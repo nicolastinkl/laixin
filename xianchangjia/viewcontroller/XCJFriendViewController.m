@@ -7,14 +7,19 @@
 //
 
 #import "XCJFriendViewController.h"
-#import "DAHttpClient.h"
+#import "XCAlbumAdditions.h"
 #import "UserInfo.h"
 #import "UIAlertView+AFNetworking.h"
 #import "UIActivityIndicatorView+AFNetworking.h"
 #import "UIImageView+AFNetworking.h"
 #import "DAImageResizedImageView.h"
 #import "XCJUserViewController.h"
-#import "tools.h"
+#import <AddressBook/AddressBook.h>
+#import <AddressBook/ABAddressBook.h>
+#import <AddressBook/ABPerson.h>
+ #import <AddressBookUI/AddressBookUI.h>
+
+#import "XCJAddressBook.h"
 
 @interface XCJFriendViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -47,12 +52,13 @@
     self.title = @"好友";
     UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];
     
     self.tableView.rowHeight = 70.0f;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self reload:nil];
+//    [self reload:nil];
+    [self reloadContacts];
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,11 +67,134 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) reloadContacts
+{
+    
+    // Request authorization to Address Book
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    //获取通讯录权限
+    
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    
+    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error){dispatch_semaphore_signal(sema);});
+    
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
+            if (granted) {
+                // First time access has been granted, add the contact
+                [self _addContactToAddressBook:addressBookRef];
+            } else {
+                SLog(@"User denied access 1");
+                // User denied access
+                // Display an alert telling user the contact could not be added
+            }
+        });
+    }
+    else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        // The user has previously given access, add the contact
+        [self _addContactToAddressBook:addressBookRef];
+    }
+    else {
+         SLog(@"User denied access 2");
+        // The user has previously denied access
+        // Send an alert telling user to change privacy setting in settings app
+    }
+}
+
+-(void) _addContactToAddressBook:(ABAddressBookRef ) addressBooks
+{
+    //获取通讯录中的所有人
+    CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
+
+    //通讯录中人数
+    CFIndex nPeople = ABAddressBookGetPersonCount(addressBooks);
+    
+    //循环，获取每个人的个人信息
+    for (NSInteger i = 0; i < nPeople; i++)
+    {
+        //新建一个addressBook model类
+        XCJAddressBook *addressBook = [[XCJAddressBook alloc] init];
+        //获取个人
+        ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
+        //获取个人名字
+        CFTypeRef abName = ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        CFTypeRef abLastName = ABRecordCopyValue(person, kABPersonLastNameProperty);
+        CFStringRef abFullName = ABRecordCopyCompositeName(person);
+        NSString *nameString = (__bridge NSString *)abName;
+        NSString *lastNameString = (__bridge NSString *)abLastName;
+        
+        if ((__bridge id)abFullName != nil) {
+            nameString = (__bridge NSString *)abFullName;
+        } else {
+            if ((__bridge id)abLastName != nil)
+            {
+                nameString = [NSString stringWithFormat:@"%@ %@", nameString, lastNameString];
+            }
+        }
+        addressBook.name = nameString;
+        addressBook.recordID = (int)ABRecordGetRecordID(person);;
+        
+        ABPropertyID multiProperties[] = {
+            kABPersonPhoneProperty,
+            kABPersonEmailProperty
+        };
+        NSInteger multiPropertiesTotal = sizeof(multiProperties) / sizeof(ABPropertyID);
+        for (NSInteger j = 0; j < multiPropertiesTotal; j++) {
+            ABPropertyID property = multiProperties[j];
+            ABMultiValueRef valuesRef = ABRecordCopyValue(person, property);
+            NSInteger valuesCount = 0;
+            if (valuesRef != nil) valuesCount = ABMultiValueGetCount(valuesRef);
+            
+            if (valuesCount == 0) {
+                CFRelease(valuesRef);
+                continue;
+            }
+            //获取电话号码和email
+            for (NSInteger k = 0; k < valuesCount; k++) {
+                CFTypeRef value = ABMultiValueCopyValueAtIndex(valuesRef, k);
+                switch (j) {
+                    case 0: {// Phone number
+                        addressBook.tel = (__bridge NSString*)value;
+                        addressBook.tel = [addressBook.tel stringByReplacingOccurrencesOfString:@"+86" withString:@""];
+                        addressBook.tel = [addressBook.tel stringByReplacingOccurrencesOfString:@"-" withString:@""];
+                        addressBook.tel = [addressBook.tel stringByReplacingOccurrencesOfString:@" " withString:@""];
+                        break;
+                    }
+                    case 1: {// Email
+                        addressBook.email = (__bridge NSString*)value;
+                        break;
+                    }
+                }
+                CFRelease(value);
+            }
+            CFRelease(valuesRef);
+        }
+        //将个人信息添加到数组中，循环完成后addressBookTemp中包含所有联系人的信息
+        [_dataSource addObject:addressBook];
+        
+        if (abName) CFRelease(abName);
+        if (abLastName) CFRelease(abLastName);
+        if (abFullName) CFRelease(abFullName);
+    }
+	
+    
+    NSMutableArray * arrays = [[NSMutableArray alloc] init];
+    [_dataSource enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        XCJAddressBook * addressbook = obj;
+        if (addressbook.tel.length == 11 && ![addressbook.tel hasPrefix:@"0"]) {
+            [arrays addObject:addressbook.tel];  //并且删除本机号码
+        }
+    }];
+    SLog(@"json : %@",[arrays JSONString]);
+}
+
 - (void)reload:(id)sender
 {
     [_dataSource removeAllObjects];
     [self.tableView reloadData];
-        
     self.navigationItem.rightBarButtonItem.enabled = NO;
     NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
     [postdata setObject:[NSNumber numberWithInt:0] forKey:@"length"];  //加载所有数据
@@ -111,11 +240,17 @@
     static NSString *CellIdentifier = @"XCJFriendCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     // Configure the cell...
-    DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
+    
+   /*DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
     UserInfo_default * info = _dataSource[indexPath.row];
     [image setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",info.user_avatar_image]]];
     ((UILabel *)[cell.contentView viewWithTag:2]).text = info.user_name;
    ((UILabel *)[cell.contentView viewWithTag:3]).text = info.user_profile;
+    */
+    XCJAddressBook *book = [_dataSource objectAtIndex:indexPath.row];
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  = book.name;
+    ((UILabel *)[cell.contentView viewWithTag:3]).text  = book.tel;
+    
     return cell;
 }
 
@@ -127,12 +262,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    UserInfo_default * info = _dataSource[indexPath.row];
-    
-    XCJUserViewController *viewcon = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserViewController"];
-    viewcon.userinfo = info;
-    viewcon.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:viewcon animated:YES];
+//    UserInfo_default * info = _dataSource[indexPath.row];
+//    
+//    XCJUserViewController *viewcon = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserViewController"];
+//    viewcon.userinfo = info;
+//    viewcon.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:viewcon animated:YES];
 }
 
 /*

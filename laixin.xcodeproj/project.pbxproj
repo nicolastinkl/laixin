@@ -46,13 +46,14 @@
 		8681BE3E1839AABA00521D36 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE3A1839AABA00521D36 /* UserInfo.m */; };
 		8681BE411839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
 		8681BE421839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
+		8692E3BE18642DB700F9E1DD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */; };
+		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
+		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
+		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
 		869D15131839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		869D15141839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
-		86C87BC8185875F3006498D4 /* Default_cn.png in Resources */ = {isa = PBXBuildFile; fileRef = 86C87BC5185875F3006498D4 /* Default_cn.png */; };
-		86C87BC9185875F3006498D4 /* Default_cn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86C87BC6185875F3006498D4 /* Default_cn@2x.png */; };
-		86C87BCA185875F3006498D4 /* Default_cn-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86C87BC7185875F3006498D4 /* Default_cn-568h@2x.png */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
 		86D181D01834822C0005901D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CF1834822C0005901D /* CoreGraphics.framework */; };
 		86D181D21834822C0005901D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181D11834822C0005901D /* UIKit.framework */; };
@@ -280,15 +281,18 @@
 		8681BE3A1839AABA00521D36 /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
 		8681BE3F1839AACD00521D36 /* InviteInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteInfo.h; sourceTree = "<group>"; };
 		8681BE401839AACD00521D36 /* InviteInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteInfo.m; sourceTree = "<group>"; };
+		8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "defaultPng/Default-568h@2x.png"; sourceTree = "<group>"; };
+		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
+		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
+		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
+		8692E3C41864364F00F9E1DD /* XCJAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJAddressBook.h; sourceTree = "<group>"; };
+		8692E3C51864364F00F9E1DD /* XCJAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJAddressBook.m; sourceTree = "<group>"; };
 		869D15111839BDBB00B14A02 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		869D15121839BDBB00B14A02 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		86C72DDC184330F9001B6CA0 /* XCModelAllEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCModelAllEntity.h; sourceTree = "<group>"; };
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
 		86C72DE018433109001B6CA0 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageManager.m; path = Application/MessageManager.m; sourceTree = "<group>"; };
-		86C87BC5185875F3006498D4 /* Default_cn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_cn.png; sourceTree = "<group>"; };
-		86C87BC6185875F3006498D4 /* Default_cn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default_cn@2x.png"; sourceTree = "<group>"; };
-		86C87BC7185875F3006498D4 /* Default_cn-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default_cn-568h@2x.png"; sourceTree = "<group>"; };
 		86D181CA1834822C0005901D /* laixin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = laixin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D181CD1834822C0005901D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D181CF1834822C0005901D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -309,7 +313,6 @@
 		86D1820718349B150005901D /* CRGradientNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRGradientNavigationBar.h; sourceTree = "<group>"; };
 		86D1820818349B150005901D /* CRGradientNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRGradientNavigationBar.m; sourceTree = "<group>"; };
 		86D1820F1834ACBA0005901D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		86D182111834ACC20005901D /* xianchangjia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = xianchangjia.entitlements; sourceTree = "<group>"; };
 		86D182171834AED30005901D /* BTSAnchorPointLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSAnchorPointLayer.h; sourceTree = "<group>"; };
 		86D182181834AED30005901D /* BTSAnchorPointLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSAnchorPointLayer.m; sourceTree = "<group>"; };
 		86D182191834AED30005901D /* BTSCoreGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSCoreGraphics.h; sourceTree = "<group>"; };
@@ -569,12 +572,12 @@
 		862D25BB18585D7C005208C8 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */,
+				8692E3BC18642DB700F9E1DD /* Default.png */,
+				8692E3BD18642DB700F9E1DD /* Default@2x.png */,
 				86EB76401859A66800836947 /* logo58x58.png */,
 				86EB76411859A66800836947 /* logo80x80.png */,
 				86EB76421859A66800836947 /* logo120x120.png */,
-				86C87BC5185875F3006498D4 /* Default_cn.png */,
-				86C87BC6185875F3006498D4 /* Default_cn@2x.png */,
-				86C87BC7185875F3006498D4 /* Default_cn-568h@2x.png */,
 			);
 			name = image;
 			sourceTree = "<group>";
@@ -686,6 +689,7 @@
 		86D181D31834822C0005901D /* laixin */ = {
 			isa = PBXGroup;
 			children = (
+				8692E3C118642E6F00F9E1DD /* laixin.entitlements */,
 				86EB770B185AB0A200836947 /* DBCommon */,
 				86EB76E3185AA72F00836947 /* CustomCell */,
 				86EB76E8185AA72F00836947 /* CustomView */,
@@ -697,7 +701,6 @@
 				86D182161834AED30005901D /* Additions */,
 				86D1825C1834AED30005901D /* support */,
 				86D182121834AE130005901D /* TestDataJson */,
-				86D182111834ACC20005901D /* xianchangjia.entitlements */,
 				86D1820A1834AC1B0005901D /* ViewController */,
 				86D1820518349B0A0005901D /* Support */,
 				86D181DC1834822C0005901D /* XCJAppDelegate.h */,
@@ -959,6 +962,8 @@
 				86EB7651185AA6CC00836947 /* Message.m */,
 				86EB7652185AA6CC00836947 /* MessageList.h */,
 				86EB7653185AA6CC00836947 /* MessageList.m */,
+				8692E3C41864364F00F9E1DD /* XCJAddressBook.h */,
+				8692E3C51864364F00F9E1DD /* XCJAddressBook.m */,
 			);
 			path = DAOModel;
 			sourceTree = "<group>";
@@ -1314,18 +1319,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
+				8692E3BE18642DB700F9E1DD /* Default-568h@2x.png in Resources */,
 				86EB76441859A66800836947 /* logo80x80.png in Resources */,
-				86C87BC8185875F3006498D4 /* Default_cn.png in Resources */,
 				86EB76451859A66800836947 /* logo120x120.png in Resources */,
 				867014A9185185F100518B6D /* JsonImageurls.json in Resources */,
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
 				866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */,
-				86C87BC9185875F3006498D4 /* Default_cn@2x.png in Resources */,
-				86C87BCA185875F3006498D4 /* Default_cn-568h@2x.png in Resources */,
 				86EB76431859A66800836947 /* logo58x58.png in Resources */,
+				8692E3BF18642DB700F9E1DD /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1402,6 +1407,7 @@
 				86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */,
 				86D181DA1834822C0005901D /* main.m in Sources */,
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
+				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,
 				86EB76D1185AA6CC00836947 /* AFNetworkReachabilityManager.m in Sources */,
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,
@@ -1630,7 +1636,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_ENTITLEMENTS = xianchangjia/xianchangjia.entitlements;
+				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yao zhang (3NW254563D)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -1654,7 +1660,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_ENTITLEMENTS = xianchangjia/xianchangjia.entitlements;
+				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
