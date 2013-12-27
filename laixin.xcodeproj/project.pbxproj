@@ -264,6 +264,7 @@
 		86EB770E185AB1AE00836947 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7704185AAD7D00836947 /* libz.1.2.5.dylib */; };
 		86EB770F185AB1AE00836947 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7706185AADB100836947 /* libz.1.dylib */; };
 		86EB7711185AB1D800836947 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7710185AB1D800836947 /* ImageIO.framework */; };
+		86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -682,6 +683,8 @@
 		86EB7706185AADB100836947 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		86EB770C185AB14F00836947 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		86EB7710185AB1D800836947 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		86FB20EE186D5B90006BDE32 /* LXChatDBStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXChatDBStoreManager.h; path = LXNetManager/LXChatDBStoreManager.h; sourceTree = "<group>"; };
+		86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXChatDBStoreManager.m; path = LXNetManager/LXChatDBStoreManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1352,6 +1355,8 @@
 		86D9A8A8186D3FAC00147631 /* LXDatabaseManager */ = {
 			isa = PBXGroup;
 			children = (
+				86FB20EE186D5B90006BDE32 /* LXChatDBStoreManager.h */,
+				86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */,
 			);
 			name = LXDatabaseManager;
 			sourceTree = "<group>";
@@ -1866,6 +1871,7 @@
 				86EB76DF185AA6CC00836947 /* base64.c in Sources */,
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,
 				86D1828E1834AED30005901D /* UIImage+Resize.m in Sources */,
+				86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */,
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,
 				86EB76CE185AA6CC00836947 /* AFHTTPRequestOperation.m in Sources */,
