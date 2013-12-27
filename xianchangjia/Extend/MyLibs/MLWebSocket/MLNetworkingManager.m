@@ -67,9 +67,12 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     request.requestKey = [self uniqueRequestKey];
     request.successBlock = success;
     request.failureBlock = failure;
-  
+    if (self.webSocket.readyState == SR_OPEN) {
+        [self sendRequest:request];
+    }else{
+        [self.preparedRequests addObject:request];
+    }
 }
-
 
 ///发送标识请求
 - (void)sendWithAction:(NSString*)action
@@ -200,7 +203,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-    SLog(@"Received \"%@\"", message);
+   
 //    NSAssert([message isKindOfClass:[NSString class]],@"返回值不是字符串");
     if (![message isKindOfClass:[NSString class]]) {
         //不是字符串就认作是被zlib压缩的数据Data
@@ -209,10 +212,11 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     }
     
     NSDictionary *response = [message objectFromJSONString];
+     SLog(@"Received :  %@ ", response);
     NSString *requestKey = [tools getStringValue:response[kRequestKeyName] defaultValue:nil];
     SLog(@"requestKey ======  %@",requestKey);
     if (!requestKey) {
-        //说明此条是服务器直接推过来的数据,想得到的话就注册此通知
+//        说明此条是服务器直接推过来的数据,想得到的话就注册此通知
         [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceivePushMessageNotification object:nil userInfo:response];
 //        return;
     }

@@ -9,9 +9,11 @@
 #import "LXAPIController.h"
 #import "XCAlbumAdditions.h"
 #import "LXRequestFacebookManager.h"
+//#import "LXChatDataStoreManager.h"
 
 @interface LXAPIController()
 @property (nonatomic, strong) LXRequestFacebookManager *requestLaixinManager;
+//@property (nonatomic, strong) LXChatDataStoreManager *chatDataStoreManager;
 @end
 
 @implementation LXAPIController
@@ -23,5 +25,14 @@ SINGLETON_GCD(LXAPIController)
     }
     return _requestLaixinManager;
 }
+
+
+
+//- (LXChatDataStoreManager *)chatDataStoreManager {
+//    if (!_chatDataStoreManager) {
+//        _chatDataStoreManager = [LXChatDataStoreManager new];
+//    }
+//    return _chatDataStoreManager;
+//}
 
 @end

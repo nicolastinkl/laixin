@@ -157,7 +157,10 @@
                                            //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
                                            NSDictionary * parames = @{@"sessionid":sessionID};
                                             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                                                SLog(@"responseObject :%@",responseObject);
+                                                NSDictionary * dict = responseObject[@"result"];
+                                                LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                                                [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                                                
                                            } failure:^(MLRequest *request, NSError *error) { 
                                            }];
                                        }];

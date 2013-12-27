@@ -14,7 +14,10 @@
 #import "tools.h"
 #import "ChatList.h"
 #import "MLNetworkingManager.h"
+//#import "LXAPIController.h"
+#import "CoreData+MagicalRecord.h"
 
+static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 @interface XCJAppDelegate()
@@ -54,27 +57,15 @@
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {
     //获取了webSocket的推过来的消息
-    NSDictionary * MsgContent  = notification.userInfo;
+    /*NSDictionary * MsgContent  = notification.userInfo;
     NSString *requestKey = [tools getStringValue:MsgContent[@"cdata"] defaultValue:nil];
     if ([requestKey isEqualToString:@"LoginSuccess"]) {
-        //首次登陆返回的用户信息
-        NSDictionary * userinfo = [MsgContent objectForKey:@"result"];
-        int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
-        [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
-        [USER_DEFAULT synchronize];
+        
     }else if([requestKey isEqualToString:@"user.info"])
     {
-        // "users":[....]
-        NSDictionary * userinfo = MsgContent[@"result"];
-        NSArray * userArray = userinfo[@"users"];
-        if (userArray && userArray.count > 0) {
-            NSDictionary * dic = userArray[0];
-            [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
-            [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
-            [USER_DEFAULT synchronize];
-        }
+        
     }
-    SLog(@"webSocketDidReceivePushMessage : %@",requestKey);
+    SLog(@"webSocketDidReceivePushMessage : %@",requestKey);*/
 }
 
 -(void)applicationDidFinishLaunching:(UIApplication *)application
@@ -107,34 +98,38 @@
     
     //添加WebSocket监视
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:) name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
-    
-    /*
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-
-//    ///setup 1:
-   
-//    ///setup 2:
-    UIColor *firstColor =  [UIColor colorWithRed:255.0f/255.0f green:42.0f/255.0f blue:104.0f/255.0f alpha:1.0f];
-    UIColor *secondColor = [UIColor colorWithRed:255.0f/255.0f green:90.0f/255.0f blue:58.0f/255.0f alpha:1.0f];
-//    ///setup 3:
-   //NSArray *colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-    NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xf16149).CGColor, (id)UIColorFromRGB(0xf14959).CGColor, nil];
-//    ///setup 4:
-    [[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
-    [[navigationController navigationBar] setTranslucent:YES]; // Remember, the default value is YES.
-    ///setup 5:
-//    DemoViewController *viewController = [[DemoViewController alloc] init];
-//    [navigationController setViewControllers:@[viewController]];
+    [self copyDefaultStoreIfNecessary];
+    [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
     
-//    [self.window setRootViewController:navigationController];
-//    self.window.backgroundColor = [UIColor whiteColor];
-//    [self.window makeKeyAndVisible];
-     */
     
     // Override point for customization after application launch.
     return YES;
+}
+
+///bak of the database
+- (void) copyDefaultStoreIfNecessary;
+{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:kLaixinStoreName];
+    
+	// If the expected store doesn't exist, copy the default store.
+	if (![fileManager fileExistsAtPath:[storeURL path]])
+    {
+		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:[kLaixinStoreName stringByDeletingPathExtension] ofType:[kLaixinStoreName pathExtension]];
+        
+		if (defaultStorePath)
+        {
+            NSError *error;
+			BOOL success = [fileManager copyItemAtPath:defaultStorePath toPath:[storeURL path] error:&error];
+            if (!success)
+            {
+                NSLog(@"Failed to install default recipe store");
+            }
+		}
+	}
+    
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -194,6 +189,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+//      [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

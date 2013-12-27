@@ -34,7 +34,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        [USER_DEFAULT removeObjectForKey:GlobalData_main_server];
+//        [USER_DEFAULT removeObjectForKey:GlobalData_main_server];
         [USER_DEFAULT removeObjectForKey:GlobalData_user_session];
         [USER_DEFAULT synchronize];
         

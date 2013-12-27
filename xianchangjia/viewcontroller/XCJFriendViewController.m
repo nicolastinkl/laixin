@@ -18,7 +18,7 @@
 #import <AddressBook/ABAddressBook.h>
 #import <AddressBook/ABPerson.h>
  #import <AddressBookUI/AddressBookUI.h>
-
+#import "MLNetworkingManager.h"
 #import "XCJAddressBook.h"
 
 @interface XCJFriendViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -50,15 +50,28 @@
     NSMutableArray * array = [[NSMutableArray alloc] init];
     _dataSource = array;
     self.title = @"好友";
-    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];
+//    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
     
     self.tableView.rowHeight = 70.0f;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-//    [self reload:nil];
-    [self reloadContacts];
+    
+    //test  add friends
+    /*
+     {
+     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+     NSDictionary * parames = @{@"uid":@[userid]};
+     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+     
+     } failure:^(MLRequest *request, NSError *error) {
+     
+     }];
+     }
+     */
+    [self reload:nil];
+//    [self reloadContacts];
 }
 
 - (void)didReceiveMemoryWarning
@@ -179,7 +192,6 @@
         if (abFullName) CFRelease(abFullName);
     }
 	
-    
     NSMutableArray * arrays = [[NSMutableArray alloc] init];
     [_dataSource enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         XCJAddressBook * addressbook = obj;
@@ -195,28 +207,37 @@
     [_dataSource removeAllObjects];
     [self.tableView reloadData];
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
-    [postdata setObject:[NSNumber numberWithInt:0] forKey:@"length"];  //加载所有数据
-    [postdata setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
-    NSURLSessionDataTask * task = [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"user_relation" Action:@"get_scene_plus_friends" success:^(id obj) {
-        //get_scene_plus_friends
-        NSArray * array = [obj objectForKey:@"list"];
-        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            UserInfo_default * userinfo = [[UserInfo_default alloc] initWithJSONObject:obj];
-            [_dataSource addObject:userinfo];
-        }];
-        
-        [self.tableView reloadData];
+    
+    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    NSDictionary * parames = @{@"uid":userid,@"pos":@0,@"count":@100};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
+    } failure:^(MLRequest *request, NSError *error) {
         
-    } error:^(NSInteger index) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-    } failure:^(NSError *error) {
     }];
- 
-    [UIAlertView showAlertViewForTaskWithErrorOnCompletion:task delegate:nil];
-    UIActivityIndicatorView *activityIndicatorView = (UIActivityIndicatorView *)self.navigationItem.leftBarButtonItem.customView;
-    [activityIndicatorView setAnimatingWithStateOfTask:task];
+     
+//    NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
+//    [postdata setObject:[NSNumber numberWithInt:0] forKey:@"length"];  //加载所有数据
+//    [postdata setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
+//    NSURLSessionDataTask * task = [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"user_relation" Action:@"get_scene_plus_friends" success:^(id obj) {
+//        //get_scene_plus_friends
+//        NSArray * array = [obj objectForKey:@"list"];
+//        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            UserInfo_default * userinfo = [[UserInfo_default alloc] initWithJSONObject:obj];
+//            [_dataSource addObject:userinfo];
+//        }];
+//        
+//        [self.tableView reloadData];
+//        self.navigationItem.rightBarButtonItem.enabled = YES;
+//        
+//    } error:^(NSInteger index) {
+//        self.navigationItem.rightBarButtonItem.enabled = YES;
+//    } failure:^(NSError *error) {
+//    }];
+// 
+//    [UIAlertView showAlertViewForTaskWithErrorOnCompletion:task delegate:nil];
+//    UIActivityIndicatorView *activityIndicatorView = (UIActivityIndicatorView *)self.navigationItem.leftBarButtonItem.customView;
+//    [activityIndicatorView setAnimatingWithStateOfTask:task];
   
 }
 

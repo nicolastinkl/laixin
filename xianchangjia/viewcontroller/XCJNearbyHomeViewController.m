@@ -22,7 +22,7 @@
 #import "XCJMainLoginViewController.h"
 #import "XCJAppDelegate.h"
 #import "MLNetworkingManager.h"
-
+#import "LXAPIController.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -111,7 +111,15 @@
         NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
         NSDictionary * parames = @{@"sessionid":sessionid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            SLog(@"responseObject :%@",responseObject);
+            //首次登陆返回的用户信息
+            NSDictionary * userinfo = responseObject[@"result"];
+            LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
+            [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+            
+            int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
+            [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
+            [USER_DEFAULT synchronize];
+            
         } failure:^(MLRequest *request, NSError *error) {
         }];
     }

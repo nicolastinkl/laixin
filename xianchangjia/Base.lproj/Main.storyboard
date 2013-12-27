@@ -548,7 +548,7 @@
             </objects>
             <point key="canvasLocation" x="832" y="1476"/>
         </scene>
-        <!--Nearby Home View Controller - 附近 -->
+        <!--Nearby Home View Controller - 动态-->
         <scene sceneID="1ns-Iw-odF">
             <objects>
                 <tableViewController id="vSU-rK-d0f" customClass="XCJNearbyHomeViewController" sceneMemberID="viewController">
@@ -590,23 +590,9 @@
                             <outlet property="delegate" destination="vSU-rK-d0f" id="w82-nm-m9D"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="附近 " id="Y82-44-1uf">
+                    <navigationItem key="navigationItem" title="动态" id="Y82-44-1uf">
                         <barButtonItem key="backBarButtonItem" title="返回" id="zVJ-BB-YZI">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </barButtonItem>
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="zE2-mm-6MA">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Iw5-72-T8P">
-                                <rect key="frame" x="16" y="5" width="71" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="商圈">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="OpenDomains:" destination="vSU-rK-d0f" eventType="touchUpInside" id="0CE-AF-WHM"/>
-                                </connections>
-                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <connections>

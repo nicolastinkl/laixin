@@ -9,7 +9,7 @@
 #import "XCJSettingsViewController.h"
 #import "XCAlbumAdditions.h"
 #import "MLNetworkingManager.h"
-
+#import "LXAPIController.h"
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
 @property (weak, nonatomic) IBOutlet UILabel *UserName;
@@ -38,14 +38,18 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+//    LXUser * user =  [[LXAPIController sharedLXAPIController] currentUser];
+//    self.title = user.nick;
     [self LoadData];
 }
 
 - (IBAction)updateInfoClick:(id)sender {
-    NSDictionary * parames = @{@"nick":@"刘杰红tinkl",@"signature":@"土豪。修正你的最爱，担心禽流感。然后：祝贺开张大吉！财源滚滚！"};
+    NSDictionary * parames = @{@"nick":@"林Sir",@"signature":@"## 前言CoreData是iOS开发中经常使用的数据持久化的技术。但其操作过程稍微繁琐，即使你只是实现简单的存"};
+    //@"headpic":@"http://media.breadtrip.com/photos/2013/02/10/5b4cd8bc68fd765e9ca9e68313c8030f.jpg"
     //nick, signature,sex, birthday, marriage, height
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-        SLog(@"responseObject :%@",responseObject);
+//        SLog(@"responseObject :%@",responseObject);
+        [self LoadData];
     } failure:^(MLRequest *request, NSError *error) {
     }];
 }
@@ -55,7 +59,21 @@
     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
     NSDictionary * parames = @{@"uid":@[userid]};
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
-        SLog(@"responseObject :%@",responseObject);
+//        SLog(@"responseObject :%@",responseObject);
+        // "users":[....]
+        NSDictionary * userinfo = responseObject[@"result"];
+        NSArray * userArray = userinfo[@"users"];
+        if (userArray && userArray.count > 0) {
+            NSDictionary * dic = userArray[0];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
+            [USER_DEFAULT synchronize];
+            
+            self.UserSign.text =  [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
+            self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+            [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        }
     } failure:^(MLRequest *request, NSError *error) {
     }];
     

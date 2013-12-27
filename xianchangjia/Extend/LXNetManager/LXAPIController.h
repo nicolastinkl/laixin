@@ -7,13 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "LXUser.h"
 #define kFCMessageDidComeNotification @"kFCMessageDidComeNotification"
 
 @class LXRequestFacebookManager;
+//,LXChatDataStoreManager;
 
 @interface LXAPIController : NSObject
+
 + (LXAPIController *)sharedLXAPIController;
+
+@property (nonatomic, strong) LXUser *currentUser;
+
 @property (readonly , nonatomic, strong) LXRequestFacebookManager *requestLaixinManager;
+//@property (readonly , nonatomic, strong) LXChatDataStoreManager *chatDataStoreManager;
 
 @end

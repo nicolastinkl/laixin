@@ -207,6 +207,13 @@
 		86D183291834B0E00005901D /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D183271834B0E00005901D /* AddressBookUI.framework */; };
 		86D1832B1834B0E80005901D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D1832A1834B0E80005901D /* Security.framework */; };
 		86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */; };
+		86D9A886186D294600147631 /* LXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A885186D294600147631 /* LXUser.m */; };
+		86D9A8A0186D30C800147631 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A897186D30C700147631 /* Conversation.m */; };
+		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
+		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
+		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
+		86D9A8A4186D30C800147631 /* FCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89F186D30C800147631 /* FCMessage.m */; };
+		86D9A8A7186D35D200147631 /* FCUserDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A8A6186D35D200147631 /* FCUserDescription.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
 		86EB76451859A66800836947 /* logo120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76421859A66800836947 /* logo120x120.png */; };
@@ -556,6 +563,19 @@
 		86D1832A1834B0E80005901D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		86D9A87C186C1A0500147631 /* XCJSysSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSysSettingsViewController.h; path = viewcontroller/XCJSysSettingsViewController.h; sourceTree = "<group>"; };
 		86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSysSettingsViewController.m; path = viewcontroller/XCJSysSettingsViewController.m; sourceTree = "<group>"; };
+		86D9A884186D294600147631 /* LXUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXUser.h; path = DAOModel/coredata/LXUser.h; sourceTree = "<group>"; };
+		86D9A885186D294600147631 /* LXUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXUser.m; path = DAOModel/coredata/LXUser.m; sourceTree = "<group>"; };
+		86D9A896186D30C700147631 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conversation.h; path = DAOModel/coredata/Conversation.h; sourceTree = "<group>"; };
+		86D9A897186D30C700147631 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Conversation.m; path = DAOModel/coredata/Conversation.m; sourceTree = "<group>"; };
+		86D9A898186D30C700147631 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
+		86D9A899186D30C700147631 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
+		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
+		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
+		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
+		86D9A89E186D30C800147631 /* FCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCMessage.h; path = DAOModel/coredata/FCMessage.h; sourceTree = "<group>"; };
+		86D9A89F186D30C800147631 /* FCMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCMessage.m; path = DAOModel/coredata/FCMessage.m; sourceTree = "<group>"; };
+		86D9A8A5186D35D200147631 /* FCUserDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCUserDescription.h; path = DAOModel/coredata/FCUserDescription.h; sourceTree = "<group>"; };
+		86D9A8A6186D35D200147631 /* FCUserDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCUserDescription.m; path = DAOModel/coredata/FCUserDescription.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
 		86EB76411859A66800836947 /* logo80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo80x80.png; sourceTree = "<group>"; };
 		86EB76421859A66800836947 /* logo120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo120x120.png; sourceTree = "<group>"; };
@@ -760,6 +780,7 @@
 		8681BDBD1834B33700521D36 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				86D9A883186D276700147631 /* Coredata */,
 				86C72DDC184330F9001B6CA0 /* XCModelAllEntity.h */,
 				86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */,
 				8681BE371839AABA00521D36 /* TalkData.h */,
@@ -823,6 +844,7 @@
 		869CE4D0186BDABE0004C1EC /* LaixinNetworking */ = {
 			isa = PBXGroup;
 			children = (
+				86D9A8A8186D3FAC00147631 /* LXDatabaseManager */,
 				869CE4D1186BDAEB0004C1EC /* LXNetManager */,
 				869CE4D5186BDD430004C1EC /* LXAPIController.h */,
 				869CE4D6186BDD430004C1EC /* LXAPIController.m */,
@@ -1307,6 +1329,33 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		86D9A883186D276700147631 /* Coredata */ = {
+			isa = PBXGroup;
+			children = (
+				86D9A896186D30C700147631 /* Conversation.h */,
+				86D9A897186D30C700147631 /* Conversation.m */,
+				86D9A898186D30C700147631 /* FCAccount.h */,
+				86D9A899186D30C700147631 /* FCAccount.m */,
+				86D9A89A186D30C700147631 /* FCConversationModel.h */,
+				86D9A89B186D30C700147631 /* FCConversationModel.m */,
+				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				86D9A89E186D30C800147631 /* FCMessage.h */,
+				86D9A89F186D30C800147631 /* FCMessage.m */,
+				86D9A884186D294600147631 /* LXUser.h */,
+				86D9A885186D294600147631 /* LXUser.m */,
+				86D9A8A5186D35D200147631 /* FCUserDescription.h */,
+				86D9A8A6186D35D200147631 /* FCUserDescription.m */,
+			);
+			name = Coredata;
+			sourceTree = "<group>";
+		};
+		86D9A8A8186D3FAC00147631 /* LXDatabaseManager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = LXDatabaseManager;
+			sourceTree = "<group>";
+		};
 		86EB764B185AA6CC00836947 /* DAOModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -1719,12 +1768,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */,
+				86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
 				869CE52A186BE38D0004C1EC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
+				86D9A8A1186D30C800147631 /* FCAccount.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
 				86D182B41834AED30005901D /* NSObject+LKDBHelper.m in Sources */,
@@ -1796,6 +1847,7 @@
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
+				86D9A8A0186D30C800147631 /* Conversation.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,
 				86EB76D1185AA6CC00836947 /* AFNetworkReachabilityManager.m in Sources */,
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,
@@ -1828,6 +1880,7 @@
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
 				865632EC185FFDDA00E9903C /* XCJSendNewContentViewController.m in Sources */,
 				869CE52C186BE38D0004C1EC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
+				86D9A8A4186D30C800147631 /* FCMessage.m in Sources */,
 				86EB76D2185AA6CC00836947 /* AFSecurityPolicy.m in Sources */,
 				869CE4D4186BDB160004C1EC /* IQSocialRequestBaseClient.m in Sources */,
 				865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */,
@@ -1850,6 +1903,7 @@
 				865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				86D9A8A7186D35D200147631 /* FCUserDescription.m in Sources */,
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
 				8681BE3D1839AABA00521D36 /* UserInfo.m in Sources */,
@@ -1869,9 +1923,11 @@
 				86D182F41834AF540005901D /* FMDatabaseQueue.m in Sources */,
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
+				86D9A886186D294600147631 /* LXUser.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				86D182AE1834AED30005901D /* LKDB+Mapping.m in Sources */,
+				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
 				86EB76D7185AA6CC00836947 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -2070,6 +2126,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2098,6 +2155,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -2175,6 +2233,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				86D9A89D186D30C700147631 /* FCModel.xcdatamodel */,
+			);
+			currentVersion = 86D9A89D186D30C700147631 /* FCModel.xcdatamodel */;
+			name = FCModel.xcdatamodeld;
+			path = DAOModel/coredata/FCModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 86D181C21834822C0005901D /* Project object */;
 }
