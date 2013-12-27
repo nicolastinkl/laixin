@@ -8,14 +8,17 @@
 
 #import "FCAccount.h"
 #import <CoreData/NSManagedObject.h>
-
+#import "LXAPIController.h"
+#import "LXChatDBStoreManager.h"
+#import "MLNetworkingManager.h"
+#import "FCUserDescription.h"
 
 @implementation FCAccount
 
 @dynamic facebookId;
 @dynamic name;
 @dynamic conversation;
-@synthesize userdesp;
+@synthesize fcindefault;
 
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 {
@@ -39,8 +42,31 @@
 -(FCUserDescription * )userdesp
 {
     //MARK Base fbid to find userdesp object,, if userdesp is nil, will select from networking
+   __block FCUserDescription * localdespObject = nil;
     
-    return nil;
+   localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:self.facebookId];
+    if (localdespObject) {
+        return localdespObject;
+    }else{
+        //from networking by ID
+        
+        NSDictionary * parames = @{@"uid":@[self.facebookId]};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+            // "users":[....]
+            NSDictionary * userinfo = responseObject[@"result"];
+            NSArray * userArray = userinfo[@"users"];
+            if (userArray && userArray.count > 0) {
+                NSDictionary * dict = userArray[0];
+                LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
+                    localdespObject = response;
+                }];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
+    
+    return localdespObject;
 }
 
 + (NSSet*)keyPathsForValuesAffectingValueForKey:(NSString*)key {
@@ -75,14 +101,6 @@
     
 }
 
-- (void)setFCUserDescriptionsObject:(FCUserDescription*)value_
-{
-
-}
-- (void)FCUserDescriptionsObject:(FCUserDescription*)value_
-{
-    
-}
 
 @end
 

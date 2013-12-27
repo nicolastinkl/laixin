@@ -8,6 +8,12 @@
 
 #import "LXRequestFacebookManager.h"
 #import "IQSocialRequestBaseClient.h"
+#import "MLNetworkingManager.h"
+#import "LXUser.h"
+#import "LXAPIController.h"
+#import "LXChatDBStoreManager.h"
+#import "FCAccount.h"
+
 
 @implementation LXRequestFacebookManager
 
@@ -41,4 +47,28 @@
     }];
 }
 
+
+-(NSArray * ) fetchAlAccountsByArray:(NSArray * ) uids
+{
+    NSMutableArray * array = [[NSMutableArray alloc] init];
+    NSDictionary * parames = @{@"uid":uids};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+        // "users":[....]
+        NSDictionary * userinfo = responseObject[@"result"];
+        NSArray * userArray = userinfo[@"users"];
+        [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            FCAccount * fccount = [[FCAccount alloc] init];
+            LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+            fccount.facebookId = currentUser.uid;
+            
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError *error) {
+                fccount.fcindefault = response;
+                [array addObject:fccount];
+            }];
+        }];
+    } failure:^(MLRequest *request, NSError *error) {
+        
+    }];
+    return array;
+}
 @end

@@ -8,6 +8,7 @@
 @dynamic facebookName;
 @dynamic facebookId;
 @dynamic badgeNumber;
+@synthesize account;
 
 - (void)addMessagesObject:(FCMessage *)value {
     NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];

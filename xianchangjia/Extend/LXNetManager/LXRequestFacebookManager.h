@@ -13,4 +13,13 @@
 
 - (void)requestGetURLWithCompletion:(CompletionBlock)completion withParems:(NSString * ) parems;
 
+/**
+ *  根据IDs 数组获取批量用户
+ *
+ *  @param uids <#uids description#>
+ *
+ *  @return <#return value description#>
+ */
+-(NSArray * ) fetchAlAccountsByArray:(NSArray * ) uids;
+
 @end

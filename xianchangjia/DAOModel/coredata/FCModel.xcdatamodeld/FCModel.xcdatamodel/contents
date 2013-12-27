@@ -15,6 +15,10 @@
         <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="account" inverseEntity="Conversation" syncable="YES"/>
         <relationship name="fcindefault" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDesp" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
+    <entity name="FCFriends" representedClassName="FCFriends" syncable="YES">
+        <attribute name="friendID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
         <attribute name="messageStatus" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -34,11 +38,13 @@
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="userDesp" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="fcindefault" inverseEntity="FCAccount" syncable="YES"/>
+        <relationship name="userDespFriends" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCFriends" inverseName="friendRelation" inverseEntity="FCFriends" syncable="YES"/>
     </entity>
     <elements>
         <element name="Conversation" positionX="250" positionY="-27" width="128" height="135"/>
         <element name="FCAccount" positionX="7" positionY="108" width="128" height="118"/>
         <element name="FCMessage" positionX="421" positionY="198" width="128" height="120"/>
-        <element name="FCUserDescription" positionX="232" positionY="264" width="128" height="208"/>
+        <element name="FCUserDescription" positionX="232" positionY="264" width="128" height="223"/>
+        <element name="FCFriends" positionX="-45" positionY="300" width="128" height="73"/>
     </elements>
 </model>

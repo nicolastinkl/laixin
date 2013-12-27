@@ -21,7 +21,8 @@
 @property (nonatomic, retain) NSString * facebookId;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSSet *conversation;
-@property (nonatomic, retain) FCUserDescription *userdesp;
+@property (nonatomic, retain) FCUserDescription *fcindefault;
+
 + (id)insertInManagedObjectContext:(NSManagedObjectContext*)moc_;
 + (NSString*)entityName;
 + (NSEntityDescription*)entityInManagedObjectContext:(NSManagedObjectContext*)moc_;
@@ -34,8 +35,5 @@
 - (void)removeConversationObject:(NSManagedObject *)value;
 - (void)addConversation:(NSSet *)values;
 - (void)removeConversation:(NSSet *)values;
-
-- (void)setFCUserDescriptionsObject:(FCUserDescription*)value_;
-- (void)FCUserDescriptionsObject:(FCUserDescription*)value_;
 
 @end

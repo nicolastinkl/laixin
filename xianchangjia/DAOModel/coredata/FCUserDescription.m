@@ -7,8 +7,23 @@
 //
 
 #import "FCUserDescription.h"
+#import "FCAccount.h"
+#import "FCFriends.h"
+
 
 @implementation FCUserDescription
-@synthesize nick,uid,signature,sex,marriage,height,headpic,create_time,birthday,background_image;
+
+@dynamic background_image;
+@dynamic birthday;
+@dynamic create_time;
+@dynamic headpic;
+@dynamic height;
+@dynamic marriage;
+@dynamic nick;
+@dynamic sex;
+@dynamic signature;
+@dynamic uid;
+@dynamic userDesp;
+@dynamic userDespFriends;
 
 @end

@@ -23,6 +23,8 @@
 #import "XCJAppDelegate.h"
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
+#import "Sequencer.h"
+#import "LXChatDBStoreManager.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -102,29 +104,11 @@
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
-        [self.refreshControl beginRefreshing];
-        [self setupLocationManager];
-        
-        // SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
-        //        SLog(@"state : %d", [websocket readyState]);
-        //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
-        NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-        NSDictionary * parames = @{@"sessionid":sessionid};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //首次登陆返回的用户信息
-            NSDictionary * userinfo = responseObject[@"result"];
-            LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
-            [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-            
-            int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
-            [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
-            [USER_DEFAULT synchronize];
-            
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
+        [self initHomeData];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
+    
     
     /*
       set title color and title font
@@ -133,24 +117,92 @@
      [UIFont boldSystemFontOfSize:16.0f], UITextAttributeFont, [UIColor darkGrayColor], UITextAttributeTextShadowColor, [NSValue valueWithCGSize:CGSizeMake(0.0, -1.0)], UITextAttributeTextShadowOffset,
      nil] forState:UIControlStateNormal];
      */
-    /*
-     {
-     "first_signin": "1",
-     "sessionid": "7e165302350e4cc58f4b094a2d467042",
-     "platform": "ios",
-     "access_token": "2.00pV1TBCjn1KFDb6d205521eNWd_AE",
-     "version": "167",
-     "weibo_user_id": "1854032365"
-     }
-     
-     f91ea9e4e0fc4460a38f645dcf8fc93a
-     */
+
+}
+-(void)   initHomeData
+{
+    [self.refreshControl beginRefreshing];
+    [self setupLocationManager];
+    
+    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+    NSDictionary * parames = @{@"sessionid":sessionid};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        //首次登陆返回的用户信息
+        NSDictionary * userinfo = responseObject[@"result"];
+        LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
+        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+        
+        int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
+        [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT synchronize];
+        
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+    
+    [self runSequucer];
+}
+
+-(void) runSequucer
+{
+//    Sequencer *sequencer = [[Sequencer alloc] init];
+//    [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
+////        NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+//        
+//    }];
+//    
+//    [sequencer run];
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
+            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@100};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                NSArray * friends = responseObject[@"result"][@"friend_id"];
+                NSMutableArray * arrayIDS = [[NSMutableArray alloc] init];
+                [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
+                }];
+                if (arrayIDS.count > 0) {
+                    NSDictionary * parameIDS = @{@"uid":arrayIDS};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {
+                        // "users":[....]
+                        NSDictionary * userinfo = responseObject[@"result"];
+                        NSArray * userArray = userinfo[@"users"];
+                        [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            LXUser * luser = [[LXUser alloc] initWithDict:obj];
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
+                        }];
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                }
+                
+                // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
+                
+                
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
+        
+
+    });
+    
+//    
+//    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+//    NSDictionary * parames = @{@"uid":userid,@"pos":@0,@"count":@100};
+//    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
+//        self.navigationItem.rightBarButtonItem.enabled = YES;
+//        
+//        
+//    } failure:^(MLRequest *request, NSError *error) {
+//        
+//    }];
 }
 
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
-    [self.refreshControl beginRefreshing];
-    [self setupLocationManager];
+    [self initHomeData];
 }
 
 

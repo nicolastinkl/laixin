@@ -142,7 +142,7 @@
                                        
                                        [self.navigationController dismissViewControllerAnimated:YES completion:^{
                                            // connection of websocket server
-                                           
+                                           [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
                                            /*
                                             {
                                             "func":"function_name",

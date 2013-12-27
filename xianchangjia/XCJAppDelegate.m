@@ -14,8 +14,10 @@
 #import "tools.h"
 #import "ChatList.h"
 #import "MLNetworkingManager.h"
-//#import "LXAPIController.h"
+#import "LXAPIController.h"
 #import "CoreData+MagicalRecord.h"
+#import "LXChatDBStoreManager.h"
+
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -189,7 +191,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-//      [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+      [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
