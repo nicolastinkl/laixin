@@ -7,7 +7,7 @@
 //
 
 #import "tools.h"
-
+#import "XCAlbumDefines.h"
 
 #pragma  mark 使用Category来计算同一时代（AD|BC）两个日期午夜之间的天数：
 @implementation NSCalendar (SameSpecialCalculations)
@@ -389,11 +389,65 @@
 	return fromDate;
 }
 
+
++ (NSString*)timeLabelTextOfTime:(NSTimeInterval)time
+{
+    if (time<=0) {
+        return nil;
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSString *text = [dateFormatter stringFromDate:date];
+    //最近时间处理
+    NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
+    if (timeAgo > 0 && timeAgo < 60) {
+        text = [NSString stringWithFormat:@"%ld秒前", (long)timeAgo];
+    }else if (timeAgo >= 60 && timeAgo < 3600) {
+        NSInteger timeAgoMinute = timeAgo / 60;
+        text = [NSString stringWithFormat:@"%ld分钟前", (long)timeAgoMinute];
+    }else if (timeAgo >= 3600 && timeAgo < 86400) {
+        [dateFormatter setDateFormat:@"今天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }else if (timeAgo >= 86400 && timeAgo < 86400*2) {
+        [dateFormatter setDateFormat:@"昨天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }else if (timeAgo >= 86400*2 && timeAgo < 86400*3) {
+        [dateFormatter setDateFormat:@"前天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }
+    return text;
+}
+
 +(NSURL*)UrlFromString:(NSString*) str
 {
     if(str==nil || [str isKindOfClass:[NSNull class]])
         return nil;
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@",str]];
+}
+
+
+
+#pragma mark - other Common
+
++ (NSString*)randomStringWithLength:(NSUInteger)length
+{
+    char data[length];
+    for (int i=0;i<length;data[i++] = (char)('A' + arc4random_uniform(26)));
+    NSString *result = [[NSString alloc] initWithBytes:data length:length encoding:NSUTF8StringEncoding];
+    return result;
+}
+
++ (NSString *)getStringValue:(id)object
+                defaultValue:(NSString *)defaultValue{
+    if (object && ![object isKindOfClass:[NSNull class]]) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return object;
+        } else if ([object isKindOfClass:[NSNumber class]]) {
+            return [object stringValue];
+        }
+    }
+    return defaultValue;
 }
 
 

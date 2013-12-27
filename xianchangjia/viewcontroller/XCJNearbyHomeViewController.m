@@ -19,7 +19,10 @@
 #import "UIImage+ImageEffects.h"
 #import "UINavigationController+MHDismissModalView.h"
 #import "XCJLoginViewController.h"
+#import "XCJMainLoginViewController.h"
 #import "XCJAppDelegate.h"
+#import "MLNetworkingManager.h"
+
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -59,9 +62,9 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    [USER_DEFAULT setValue:@"f91ea9e4e0fc4460a38f645dcf8fc93a" forKey:GlobalData_user_session];
-    [USER_DEFAULT setValue:@1 forKey:GlobalData_user_id];
-    [USER_DEFAULT synchronize];
+//    [USER_DEFAULT setValue:@"f91ea9e4e0fc4460a38f645dcf8fc93a" forKey:GlobalData_user_session];
+//    [USER_DEFAULT setValue:@1 forKey:GlobalData_user_id];
+//    [USER_DEFAULT synchronize];
     
     //[USER_DEFAULT removeObjectForKey:GlobalData_user_session];
     
@@ -95,11 +98,22 @@
 //    NSString *strJson = [NSString stringWithContentsOfFile:strFilePath encoding:NSUTF8StringEncoding error:nil];
 //    NSData * jsondata = [strJson  dataUsingEncoding:NSUTF8StringEncoding];
     //JsonArray = [jsondata objectFromJSONData];
-    if (![[GlobalData sharedGlobalData] hasLogin]) {
+    
+    if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
         [self.refreshControl beginRefreshing];
         [self setupLocationManager];
+        
+        // SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
+        //        SLog(@"state : %d", [websocket readyState]);
+        //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
+        NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+        NSDictionary * parames = @{@"sessionid":sessionid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            SLog(@"responseObject :%@",responseObject);
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
@@ -373,10 +387,11 @@
 
 -(IBAction)OpenLoginview:(id)sender
 { 
-    XCJLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginViewController"];
+    XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate.mainNavigateController pushViewController:viewContr animated:NO];
     [self presentViewController:delegate.mainNavigateController animated:NO completion:^{}];
+//    [self presentViewController:viewContr animated:NO completion:nil];
 }
 
 @end

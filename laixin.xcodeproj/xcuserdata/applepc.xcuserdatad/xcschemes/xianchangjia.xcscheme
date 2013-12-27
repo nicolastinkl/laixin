@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "86D181C91834822C0005901D"
-               BuildableName = "xianchangjia.app"
+               BuildableName = "laixin.app"
                BlueprintName = "laixin"
                ReferencedContainer = "container:laixin.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "86D181ED1834822D0005901D"
-               BuildableName = "xianchangjiaTests.xctest"
+               BuildableName = "laixinTests.xctest"
                BlueprintName = "laixinTests"
                ReferencedContainer = "container:laixin.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "86D181C91834822C0005901D"
-            BuildableName = "xianchangjia.app"
+            BuildableName = "laixin.app"
             BlueprintName = "laixin"
             ReferencedContainer = "container:laixin.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "86D181C91834822C0005901D"
-            BuildableName = "xianchangjia.app"
+            BuildableName = "laixin.app"
             BlueprintName = "laixin"
             ReferencedContainer = "container:laixin.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "86D181C91834822C0005901D"
-            BuildableName = "xianchangjia.app"
+            BuildableName = "laixin.app"
             BlueprintName = "laixin"
             ReferencedContainer = "container:laixin.xcodeproj">
          </BuildableReference>

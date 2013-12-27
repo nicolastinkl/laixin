@@ -22,5 +22,14 @@ typedef void(^SLSendRequestAndResendRequestBlock)(id sendBlock, id resendBlock);
 
 typedef void(^SLNetBlock)(NSArray *posts, NSError *error);
 
+/* net working */
+typedef void (^CompletionBlock)(id, NSError *);
+typedef void (^ComplexBlock)(id, id, id);
+typedef void (^SimpleBlock)(void);
+typedef void (^InfoBlock)(id);
+typedef void (^ConfirmationBlock)(BOOL);
+typedef BOOL (^BoolBlock)(id);
+typedef void (^DownloadProgressBlock)(NSUInteger bytesRead, long long totalBytes, long long totalBytesExp);
+
 
 #endif

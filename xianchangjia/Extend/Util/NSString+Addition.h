@@ -7,11 +7,18 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSString (Addition)
 
 + (BOOL)IsNilOrEmpty:(NSString *)str;
 
 - (BOOL)isNilOrEmpty;
+
+///
+/// 判断是否是电话格式
+///
+- (BOOL) isValidPhone;
+
 
 //- (NSString *)htmlEncode;
 //- (NSString *)htmlDecode;
@@ -22,5 +29,7 @@
 ////用作只有一行文字的实际宽度
 //- (CGFloat)realWidthForWidth:(CGFloat)width
 //                        font:(UIFont *)font;
+
+
 
 @end

@@ -46,6 +46,7 @@ typedef enum {
 
 #define kidswantURL                         @"http://api.xianchangjia.com/"//@"http://app.kidswant.com.cn"
 #define xianchangjiaURI						@"2824743419://com.liveplus"
+#define LaixinWebsocketURL                  @"ws://127.0.0.1:8000/ws"
 
 #define USER_DEFAULT                [NSUserDefaults standardUserDefaults]
 #define FILE_MANAGER                [NSFileManager defaultManager]
@@ -70,6 +71,16 @@ typedef enum {
 #define APP_STORE_LINK_iTunes       @"itms-apps://itunes.apple.com/cn/app/541873451?mt=8"
 
 #define APP_COMMENT_LINK_iTunes     @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=541873451"
+
+/*keychain group*/
+#define KeyChain_Laixin_account_phone           @"lifestyle.laixin.chengdu.account_phone"
+#define KeyChain_Laixin_account_pwd             @"lifestyle.laixin.chengdu.account_pwd"
+#define KeyChain_Laixin_account_user_id         @"lifestyle.laixin.chengdu.account_user_id"
+#define KeyChain_Laixin_account_user_nick       @"KeyChain_Laixin_account_user_nick"
+#define KeyChain_Laixin_account_user_headpic    @"KeyChain_Laixin_account_user_headpic"
+#define KeyChain_Laixin_account_sessionid       @"KeyChain_Laixin_account_sessionid"
+
+#define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"
 
 /*-----------------------------
  1. 类型1----新的好友动态

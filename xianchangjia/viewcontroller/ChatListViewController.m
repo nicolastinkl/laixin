@@ -40,7 +40,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.title = @"消息";
-    
+   /*
     self.chatList = [ChatList shareInstance];
     //重新排序
     [self.chatList sortWithAscending:NO];
@@ -53,7 +53,7 @@
     //给每一个chat添加监控
     for (Chat* chat in self.chatList) {
         [self addObserverOfChat:chat];
-    }
+    }*/
 }
 
 - (void)dealloc {
@@ -193,6 +193,11 @@
     return 1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
@@ -206,6 +211,8 @@
 //    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     cell.chat = self.chatList[indexPath.row];
+   
+    
     return cell;
 }
 

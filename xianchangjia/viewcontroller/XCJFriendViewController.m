@@ -69,7 +69,6 @@
 
 -(void) reloadContacts
 {
-    
     // Request authorization to Address Book
     ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
     
@@ -188,7 +187,7 @@
             [arrays addObject:addressbook.tel];  //并且删除本机号码
         }
     }];
-    SLog(@"json : %@",[arrays JSONString]);
+//    SLog(@"json : %@",[arrays JSONString]);
 }
 
 - (void)reload:(id)sender

@@ -7,6 +7,12 @@
 
 #import "NSString+Addition.h"
 
+
+
+
+int getIndex (char ch);
+BOOL isNumber (char ch);
+
 @implementation NSString (Addition)
 
 + (BOOL)IsNilOrEmpty:(NSString *)str {
@@ -32,6 +38,68 @@
 {
     return [NSString IsNilOrEmpty:self];
 }
+
+
+
+int getIndex (char ch) {
+    if ((ch >= '0'&& ch <= '9')||(ch >= 'a'&& ch <= 'z')||
+        (ch >= 'A' && ch <= 'Z')|| ch == '_') {
+        return 0;
+    }
+    if (ch == '@') {
+        return 1;
+    }
+    if (ch == '.') {
+        return 2;
+    }
+    return -1;
+}
+
+BOOL isNumber (char ch)
+{
+    if (!(ch >= '0' && ch <= '9')) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (BOOL) isValidPhone
+{
+    NSString * value = self;
+    const char *cvalue = [value UTF8String];
+    int len = strlen(cvalue);
+    if (len != 11) {
+        return FALSE;
+    }
+    if (![self isValidNumber:value])
+    {
+        return FALSE;
+    }
+    NSString *preString = [[NSString stringWithFormat:@"%@",value] substringToIndex:2];
+    if ([preString isEqualToString:@"13"] ||
+        [preString isEqualToString: @"15"] ||
+        [preString isEqualToString: @"18"])
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (BOOL) isValidNumber:(NSString*)value{
+    const char *cvalue = [value UTF8String];
+    int len = strlen(cvalue);
+    for (int i = 0; i < len; i++) {
+        if(!isNumber(cvalue[i])){
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 
 //- (NSString *)htmlEncode{
 //    NSString *str = [self stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];

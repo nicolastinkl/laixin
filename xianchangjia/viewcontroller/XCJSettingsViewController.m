@@ -8,7 +8,7 @@
 
 #import "XCJSettingsViewController.h"
 #import "XCAlbumAdditions.h"
-
+#import "MLNetworkingManager.h"
 
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
@@ -40,8 +40,26 @@
     
     [self LoadData];
 }
+
+- (IBAction)updateInfoClick:(id)sender {
+    NSDictionary * parames = @{@"nick":@"刘杰红tinkl",@"signature":@"土豪。修正你的最爱，担心禽流感。然后：祝贺开张大吉！财源滚滚！"};
+    //nick, signature,sex, birthday, marriage, height
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        SLog(@"responseObject :%@",responseObject);
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+}
+
 -(void) LoadData
 {
+    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    NSDictionary * parames = @{@"uid":@[userid]};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+        SLog(@"responseObject :%@",responseObject);
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+    
+    /*
     NSMutableDictionary * params = [[NSMutableDictionary alloc] init];
     params[@"uid"] = @1571;
     [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params controller:@"user_profile" Action:@"profile" success:^(id obj) {
@@ -60,6 +78,7 @@
     } error:^(NSInteger index) {
     } failure:^(NSError *error) {
     }];
+     */
 }
 
 - (void)didReceiveMemoryWarning

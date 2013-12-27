@@ -23,4 +23,6 @@
 #import "UserInfo.h"
 #import "UIViewController+Indicator.h"
 #import "GCDHelper.h"
+#import "SINGLETONGCD.h"
+#import "blocktypedef.h"
 #endif

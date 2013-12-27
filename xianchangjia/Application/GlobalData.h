@@ -60,7 +60,7 @@
 
 #define table_All__Notity_Message_activity_PhotoCommit  @"table_All__Notity_Message_activity_PhotoCommit" //集成照片评论列表 table
 extern NSString *const GlobalData_service_url;
-
+extern NSString * const GlobalData_main_url;
 extern NSString * const GlobalData_sinaweibo_userID;
 extern NSString * const GlobalData_sinaweibo_accesstoken;
 extern NSString * const GlobalData_sinaweibo_refresh_token;
@@ -117,7 +117,7 @@ extern NSString * const GlobalData_rejectvision;
 extern NSString * const GlobalData_createinvitefirstuse;
 extern NSString * const GlobalData_hasSuccessedLogin;
 extern NSString * const GlobalData_lastCheckUrlTime;
-extern NSString * const GlobalData_main_url;
+
 extern NSString * const GlobalData_safe_main_url;
 extern NSString * const GlobalData_main_server;
 extern NSString * const GlobalData_upload_url;

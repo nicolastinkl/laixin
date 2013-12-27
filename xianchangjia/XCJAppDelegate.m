@@ -11,7 +11,7 @@
 #import "XCAlbumDefines.h"
 #import "SinaWeibo.h"
 #import "XCJLoginViewController.h"
-
+#import "tools.h"
 #import "ChatList.h"
 #import "MLNetworkingManager.h"
 
@@ -19,7 +19,7 @@
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 @interface XCJAppDelegate()
 
-@property (nonatomic,strong) UITabBarController *tabBarController;
+
 
 @end
 
@@ -50,11 +50,31 @@
     }
 }
 
+///所有消息接收器
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {
     //获取了webSocket的推过来的消息
-//    NSDictionary *userInfo  = notification.userInfo;
-    
+    NSDictionary * MsgContent  = notification.userInfo;
+    NSString *requestKey = [tools getStringValue:MsgContent[@"cdata"] defaultValue:nil];
+    if ([requestKey isEqualToString:@"LoginSuccess"]) {
+        //首次登陆返回的用户信息
+        NSDictionary * userinfo = [MsgContent objectForKey:@"result"];
+        int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
+        [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT synchronize];
+    }else if([requestKey isEqualToString:@"user.info"])
+    {
+        // "users":[....]
+        NSDictionary * userinfo = MsgContent[@"result"];
+        NSArray * userArray = userinfo[@"users"];
+        if (userArray && userArray.count > 0) {
+            NSDictionary * dic = userArray[0];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
+            [USER_DEFAULT synchronize];
+        }
+    }
+    SLog(@"webSocketDidReceivePushMessage : %@",requestKey);
 }
 
 -(void)applicationDidFinishLaunching:(UIApplication *)application
@@ -63,7 +83,6 @@
     NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xf16149).CGColor, (id)UIColorFromRGB(0xf14959).CGColor, nil];
     ///setup 4:
     [[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
-   
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -78,17 +97,16 @@
     //    ///setup 4:
     //[[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
     [[mainNavigateController navigationBar] setTranslucent:YES];
+    [[mainNavigateController navigationBar] setHidden:YES];
     [[mainNavigateController navigationBar] setBarStyle:UIBarStyleBlack];
     
-    [[ChatList shareInstance]getDataFromLocalDB]; //从本地存储获得
-    [self updateMessageTabBarItemBadge]; //更新未读条目数
-    //添加监视
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageTabBarItemBadge) name:ChatListNeedUpdateToalUnreadCountNotification object:nil];
+//    [[ChatList shareInstance]getDataFromLocalDB]; //从本地存储获得
+//    [self updateMessageTabBarItemBadge]; //更新未读条目数
+//    //添加监视
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageTabBarItemBadge) name:ChatListNeedUpdateToalUnreadCountNotification object:nil];
     
     //添加WebSocket监视
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:) name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
-    
-    
     
     /*
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
