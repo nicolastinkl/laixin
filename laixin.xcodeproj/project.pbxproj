@@ -99,6 +99,9 @@
 		869CE54E186BEE820004C1EC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8681BDE91836236D00521D36 /* libxml2.dylib */; };
 		869D15131839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		869D15141839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; };
+		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
+		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
+		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
@@ -445,6 +448,12 @@
 		869CE54C186BEC1A0004C1EC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		869D15111839BDBB00B14A02 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		869D15121839BDBB00B14A02 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		86A3069D1871A7D900C7168B /* XCJCompleteUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUserInfoViewController.h; path = viewcontroller/XCJCompleteUserInfoViewController.h; sourceTree = "<group>"; };
+		86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUserInfoViewController.m; path = viewcontroller/XCJCompleteUserInfoViewController.m; sourceTree = "<group>"; };
+		86A306A31871A82A00C7168B /* XCJCompleteUploadImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUploadImgViewController.h; path = viewcontroller/XCJCompleteUploadImgViewController.h; sourceTree = "<group>"; };
+		86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUploadImgViewController.m; path = viewcontroller/XCJCompleteUploadImgViewController.m; sourceTree = "<group>"; };
+		86A306A71871A8B100C7168B /* XCJSuperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSuperViewController.h; path = viewcontroller/XCJSuperViewController.h; sourceTree = "<group>"; };
+		86A306A81871A8B100C7168B /* XCJSuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSuperViewController.m; path = viewcontroller/XCJSuperViewController.m; sourceTree = "<group>"; };
 		86C72DDC184330F9001B6CA0 /* XCModelAllEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCModelAllEntity.h; sourceTree = "<group>"; };
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
@@ -1018,6 +1027,15 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
+		86A306A61871A89700C7168B /* SuperViewController */ = {
+			isa = PBXGroup;
+			children = (
+				86A306A71871A8B100C7168B /* XCJSuperViewController.h */,
+				86A306A81871A8B100C7168B /* XCJSuperViewController.m */,
+			);
+			name = SuperViewController;
+			sourceTree = "<group>";
+		};
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
@@ -1148,6 +1166,9 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86A306A61871A89700C7168B /* SuperViewController */,
+				86A306A31871A82A00C7168B /* XCJCompleteUploadImgViewController.h */,
+				86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */,
 				865632C8185FFDDA00E9903C /* ChatListViewController.h */,
 				865632C9185FFDDA00E9903C /* ChatListViewController.m */,
 				865632CA185FFDDA00E9903C /* ChatViewController.h */,
@@ -1182,6 +1203,8 @@
 				86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */,
 				86FB20FF18716C80006BDE32 /* XCJRegisterViewController.h */,
 				86FB210018716C80006BDE32 /* XCJRegisterViewController.m */,
+				86A3069D1871A7D900C7168B /* XCJCompleteUserInfoViewController.h */,
+				86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -1789,6 +1812,7 @@
 			files = (
 				8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */,
 				86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */,
+				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
@@ -1894,6 +1918,7 @@
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,
 				86EB76CE185AA6CC00836947 /* AFHTTPRequestOperation.m in Sources */,
 				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
+				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
@@ -1949,6 +1974,7 @@
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
+				86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */,
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				86D182AE1834AED30005901D /* LKDB+Mapping.m in Sources */,
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
