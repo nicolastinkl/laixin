@@ -17,7 +17,7 @@
 #import "LXAPIController.h"
 #import "CoreData+MagicalRecord.h"
 #import "LXChatDBStoreManager.h"
-
+#import "XCJLoginNaviController.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -85,13 +85,17 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     /**
      *  login view navigationbar
      */
-    mainNavigateController = [[UINavigationController alloc] initWithNavigationBarClass:[CRGradientNavigationBar class] toolbarClass:nil];
+//    mainNavigateController = [[XCJLoginNaviController alloc] init];
+//    [[mainNavigateController navigationBar] setBarStyle:UIBarStyleBlack];
+//
+//    
+//     [[mainNavigateController navigationBar] setTranslucent:YES];
     //NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xFFFFFF).CGColor, (id)UIColorFromRGB(0xFFFFFF).CGColor, nil];
     //    ///setup 4:
     //[[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
-    [[mainNavigateController navigationBar] setTranslucent:YES];
-    [[mainNavigateController navigationBar] setHidden:YES];
-    [[mainNavigateController navigationBar] setBarStyle:UIBarStyleBlack];
+//    [[mainNavigateController navigationBar] setTranslucent:YES];
+//    [[mainNavigateController navigationBar] setHidden:YES];
+
     
 //    [[ChatList shareInstance]getDataFromLocalDB]; //从本地存储获得
 //    [self updateMessageTabBarItemBadge]; //更新未读条目数

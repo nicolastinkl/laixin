@@ -25,6 +25,8 @@
 #import "LXAPIController.h"
 #import "Sequencer.h"
 #import "LXChatDBStoreManager.h"
+#import "XCJLoginNaviController.h"
+
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -53,6 +55,8 @@
     }
     return self;
 }
+
+SINGLETON_GCD(XCJNearbyHomeViewController)
 
 - (void)viewDidLoad
 {
@@ -121,8 +125,8 @@
 }
 -(void)   initHomeData
 {
-    [self.refreshControl beginRefreshing];
-    [self setupLocationManager];
+//    [self.refreshControl beginRefreshing];
+//    [self setupLocationManager];
     
     NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
     NSDictionary * parames = @{@"sessionid":sessionid};
@@ -446,12 +450,14 @@
 }
 
 -(IBAction)OpenLoginview:(id)sender
-{ 
-    XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
-    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.mainNavigateController pushViewController:viewContr animated:NO];
-    [self presentViewController:delegate.mainNavigateController animated:NO completion:^{}];
-//    [self presentViewController:viewContr animated:NO completion:nil];
+{
+    UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
+    //XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
+   // XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+
+//    [delegate.mainNavigateController pushViewController:viewContr animated:NO];
+//    [self presentViewController:delegate.mainNavigateController animated:NO completion:^{}];
+    [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
 }
 
 @end

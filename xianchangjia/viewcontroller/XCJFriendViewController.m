@@ -86,22 +86,22 @@
     self.title = @"好友";
 //    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reload:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];
     
     self.tableView.rowHeight = 70.0f;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
     //test  add friends
-//     {
+     {
 //     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-//     NSDictionary * parames = @{@"uid":@[@3]};
+//     NSDictionary * parames = @{@"uid":@[@5]};
 //     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
 //     
 //     } failure:^(MLRequest *request, NSError *error) {
 //         
 //     }];
-//     }
+    }
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
     [self reloadFetchedResults:nil];
     
@@ -109,7 +109,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
 //    [self reload:nil];
-//    [self reloadContacts];
+    [self reloadContacts];
 }
 
 #pragma mark -
@@ -228,6 +228,7 @@
 
 -(void) _addContactToAddressBook:(ABAddressBookRef ) addressBooks
 {
+    NSMutableArray * addarray = [[NSMutableArray alloc] init];
     //获取通讯录中的所有人
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBooks);
 
@@ -295,7 +296,7 @@
             CFRelease(valuesRef);
         }
         //将个人信息添加到数组中，循环完成后addressBookTemp中包含所有联系人的信息
-        [_dataSource addObject:addressBook];
+        [addarray addObject:addressBook];
         
         if (abName) CFRelease(abName);
         if (abLastName) CFRelease(abLastName);
@@ -303,13 +304,27 @@
     }
 	
     NSMutableArray * arrays = [[NSMutableArray alloc] init];
-    [_dataSource enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [addarray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         XCJAddressBook * addressbook = obj;
         if (addressbook.tel.length == 11 && ![addressbook.tel hasPrefix:@"0"]) {
-            [arrays addObject:addressbook.tel];  //并且删除本机号码
+//            [arrays addObject:addressbook.tel];  //并且删除本机号码
+            if (addressbook.name) {
+                [arrays addObject:@{@"phone":addressbook.tel,@"name":addressbook.name}];
+            }else{
+                [arrays addObject:@{@"phone":addressbook.tel,@"name":@"未知"}];
+            }
         }
     }];
-//    SLog(@"json : %@",[arrays JSONString]);
+    if (arrays.count > 0) {
+        NSDictionary * parames = @{@"phone_list":arrays};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"phonebook.upload"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+
+    }
+    
+    SLog(@"json : %@",[arrays JSONString]);
+    
 }
 
 - (void)reload:(id)sender
@@ -352,10 +367,11 @@
 {
 
 }
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    ((UILabel *)[cell.contentView viewWithTag:2]).text  = userdesp.friendRelation.nick;
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  = [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, userdesp.friendRelation.nick];
     ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
     DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
     [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];

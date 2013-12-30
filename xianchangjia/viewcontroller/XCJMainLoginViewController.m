@@ -14,6 +14,7 @@
 #import "NSString+Addition.h"
 #import "UIAlertViewAddition.h"
 #import "MLNetworkingManager.h"
+#import "XCJRegisterViewController.h"
 
 @interface XCJMainLoginViewController ()<UITextFieldDelegate>
 
@@ -133,7 +134,7 @@
                                     "timeout":1388472185.910526
                                     }*/
                                    NSString * sessionID =  [response2 objectForKey:@"sessionid"];
-                                   NSString * serverURL =  @"ws://192.168.1.10:8000/ws";//[response2 objectForKey:@"ws"];
+                                   NSString * serverURL =  @"ws://192.168.1.11:8000/ws";//[response2 objectForKey:@"ws"];
                                    if (sessionID) {
                                        
                                        [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
@@ -159,6 +160,7 @@
                                             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
                                                 NSDictionary * dict = responseObject[@"result"];
                                                 LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                                                 [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
                                                 [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
                                                 
                                            } failure:^(MLRequest *request, NSError *error) { 
@@ -184,6 +186,17 @@
 -(void) loginError
 {
     [UIAlertView showAlertViewWithTitle:@"登陆失败" message:@"用户或密码错误"];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"showRegister"])
+    {
+        XCJRegisterViewController *vc = (XCJRegisterViewController *)[segue destinationViewController];
+        [vc initControlls];
+        
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning

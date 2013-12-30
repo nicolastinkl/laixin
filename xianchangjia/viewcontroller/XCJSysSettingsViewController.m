@@ -11,7 +11,7 @@
 #import "XCJMainLoginViewController.h"
 #import "XCJAppDelegate.h"
 #import "UIAlertViewAddition.h"
-
+#import "XCJLoginNaviController.h"
 @interface XCJSysSettingsViewController ()<UIAlertViewDelegate>
 
 @end

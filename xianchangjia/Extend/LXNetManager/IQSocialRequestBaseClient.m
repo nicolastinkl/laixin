@@ -9,7 +9,7 @@
 #import "IQSocialRequestBaseClient.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
-static NSString * const kAPIBaseURLString = @"http://192.168.1.10:8080";
+static NSString * const kAPIBaseURLString = @"http://192.168.1.11:8080";
 
 @implementation IQSocialRequestBaseClient
 + (IQSocialRequestBaseClient *)sharedClient {

@@ -118,15 +118,23 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     //在超时之后执行block
     dispatch_after(popTime, request_is_timeout_judge_queue(), ^(void){
         //判断此request是否还存在于sentRequests里
-        if ([_sentRequests containsObject:request]) {
-            NSError *error = [NSError errorWithDomain:SRWebSocketErrorDomain code:8888 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Request timeout!"] forKey:NSLocalizedDescriptionKey]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                request.failureBlock(request,error);
-                //删去request
-                [_sentRequests removeObject:request];
-            });
-        }else{
-            SLog(@"没有超时 , request key :  %@",request.requestKey);
+        @try {
+            if ([_sentRequests containsObject:request]) {
+                NSError *error = [NSError errorWithDomain:SRWebSocketErrorDomain code:8888 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Request timeout!"] forKey:NSLocalizedDescriptionKey]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    request.failureBlock(request,error);
+                    //删去request
+                    [_sentRequests removeObject:request];
+                });
+            }else{
+                SLog(@"没有超时 , request key :  %@",request.requestKey);
+            }
+        }
+        @catch (NSException *exception) {
+            SLog(@"error: %@",exception.userInfo);
+        }
+        @finally {
+            
         }
     });
 }

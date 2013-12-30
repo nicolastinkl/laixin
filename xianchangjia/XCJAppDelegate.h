@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-@class SinaWeibo;
+@class SinaWeibo,XCJLoginNaviController;
 @interface XCJAppDelegate : UIResponder <UIApplicationDelegate>
 {
     SinaWeibo *sinaweiboMain;
 }
 @property (strong, nonatomic) UIWindow                  *window;
 @property (readonly, nonatomic) SinaWeibo				*sinaweiboMain;
-@property (nonatomic, strong) IBOutlet UINavigationController *mainNavigateController;
+@property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;
 @property (nonatomic,strong) UITabBarController *tabBarController;
 -(void) initWeiboView;
 @end

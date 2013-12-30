@@ -266,6 +266,8 @@
 		86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */; };
 		86FB20F6186D8215006BDE32 /* FCFriends.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20F5186D8215006BDE32 /* FCFriends.m */; };
 		86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20F8186D8256006BDE32 /* FCUserDescription.m */; };
+		86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */; };
+		86FB210118716C80006BDE32 /* XCJRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB210018716C80006BDE32 /* XCJRegisterViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -688,6 +690,10 @@
 		86FB20F5186D8215006BDE32 /* FCFriends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCFriends.m; path = DAOModel/coredata/FCFriends.m; sourceTree = "<group>"; };
 		86FB20F7186D8256006BDE32 /* FCUserDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCUserDescription.h; path = DAOModel/coredata/FCUserDescription.h; sourceTree = "<group>"; };
 		86FB20F8186D8256006BDE32 /* FCUserDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCUserDescription.m; path = DAOModel/coredata/FCUserDescription.m; sourceTree = "<group>"; };
+		86FB20FC1871640C006BDE32 /* XCJLoginNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJLoginNaviController.h; path = viewcontroller/XCJLoginNaviController.h; sourceTree = "<group>"; };
+		86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJLoginNaviController.m; path = viewcontroller/XCJLoginNaviController.m; sourceTree = "<group>"; };
+		86FB20FF18716C80006BDE32 /* XCJRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRegisterViewController.h; path = viewcontroller/XCJRegisterViewController.h; sourceTree = "<group>"; };
+		86FB210018716C80006BDE32 /* XCJRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRegisterViewController.m; path = viewcontroller/XCJRegisterViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1172,6 +1178,10 @@
 				869CE4CE186BCD120004C1EC /* XCJMainLoginViewController.m */,
 				86D9A87C186C1A0500147631 /* XCJSysSettingsViewController.h */,
 				86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */,
+				86FB20FC1871640C006BDE32 /* XCJLoginNaviController.h */,
+				86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */,
+				86FB20FF18716C80006BDE32 /* XCJRegisterViewController.h */,
+				86FB210018716C80006BDE32 /* XCJRegisterViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -1865,6 +1875,7 @@
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,
 				869CE534186BE38D0004C1EC /* MagicalRecord+Setup.m in Sources */,
 				86EB76C7185AA6CC00836947 /* ObjcRuntime.m in Sources */,
+				86FB210118716C80006BDE32 /* XCJRegisterViewController.m in Sources */,
 				86D183061834AFB00005901D /* XCDataDBFactory.m in Sources */,
 				869CE532186BE38D0004C1EC /* MagicalRecord+iCloud.m in Sources */,
 				869CE527186BE38D0004C1EC /* NSManagedObject+MagicalRecord.m in Sources */,
@@ -1882,6 +1893,7 @@
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,
 				86EB76CE185AA6CC00836947 /* AFHTTPRequestOperation.m in Sources */,
+				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,

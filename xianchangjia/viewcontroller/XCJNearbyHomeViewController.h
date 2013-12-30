@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJNearbyHomeViewController : UITableViewController
++(XCJNearbyHomeViewController* )sharedXCJNearbyHomeViewController;
 -(void) refershCurrentScene:(NSInteger) sceneID;
 @end

@@ -44,7 +44,8 @@
 }
 
 - (IBAction)updateInfoClick:(id)sender {
-    NSDictionary * parames = @{@"nick":@"林Sir",@"signature":@"## 前言CoreData是iOS开发中经常使用的数据持久化的技术。但其操作过程稍微繁琐，即使你只是实现简单的存"};
+    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    NSDictionary * parames = @{@"nick":[NSString stringWithFormat:@"表弟 id%@",userid],@"signature":@" S开发中经常使用的数据持久化的技术。但其操作过程稍微繁琐，即使你只是实现简单的存"};
     //@"headpic":@"http://media.breadtrip.com/photos/2013/02/10/5b4cd8bc68fd765e9ca9e68313c8030f.jpg"
     //nick, signature,sex, birthday, marriage, height
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
