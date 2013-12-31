@@ -9,10 +9,6 @@
 #import "ChatViewController.h"
 #import "Extend.h"
 #import "MLTextView.h"
-#import "Chat.h"
-#import "MessageCell.h"
-#import "MessageList.h"
-#import "Message.h"
 #import "XCAlbumAdditions.h"
 #import "XCJChatMessageCell.h"
 #import "XCAlbumAdditions.h"
@@ -20,22 +16,22 @@
 #import "MarkupParser.h"
 #import "OHAttributedLabel.h"
 #import "UIButton+Bootstrap.h"
+#import "Conversation.h"
+#import "LXAPIController.h"
+#import "LXChatDBStoreManager.h"
+#import "Sequencer.h"
+#import "FCMessage.h"
+#import "FCUserDescription.h"
+#import "LXRequestFacebookManager.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
-//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inputContainerViewBottomConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextView *inputTextView;
-
 @property (weak, nonatomic) UIView *keyboardView;
-
-
-@property (strong,nonatomic) MessageList *messageList;
-@property (strong,nonatomic) NSMutableArray *messageCellHeights;
-
-@property (nonatomic, strong) MessageCell *prototypeCell;
-
+@property (strong,nonatomic) NSMutableArray *messageList;
 @end
 
 @implementation ChatViewController
@@ -53,8 +49,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.title = self.chat.name;
-//    self.inputTextView.scrollsToTop = NO;
+    self.title = self.conversation.facebookName;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -64,50 +59,125 @@
 //    panRecognizer.delegate = self;
 //    [self.tableView addGestureRecognizer:panRecognizer];
     
-    
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
-    
     [button defaultStyle];
+    
 //    self.inputContainerView.layer.borderColor = [UIColor grayColor].CGColor;
 //    self.inputContainerView.layer.borderWidth = 0.5f;
     self.inputContainerView.top = self.view.height - self.inputContainerView.height;
     self.inputTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    //载入聊天记录
-    //获取聊天列表
-    NSArray *data =
-    @[
-      @{
-          @"avatarURL":@"http://tp4.sinaimg.cn/1600725215/180/5628483622/1",
-          @"name":@"天若有情天亦老天若有情天亦老天若有情天亦老天若有情天亦老",
-          @"time":@1386039357,
-          @"content":@"昨天你睡觉的时候",
-          },
-      @{
-          @"avatarURL":@"http://tp4.sinaimg.cn/3217545835/50/40012531405/0",
-          @"name":@"司空滢渟9945",
-          @"time":@1386039358,
-          @"content":@"昨天你睡觉的时候在干 2.绘制",
-          }
-    ];
     
-    [self.messageList turnObject:data];
-    
-    //重新排序
-    [self.messageList sortWithAscending:YES];
-    
-    //初始化高度记录数组
-//    for (NSUInteger i=0; i<self.messageList.count; i++) {
-//        [self.messageCellHeights addObject:@0];
-//    }
-    
-    //重载TableView
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
     
     //KVO监控chatList单例数组
     [self.messageList addObserver:self forKeyPath:@"array" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionPrior context:nil];
 
     //tableView底部
     [self scrollToBottonWithAnimation:NO];
+    
+    [self setUpSequencer];
+    
+    if (!self.userinfo) {
+        // from db or networking
+          [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+              self.userinfo = response;
+          } withuid:self.conversation.facebookId];
+    }
+}
+
+- (void) setUpSequencer
+{
+    __weak ChatViewController *self_ = self;
+     Sequencer *sequencer = [[Sequencer alloc] init];
+    [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
+        self_.messageList = [NSMutableArray arrayWithArray:[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAllMessagesInConversation:self_.conversation]];
+        [self_.tableView reloadData];
+        completion(nil);
+    }];
+    [sequencer run];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.conversation.badgeNumber = @(0);
+    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    
+    /* receive websocket message*/
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(webSocketDidReceivePushMessage:)
+                                                 name:MLNetworkingManagerDidReceivePushMessageNotification
+                                               object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)webSocketDidReceivePushMessage:(NSNotification *)notification
+{
+    //获取了webSocket的推过来的消息
+    NSDictionary * MsgContent  = notification.userInfo;
+    SLog(@"MsgContent :%@",MsgContent);
+    if ([MsgContent[@"push"] intValue] == 1) {
+        NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
+        if ([requestKey isEqualToString:@"newmsg"]) {
+            /*
+             {"push": true, "data": {"message": {"toid": 14, "msgid": 5, "content": "\u6211\u6765\u4e86sss", "fromid": 2, "time": 1388477804.0}}, "type": "newmsg"}
+             */
+            
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"message"];
+            
+            NSString *facebookID =dicMessage[@"fromid"];
+            if ([self.conversation.facebookId isEqualToString:facebookID]) {
+                // int view
+                
+                NSString * content = dicMessage[@"content"];
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                self.conversation.lastMessage = content;
+                self.conversation.lastMessageDate = date;
+                self.conversation.badgeNumber = @0;
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg]; //table reload
+                [localContext MR_saveToPersistentStoreAndWait];
+
+            }else if(![self.conversation.facebookId isEqualToString:facebookID]){
+                //out view
+                NSString * content = dicMessage[@"content"];
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                self.conversation.lastMessage = content;
+                self.conversation.lastMessageDate = date;
+                
+                // increase badge number.
+                int badgeNumber = [self.conversation.badgeNumber intValue];
+                badgeNumber ++;
+                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg]; //table reload
+                [localContext MR_saveToPersistentStoreAndWait];
+            }
+        }
+    }
+    
 }
 
 - (void)dealloc
@@ -119,6 +189,9 @@
                                                     name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -128,51 +201,42 @@
 }
 
 - (IBAction)SendTextMsgClick:(id)sender {
-    Message *message = [[Message alloc]init];
-    message.name = @"天王盖地虎";
-    message.content = self.inputTextView.text;
-    message.time = [[NSDate date] timeIntervalSince1970];
-    message.avatarURL = [NSURL URLWithString:@"http://tp2.sinaimg.cn/3900241153/50/5679138377/1"];
-    //添加到列表
-    [self.messageList addObject:message];
-    self.inputTextView.text = @"";
-     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
-    [button defaultStyle];
-}
-
-- (MessageList*)messageList
-{
-    if (!_messageList) {
-        _messageList = [[MessageList alloc]init];
+    NSString * text = self.inputTextView.text;
+    if ([text trimWhitespace].length > 0) {
+        //send to websocket message.send(uid,content) 私信 Result={“msgid”:}
+        
+        NSDictionary * parames = @{@"uid":self.conversation.facebookId,@"content":text};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"message.send"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
+            NSDictionary * dic = [responseObject objectForKey:@"result"];
+            if (dic) {
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = text;
+                msg.sentDate = [NSDate date];
+                msg.messageType = @(messageType_text);
+                // message did not come, this will be on rigth
+                msg.messageStatus = @(NO);
+                msg.messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@"0"];
+                self.conversation.lastMessage = text;
+                self.conversation.lastMessageDate = [NSDate date];
+                self.conversation.badgeNumber = @0;
+                self.inputTextView.text = @"";
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
+                UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+                [button defaultStyle];
+            }
+           
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
     }
-    return _messageList;
 }
 
-- (NSMutableArray*)messageCellHeights
-{
-    if (!_messageCellHeights) {
-        _messageCellHeights = [[NSMutableArray alloc]init];
-    }
-    return _messageCellHeights;
-}
-
-#warning 测试是否捕获到了正确的键盘
 - (IBAction)adjustKeyboardFrame:(id)sender {
     //检测冲突
     [self.view exerciseAmiguityInLayoutRepeatedly:YES];
-    //其他
-    //    if (self.keyboardView) {
-    //        CGRect frame = self.keyboardView.frame;
-    //        frame.origin.y += 2;
-    //        self.keyboardView.frame = frame;
-    //
-    //        static CGFloat green = 255.0;
-    //        green -= 10;
-    //        if (green<0) {
-    //            green = 255.0;
-    //        }
-    //        self.keyboardView.backgroundColor = [UIColor colorWithRed:0 green:green/255.0 blue:0 alpha:1.0];
-    //    }
 }
 
 - (IBAction)addImage:(id)sender {
@@ -244,15 +308,14 @@
     
     UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     
-    Message *message = [[Message alloc]init];
-    message.name = @"天王盖地虎";
-    message.content = @"";
-    message.time = [[NSDate date] timeIntervalSince1970];
-    message.avatarURL = [NSURL URLWithString:@"http://tp2.sinaimg.cn/3900241153/50/5679138377/1"];
-    message.messageImage = postImage;
-    //添加到列表
-    [self.messageCellHeights addObject:@0];
-    [self.messageList addObject:message];
+//    Message *message = [[Message alloc]init];
+//    message.name = @"天王盖地虎";
+//    message.content = @"";
+//    message.time = [[NSDate date] timeIntervalSince1970];
+//    message.avatarURL = [NSURL URLWithString:@"http://tp2.sinaimg.cn/3900241153/50/5679138377/1"];
+//    message.messageImage = postImage;
+//    //添加到列表
+//    [self.messageList addObject:message];
 }
 
 
@@ -385,7 +448,7 @@
         }
     }
     
-    label.delegate = self;
+//    label.delegate = self;
     CGRect labelRect = label.frame;
     labelRect.size.width = [label sizeThatFits:CGSizeMake(222, CGFLOAT_MAX)].width;
     labelRect.size.height = [label sizeThatFits:CGSizeMake(222, CGFLOAT_MAX)].height;
@@ -417,7 +480,7 @@
     */
     static NSString *CellIdentifier = @"XCJChatMessageCell";
     XCJChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    Message *message = self.messageList[indexPath.row];
+    FCMessage *message = self.messageList[indexPath.row];
 //#warning 现在是根据名字来判断是否本人，实际情况需要根据uid来判断
 //    if (![message.name isEqualToString:self.chat.name]) {
 //        cell.backgroundColor = [UIColor colorWithWhite:0.883 alpha:1.000];
@@ -432,25 +495,32 @@
 //    labelContent.delegate = self;
     UIImageView * imageview_Img = (UIImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
-    [imageview setImageWithURL:message.avatarURL];
-    labelName.text = message.name;
-    labelTime.text = [tools timeLabelTextOfTime:message.time];
-    labelContent.text = message.content;
+    
+    if ([message.messageStatus boolValue]) {
+        //Incoming
+        [imageview setImageWithURL:[NSURL URLWithString:self.userinfo.headpic]];
+        labelName.text = self.userinfo.nick;
+    }else{
+        //Outcoming
+        [imageview setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        labelName.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    }
+    labelTime.text = [tools FormatStringForDate:message.sentDate];
+    labelContent.text = message.text;
 //    [self creatAttributedLabel:message.content Label:labelContent];
     /*build test frame */
     [labelContent sizeToFit];
-    if (message.messageImage) {
+    if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
-        [imageview_Img setImage:message.messageImage];
+        [imageview_Img setImageWithURL:[NSURL URLWithString:message.imageUrl]];
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
-    }else{
+    }else if ([message.messageType intValue] == messageType_text) {
         imageview_Img.hidden = YES;
-        
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        CGSize sizeToFit = [ message.content sizeWithFont:labelContent.font constrainedToSize:CGSizeMake(222.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+        CGSize sizeToFit = [ message.text sizeWithFont:labelContent.font constrainedToSize:CGSizeMake(222.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
         [labelContent setWidth:sizeToFit.width];
         [labelContent setHeight:sizeToFit.height]; // set label content frame with tinkl
@@ -467,7 +537,7 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-     XCJChatMessageCell * msgcell =(XCJChatMessageCell*) cell;
+    XCJChatMessageCell * msgcell =(XCJChatMessageCell*) cell;
     UILabel * labelContent = (UILabel *) [msgcell.contentView subviewWithTag:4];
     [labelContent sizeToFit];
     
@@ -495,40 +565,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Message *message = self.messageList[indexPath.row];
-    if (message.messageImage) {
+    FCMessage *message = self.messageList[indexPath.row];
+    if ([message.messageType intValue] == messageType_image) {
         return 148.0f;
     }
-    return [self heightForCellWithPost:message.content]+20.0f;
-
-    //如果有记录，直接返回
-    if ([self.messageCellHeights[indexPath.row] integerValue]>0) {
-        return [self.messageCellHeights[indexPath.row] doubleValue];
-    }
-    
-    if (!self.prototypeCell)
-    {
-        self.prototypeCell = [self.tableView dequeueReusableCellWithIdentifier:@"MessageCell"];
-    }
-    
-    self.prototypeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if (indexPath.row>0&&[((Message*)self.messageList[indexPath.row-1]).name isEqualToString:((Message*)self.messageList[indexPath.row]).name]) {
-        self.prototypeCell.isDisplayOnlyContent = YES;
-    }else{
-        self.prototypeCell.isDisplayOnlyContent = NO;
-    }
-    
-    self.prototypeCell.message = self.messageList[indexPath.row];
-    
-    [self.prototypeCell layoutIfNeeded];
-    
-    CGSize size = [self.prototypeCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-    
-    //记录高度
-    self.messageCellHeights[indexPath.row] = [NSNumber numberWithDouble:size.height+1];
-    
-    return size.height+1;
+    return [self heightForCellWithPost:message.text]+20.0f;
 }
 
 
@@ -594,7 +635,7 @@
     }
     if (!keyboardWindow||![[keyboardWindow description] hasPrefix:@"<UITextEffectsWindow"]) return;
     self.keyboardView = keyboardWindow.subviews[0];
-#warning 以上只适用于IOS7，其他的系统需要测试。
+//#warning 以上只适用于IOS7，其他的系统需要测试。
 }
 
 #pragma mark  textview

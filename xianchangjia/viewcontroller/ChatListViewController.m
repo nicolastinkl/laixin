@@ -244,8 +244,8 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier isEqualToString:@"Chat"]) {
-        ChatViewController *vc = [segue destinationViewController];
-        vc.chat = (Chat*)sender;
+//        ChatViewController *vc = [segue destinationViewController];
+//        vc.chat = (Chat*)sender;
     }
 }
 

@@ -99,6 +99,7 @@
 		869CE54E186BEE820004C1EC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8681BDE91836236D00521D36 /* libxml2.dylib */; };
 		869D15131839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		869D15141839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; };
+		869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DDC5E1872BB9300560AFD /* XCJMsgListController.m */; };
 		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
 		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
@@ -215,7 +216,6 @@
 		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
-		86D9A8A4186D30C800147631 /* FCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89F186D30C800147631 /* FCMessage.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
 		86EB76451859A66800836947 /* logo120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76421859A66800836947 /* logo120x120.png */; };
@@ -268,6 +268,7 @@
 		86EB7711185AB1D800836947 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7710185AB1D800836947 /* ImageIO.framework */; };
 		86F9B9AE1872865600ED768B /* XCJChangeUserInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F9B9AD1872865600ED768B /* XCJChangeUserInfoController.m */; };
 		86F9B9B218728AFE00ED768B /* XCJUserInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F9B9B118728AFE00ED768B /* XCJUserInfoController.m */; };
+		86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F9B9B51872A3CB00ED768B /* FCMessage.m */; };
 		86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */; };
 		86FB20F6186D8215006BDE32 /* FCFriends.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20F5186D8215006BDE32 /* FCFriends.m */; };
 		86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20F8186D8256006BDE32 /* FCUserDescription.m */; };
@@ -450,6 +451,8 @@
 		869CE54C186BEC1A0004C1EC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		869D15111839BDBB00B14A02 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		869D15121839BDBB00B14A02 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		869DDC5D1872BB9300560AFD /* XCJMsgListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMsgListController.h; path = viewcontroller/XCJMsgListController.h; sourceTree = "<group>"; };
+		869DDC5E1872BB9300560AFD /* XCJMsgListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMsgListController.m; path = viewcontroller/XCJMsgListController.m; sourceTree = "<group>"; };
 		86A3069D1871A7D900C7168B /* XCJCompleteUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUserInfoViewController.h; path = viewcontroller/XCJCompleteUserInfoViewController.h; sourceTree = "<group>"; };
 		86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUserInfoViewController.m; path = viewcontroller/XCJCompleteUserInfoViewController.m; sourceTree = "<group>"; };
 		86A306A31871A82A00C7168B /* XCJCompleteUploadImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUploadImgViewController.h; path = viewcontroller/XCJCompleteUploadImgViewController.h; sourceTree = "<group>"; };
@@ -587,8 +590,6 @@
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
-		86D9A89E186D30C800147631 /* FCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCMessage.h; path = DAOModel/coredata/FCMessage.h; sourceTree = "<group>"; };
-		86D9A89F186D30C800147631 /* FCMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCMessage.m; path = DAOModel/coredata/FCMessage.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
 		86EB76411859A66800836947 /* logo80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo80x80.png; sourceTree = "<group>"; };
 		86EB76421859A66800836947 /* logo120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo120x120.png; sourceTree = "<group>"; };
@@ -699,6 +700,8 @@
 		86F9B9AD1872865600ED768B /* XCJChangeUserInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeUserInfoController.m; path = viewcontroller/XCJChangeUserInfoController.m; sourceTree = "<group>"; };
 		86F9B9B018728AFE00ED768B /* XCJUserInfoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJUserInfoController.h; path = viewcontroller/XCJUserInfoController.h; sourceTree = "<group>"; };
 		86F9B9B118728AFE00ED768B /* XCJUserInfoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJUserInfoController.m; path = viewcontroller/XCJUserInfoController.m; sourceTree = "<group>"; };
+		86F9B9B41872A3CB00ED768B /* FCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCMessage.h; path = DAOModel/coredata/FCMessage.h; sourceTree = "<group>"; };
+		86F9B9B51872A3CB00ED768B /* FCMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCMessage.m; path = DAOModel/coredata/FCMessage.m; sourceTree = "<group>"; };
 		86FB20EE186D5B90006BDE32 /* LXChatDBStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXChatDBStoreManager.h; path = LXNetManager/LXChatDBStoreManager.h; sourceTree = "<group>"; };
 		86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXChatDBStoreManager.m; path = LXNetManager/LXChatDBStoreManager.m; sourceTree = "<group>"; };
 		86FB20F4186D8215006BDE32 /* FCFriends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCFriends.h; path = DAOModel/coredata/FCFriends.h; sourceTree = "<group>"; };
@@ -1202,14 +1205,11 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86F9B9B318729C3900ED768B /* Chat */,
 				86F9B9AF18728ADA00ED768B /* User */,
 				86A306AB18725EE600C7168B /* SystemSettings */,
 				86A306AA18725DBE00C7168B /* LoginViews */,
 				86A306A61871A89700C7168B /* SuperViewController */,
-				865632C8185FFDDA00E9903C /* ChatListViewController.h */,
-				865632C9185FFDDA00E9903C /* ChatListViewController.m */,
-				865632CA185FFDDA00E9903C /* ChatViewController.h */,
-				865632CB185FFDDA00E9903C /* ChatViewController.m */,
 				865632CC185FFDDA00E9903C /* XCJCommentViewController.h */,
 				865632CD185FFDDA00E9903C /* XCJCommentViewController.m */,
 				865632CE185FFDDA00E9903C /* XCJDomainsViewController.h */,
@@ -1402,10 +1402,10 @@
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				86F9B9B41872A3CB00ED768B /* FCMessage.h */,
+				86F9B9B51872A3CB00ED768B /* FCMessage.m */,
 				86FB20F7186D8256006BDE32 /* FCUserDescription.h */,
 				86FB20F8186D8256006BDE32 /* FCUserDescription.m */,
-				86D9A89E186D30C800147631 /* FCMessage.h */,
-				86D9A89F186D30C800147631 /* FCMessage.m */,
 				86D9A884186D294600147631 /* LXUser.h */,
 				86D9A885186D294600147631 /* LXUser.m */,
 				86FB20F4186D8215006BDE32 /* FCFriends.h */,
@@ -1731,6 +1731,19 @@
 			name = User;
 			sourceTree = "<group>";
 		};
+		86F9B9B318729C3900ED768B /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				865632C8185FFDDA00E9903C /* ChatListViewController.h */,
+				865632C9185FFDDA00E9903C /* ChatListViewController.m */,
+				865632CA185FFDDA00E9903C /* ChatViewController.h */,
+				865632CB185FFDDA00E9903C /* ChatViewController.m */,
+				869DDC5D1872BB9300560AFD /* XCJMsgListController.h */,
+				869DDC5E1872BB9300560AFD /* XCJMsgListController.m */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1973,7 +1986,6 @@
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
 				865632EC185FFDDA00E9903C /* XCJSendNewContentViewController.m in Sources */,
 				869CE52C186BE38D0004C1EC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
-				86D9A8A4186D30C800147631 /* FCMessage.m in Sources */,
 				86EB76D2185AA6CC00836947 /* AFSecurityPolicy.m in Sources */,
 				869CE4D4186BDB160004C1EC /* IQSocialRequestBaseClient.m in Sources */,
 				865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */,
@@ -1984,6 +1996,7 @@
 				865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */,
 				86D183021834AF9F0005901D /* tools.m in Sources */,
 				869CE529186BE38D0004C1EC /* NSManagedObjectContext+MagicalObserving.m in Sources */,
+				869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */,
 				86EB76DA185AA6CC00836947 /* UIButton+AFNetworking.m in Sources */,
 				86F9B9AE1872865600ED768B /* XCJChangeUserInfoController.m in Sources */,
 				862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */,
@@ -2017,6 +2030,7 @@
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
+				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
 				86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */,
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,

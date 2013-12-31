@@ -54,22 +54,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
 }
-
-///所有消息接收器
-- (void)webSocketDidReceivePushMessage:(NSNotification *)notification
-{
-    //获取了webSocket的推过来的消息
-    /*NSDictionary * MsgContent  = notification.userInfo;
-    NSString *requestKey = [tools getStringValue:MsgContent[@"cdata"] defaultValue:nil];
-    if ([requestKey isEqualToString:@"LoginSuccess"]) {
-        
-    }else if([requestKey isEqualToString:@"user.info"])
-    {
-        
-    }
-    SLog(@"webSocketDidReceivePushMessage : %@",requestKey);*/
-}
-
+ 
 -(void)applicationDidFinishLaunching:(UIApplication *)application
 {
     
@@ -103,7 +88,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageTabBarItemBadge) name:ChatListNeedUpdateToalUnreadCountNotification object:nil];
     
     //添加WebSocket监视
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:) name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:) name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
 
     [self copyDefaultStoreIfNecessary];
     [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];

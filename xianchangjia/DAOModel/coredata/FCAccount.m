@@ -42,9 +42,9 @@
 -(FCUserDescription * )userdesp
 {
     //MARK Base fbid to find userdesp object,, if userdesp is nil, will select from networking
-   __block FCUserDescription * localdespObject = nil;
+    __block FCUserDescription * localdespObject = nil;
     
-   localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:self.facebookId];
+    localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:self.facebookId];
     if (localdespObject) {
         return localdespObject;
     }else{

@@ -22,4 +22,13 @@
  */
 -(NSArray * ) fetchAlAccountsByArray:(NSArray * ) uids;
 
+/**
+ *  获取单个user
+ *
+ *  @param uid <#uid description#>
+ *
+ *  @return <#return value description#>
+ */
+-(void) getUserDesPtionCompletion:(CompletionBlock)completion withuid:(NSString * ) uid;
+
 @end

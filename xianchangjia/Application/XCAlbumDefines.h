@@ -83,6 +83,8 @@ typedef enum {
 
 #define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"
 
+
+
 /*-----------------------------
  1. 类型1----新的好友动态
  2. 类型2----新的被人评论

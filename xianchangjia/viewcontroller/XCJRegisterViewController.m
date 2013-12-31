@@ -146,7 +146,6 @@
                 NSString * yanzhengCode =  [response objectForKey:@"code"];
                 if (yanzhengCode) {
                     self.yanzhengNumber.text = yanzhengCode;
-                    
                 }else{
                     [self loginError:@"获取验证码出错"];
                 }

@@ -5,6 +5,10 @@
         <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="facebookName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastMessage" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="lastMessageDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageStutes" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="account" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="conversation" inverseEntity="FCAccount" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="conversation" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
@@ -20,11 +24,15 @@
         <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
+        <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageStatus" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="sentDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="conversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation" inverseName="messages" inverseEntity="Conversation" syncable="YES"/>
+        <relationship name="messageUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespMsg" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
     <entity name="FCUserDescription" representedClassName="FCUserDescription" syncable="YES">
         <attribute name="background_image" optional="YES" attributeType="String" syncable="YES"/>
@@ -39,12 +47,13 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="userDesp" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="fcindefault" inverseEntity="FCAccount" syncable="YES"/>
         <relationship name="userDespFriends" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCFriends" inverseName="friendRelation" inverseEntity="FCFriends" syncable="YES"/>
+        <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Conversation" positionX="250" positionY="-27" width="128" height="135"/>
-        <element name="FCAccount" positionX="7" positionY="108" width="128" height="118"/>
-        <element name="FCMessage" positionX="421" positionY="198" width="128" height="120"/>
-        <element name="FCUserDescription" positionX="232" positionY="264" width="128" height="223"/>
-        <element name="FCFriends" positionX="-45" positionY="300" width="128" height="73"/>
+        <element name="Conversation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCAccount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCFriends" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCUserDescription" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

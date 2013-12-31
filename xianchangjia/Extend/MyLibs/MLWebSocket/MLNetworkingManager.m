@@ -14,12 +14,12 @@
 #import "tools.h"
 #import "tools.h"
 
+NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
 #define kRequestKeyName @"cdata"// @"client_code"
 #define kRequestKeyLength 5
 #define kTimeOut 5 //暂时设置10秒
 
-NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
 //static NSString * const MLNetworkingManagerBaseURLString = LaixinWebsocketURL;
 
