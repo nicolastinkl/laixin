@@ -19,4 +19,11 @@
 - (void)showIndicatorViewAtpoint:(CGPoint)point indicatorStyle:(UIActivityIndicatorViewStyle)style;
 
 - (void)hideIndicatorView;
+
+
+- (void)showIndicatorViewGary;
+- (void)showIndicatorViewBlue;
+- (void)showIndicatorViewLargeBlue;
+- (void)hideIndicatorViewBlueOrGary;
+
 @end

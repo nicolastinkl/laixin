@@ -108,7 +108,6 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     [self copyDefaultStoreIfNecessary];
     [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
     
-    
     // Override point for customization after application launch.
     return YES;
 }

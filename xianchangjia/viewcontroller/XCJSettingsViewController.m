@@ -10,10 +10,10 @@
 #import "XCAlbumAdditions.h"
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
+
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
-@property (weak, nonatomic) IBOutlet UILabel *UserName;
-@property (weak, nonatomic) IBOutlet UILabel *UserSign;
+@property (weak, nonatomic) IBOutlet UILabel *UserName; 
 
 @end
 
@@ -40,6 +40,7 @@
     
 //    LXUser * user =  [[LXAPIController sharedLXAPIController] currentUser];
 //    self.title = user.nick;
+    
     [self LoadData];
 }
 
@@ -71,7 +72,6 @@
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
             [USER_DEFAULT synchronize];
             
-            self.UserSign.text =  [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
             self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
             [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
         }
@@ -131,45 +131,6 @@
 //    
 //    return cell;
 //}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

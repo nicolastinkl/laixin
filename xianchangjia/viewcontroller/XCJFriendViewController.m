@@ -26,6 +26,7 @@
 #import "FCUserDescription.h"
 #import "FCFriends.h"
 #import "CoreData+MagicalRecord.h"
+#import "XCJUserInfoController.h"
 
 @interface XCJFriendViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 {
@@ -94,13 +95,12 @@
     
     //test  add friends
      {
-//     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-//     NSDictionary * parames = @{@"uid":@[@5]};
-//     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
-//     
-//     } failure:^(MLRequest *request, NSError *error) {
-//         
-//     }];
+     NSDictionary * parames = @{@"uid":@[@5,@6,@3,@9,@8,@7]};
+     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+     
+     } failure:^(MLRequest *request, NSError *error) {
+         
+     }];
     }
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
     [self reloadFetchedResults:nil];
@@ -109,7 +109,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
 //    [self reload:nil];
-    [self reloadContacts];
+//    [self reloadContacts];
 }
 
 #pragma mark -
@@ -365,7 +365,10 @@
 
 - (void)showRecipe:(FCFriends *) friend animated:(BOOL)animated
 {
-
+    XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
+    infoview.frend = friend;
+    infoview.title = @"详细资料";
+    [self.navigationController pushViewController:infoview animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath

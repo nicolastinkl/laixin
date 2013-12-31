@@ -134,7 +134,7 @@
                                     "timeout":1388472185.910526
                                     }*/
                                    NSString * sessionID =  [response2 objectForKey:@"sessionid"];
-                                   NSString * serverURL =  @"ws://192.168.1.11:8000/ws";//[response2 objectForKey:@"ws"];
+                                   NSString * serverURL = [response2 objectForKey:@"ws"];
                                    if (sessionID) {
                                        
                                        [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
@@ -194,7 +194,12 @@
     {
         XCJRegisterViewController *vc = (XCJRegisterViewController *)[segue destinationViewController];
         [vc initControlls];
-        
+    }else if ([[segue identifier] isEqualToString:@"showforgetPwd"])
+    {
+        XCJRegisterViewController *vc = (XCJRegisterViewController *)[segue destinationViewController];
+        UILabel * title  = (UILabel *) [vc.view subviewWithTag:5];
+        title.text = @"找回密码";
+        [vc initControlls];
     }
     
 }

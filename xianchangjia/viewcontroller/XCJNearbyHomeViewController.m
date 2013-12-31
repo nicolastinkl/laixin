@@ -26,7 +26,7 @@
 #import "Sequencer.h"
 #import "LXChatDBStoreManager.h"
 #import "XCJLoginNaviController.h"
-
+#import "UIView+Additon.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -63,16 +63,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-//    [USER_DEFAULT setValue:@"f91ea9e4e0fc4460a38f645dcf8fc93a" forKey:GlobalData_user_session];
-//    [USER_DEFAULT setValue:@1 forKey:GlobalData_user_id];
-//    [USER_DEFAULT synchronize];
-    
-    //[USER_DEFAULT removeObjectForKey:GlobalData_user_session];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     self.tableView.delegate = self;
@@ -85,30 +75,11 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
     self.refreshControl = refreshControl;
     
-    
-//    CRGradientNavigationBar *naviBar = (CRGradientNavigationBar*)self.navigationController.navigationBar;
-//    naviBar.backItem.backBarButtonItem.tintColor = [UIColor whiteColor];
-    //54A7FF
-    //NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xFFFFFF).CGColor,UIColorFromRGB(0xFFFFFF).CGColor, nil];
-    
-    //UIColor *firstColor =  [UIColor colorWithRed:255.0f/255.0f green:42.0f/255.0f blue:104.0f/255.0f alpha:1.0f];
-    //UIColor *secondColor = [UIColor colorWithRed:255.0f/255.0f green:90.0f/255.0f blue:58.0f/255.0f alpha:1.0f];
-    // NSArray *colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-    //    ///setup 4:
-//    [naviBar setBarTintGradientColors:colors];
-//    [[self.navigationController navigationBar] setTranslucent:YES];
-//    [naviBar setBarTintColor:UIColorFromRGB(0xEE695D)];
-    
-    [self showIndicatorView];
-//    NSString *strFilePath = [[NSBundle mainBundle] pathForResource:@"JsonImageurls" ofType:@"json"];
-//    NSString *strJson = [NSString stringWithContentsOfFile:strFilePath encoding:NSUTF8StringEncoding error:nil];
-//    NSData * jsondata = [strJson  dataUsingEncoding:NSUTF8StringEncoding];
-    //JsonArray = [jsondata objectFromJSONData];
-    
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
         [self initHomeData];
+//        [self.view showIndicatorViewLargeBlue];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];

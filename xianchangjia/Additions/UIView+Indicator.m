@@ -11,6 +11,7 @@
 
 typedef enum {
     kTagIndicatorView = 1988,
+    kTagIndicatorViewImg = 1989,
 }kUIViewIndicatorTags;
 
 @implementation UIView (Indicator)
@@ -44,7 +45,7 @@ typedef enum {
 }
 
 - (void)hideIndicatorView{
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self subviewWithTag:kTagIndicatorView];
+    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self subviewWithTag:kTagIndicatorViewImg];
     
     if(indicator){
         if ([indicator isMemberOfClass:[UIActivityIndicatorView class]]) {
@@ -57,5 +58,84 @@ typedef enum {
     }
 }
 
+- (void)showIndicatorViewGary
+{
+    CGPoint point = CGPointMake((self.width-20)/2, (self.height-20)/2);
+    UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
+    
+    if (!indicator) {
+        indicator = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loadingSpinnerSmallGray"]];
+        indicator.frame = CGRectMake(point.x, point.y, 28, 28);
+        indicator.tag = kTagIndicatorViewImg;
+        indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+        [self addSubview:indicator];
+        [self startAnimation:indicator];
+    }
+    indicator.hidden = NO;
+    [self startAnimation:indicator];
+}
 
+- (void)startAnimation:(UIImageView *)button{
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];///* full rotation*/ * rotations * duration ];
+    rotationAnimation.duration = 1;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = CGFLOAT_MAX;
+    
+    [button.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
+- (void)stopAnimation{
+    UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
+    
+    if (!indicator) {
+        [indicator.layer removeAllAnimations];
+        indicator.hidden = YES;
+        [indicator removeFromSuperview];
+    }
+}
+
+- (void)showIndicatorViewBlue
+{
+    CGPoint point = CGPointMake((self.width-20)/2, (self.height-20)/2);
+    UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
+    
+    if (!indicator) {
+        indicator = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loadingSpinnerSmallBlue"]];
+        indicator.frame = CGRectMake(point.x, point.y, 28, 28);
+        indicator.tag = kTagIndicatorViewImg;
+        indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+        [self addSubview:indicator];
+        [self startAnimation:indicator];
+    }
+    indicator.hidden = NO;
+    [self startAnimation:indicator];
+}
+
+- (void)showIndicatorViewLargeBlue
+{
+    CGPoint point = CGPointMake((self.width-20)/2, (self.height-20)/2);
+    UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
+    
+    if (!indicator) {
+        indicator = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loadingSpinnerBlue"]];
+        indicator.frame = CGRectMake(point.x, point.y, 55, 55);
+        indicator.tag = kTagIndicatorViewImg;
+        indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+        [self addSubview:indicator];
+        [self startAnimation:indicator];
+    }
+    indicator.hidden = NO;
+    [self startAnimation:indicator];
+}
+
+- (void)hideIndicatorViewBlueOrGary
+{
+//    [self stopAnimation];
+//    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+//    NSTimeInterval end = [NSDate timeIntervalSinceReferenceDate];
+//    NSTimeInterval delay = (end-start>2.0?0:(2.0-(end-start)));
+    [self performSelector:@selector(stopAnimation) withObject:nil afterDelay:0.3];
+}
 @end

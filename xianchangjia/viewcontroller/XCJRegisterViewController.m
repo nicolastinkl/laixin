@@ -14,6 +14,7 @@
 #import "LXAPIController.h"
 #import "MLNetworkingManager.h"
 #import "LXRequestFacebookManager.h"
+#import "XCJCompleteUserInfoViewController.h"
 
 @interface XCJRegisterViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *PhoneNumber;
@@ -96,38 +97,37 @@
                  "timeout":1388472185.910526
                  }*/
                 NSString * sessionID =  [response2 objectForKey:@"sessionid"];
-                NSString * serverURL =  @"ws://192.168.1.11:8000/ws";//[response2 objectForKey:@"ws"];
+                NSString * serverURL =  [response2 objectForKey:@"ws"];
                 if (sessionID) {
                     
                     [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                     [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                     [USER_DEFAULT synchronize];
+             
+                    /*
+                     {
+                     "func":"function_name",
+                     "parm":{
+                     "parm1":value,
+                     }
+                     }
+                     */
                     
-                    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                        // connection of websocket server
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
-                        /*
-                         {
-                         "func":"function_name",
-                         "parm":{
-                         "parm1":value,
-                         }
-                         }
-                         */
-                        
-                        SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
-                        SLog(@"state : %d", [websocket readyState]);
-                        //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
-                        NSDictionary * parames = @{@"sessionid":sessionID};
-                        [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                            NSDictionary * dict = responseObject[@"result"];
-                            LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
-                            [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
-                            [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-                            
-                        } failure:^(MLRequest *request, NSError *error) {
-                        }];
+                    SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
+                    SLog(@"state : %d", [websocket readyState]);
+                    //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
+                    NSDictionary * parames = @{@"sessionid":sessionID};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                        NSDictionary * dict = responseObject[@"result"];
+                        LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                        [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+                        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                        XCJCompleteUserInfoViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCompleteUserInfoViewController"];
+                        [self.navigationController pushViewController:viewContr animated:YES];
+                    } failure:^(MLRequest *request, NSError *error) {
+                        [self loginError];
                     }];
+                    //setup next viewcontroller
                 }
             }else{
                 [self loginError];

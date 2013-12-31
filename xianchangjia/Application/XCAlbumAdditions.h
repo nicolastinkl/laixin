@@ -9,6 +9,7 @@
 #import "UIView+Additon.h"
 #import "UIView+CocoaPlant.h"
 #import "UIImage+Addition.h"
+#import "UIImage+RoundedCorner.h"
 #import "UIView+Indicator.h"
 #import "UIImageView+WebCache.h"
 #import "DAImageResizedImageView.h"
