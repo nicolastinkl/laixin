@@ -129,7 +129,7 @@
 {
     UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
     [img setImage:[UIImage imageWithContentsOfFile:filePath]];
-    [img showIndicatorViewLargeBlue];
+    [img showIndicatorViewBlue];
     // setup 2: upload image
     //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

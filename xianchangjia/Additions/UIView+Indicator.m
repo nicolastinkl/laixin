@@ -89,7 +89,7 @@ typedef enum {
 - (void)stopAnimation{
     UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
     
-    if (!indicator) {
+    if (indicator) {
         [indicator.layer removeAllAnimations];
         indicator.hidden = YES;
         [indicator removeFromSuperview];
@@ -132,6 +132,7 @@ typedef enum {
 
 - (void)hideIndicatorViewBlueOrGary
 {
+//    [self stopAnimation];
 //    [self stopAnimation];
 //    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
 //    NSTimeInterval end = [NSDate timeIntervalSinceReferenceDate];

@@ -94,17 +94,16 @@
     self.tableView.dataSource = self;
     
     //test  add friends
-     {
-     NSDictionary * parames = @{@"uid":@[@5,@6,@3,@9,@8,@7]};
-     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
-     
-     } failure:^(MLRequest *request, NSError *error) {
-         
-     }];
-    }
+//     {
+//     NSDictionary * parames = @{@"uid":@[@12,@11]};
+//     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+//     
+//     } failure:^(MLRequest *request, NSError *error) {
+//         
+//     }];
+//    }
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
     [self reloadFetchedResults:nil];
-    
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
@@ -374,10 +373,12 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    ((UILabel *)[cell.contentView viewWithTag:2]).text  = [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, userdesp.friendRelation.nick];
-    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  =userdesp.friendRelation.nick;// [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, ];
+//    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
     DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
     [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];
+    
+    ((UILabel *)[cell.contentView viewWithTag:6]).height = 0.5f;
 }
 
 #pragma mark - Table view data source
