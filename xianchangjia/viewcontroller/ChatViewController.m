@@ -24,6 +24,7 @@
 #import "FCUserDescription.h"
 #import "LXRequestFacebookManager.h"
 #import "CoreData+MagicalRecord.h"
+#import "MessageList.h"
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -70,17 +71,17 @@
 //    [self.tableView reloadData];
     
     //KVO监控chatList单例数组
-    [self.messageList addObserver:self forKeyPath:@"array" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionPrior context:nil];
-
-    //tableView底部
-    [self scrollToBottonWithAnimation:NO];
+//    [self.messageList addObserver:self forKeyPath:@"array" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionPrior context:nil];
     
     [self setUpSequencer];
     
     if (!self.userinfo) {
         // from db or networking
           [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-              self.userinfo = response;
+              if (response) {
+                  self.userinfo = response;
+                  self.title = self.userinfo.nick;
+              }
           } withuid:self.conversation.facebookId];
     }
 }
@@ -91,17 +92,33 @@
      Sequencer *sequencer = [[Sequencer alloc] init];
     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
         self_.messageList = [NSMutableArray arrayWithArray:[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAllMessagesInConversation:self_.conversation]];
+//        [self_.messageList turnObjectCore:[NSMutableArray arrayWithArray:[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAllMessagesInConversation:self_.conversation]]];
         [self_.tableView reloadData];
+        //tableView底部
+        [self scrollToBottonWithAnimation:NO];
+        
         completion(nil);
     }];
     [sequencer run];
 }
 
+//- (MessageList*)messageList
+//{
+//    if (!_messageList) {
+//        _messageList = [[MessageList alloc]init];
+//    }
+//    return _messageList;
+//}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.conversation.badgeNumber = @(0);
-    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-    
+    if ([self.conversation.badgeNumber intValue] > 0) {
+        
+        self.conversation.badgeNumber = @(0);
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+        
+    }
     /* receive websocket message*/
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(webSocketDidReceivePushMessage:)
@@ -111,6 +128,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -183,7 +201,7 @@
 - (void)dealloc
 {
     //删除Observer
-	[self.messageList removeObserver:self forKeyPath:@"array"];
+//	[self.messageList removeObserver:self forKeyPath:@"array"];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillShowNotification object:nil];
@@ -587,9 +605,11 @@
 //        return;
 //    }
     
-    
-    self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
-    self.tableView.height = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+        self.tableView.height = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+    }];
     //tableView滚动到底部
     [self scrollToBottonWithAnimation:YES];
     
@@ -602,8 +622,11 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    self.inputContainerView.top = self.view.height - self.inputContainerView.height;
-    self.tableView.height  = self.view.height - self.inputContainerView.height;
+     [UIView animateWithDuration:0.3 animations:^{
+         
+         self.inputContainerView.top = self.view.height - self.inputContainerView.height;
+         self.tableView.height  = self.view.height - self.inputContainerView.height;
+     }];
     
 //    [self animateChangeWithConstant:0. withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
 //    self.keyboardView = nil;

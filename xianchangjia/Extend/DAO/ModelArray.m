@@ -53,6 +53,17 @@
     return modelArray;
 }
 
++ (instancetype)turnObjectCore:(NSArray*)dict
+{
+    ModelArray *modelArray = [[self alloc]init];
+    
+    //遍历并且根据modelClass来处理内部数据
+    for (id aModel in dict) {
+        [modelArray addObject:aModel];
+    }
+    return modelArray;
+    
+}
 //重新定义
 - (void)turnObject:(NSArray*)dict
 {
@@ -64,6 +75,14 @@
         }else{
             NSLog(@"数据非DICT:%@",aModel);
         }
+    }
+}
+
+- (void)turnObjectCore:(NSArray*)dict
+{
+    //遍历并且根据modelClass来处理内部数据
+    for (id aModel in dict) {
+        [self addObject:aModel];
     }
 }
 

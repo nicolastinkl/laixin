@@ -140,7 +140,7 @@
             
             NSDictionary * dicMessage = dicResult[@"message"];
             
-            NSString *facebookID =dicMessage[@"fromid"];
+            NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
             
             
             //out view
@@ -168,6 +168,7 @@
             conversation.messageStutes = @(messageStutes_incoming);
             conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
             conversation.facebookName = @"";
+            conversation.facebookId = facebookID;
             // increase badge number.
             int badgeNumber = [conversation.badgeNumber intValue];
             badgeNumber ++;
@@ -262,20 +263,27 @@
     Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     switch ([conver.messageType intValue]) {
         case XCMessageActivity_UserPrivateMessage:
-            
         {// 私信
             
             UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
             UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
             UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
 
+            @try {
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                    FCUserDescription * localdespObject = response;
+                    ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
+                    [imageIcon setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",localdespObject.headpic]]];
+                } withuid:conver.facebookId];
+
+            }
+            @catch (NSException *exception) {
+                SLog(@"icon %@",exception.userInfo);
+            }
+            @finally {
+                
+            }
             
-            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                FCUserDescription * localdespObject = response;
-                 ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
-                [imageIcon setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",localdespObject.headpic]]];
-            } withuid:conver.facebookId];
-           
             ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
             ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time
             

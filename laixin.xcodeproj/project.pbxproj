@@ -100,6 +100,7 @@
 		869D15131839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		869D15141839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; };
 		869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DDC5E1872BB9300560AFD /* XCJMsgListController.m */; };
+		869DDC621874422600560AFD /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DDC611874422600560AFD /* Conversation.m */; };
 		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
 		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
@@ -212,7 +213,6 @@
 		86D1832B1834B0E80005901D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D1832A1834B0E80005901D /* Security.framework */; };
 		86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */; };
 		86D9A886186D294600147631 /* LXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A885186D294600147631 /* LXUser.m */; };
-		86D9A8A0186D30C800147631 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A897186D30C700147631 /* Conversation.m */; };
 		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
@@ -453,6 +453,8 @@
 		869D15121839BDBB00B14A02 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		869DDC5D1872BB9300560AFD /* XCJMsgListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMsgListController.h; path = viewcontroller/XCJMsgListController.h; sourceTree = "<group>"; };
 		869DDC5E1872BB9300560AFD /* XCJMsgListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMsgListController.m; path = viewcontroller/XCJMsgListController.m; sourceTree = "<group>"; };
+		869DDC601874422600560AFD /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conversation.h; path = DAOModel/coredata/Conversation.h; sourceTree = "<group>"; };
+		869DDC611874422600560AFD /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Conversation.m; path = DAOModel/coredata/Conversation.m; sourceTree = "<group>"; };
 		86A3069D1871A7D900C7168B /* XCJCompleteUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUserInfoViewController.h; path = viewcontroller/XCJCompleteUserInfoViewController.h; sourceTree = "<group>"; };
 		86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUserInfoViewController.m; path = viewcontroller/XCJCompleteUserInfoViewController.m; sourceTree = "<group>"; };
 		86A306A31871A82A00C7168B /* XCJCompleteUploadImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCompleteUploadImgViewController.h; path = viewcontroller/XCJCompleteUploadImgViewController.h; sourceTree = "<group>"; };
@@ -583,8 +585,6 @@
 		86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSysSettingsViewController.m; path = viewcontroller/XCJSysSettingsViewController.m; sourceTree = "<group>"; };
 		86D9A884186D294600147631 /* LXUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXUser.h; path = DAOModel/coredata/LXUser.h; sourceTree = "<group>"; };
 		86D9A885186D294600147631 /* LXUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXUser.m; path = DAOModel/coredata/LXUser.m; sourceTree = "<group>"; };
-		86D9A896186D30C700147631 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conversation.h; path = DAOModel/coredata/Conversation.h; sourceTree = "<group>"; };
-		86D9A897186D30C700147631 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Conversation.m; path = DAOModel/coredata/Conversation.m; sourceTree = "<group>"; };
 		86D9A898186D30C700147631 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
 		86D9A899186D30C700147631 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
@@ -1395,13 +1395,13 @@
 		86D9A883186D276700147631 /* Coredata */ = {
 			isa = PBXGroup;
 			children = (
-				86D9A896186D30C700147631 /* Conversation.h */,
-				86D9A897186D30C700147631 /* Conversation.m */,
 				86D9A898186D30C700147631 /* FCAccount.h */,
 				86D9A899186D30C700147631 /* FCAccount.m */,
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				869DDC601874422600560AFD /* Conversation.h */,
+				869DDC611874422600560AFD /* Conversation.m */,
 				86F9B9B41872A3CB00ED768B /* FCMessage.h */,
 				86F9B9B51872A3CB00ED768B /* FCMessage.m */,
 				86FB20F7186D8256006BDE32 /* FCUserDescription.h */,
@@ -1874,6 +1874,7 @@
 				869CE52A186BE38D0004C1EC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
+				869DDC621874422600560AFD /* Conversation.m in Sources */,
 				86D9A8A1186D30C800147631 /* FCAccount.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
@@ -1949,7 +1950,6 @@
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
-				86D9A8A0186D30C800147631 /* Conversation.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,
 				86EB76D1185AA6CC00836947 /* AFNetworkReachabilityManager.m in Sources */,
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,

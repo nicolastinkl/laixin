@@ -95,7 +95,7 @@
     
     //test  add friends
 //     {
-//     NSDictionary * parames = @{@"uid":@[@12,@11]};
+//     NSDictionary * parames = @{@"uid":@[@12,@11,@14]};
 //     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
 //     
 //     } failure:^(MLRequest *request, NSError *error) {

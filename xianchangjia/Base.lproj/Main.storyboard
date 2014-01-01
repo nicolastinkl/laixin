@@ -1676,7 +1676,7 @@
         <!--Chat View Controller - 聊天-->
         <scene sceneID="HHe-sk-cBx">
             <objects>
-                <viewController title="聊天" hidesBottomBarWhenPushed="YES" id="PQ7-1p-COo" customClass="ChatViewController" sceneMemberID="viewController">
+                <viewController restorationIdentifier="ChatViewController" storyboardIdentifier="ChatViewController" title="聊天" hidesBottomBarWhenPushed="YES" id="PQ7-1p-COo" customClass="ChatViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="OiE-KH-T46">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

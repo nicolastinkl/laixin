@@ -75,6 +75,9 @@
 
 -(void) getUserDesPtionCompletion:(CompletionBlock)completion withuid:(NSString * ) uid
 {
+    if (!uid) {
+        return;
+    }
     //MARK Base fbid to find userdesp object,, if userdesp is nil, will select from networking
     FCUserDescription * localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:uid];
     if (localdespObject) {

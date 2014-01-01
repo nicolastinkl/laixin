@@ -1,32 +1,43 @@
+//
+//  Conversation.h
+//  laixin
+//
+//  Created by apple on 14-1-1.
+//  Copyright (c) 2014年 jijia. All rights reserved.
+//
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+
 
 enum messageStutes_type {
     messageStutes_incoming = 1,
     messageStutes_outcoming = 2,
     messageStutes_error = 3,
-    };
+};
 
-@class FCMessage;
-@class FCAccount;
-@interface Conversation : NSManagedObject {
 
-}
+@class FCAccount, FCMessage;
 
-@property (nonatomic, strong) id lastMessage;
-@property (nonatomic, strong) NSSet *messages;
-@property (nonatomic, strong) NSString *facebookName;
-@property (nonatomic, strong) NSString *facebookId;
-@property (nonatomic, strong) NSNumber *badgeNumber;
-@property (nonatomic, strong) NSNumber *messageStutes;
-@property (nonatomic, strong) NSNumber *messageType;
-@property (nonatomic, strong) NSString *messageId;
-@property (nonatomic, strong) NSDate   *lastMessageDate;
+@interface Conversation : NSManagedObject
 
-@property (nonatomic, retain)  FCAccount *account;
+@property (nonatomic, retain) NSNumber * badgeNumber;
+@property (nonatomic, retain) NSString * facebookId;
+@property (nonatomic, retain) NSString * facebookName;
+@property (nonatomic, retain) id lastMessage;
+@property (nonatomic, retain) NSDate * lastMessageDate;
+@property (nonatomic, retain) NSString * messageId;
+@property (nonatomic, retain) NSNumber * messageStutes;
+@property (nonatomic, retain) NSNumber * messageType;
+@property (nonatomic, retain) FCAccount *account;
+@property (nonatomic, retain) NSSet *messages;
+@end
+
+@interface Conversation (CoreDataGeneratedAccessors)
+
 - (void)addMessagesObject:(FCMessage *)value;
 - (void)removeMessagesObject:(FCMessage *)value;
-- (void)addMessages:(NSSet *)value;
-- (void)removeMessages:(NSSet *)value;
+- (void)addMessages:(NSSet *)values;
+- (void)removeMessages:(NSSet *)values;
 
 @end

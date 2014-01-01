@@ -18,8 +18,11 @@
 @property (nonatomic,weak) Class modelClass;
 
 + (instancetype)turnObject:(NSArray*)dict;
-- (void)turnObject:(NSArray*)dict;
 
++ (instancetype)turnObjectCore:(NSArray*)dict;
+
+- (void)turnObject:(NSArray*)dict;
+- (void)turnObjectCore:(NSArray*)dict;
 //模拟NSArray的一些常用方法
 - (NSUInteger)count;
 - (id)objectAtIndex:(NSUInteger)index;
