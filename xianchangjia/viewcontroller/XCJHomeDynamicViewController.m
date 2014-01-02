@@ -95,7 +95,9 @@
     /**
      *  gid,content
      */
-    [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+    NSDictionary * parames = @{@"sessionid":sessionid};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:parames success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             NSDictionary * groups = responseObject[@"result"];
             NSArray * groupsDict =  groups[@"groups"];
@@ -109,25 +111,21 @@
                      //    postid = 12;
                      } failure:^(MLRequest *request, NSError *error) {
                      }];*/
-                    
-                    
                 }];
             }
         }
     } failure:^(MLRequest *request, NSError *error) {
     }];
-    
-    
-    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-    NSDictionary * parames = @{@"sessionid":sessionid};
+     
     [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //首次登陆返回的用户信息
         NSDictionary * userinfo = responseObject[@"result"];
         LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
         [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-        
-        int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
-        [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
+        [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
+        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
         [USER_DEFAULT synchronize];
         
     } failure:^(MLRequest *request, NSError *error) {
@@ -242,6 +240,9 @@
 - (void)postGetActivitiesWithLastID:(NSInteger)lastID
 {
     if (Currentgid == nil) {
+        Currentgid  = @"2";
+    }
+    if (Currentgid == nil) {
         [self failedGetActivitiesWithLastID:0];
         return;
     }
@@ -342,7 +343,7 @@
     }
     
     NSDictionary * parames = @{@"postid":currentOperateActivity.postid,@"content":content};
-    [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
+    [[MLNetworkingManager sharedManager] sendWithAction:@"post.reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //"result":{"replyid":1}
         
         if (responseObject) {

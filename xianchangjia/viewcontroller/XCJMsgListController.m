@@ -243,14 +243,13 @@
 	}
 }
 
-
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	// The fetch controller has sent all current change notifications, so tell the table view to process all updates.
 	[self.tableView endUpdates];
 }
 
-#pragma mark - table fetchview
 
+#pragma mark - table fetchview
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated
 {
     ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];

@@ -35,4 +35,6 @@
 //delegate
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 
+-(int) heigthforCell:(XCJGroupPost_list * )activity;
+
 @end

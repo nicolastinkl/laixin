@@ -771,15 +771,7 @@
 {
     NSDictionary *info = [notification userInfo];
     CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-//    if (self.keyboardView&&self.keyboardView.frameY<self.keyboardView.window.frameHeight) {
-//        //到这里说明其不是第一次推出来的，而且中间变化，无需动画直接变
-////        self.inputContainerViewBottomConstraint.top = keyboardFrame.size.height;
-//        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
-////        [self.view setNeedsUpdateConstraints];
-//        return;
-//    }
-    
+
     [UIView animateWithDuration:0.3 animations:^{
         
         self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
@@ -787,6 +779,14 @@
     }];
     //tableView滚动到底部
     [self scrollToBottonWithAnimation:YES];
+    
+    //    if (self.keyboardView&&self.keyboardView.frameY<self.keyboardView.window.frameHeight) {
+    //        //到这里说明其不是第一次推出来的，而且中间变化，无需动画直接变
+    ////        self.inputContainerViewBottomConstraint.top = keyboardFrame.size.height;
+    //        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+    ////        [self.view setNeedsUpdateConstraints];
+    //        return;
+    //    }
     
 //    [self animateChangeWithConstant:keyboardFrame.size.height withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
     

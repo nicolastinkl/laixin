@@ -215,9 +215,9 @@
     _activityImageView.image = nil;
     _activityImageView.fullScreenImageURL = nil;
     if (_activity.imageURL) {
-        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
-        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
-        [_activityImageView setImageWithURL:[NSURL URLWithString:thumbImageURL] placeholderImage:nil displayProgress:YES];
+//        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
+//        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
+        [_activityImageView setImageWithURL:[NSURL URLWithString:_activity.imageURL] placeholderImage:nil displayProgress:YES];
         _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
     }
     
@@ -330,6 +330,88 @@
     
     _cellHeight = yOffset;
 }
+
+
+-(int) heigthforCell:(XCJGroupPost_list *) _activity_new
+{
+    //frame
+    CGFloat xOffset = 10;
+    CGFloat yOffset = 10;
+    
+    _avatarButton.frame = CGRectMake(xOffset, yOffset, 46, 46);
+    _avatarButton.layer.cornerRadius = 23.0;
+    
+    xOffset += _avatarButton.frameWidth+10;
+    
+    _timeLabel.frame = CGRectZero;
+    [_timeLabel sizeToFit]; //自适应时间长度
+    _timeLabel.frame = CGRectMake(self.frameWidth-_timeLabel.frameWidth-10, yOffset, _timeLabel.frameWidth, _timeLabel.frameHeight);
+    
+    //用户名是时间宽度刨去，再刨去5像素为最终宽度，如果太长就自动省略号了
+    CGFloat width = [_userNameButton.titleLabel.text realWidthForWidth:_timeLabel.frame.origin.x-xOffset-5 font:_userNameButton.titleLabel.font];
+    _userNameButton.frame = CGRectMake(xOffset, yOffset, width, 20);
+    
+    yOffset += _userNameButton.frameHeight+5;
+    
+    _contentLabel.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 1);
+    [_contentLabel sizeToFit];//自适应高度
+    yOffset += _contentLabel.frameHeight+10;
+    
+    if (_activity_new.imageURL) {
+        _activityImageView.hidden = NO;
+        _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, self.frameWidth-xOffset-10);
+        yOffset += _activityImageView.frameHeight+10;
+    }else{
+        _activityImageView.hidden = YES;
+    }
+    
+    _likeButton.frame = CGRectMake(self.frameWidth-120, yOffset, 50, 20);
+    _commentButton.frame = CGRectMake(_likeButton.frame.origin.x+_likeButton.frameWidth+10, yOffset, 50, _likeButton.frameHeight);
+    _ReportButton.frame =   CGRectMake(50, yOffset, 50, _likeButton.frameHeight);
+    yOffset += _likeButton.frameHeight+10;
+    
+    
+    
+    CGFloat likeCommentBackY = yOffset-6.2;
+    
+    if (_activity_new.like>0) {
+        _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
+        [_likeLabel sizeToFit];
+        
+        _likeBackView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, _likeLabel.frameHeight+5*2);
+        
+        _likeBackView.hidden = NO;
+        yOffset += _likeBackView.frameHeight;
+    }else{
+        _likeBackView.hidden = YES;
+    }
+    
+    if (_activity_new.comments.count>0) {
+        _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
+        _commentsView.comments = _activity_new.comments; //会根据内容和自身宽度自动调整高度
+        _commentsView.delegate = self;
+        _commentsView.hidden = NO;
+        
+        yOffset += _commentsView.frameHeight;
+    }else{
+        _commentsView.comments = nil;
+        _commentsView.hidden = YES;
+    }
+    
+    _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
+    
+    if (_activity_new.like>0||_activity_new.comments.count>0) {
+        yOffset += 10;
+        _likeCommentBackView.hidden = NO;
+    }else{
+        _likeCommentBackView.hidden = YES;
+    }
+    
+    _cellHeight = yOffset;
+    
+    return _cellHeight;
+}
+
 
 #pragma mark - button event
 - (void)likeOrCommentButtonClick:(id)sender

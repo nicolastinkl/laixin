@@ -833,6 +833,13 @@
 			name = image;
 			sourceTree = "<group>";
 		};
+		86489EF4187586BE001AB9BA /* PostPhoto */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = PostPhoto;
+			sourceTree = "<group>";
+		};
 		8668E44F18751AB500D20C9E /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -1347,6 +1354,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86489EF4187586BE001AB9BA /* PostPhoto */,
 				8668E44F18751AB500D20C9E /* Home */,
 				86F9B9B318729C3900ED768B /* Chat */,
 				86F9B9AF18728ADA00ED768B /* User */,

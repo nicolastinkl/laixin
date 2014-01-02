@@ -15,6 +15,7 @@
 #import "Extend.h"
 #import "UIView+Additon.h"
 #import "UIView+Indicator.h"
+#import "XCAlbumAdditions.h"
 
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
@@ -68,6 +69,18 @@
 {
     [super viewWillAppear:animated];
     // Custom initialization
+  
+}
+
+- (void)viewDidLoad
+{
+    UIView *origView = self.view;
+    self.view = [[InterceptTouchView alloc]initWithFrame:origView.frame];
+    
+    ((InterceptTouchView*)self.view).interceptTouchViewDelegate = self;
+    
+    [super viewDidLoad];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -80,16 +93,6 @@
     
     self.activities = [[NSMutableArray alloc]initWithCapacity:1];
     self.cellHeights = [[NSMutableArray alloc]initWithCapacity:1];
-}
-
-- (void)viewDidLoad
-{
-    UIView *origView = self.view;
-    self.view = [[InterceptTouchView alloc]initWithFrame:origView.frame];
-    
-    ((InterceptTouchView*)self.view).interceptTouchViewDelegate = self;
-    
-    [super viewDidLoad];
     
     [SDWebImageManager.sharedManager.imageDownloader setValue:@"Molon" forHTTPHeaderField:@"AppName"];
     SDWebImageManager.sharedManager.imageDownloader.executionOrder = SDWebImageDownloaderLIFOExecutionOrder;
@@ -101,7 +104,7 @@
     
     [self.titleString  addObserver:self forKeyPath:@"changeTitle" options:NSKeyValueObservingOptionNew context:nil];
 
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-64-44) style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -172,6 +175,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+    
+     return _activities.count;
+    
     if (_isDontNeedLazyLoad) {
         return _activities.count;
     }
@@ -180,42 +186,40 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row>=_activities.count) {
-        static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
-        UITableViewCell *moreCell = [tableView dequeueReusableCellWithIdentifier:LoadMoreCellIdentifier];
-        if (moreCell == nil) {
-            moreCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LoadMoreCellIdentifier];
-            
-            moreCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            moreCell.backgroundColor = [UIColor clearColor];
-            
-//            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//            indicator.frameSize = CGSizeMake(20, 20);
-//            indicator.center = CGPointMake(self.view.frameWidth/2, kLoadMoreCellHeight/2);
-//            indicator.tag = 888;
-//            indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
-//            [moreCell addSubview:indicator];
-            
-            
-            
-            UIButton *retryButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, moreCell.frameWidth, moreCell.frameHeight)];
-            retryButton.backgroundColor = [UIColor clearColor];
-            [retryButton setTitle:@"点击重新加载" forState:UIControlStateNormal];
-            retryButton.titleLabel.font = [UIFont systemFontOfSize:14];
-            retryButton.tag = 111;
-            retryButton.titleLabel.textColor = [UIColor grayColor];
-            [retryButton addTarget:self action:@selector(retryButtonEvent) forControlEvents:UIControlEventTouchUpInside];
-            [moreCell addSubview:retryButton];
-        }
-        self.moreCell = moreCell;
-        
-        UIButton *button = (UIButton *)[moreCell viewWithTag:111];
-//        UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[moreCell viewWithTag:888];
-//        [indicator startAnimating];
-        button.hidden = YES;
-        [moreCell showIndicatorViewBlue];
-        return moreCell;
-    }
+    /*if (indexPath.row>=_activities.count) {
+     static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
+     UITableViewCell *moreCell = [tableView dequeueReusableCellWithIdentifier:LoadMoreCellIdentifier];
+     if (moreCell == nil) {
+     moreCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LoadMoreCellIdentifier];
+     
+     moreCell.selectionStyle = UITableViewCellSelectionStyleNone;
+     moreCell.backgroundColor = [UIColor clearColor];
+     
+     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+     indicator.frameSize = CGSizeMake(20, 20);
+     indicator.center = CGPointMake(self.view.frameWidth/2, kLoadMoreCellHeight/2);
+     indicator.tag = 888;
+     indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+     [moreCell addSubview:indicator];
+     
+     UIButton *retryButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, moreCell.frameWidth, moreCell.frameHeight)];
+     retryButton.backgroundColor = [UIColor clearColor];
+     [retryButton setTitle:@"点击重新加载" forState:UIControlStateNormal];
+     retryButton.titleLabel.font = [UIFont systemFontOfSize:14];
+     retryButton.tag = 111;
+     retryButton.titleLabel.textColor = [UIColor grayColor];
+     [retryButton addTarget:self action:@selector(retryButtonEvent) forControlEvents:UIControlEventTouchUpInside];
+     [moreCell addSubview:retryButton];
+     }
+     self.moreCell = moreCell;
+     
+     UIButton *button = (UIButton *)[moreCell viewWithTag:111];
+     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[moreCell viewWithTag:888];
+     [indicator startAnimating];
+     button.hidden = YES;
+     //        [self.moreCell showIndicatorViewBlue];
+     return moreCell;
+     }*/
     
     static NSString *CellIdentifier = @"Cell";
     ActivityTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -229,13 +233,22 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row>=_activities.count) {
-        return kLoadMoreCellHeight;
-    }
+//    static NSString *CellIdentifier = @"Cell";
+//    XCJGroupPost_list *activity = _activities[indexPath.row];
+//    ActivityTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[ActivityTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//    }
+//    return [cell heigthforCell:activity] + 20;
+    
+//    if (indexPath.row>=_activities.count) {
+//        return kLoadMoreCellHeight;
+//    }
     
     XCJGroupPost_list *activity = [_activities objectAtIndex:indexPath.row];
     if (activity) {
         if (_cellHeights&&[_cellHeights[indexPath.row] floatValue]>0) {
+            SLog(@"indexPath.row : %d %@",indexPath.row , _cellHeights[indexPath.row]);
             return [_cellHeights[indexPath.row] floatValue];
         }
         
@@ -260,15 +273,15 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_isDontNeedLazyLoad) {
-        return;
-    }
-    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
-        if (!_isLoading) {
-            self.isLoading = YES;
-            [self postLoadMoreActivitiesRequest];
-        }
-    }
+//    if (_isDontNeedLazyLoad) {
+//        return;
+//    }
+//    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
+//        if (!_isLoading) {
+//            self.isLoading = YES;
+//            [self postLoadMoreActivitiesRequest];
+//        }
+//    }
 }
 
 #pragma mark - ActivityTableViewCellDelegate
@@ -386,12 +399,15 @@
     
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                      animations:^{
-                         _inputView.frameY = newY;
+                          CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                         _inputView.frameY =  self.view.height - keyboardFrame.size.height;// newY;
                          _tableView.contentOffset = CGPointMake(0, newYOffset);
                      }
                     completion:^(BOOL finished) {
                         _tableView.userInteractionEnabled = YES;
                     }];
+    
+    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -420,6 +436,12 @@
 {
     self.isLoading = YES;
     _noDataHintLabel.hidden = YES;
+    // hide error message
+//    
+//    UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
+//    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
+//    button.hidden = YES;
+//    [indicator stopAnimating];
     [self postGetActivitiesWithLastID:0];
 }
 
@@ -499,52 +521,52 @@
         }
     });
     
-    if ((!activities || activities.count<=0)&&!_isDontNeedLazyLoad) {
-        //如果没有新的，那就不需要懒加载了。
-        self.isDontNeedLazyLoad = YES;
-        NSArray *arr = @[[NSIndexPath indexPathForRow:_activities.count inSection:0]];
-        //删除最后一行
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_tableView deleteRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationNone];
-        });
-        
-        return;
-    }
+//    if ((!activities || activities.count<=0)&&!_isDontNeedLazyLoad) {
+//        //如果没有新的，那就不需要懒加载了。
+//        self.isDontNeedLazyLoad = YES;
+//        NSArray *arr = @[[NSIndexPath indexPathForRow:_activities.count inSection:0]];
+//        //删除最后一行
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [_tableView deleteRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationNone];
+//        });
+//        
+//        return;
+//    }
     
-    if (lastID<=0) {
-        //开启懒加载
-        self.isDontNeedLazyLoad = NO;
-        //清空数据源
-        [_cellHeights removeAllObjects];
-        [_activities removeAllObjects];
-    } else if (_activities.count>0&&lastID!=[((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue]) {
-        //这里得判断当前最后一个activity ID是不是和lastID对应，不是则什么都不做
-        //假想一个场景，先有loadMore请求，然后有refresh请求，然后refresh先有结果，然后loadMore再有结果。
-        //More之前的数据就会有问题。
-        return;
-    }
+//    if (lastID<=0) {
+//        //开启懒加载
+//        self.isDontNeedLazyLoad = NO;
+//        //清空数据源
+//        [_cellHeights removeAllObjects];
+//        [_activities removeAllObjects];
+//    } else if (_activities.count>0&&lastID!=[((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue]) {
+////        //这里得判断当前最后一个activity ID是不是和lastID对应，不是则什么都不做
+////        //假想一个场景，先有loadMore请求，然后有refresh请求，然后refresh先有结果，然后loadMore再有结果。
+////        //More之前的数据就会有问题。
+////        return;
+//    }
     
     //加入新数据
     for (NSInteger i = 0; i<activities.count; i++) {
         [_cellHeights addObject:@0];
     }
-    [_activities addObjectsFromArray:activities];
-    
-    if (lastID<=0) { //reload的就直接重刷新tableView吧
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_tableView reloadData];
-            [_refreshView endRefreshing];
-        });
-        return;
-    }
-    
-    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:activities.count];
-    for (NSInteger i = activities.count-1; i>=0; i--) {
-        [arr addObject:[NSIndexPath indexPathForRow:_activities.count-1-i inSection:0]];
+//
+    if (lastID == 0) { //reload的就直接重刷新tableView吧
+//        [_activities addObjectsFromArray:activities];
+        //return;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_tableView insertRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationFade];
+        [_tableView reloadData];
+        [_refreshView endRefreshing];
     });
+    
+//    NSMutableArray *arr = [NSMutableArray arrayWithCapacity:activities.count];
+//    for (NSInteger i = activities.count-1; i>=0; i--) {
+//        [arr addObject:[NSIndexPath indexPathForRow:_activities.count-1-i inSection:0]];
+//    }
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [_tableView insertRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationFade];
+//    });
 }
 
 - (void)failedGetActivitiesWithLastID:(NSInteger)lastID
@@ -554,20 +576,20 @@
     
     if (_isDontNeedLazyLoad) return;
     
-    UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
+//    UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
 //    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
-    button.hidden = NO;
+//    button.hidden = NO;
 //    [indicator stopAnimating];
-    [self.moreCell hideIndicatorViewBlueOrGary];
+//    [self.moreCell hideIndicatorViewBlueOrGary];
 }
 
 - (void)retryButtonEvent
 {
-    UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
+//    UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
 //    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
-    button.hidden = YES;
+//    button.hidden = YES;
 //    [indicator startAnimating];
-    [self.moreCell hideIndicatorViewBlueOrGary];
+//    [self.moreCell hideIndicatorViewBlueOrGary];
     [self postLoadMoreActivitiesRequest];
 }
 

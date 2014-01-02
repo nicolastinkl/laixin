@@ -7,7 +7,7 @@
 
 #import "MLScrollRefreshHeader.h"
 #import <AudioToolbox/AudioToolbox.h> //播放声音用到
-
+#import "UIView+Additon.h"
 #define kPullToRefreshText @"上拉刷新"
 #define kReleaseToRefreshText @"松开刷新"
 #define kRefreshingText @"正在加载..."
@@ -65,10 +65,12 @@ typedef enum {
         [self addSubview:self.stateLabel = label];
         
         //箭头图片,左右自适应
-        UIImage *image = [UIImage imageNamed:@"arrow.png"];
+        UIImage *image = [UIImage imageNamed:@"activity_indicator_light.png"];
         UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:image];
+        arrowImageView.width = 20;
+        arrowImageView.height = 20;
         arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//        [self addSubview:self.arrowImageView = arrowImageView]; change by tinkl
+        [self addSubview:self.arrowImageView = arrowImageView]; //change by tinkl
         
         //指示器，系统默认，灰色样式，左右自适应
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
