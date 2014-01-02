@@ -18,6 +18,10 @@
 #import "XCJUserInfoController.h"
 #import "LXRequestFacebookManager.h"
 
+#import <CommonCrypto/CommonDigest.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <Foundation/Foundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImageView+AFNetworking.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -32,6 +36,7 @@
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
 #import "Sequencer.h"
+#import "PostActivityViewController.h"
 #import "LXChatDBStoreManager.h"
 
 
@@ -401,12 +406,50 @@
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-//    PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
-//    postVC.sceneID = self.sceneID;
-//    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
-//    postVC.needRefreshViewController = self;
-//    [self.navigationController pushViewController:postVC animated:YES];
+    NSURL * url = [self uploadContent:theInfo];
+    PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
+    postVC.gID = Currentgid;
+    postVC.filePath = url;
+    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    postVC.needRefreshViewController = self;
+    [self.navigationController pushViewController:postVC animated:YES];
 }
+
+
+- (NSURL * )uploadContent:(NSDictionary *)theInfo {
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
+    //Optionally for time zone conversions
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    
+    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
+    
+    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
+        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,Currentgid]];
+        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+        NSLog(@"Upload Path: %@", filePath);
+        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
+        [webData writeToFile:filePath atomically:YES];
+        return [NSURL URLWithString:filePath];
+    }
+    return nil;
+}
+
+- (NSString *)getMd5_32Bit_String:(NSString *)srcString{
+    const char *cStr = [srcString UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5( cStr, strlen(cStr), digest );
+    NSMutableString *result = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [result appendFormat:@"%02x", digest[i]];
+    
+    return result;
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
+		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
 		865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CB185FFDDA00E9903C /* ChatViewController.m */; };
 		865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CD185FFDDA00E9903C /* XCJCommentViewController.m */; };
@@ -310,6 +311,8 @@
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
+		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		865632C8185FFDDA00E9903C /* ChatListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListViewController.h; path = viewcontroller/ChatListViewController.h; sourceTree = "<group>"; };
 		865632C9185FFDDA00E9903C /* ChatListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatListViewController.m; path = viewcontroller/ChatListViewController.m; sourceTree = "<group>"; };
 		865632CA185FFDDA00E9903C /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = viewcontroller/ChatViewController.h; sourceTree = "<group>"; };
@@ -836,6 +839,8 @@
 		86489EF4187586BE001AB9BA /* PostPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				86489EF51875874A001AB9BA /* PostActivityViewController.h */,
+				86489EF61875874A001AB9BA /* PostActivityViewController.m */,
 			);
 			name = PostPhoto;
 			sourceTree = "<group>";
@@ -2154,6 +2159,7 @@
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
 				86EB76C9185AA6CC00836947 /* NSString+Addition.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
+				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
 				865632EC185FFDDA00E9903C /* XCJSendNewContentViewController.m in Sources */,
 				869CE52C186BE38D0004C1EC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
