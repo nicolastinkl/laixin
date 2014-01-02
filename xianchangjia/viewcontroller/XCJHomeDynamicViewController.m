@@ -408,6 +408,9 @@
     
     NSURL * url = [self uploadContent:theInfo];
     PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
+    if (Currentgid == nil) {
+        Currentgid = @"2";
+    }
     postVC.gID = Currentgid;
     postVC.filePath = url;
     postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];

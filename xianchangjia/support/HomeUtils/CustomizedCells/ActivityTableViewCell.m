@@ -17,6 +17,8 @@
 #import "UIButton+WebCache.h"
 #import "LXAPIController.h"
 #import "LXRequestFacebookManager.h"
+#import "Comment.h"
+
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
 
@@ -206,8 +208,6 @@
         [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
     } withuid:activity.uid];
     
-    
-    
     _timeLabel.text = [self timeLabelTextOfTime:_activity.time];
     _contentLabel.text = _activity.content;
     
@@ -305,6 +305,36 @@
         yOffset += _likeBackView.frameHeight;
     }else{
         _likeBackView.hidden = YES;
+    }
+ 
+    
+    if (_activity.comments.count <= 0) {
+        
+        /* get all list data*/
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //    postid = 12;
+            /*
+             Result={
+             “posts”:[*/
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * postsDict =  groups[@"replys"];
+            NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                /*“replyid”:
+                 “postid”:
+                 “uid”:
+                 “content”:
+                 “time”:
+                 */
+                Comment * comment = [Comment turnObject:obj];
+                [mutaArray addObject:comment];
+                
+            }];
+            [activity.comments addObjectsFromArray:mutaArray];
+            
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
     }
     
     if (_activity.comments.count>0) {

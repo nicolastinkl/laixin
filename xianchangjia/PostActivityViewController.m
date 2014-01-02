@@ -19,7 +19,7 @@
 #import "XCJGroupPost_list.h"
 
 
-@interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate>
+@interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate>
 {
     AFHTTPRequestOperation  * operation;
     NSString * TokenAPP;
@@ -77,10 +77,11 @@
     postIndicator.frameSize = CGSizeMake(20, 20);
     postIndicator.center = postBtn.center;
     [rightView addSubview: self.postIndicator = postIndicator];
+//    
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamedTwo:@"header_bg_opaque"] forBarMetrics:UIBarMetricsDefault];
+//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStyleDone target:self action:@selector(CompletionPostImage:)];
     
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamedTwo:@"header_bg_opaque"] forBarMetrics:UIBarMetricsDefault];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
     self.title = @"发布动态";
     
     //scrollView
@@ -113,9 +114,7 @@
     
     _inputTextView.text = @"请勿发布带有色情或者非法不良信息";
     //监视输入内容大小，在KVO里自动调整
-    [_inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-
-    
+    [_inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];    
     self.postImageView = [[UIImageView alloc]initWithFrame:CGRectMake(8, _inputTextBackView.frameBottom+10, 70, 70)];
     _postImageView.contentMode = UIViewContentModeScaleAspectFill;
     _postImageView.clipsToBounds = YES;
@@ -131,19 +130,11 @@
     
 }
 
+-(IBAction)CompletionPostImage:(id)sender
+{
+    [self postAction];
+}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.navigationController.navigationBarHidden = NO;
-    
-    [super viewWillAppear:animated];
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    self.navigationController.navigationBarHidden = YES;
-    
-    [super viewWillDisappear:animated];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -243,6 +234,12 @@
     }];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [self uploadImagetoken:TokenAPP];
+    }
+}
 
 #pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

@@ -227,7 +227,13 @@
         cell = [[ActivityTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.delegate = self;
     }
-    cell.activity = _activities[indexPath.row];
+    XCJGroupPost_list* activity = _activities[indexPath.row];
+   
+    cell.activity = activity;
+    // start requst comments  and likes
+//    post.get_reply(postid,pos=0,count=50) 读取回复
+   
+    
     return cell;
 }
 
@@ -400,7 +406,7 @@
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                      animations:^{
                           CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                         _inputView.frameY =  self.view.height - keyboardFrame.size.height;// newY;
+                         _inputView.frameY =  self.view.height - keyboardFrame.size.height + 2;// newY;
                          _tableView.contentOffset = CGPointMake(0, newYOffset);
                      }
                     completion:^(BOOL finished) {
