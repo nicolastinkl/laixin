@@ -101,6 +101,34 @@ BOOL isNumber (char ch)
 }
 
 
+
+/**
+ * 计算字符串使用指定宽度和指定字体的情况下所使用的高度
+ * @return CGFloat 字符串的高度
+ */
+- (CGFloat)heightForWidth:(CGFloat)width
+                     font:(UIFont *)font {
+    CGSize textSize = {0, 0};
+    if (![NSString IsNilOrEmpty:self]){
+        textSize = [self sizeWithFont:font
+                    constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
+                        lineBreakMode:NSLineBreakByWordWrapping];
+    }
+    return textSize.height;
+}
+
+- (CGFloat)realWidthForWidth:(CGFloat)width
+                        font:(UIFont *)font {
+    CGSize textSize = {0, 0};
+    if (![NSString IsNilOrEmpty:self]){
+        textSize = [self sizeWithFont:font
+                    constrainedToSize:CGSizeMake(width, CGFLOAT_MAX)
+                        lineBreakMode:NSLineBreakByTruncatingTail];
+    }
+    return textSize.width;
+}
+
+
 //- (NSString *)htmlEncode{
 //    NSString *str = [self stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
 //    str = [str stringByReplacingOccurrencesOfString:@"'" withString:@"''"];

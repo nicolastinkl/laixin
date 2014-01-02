@@ -20,6 +20,15 @@
 - (BOOL) isValidPhone;
 
 
+
+- (CGFloat)heightForWidth:(CGFloat)width
+                     font:(UIFont *)font;
+
+//用作只有一行文字的实际宽度
+- (CGFloat)realWidthForWidth:(CGFloat)width
+                        font:(UIFont *)font;
+
+
 //- (NSString *)htmlEncode;
 //- (NSString *)htmlDecode;
 

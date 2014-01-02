@@ -103,7 +103,11 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:3];
     dict[@"func"] = request.action;
-    dict[@"parm"] = request.params;
+    if (request.params) {
+        dict[@"parm"] = request.params;
+    }else{
+        dict[@"parm"] = @{};
+    }
 //    if (request.cdata && request.cdata != NULL) {
 //        dict[@"client_code"] = request.cdata;
 //    }

@@ -27,6 +27,7 @@
 #import "LXChatDBStoreManager.h"
 #import "XCJLoginNaviController.h"
 #import "UIView+Additon.h"
+#import "XCJGroupPost_list.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -37,6 +38,7 @@
     CLLocationManager *locationManager;
     CLLocation *checkinLocation;
     NSArray * JsonArray;
+    NSString * Currentgid;
 }
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *checkinLocation;
@@ -84,7 +86,59 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
     
+    /**
+     *  16 group.create(name,board,type) 创建群
+        Result={“gid”:1}
+     */
+//    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+//    NSDictionary * parames = @{@"name":@"乐百汇公馆",@"board":@"成都好玩的都市圈子",@"type":@1};
+//    [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
+//        
+//    } failure:^(MLRequest *request, NSError *error) {
+//    }];
     
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        /**
+         *  gid,content
+         */
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * groupsDict =  groups[@"groups"];
+                if (groupsDict && groupsDict.count > 0 ) {
+                    [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        Currentgid = [tools getStringValue:obj[@"gid"] defaultValue:@""];
+                        
+                        /*  add group
+                         NSDictionary * parames = @{@"content":@"来上班5天迟到4次然后人就不见了",@"gid":gid};
+                         [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                                //    postid = 12;
+                         } failure:^(MLRequest *request, NSError *error) {
+                         }];*/
+                        
+                        /* get all list data*/
+                        NSDictionary * parames = @{@"gid":Currentgid,@"pos":@0,@"count":@"20"};
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                            //    postid = 12;
+                            /*        
+                             Result={
+                             “posts”:[*/
+                            NSDictionary * groups = responseObject[@"result"];
+                            NSArray * postsDict =  groups[@"posts"];
+                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                                [_dataSource addObject:post];
+                            }];
+                        } failure:^(MLRequest *request, NSError *error) {
+                        }];
+                    }];
+                }
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    });
     /*
       set title color and title font
      [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
