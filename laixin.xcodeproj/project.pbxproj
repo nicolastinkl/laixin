@@ -39,10 +39,9 @@
 		8668E481187540DB00D20C9E /* MLScrollRefreshHeader.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8668E46E187540DB00D20C9E /* MLScrollRefreshHeader.bundle */; };
 		8668E482187540DB00D20C9E /* MLScrollRefreshHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E470187540DB00D20C9E /* MLScrollRefreshHeader.m */; };
 		8668E483187540DB00D20C9E /* UItitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E472187540DB00D20C9E /* UItitleView.m */; };
-		8668E488187541BB00D20C9E /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E485187541BB00D20C9E /* Activity.m */; };
 		8668E489187541BB00D20C9E /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E487187541BB00D20C9E /* Comment.m */; };
-		8668E48C1875424C00D20C9E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E48B1875424C00D20C9E /* User.m */; };
 		8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E491187543B900D20C9E /* UIImageView+Addtion.m */; };
+		8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */; };
 		866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 866F0618185724EE007A57CF /* SinaWeibo.bundle */; };
 		866F0621185724EE007A57CF /* SinaWeibo.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061A185724EE007A57CF /* SinaWeibo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061C185724EE007A57CF /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -340,8 +339,8 @@
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
 		8668E44A187517C000D20C9E /* XCJGroupPost_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJGroupPost_list.h; sourceTree = "<group>"; };
 		8668E44B187517C000D20C9E /* XCJGroupPost_list.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJGroupPost_list.m; sourceTree = "<group>"; };
-		8668E452187540DB00D20C9E /* BaseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDetailViewController.h; sourceTree = "<group>"; };
-		8668E453187540DB00D20C9E /* BaseDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseDetailViewController.m; sourceTree = "<group>"; };
+		8668E452187540DB00D20C9E /* BaseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseDetailViewController.h; path = support/HomeUtils/BaseDetailViewController.h; sourceTree = "<group>"; };
+		8668E453187540DB00D20C9E /* BaseDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseDetailViewController.m; path = support/HomeUtils/BaseDetailViewController.m; sourceTree = "<group>"; };
 		8668E455187540DB00D20C9E /* ActivityTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityTableViewCell.h; sourceTree = "<group>"; };
 		8668E456187540DB00D20C9E /* ActivityTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityTableViewCell.m; sourceTree = "<group>"; };
 		8668E458187540DB00D20C9E /* ActivityCommentsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityCommentsView.h; sourceTree = "<group>"; };
@@ -364,14 +363,12 @@
 		8668E470187540DB00D20C9E /* MLScrollRefreshHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLScrollRefreshHeader.m; sourceTree = "<group>"; };
 		8668E471187540DB00D20C9E /* UItitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UItitleView.h; sourceTree = "<group>"; };
 		8668E472187540DB00D20C9E /* UItitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UItitleView.m; sourceTree = "<group>"; };
-		8668E484187541BB00D20C9E /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
-		8668E485187541BB00D20C9E /* Activity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Activity.m; sourceTree = "<group>"; };
 		8668E486187541BB00D20C9E /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		8668E487187541BB00D20C9E /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
-		8668E48A1875424C00D20C9E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		8668E48B1875424C00D20C9E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		8668E490187543B900D20C9E /* UIImageView+Addtion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Addtion.h"; sourceTree = "<group>"; };
 		8668E491187543B900D20C9E /* UIImageView+Addtion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Addtion.m"; sourceTree = "<group>"; };
+		8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeDynamicViewController.h; path = viewcontroller/XCJHomeDynamicViewController.h; sourceTree = "<group>"; };
+		8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeDynamicViewController.m; path = viewcontroller/XCJHomeDynamicViewController.m; sourceTree = "<group>"; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -839,8 +836,12 @@
 		8668E44F18751AB500D20C9E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
+				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				865632D8185FFDDA00E9903C /* XCJNearbyHomeViewController.h */,
 				865632D9185FFDDA00E9903C /* XCJNearbyHomeViewController.m */,
+				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
+				8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -848,8 +849,6 @@
 		8668E4511875403D00D20C9E /* HomeUtils */ = {
 			isa = PBXGroup;
 			children = (
-				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
-				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				8668E454187540DB00D20C9E /* CustomizedCells */,
 				8668E457187540DB00D20C9E /* CustomizedViews */,
 				8668E45C187540DB00D20C9E /* Images */,
@@ -1603,10 +1602,6 @@
 		86EB7655185AA6CC00836947 /* DAO */ = {
 			isa = PBXGroup;
 			children = (
-				8668E48A1875424C00D20C9E /* User.h */,
-				8668E48B1875424C00D20C9E /* User.m */,
-				8668E484187541BB00D20C9E /* Activity.h */,
-				8668E485187541BB00D20C9E /* Activity.m */,
 				8668E486187541BB00D20C9E /* Comment.h */,
 				8668E487187541BB00D20C9E /* Comment.m */,
 				86EB7656185AA6CC00836947 /* Model.h */,
@@ -2028,6 +2023,7 @@
 			files = (
 				8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */,
 				86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */,
+				8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */,
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
@@ -2056,7 +2052,6 @@
 				869CE4C2186A73880004C1EC /* RegexKitLite.m in Sources */,
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
-				8668E488187541BB00D20C9E /* Activity.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
@@ -2136,7 +2131,6 @@
 				869CE525186BE38D0004C1EC /* NSManagedObject+MagicalDataImport.m in Sources */,
 				86EB76DF185AA6CC00836947 /* base64.c in Sources */,
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,
-				8668E48C1875424C00D20C9E /* User.m in Sources */,
 				86D1828E1834AED30005901D /* UIImage+Resize.m in Sources */,
 				86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */,
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,

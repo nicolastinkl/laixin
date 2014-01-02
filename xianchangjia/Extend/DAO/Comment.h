@@ -9,12 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "Model.h"
 
-@class User;
 
+/*
+ “replyid”:
+ “postid”:
+ “uid”:
+ “content”:
+ “time”:
+ */
 @interface Comment : Model
 
 @property (nonatomic,copy) NSString *content;
-@property (nonatomic,strong) User *user;
+@property (nonatomic,strong) NSString *postid;
+@property (nonatomic,strong) NSString *replyid;
+@property (nonatomic,strong) NSString *uid;
 @property (nonatomic,assign) NSTimeInterval time;
+@property (strong, nonatomic) NSString * timeText;
 
 @end

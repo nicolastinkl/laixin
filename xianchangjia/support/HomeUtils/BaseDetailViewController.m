@@ -7,13 +7,14 @@
 //
 
 #import "BaseDetailViewController.h"
-#import "Activity.h"
-//#import "User.h"
-//#import "Comment.h"
+#import "XCJGroupPost_list.h"
+#import "Comment.h"
 #import "MLScrollRefreshHeader.h"
 #import "InterceptTouchView.h"
 #import "ActivityTableViewCell.h"
 #import "Extend.h"
+#import "UIView+Additon.h"
+#import "UIView+Indicator.h"
 
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
@@ -28,7 +29,7 @@
 
 @property (nonatomic,assign) CGFloat tableBaseYOffsetForInput;
 
-@property (nonatomic,strong) Activity* currentOperateActivity;
+@property (nonatomic,strong) XCJGroupPost_list* currentOperateActivity;
 @property (nonatomic,assign) NSInteger currentCommentToUserIndex;
 
 @property (nonatomic,assign) BOOL isLoading;
@@ -45,20 +46,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(keyboardWillShow:)
-													 name:UIKeyboardWillShowNotification
-												   object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(keyboardWillHide:)
-													 name:UIKeyboardWillHideNotification
-												   object:nil];
-        
-        self.activities = [[NSMutableArray alloc]initWithCapacity:1];
-        self.cellHeights = [[NSMutableArray alloc]initWithCapacity:1];
-        
     }
     return self;
 }
@@ -75,6 +62,24 @@
     
     [_inputTextView removeObserver:self forKeyPath:@"contentSize" context:nil];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // Custom initialization
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    self.activities = [[NSMutableArray alloc]initWithCapacity:1];
+    self.cellHeights = [[NSMutableArray alloc]initWithCapacity:1];
 }
 
 - (void)viewDidLoad
@@ -96,33 +101,19 @@
     
     [self.titleString  addObserver:self forKeyPath:@"changeTitle" options:NSKeyValueObservingOptionNew context:nil];
 
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.scrollsToTop = YES;
-    _tableView.backgroundColor = [UIColor clearColor];
+    _tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_tableView];
-    
-    self.titleview = [[NSBundle mainBundle] loadNibNamed:@"UItitleView" owner:self options:nil][0];
-    if (self.titleview ) {
-        self.titleview.viewcontr = self;
-        [self.view  addSubview:self.titleview];
-//        int uploadConfig =  [[MobClick getConfigParams:@"openUploadButton"] intValue];
-//        if (uploadConfig == 0)
-//            //display
-//            self.titleview.uploadButton.hidden = YES;
-//        else
-//            self.titleview.uploadButton.hidden = NO;
-       
-        
-    }
     
     UIEdgeInsets insets =  _tableView.contentInset;
     insets.top = [self topInsetOfTableView:_tableView];
     _tableView.contentInset = insets;
     
-    self.refreshView = [[MLScrollRefreshHeader alloc]initWithScrollView:self.tableView andDelegate:self isPlaySound:NO];
+    self.refreshView = [[MLScrollRefreshHeader alloc]initWithScrollView:self.tableView andDelegate:self isPlaySound:YES];
     
     //评论输入框
     self.inputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frameBottom,self.view.frameWidth, 47)];
@@ -198,28 +189,31 @@
             moreCell.selectionStyle = UITableViewCellSelectionStyleNone;
             moreCell.backgroundColor = [UIColor clearColor];
             
-            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-            indicator.frameSize = CGSizeMake(20, 20);
-            indicator.center = CGPointMake(self.view.frameWidth/2, kLoadMoreCellHeight/2);
-            indicator.tag = 888;
-            indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
-            [moreCell addSubview:indicator];
+//            UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//            indicator.frameSize = CGSizeMake(20, 20);
+//            indicator.center = CGPointMake(self.view.frameWidth/2, kLoadMoreCellHeight/2);
+//            indicator.tag = 888;
+//            indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+//            [moreCell addSubview:indicator];
+            
+            
             
             UIButton *retryButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, moreCell.frameWidth, moreCell.frameHeight)];
-            retryButton.backgroundColor = [UIColor lightGrayColor];
+            retryButton.backgroundColor = [UIColor clearColor];
             [retryButton setTitle:@"点击重新加载" forState:UIControlStateNormal];
             retryButton.titleLabel.font = [UIFont systemFontOfSize:14];
             retryButton.tag = 111;
+            retryButton.titleLabel.textColor = [UIColor grayColor];
             [retryButton addTarget:self action:@selector(retryButtonEvent) forControlEvents:UIControlEventTouchUpInside];
             [moreCell addSubview:retryButton];
         }
         self.moreCell = moreCell;
         
         UIButton *button = (UIButton *)[moreCell viewWithTag:111];
-        UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[moreCell viewWithTag:888];
+//        UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[moreCell viewWithTag:888];
+//        [indicator startAnimating];
         button.hidden = YES;
-        [indicator startAnimating];
-        
+        [moreCell showIndicatorViewBlue];
         return moreCell;
     }
     
@@ -239,7 +233,7 @@
         return kLoadMoreCellHeight;
     }
     
-    Activity *activity = [_activities objectAtIndex:indexPath.row];
+    XCJGroupPost_list *activity = [_activities objectAtIndex:indexPath.row];
     if (activity) {
         if (_cellHeights&&[_cellHeights[indexPath.row] floatValue]>0) {
             return [_cellHeights[indexPath.row] floatValue];
@@ -279,19 +273,19 @@
 
 #pragma mark - ActivityTableViewCellDelegate
 //点击某用户名
-- (void)clickUserID:(NSInteger)uid onActivity:(Activity *)activity
+- (void)clickUserID:(NSString *)uid onActivity:(XCJGroupPost_list *)activity
 {
-    NSLog(@"点击用户id:%d",uid);
+    NSLog(@"点击用户id:%@",uid);
 }
 
 //点击当前activity的发布者头像
-- (void)clickAvatarButton:(UIButton *)avatarButton onActivity:(Activity *)activity
+- (void)clickAvatarButton:(UIButton *)avatarButton onActivity:(XCJGroupPost_list *)activity
 {
     NSLog(@"点击头像:%@",avatarButton);
 }
 
 //点击评论按钮
-- (void)clickCommentButton:(UIButton *)commentButton onActivity:(Activity *)activity
+- (void)clickCommentButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity
 {
     //滚动到指定activity的底部-10像素
     NSInteger index = [_activities indexOfObject:activity];
@@ -305,13 +299,13 @@
 }
 
 //点击赞按钮
-- (void)clickLikeButton:(UIButton *)likeButton onActivity:(Activity *)activity{
+- (void)clickLikeButton:(UIButton *)likeButton onActivity:(XCJGroupPost_list *)activity{
     NSLog(@"点击赞:%@",likeButton);
     //在activity
 }
 
 //点击评论View中的某行(当前如果点击的是其中的某用户是会忽略的)
-- (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(Activity *)activity
+- (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(XCJGroupPost_list *)activity
 {
     //滚动到指定activity的底部-5像素
     NSInteger acindex = [_activities indexOfObject:activity];
@@ -366,8 +360,8 @@
     
     if ([keyPath isEqualToString:@"changeTitle"]) {
         self.titleString = [NSString stringWithFormat:@"%@",object];
-        self.titleview.titleView.text = self.titleString;
-        [self.titleview.titleView sizeToFit];
+//        self.titleview.titleView.text = self.titleString;
+//        [self.titleview.titleView sizeToFit];
     }
    // [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
@@ -481,9 +475,8 @@
 {
     NSInteger lastID = 0;
     if (_activities.count>0) {
-        lastID = ((Activity*)_activities[_activities.count-1]).aid;
+        lastID = [((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue];
     }
-
     self.isLoading = YES;
     _noDataHintLabel.hidden = YES;
     [self postGetActivitiesWithLastID:lastID];
@@ -524,7 +517,7 @@
         //清空数据源
         [_cellHeights removeAllObjects];
         [_activities removeAllObjects];
-    } else if (_activities.count>0&&lastID!=((Activity*)_activities[_activities.count-1]).aid) {
+    } else if (_activities.count>0&&lastID!=[((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue]) {
         //这里得判断当前最后一个activity ID是不是和lastID对应，不是则什么都不做
         //假想一个场景，先有loadMore请求，然后有refresh请求，然后refresh先有结果，然后loadMore再有结果。
         //More之前的数据就会有问题。
@@ -562,19 +555,22 @@
     if (_isDontNeedLazyLoad) return;
     
     UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
+//    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
     button.hidden = NO;
-    [indicator stopAnimating];
+//    [indicator stopAnimating];
+    [self.moreCell hideIndicatorViewBlueOrGary];
 }
 
 - (void)retryButtonEvent
 {
     UIButton *button = (UIButton *)[self.moreCell viewWithTag:111];
-    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
+//    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
     button.hidden = YES;
-    [indicator startAnimating];
+//    [indicator startAnimating];
+    [self.moreCell hideIndicatorViewBlueOrGary];
     [self postLoadMoreActivitiesRequest];
 }
+
 #pragma mark - 需要子类继承的一些
 /**
  *  根据lastID来获取activities，
@@ -586,12 +582,12 @@
  */
 - (void)postGetActivitiesWithLastID:(NSInteger)lastID
 {
-    
+    NSLog(@"postGetActivitiesWithLastID %d",lastID);
 //    [self successGetActivities:nil withLastID:lastID];
     
 }
 
-- (void)sendCommentContent:(NSString*)content ToActivity:(Activity*)currentOperateActivity atCommentIndex:(NSInteger)commentIndex
+- (void)sendCommentContent:(NSString*)content ToActivity:(XCJGroupPost_list*)currentOperateActivity atCommentIndex:(NSInteger)commentIndex
 {
     
     

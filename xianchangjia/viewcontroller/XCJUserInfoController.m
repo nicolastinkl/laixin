@@ -43,17 +43,33 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    
-    self.Label_nick.text  = self.frend.friendRelation.nick;
-    self.Label_sign.text  = self.frend.friendRelation.signature;
-    self.Label_address.text = @"成都";
-    if ([self.frend.friendRelation.sex intValue] == 1) {
-        self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
-    }else if ([self.frend.friendRelation.sex intValue] == 2) {
-        self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
+    if (self.UserInfo) {
+        
+        self.Label_nick.text  = self.UserInfo.nick;
+        self.Label_sign.text  = self.UserInfo.signature;
+        self.Label_address.text = @"成都";
+        if ([self.UserInfo.sex intValue] == 1) {
+            self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
+        }else if ([self.UserInfo.sex intValue] == 2) {
+            self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
+        }
+        
+        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.UserInfo.headpic defaultValue:@""]]];
+
+    }else{
+        
+        self.Label_nick.text  = self.frend.friendRelation.nick;
+        self.Label_sign.text  = self.frend.friendRelation.signature;
+        self.Label_address.text = @"成都";
+        if ([self.frend.friendRelation.sex intValue] == 1) {
+            self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
+        }else if ([self.frend.friendRelation.sex intValue] == 2) {
+            self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
+        }
+        
+        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""]]];
+
     }
-    
-    [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""]]];
     
     [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
     [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];

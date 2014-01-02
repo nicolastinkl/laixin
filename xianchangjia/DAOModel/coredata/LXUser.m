@@ -23,7 +23,7 @@
  sex = 0;
  signature = "\U571f\U8c6a\U3002\U4fee\U6b63\U4f60\U7684\U6700\U7231\Uff0c\U62c5\U5fc3\U79bd\U6d41\U611f\U3002\U7136\U540e\Uff1a\U795d\U8d3a\U5f00\U5f20\U5927\U5409\Uff01\U8d22\U6e90\U6eda\U6eda\Uff01";
  uid = 8;
- */
+*/
 - (id)initWithDict:(NSDictionary *)dic
 {
     if (self = [super init]) {

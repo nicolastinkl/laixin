@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UItitleView.h"
 
 #define kEveryGetDataCount 10
 
@@ -20,7 +19,6 @@
 
 @property (nonatomic,strong) UILabel *noDataHintLabel;
 @property (nonatomic,strong) NSString * titleString;
-@property (nonatomic,strong) UItitleView * titleview;
 //@property (nonatomic,assign) SEL UPloadClick;
 - (void)failedGetActivitiesWithLastID:(NSInteger)lastID;
 - (void)successGetActivities:(NSArray*)activities withLastID:(NSInteger)lastID;

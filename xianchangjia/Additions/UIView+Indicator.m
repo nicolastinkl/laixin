@@ -11,7 +11,7 @@
 
 typedef enum {
     kTagIndicatorView = 1988,
-    kTagIndicatorViewImg = 1989,
+    kTagIndicatorViewImg = 19894,
 }kUIViewIndicatorTags;
 
 @implementation UIView (Indicator)
@@ -93,6 +93,7 @@ typedef enum {
         [indicator.layer removeAllAnimations];
         indicator.hidden = YES;
         [indicator removeFromSuperview];
+        indicator = nil;
     }
 }
 
@@ -137,6 +138,7 @@ typedef enum {
 //    NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
 //    NSTimeInterval end = [NSDate timeIntervalSinceReferenceDate];
 //    NSTimeInterval delay = (end-start>2.0?0:(2.0-(end-start)));
-    [self performSelector:@selector(stopAnimation) withObject:nil afterDelay:0.3];
+    [self stopAnimation];
+//    [self performSelector:@selector(stopAnimation) withObject:nil afterDelay:0.1];
 }
 @end

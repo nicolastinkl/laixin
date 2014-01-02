@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class FCFriends;
+@class FCFriends,FCUserDescription;
 @interface XCJUserInfoController : UITableViewController
 @property (readwrite, nonatomic, strong) FCFriends *frend;
+@property (readwrite, nonatomic, strong) FCUserDescription *UserInfo;
 @end

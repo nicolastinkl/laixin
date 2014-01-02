@@ -65,10 +65,10 @@ typedef enum {
         [self addSubview:self.stateLabel = label];
         
         //箭头图片,左右自适应
-        UIImage *image = [UIImage imageNamed:kSrcName(@"arrow.png")];
+        UIImage *image = [UIImage imageNamed:@"arrow.png"];
         UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:image];
         arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        [self addSubview:self.arrowImageView = arrowImageView];
+//        [self addSubview:self.arrowImageView = arrowImageView]; change by tinkl
         
         //指示器，系统默认，灰色样式，左右自适应
         UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -175,8 +175,12 @@ typedef enum {
         {
             _stateLabel.text = kReleaseToRefreshText;
             
+            /*
+             rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+             rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ]; full rotation
+             */
             [UIView animateWithDuration:0.2 animations:^{
-                _arrowImageView.transform = CGAffineTransformMakeRotation(M_PI);
+                _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
                 UIEdgeInsets inset = _scrollView.contentInset;
                 inset.top = _deaultTopInset;
                 _scrollView.contentInset = inset;

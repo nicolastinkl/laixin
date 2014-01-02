@@ -7,26 +7,23 @@
 //
 
 #import "Comment.h"
-#import "User.h"
 #import "DataHelper.h"
+#import "tools.h"
 
 @implementation Comment
-
 
 + (instancetype)turnObject:(NSDictionary*)dict
 {
     Comment *result = [[self alloc]init];
     
-    if (dict[@"user"]&& [dict[@"user"] isKindOfClass:[NSDictionary class]]) {
-        result.user = [User turnObject:[DataHelper getDictionaryValue:dict[@"user"] defaultValue:nil flag:@"user"]];
-    }
+    NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
+    result.time = timeinter;
+    result.timeText = [tools timeLabelTextOfTime:timeinter];
+    result.uid = [DataHelper getStringValue:dict[@"uid"] defaultValue:@""];
+    result.replyid = [DataHelper getStringValue:dict[@"replyid"] defaultValue:@""];
+    result.postid = [DataHelper getStringValue:dict[@"postid"] defaultValue:@""];
+    result.content = [DataHelper getStringValue:dict[@"content"] defaultValue:@""];
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setLocale:[NSLocale currentLocale]];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    result.time = [[formatter dateFromString:[DataHelper getStringValue:dict[@"time"] defaultValue:nil flag:@"time"]] timeIntervalSince1970];
-    
-    result.content = [DataHelper getStringValue:dict[@"content"] defaultValue:nil flag:@"content"];
     return result;
 }
 

@@ -8,13 +8,15 @@
 
 #import "ActivityTableViewCell.h"
 #import "ActivityCommentsView.h"
-#import "Activity.h"
-#import "User.h"
+#import "XCJGroupPost_list.h"
+#import "LXUser.h"
 #import "Extend.h"
 #import "TTTAttributedLabel.h"
 #import "UIImageView+Addtion.h"
 #import "UIAlertViewAddition.h"
 #import "UIButton+WebCache.h"
+#import "LXAPIController.h"
+#import "LXRequestFacebookManager.h"
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
 
@@ -189,19 +191,23 @@
 }
 
 #pragma mark - set Activity
-- (void)setActivity:(Activity *)activity
+- (void)setActivity:(XCJGroupPost_list *)activity
 {
     //在这里根据activity的内容去设置各个subView的frame和细节
     _activity = activity;
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+        LXUser * user = response;
+        //内容
+        if (user.headpic) {
+            [_avatarButton setImageWithURL:[NSURL URLWithString:user.headpic] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+        }else{
+            [_avatarButton setImage:[UIImage imageNamed:@"avatar_fault"] forState:UIControlStateNormal];
+        }
+        [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
+    } withuid:activity.uid];
     
-    //内容
-    if (_activity.user.avatarURL) {
-        [_avatarButton setImageWithURL:[NSURL URLWithString:_activity.user.avatarURL] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
-    }else{
-        [_avatarButton setImage:[UIImage imageNamed:@"avatar_fault"] forState:UIControlStateNormal];
-    }
     
-    [_userNameButton setTitle:_activity.user.name forState:UIControlStateNormal];
+    
     _timeLabel.text = [self timeLabelTextOfTime:_activity.time];
     _contentLabel.text = _activity.content;
     
@@ -215,7 +221,7 @@
         _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
     }
     
-    if (_activity.isLiked) {
+    if (_activity.ilike) {
         [_likeButton setImage:[UIImage imageNamed:@"btn_like.png"] forState:UIControlStateNormal];
         [_likeButton setTitle:@"已赞" forState:UIControlStateNormal];
     }else{
@@ -223,20 +229,20 @@
         [_likeButton setTitle:@"赞" forState:UIControlStateNormal];
     }
     //根据latestLikeUser和likeCount来设置text
-    if (_activity.likeCount>0) {
+    if (_activity.like>0) {
         NSString *text = @"     ";
         NSMutableArray *textCheckingResults = [[NSMutableArray alloc]init];
-        for (User *aUser in _activity.latestLikeUsers) {
-            [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, aUser.name.length) replacementString:[NSString stringWithFormat:@"%d",aUser.uid]]];
-            text = [text stringByAppendingFormat:@"%@, ",aUser.name];
+        for (LXUser *aUser in _activity.likeUsers) {
+            [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, aUser.nick.length) replacementString:aUser.uid]];
+            text = [text stringByAppendingFormat:@"%@, ",aUser.nick];
         }
         if (text.length>0) {
             text = [text substringToIndex:text.length-2];//去掉最后的，号
             text = [text stringByAppendingString:@" "];
         }
-        NSInteger otherUserCount = _activity.likeCount - _activity.latestLikeUsers.count;
+        NSInteger otherUserCount = _activity.like - _activity.likeUsers.count;
         if (otherUserCount) {
-            if (_activity.latestLikeUsers.count>0) {
+            if (_activity.likeUsers.count>0) {
                 text = [text stringByAppendingFormat:@"等%d人",otherUserCount];
             }else{
                 text = [text stringByAppendingFormat:@"%d人",otherUserCount];
@@ -289,7 +295,7 @@
     
     CGFloat likeCommentBackY = yOffset-6.2;
     
-    if (_activity.likeCount>0) {
+    if (_activity.like>0) {
         _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
         [_likeLabel sizeToFit];
         
@@ -315,7 +321,7 @@
     
     _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
     
-    if (_activity.likeCount>0||_activity.comments.count>0) {
+    if (_activity.like>0||_activity.comments.count>0) {
         yOffset += 10;
         _likeCommentBackView.hidden = NO;
     }else{
@@ -355,7 +361,7 @@
    didSelectLinkWithCMD:(NSString *)cmd
 {
     if (_delegate&&[_delegate respondsToSelector:@selector(clickUserID:onActivity:)]) {
-        [_delegate clickUserID:[cmd integerValue] onActivity:_activity];
+        [_delegate clickUserID:cmd onActivity:_activity];
     }
 }
 

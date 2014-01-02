@@ -501,7 +501,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="dymaicCell" rowHeight="90" id="PW5-jZ-f27">
-                                <rect key="frame" x="0.0" y="86" width="320" height="90"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="90"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PW5-jZ-f27" id="FDb-NC-AFE">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
@@ -673,12 +673,38 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="vSU-rK-d0f" kind="relationship" relationship="rootViewController" id="zBn-zf-1Uw"/>
+                        <segue destination="vdo-Sn-q03" kind="relationship" relationship="rootViewController" id="84f-2g-cgu"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kdp-jk-wlw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="832" y="1476"/>
+        </scene>
+        <!--Home Dynamic View Controller - 动态-->
+        <scene sceneID="6iF-1p-0JP">
+            <objects>
+                <viewController restorationIdentifier="XCJHomeDynamicViewController" storyboardIdentifier="XCJHomeDynamicViewController" id="vdo-Sn-q03" customClass="XCJHomeDynamicViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mll-pE-Zag">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="动态" id="EUI-ZB-dQz">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="mqS-pX-Y4P">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="6Oz-1d-NhI">
+                                <rect key="frame" x="282" y="11" width="22" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <connections>
+                                    <action selector="postAction:" destination="vdo-Sn-q03" eventType="touchUpInside" id="IJN-pJ-tLa"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d6P-Kz-3yT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1101" y="1442"/>
         </scene>
         <!--Nearby Home View Controller - 动态-->
         <scene sceneID="1ns-Iw-odF">
@@ -690,7 +716,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="144" id="Wzq-ym-IsS">
-                                <rect key="frame" x="0.0" y="86" width="320" height="144"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="144"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wzq-ym-IsS" id="fRo-K8-gNA">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="144"/>
