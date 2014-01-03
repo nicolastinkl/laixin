@@ -18,7 +18,7 @@
 #import "LXAPIController.h"
 #import "LXRequestFacebookManager.h"
 #import "Comment.h"
-
+#import "tools.h"
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
 
@@ -214,6 +214,7 @@
     //重置下
     _activityImageView.image = nil;
     _activityImageView.fullScreenImageURL = nil;
+    _activityImageView.backgroundColor = [UIColor colorWithHex:0xF0F0F0];
     if (_activity.imageURL) {
 //        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
 //        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
@@ -278,7 +279,7 @@
      [_contentLabel sizeToFit];//自适应高度
     yOffset += _contentLabel.frameHeight+10;
     
-    if (_activity.imageURL) {
+    if (_activity.imageURL && _activity.imageURL.length > 5) {
         _activityImageView.hidden = NO;
         _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, self.frameWidth-xOffset-10);
         yOffset += _activityImageView.frameHeight+10;
@@ -306,43 +307,12 @@
     }else{
         _likeBackView.hidden = YES;
     }
- 
-    
-    if (_activity.comments.count <= 0) {
-        
-        /* get all list data*/
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //    postid = 12;
-            /*
-             Result={
-             “posts”:[*/
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * postsDict =  groups[@"replys"];
-            NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                /*“replyid”:
-                 “postid”:
-                 “uid”:
-                 “content”:
-                 “time”:
-                 */
-                Comment * comment = [Comment turnObject:obj];
-                [mutaArray addObject:comment];
-                
-            }];
-            [activity.comments addObjectsFromArray:mutaArray];
-            
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
-    }
     
     if (_activity.comments.count>0) {
         _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
         _commentsView.comments = _activity.comments; //会根据内容和自身宽度自动调整高度
         _commentsView.delegate = self;
         _commentsView.hidden = NO;
-        
         yOffset += _commentsView.frameHeight;
     }else{
         _commentsView.comments = nil;

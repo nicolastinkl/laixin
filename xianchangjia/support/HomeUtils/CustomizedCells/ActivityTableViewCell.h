@@ -32,6 +32,10 @@
 @property (nonatomic, assign,readonly) CGFloat cellHeight;
 //当前cell对应的activity
 @property (nonatomic, strong) XCJGroupPost_list *activity;
+
+////刷新对应行[self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+@property (nonatomic, assign) BOOL HasLoad;
+
 //delegate
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 

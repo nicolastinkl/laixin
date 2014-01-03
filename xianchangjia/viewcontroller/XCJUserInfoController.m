@@ -10,6 +10,9 @@
 #import "XCAlbumAdditions.h"
 #import "FCFriends.h"
 #import "FCUserDescription.h"
+#import "Conversation.h"
+#import "CoreData+MagicalRecord.h"
+#import "ChatViewController.h"
 
 @interface XCJUserInfoController ()
 @property (weak, nonatomic) IBOutlet UIImageView *Image_user;
@@ -57,7 +60,7 @@
         [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.UserInfo.headpic defaultValue:@""]]];
 
     }else{
-        
+        self.UserInfo = self.frend.friendRelation;
         self.Label_nick.text  = self.frend.friendRelation.nick;
         self.Label_sign.text  = self.frend.friendRelation.signature;
         self.Label_address.text = @"成都";
@@ -90,6 +93,30 @@
 -(IBAction)touchBtnUp:(id)sender
 {
     [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
+    
+    // target to chat view
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",self.UserInfo.uid];
+    NSArray * array =  [Conversation MR_findAllWithPredicate:pre inContext:localContext];
+    ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
+    if (array.count > 0) {
+        chatview.conversation = array[0];
+    }else{
+        // create new
+        Conversation * conversation =  [Conversation MR_createInContext:localContext];
+        conversation.lastMessage = @"";
+        conversation.lastMessageDate = [NSDate date];
+        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+        conversation.messageStutes = @(messageStutes_incoming);
+        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        conversation.facebookName = self.UserInfo.nick;
+        conversation.facebookId = self.UserInfo.uid;
+        conversation.badgeNumber = @0;
+        [localContext MR_saveOnlySelfAndWait];
+         chatview.conversation = conversation;
+     }
+     chatview.userinfo = self.UserInfo;
+     [self.navigationController pushViewController:chatview animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -98,82 +125,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-//
-//#pragma mark - Table view data source
-//
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//#warning Potentially incomplete method implementation.
-//    // Return the number of sections.
-//    return 0;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//#warning Incomplete method implementation.
-//    // Return the number of rows in the section.
-//    return 0;
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    
-//    // Configure the cell...
-//    
-//    return cell;
-//}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-
- */
 
 @end

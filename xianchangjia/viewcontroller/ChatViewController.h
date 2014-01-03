@@ -11,8 +11,6 @@
 @class Conversation,FCUserDescription;
 @interface ChatViewController : UIViewController
 
-//@property (nonatomic,strong) Chat *chat;
-
 @property (readwrite, nonatomic, strong) Conversation *conversation;
 
 @property (readwrite, nonatomic, strong) FCUserDescription *userinfo;

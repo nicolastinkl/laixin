@@ -248,7 +248,6 @@
 	[self.tableView endUpdates];
 }
 
-
 #pragma mark - table fetchview
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated
 {

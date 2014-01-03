@@ -65,13 +65,6 @@
     
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    // Custom initialization
-  
-}
-
 - (void)viewDidLoad
 {
     UIView *origView = self.view;
@@ -228,7 +221,45 @@
         cell.delegate = self;
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
-   
+    
+    if (activity.comments.count <= 0 && !cell.HasLoad) {
+        /* get all list data*/
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //    postid = 12;
+            /*
+             Result={
+             “posts”:[*/
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * postsDict =  groups[@"replys"];
+            if (postsDict && postsDict.count > 0) {
+                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    /*“replyid”:
+                     “postid”:
+                     “uid”:
+                     “content”:
+                     “time”:
+                     */
+                    Comment * comment = [Comment turnObject:obj];
+                    [mutaArray addObject:comment];
+                    
+                }];
+                [activity.comments addObjectsFromArray:mutaArray];
+                //indexofActivitys
+                [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+                cell.HasLoad = YES;
+            }
+            else{
+                cell.HasLoad = NO;
+            }
+           
+        } failure:^(MLRequest *request, NSError *error) {
+                cell.HasLoad = YES;
+        }];
+    }
+    
+//    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;
     // start requst comments  and likes
 //    post.get_reply(postid,pos=0,count=50) 读取回复
@@ -254,7 +285,6 @@
     XCJGroupPost_list *activity = [_activities objectAtIndex:indexPath.row];
     if (activity) {
         if (_cellHeights&&[_cellHeights[indexPath.row] floatValue]>0) {
-            SLog(@"indexPath.row : %d %@",indexPath.row , _cellHeights[indexPath.row]);
             return [_cellHeights[indexPath.row] floatValue];
         }
         
@@ -424,7 +454,11 @@
     
     //调整tableView位置
     if (_tableView.contentOffset.y > _tableView.contentSize.height-_tableView.frameHeight) {//最底部
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        if (_activities.count > 0) {
+            
+            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+        }
     }
     
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]

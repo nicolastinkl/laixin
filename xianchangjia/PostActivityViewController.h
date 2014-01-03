@@ -15,6 +15,7 @@
 @property (nonatomic,strong) UIImage *postImage;
 @property (nonatomic,strong) NSURL * filePath;
 @property (nonatomic,strong) NSString * gID;
+@property (nonatomic,strong) NSString * uploadKey;
 @property (nonatomic,weak) BaseDetailViewController *needRefreshViewController;
 
 @end

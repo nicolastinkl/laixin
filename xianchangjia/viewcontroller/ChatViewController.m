@@ -413,33 +413,36 @@
 - (void) SendImageWithMeImageurl:(NSString * ) url withMsgID:(NSString *) msgid
 {
     
-    NSDictionary * parames = @{@"uid":self.conversation.facebookId};
+    
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+    msg.text = @"";
+    msg.sentDate = [NSDate date];
+    msg.messageType = @(messageType_image);
+    msg.messageId = msgid;
+    msg.imageUrl = url;
+    // message did not come, this will be on rigth
+    msg.messageStatus = @(NO);
+    self.conversation.lastMessage = @"[图片]";
+    self.conversation.lastMessageDate = [NSDate date];
+    self.conversation.badgeNumber = @0;
+    [self.conversation addMessagesObject:msg];
+    [self.messageList addObject:msg];
+    [localContext MR_saveToPersistentStoreAndWait];
+    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+    [button defaultStyle];
+    [self insertTableRow];
+    
+   /* NSDictionary * parames = @{@"uid":self.conversation.facebookId};
     [[MLNetworkingManager sharedManager] sendWithAction:@"message.send"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
         NSDictionary * dic = [responseObject objectForKey:@"result"];
         if (dic) {
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            FCMessage *msg = [FCMessage MR_createInContext:localContext];
-            msg.text = @"";
-            msg.sentDate = [NSDate date];
-            msg.messageType = @(messageType_image);
-            msg.messageId = msgid;
-            msg.imageUrl = url;
-            // message did not come, this will be on rigth
-            msg.messageStatus = @(NO);
-            self.conversation.lastMessage = @"[图片]";
-            self.conversation.lastMessageDate = [NSDate date];
-            self.conversation.badgeNumber = @0;
-            [self.conversation addMessagesObject:msg];
-            [self.messageList addObject:msg];
-            [localContext MR_saveToPersistentStoreAndWait];
-            UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
-            [button defaultStyle];
-            [self insertTableRow];
+           
         }
         
     } failure:^(MLRequest *request, NSError *error) {
-    }];
+    }];*/
 }
 
 
@@ -466,10 +469,10 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
-    [parameters setValue:@"1" forKey:@"filetype"];
-    [parameters setValue:@"" forKey:@"content"];
-    [parameters setValue:@"" forKey:@"length"];
-    [parameters setValue:self.conversation.facebookId forKey:@"toid"];
+    [parameters setValue:@"1" forKey:@"x:filetype"];
+    [parameters setValue:@"" forKey:@"x:content"];
+    [parameters setValue:@"" forKey:@"x:length"];
+    [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         //        [formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];

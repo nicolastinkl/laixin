@@ -412,8 +412,10 @@
         Currentgid = @"2";
     }
     postVC.gID = Currentgid;
-    postVC.filePath = url;
+    postVC.filePath = [url copy];
+    postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
     postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    
     postVC.needRefreshViewController = self;
     [self.navigationController pushViewController:postVC animated:YES];
 }

@@ -184,13 +184,14 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
-    [parameters setValue:@"1" forKey:@"filetype"];
-    [parameters setValue:_inputTextView.text forKey:@"content"];
-    [parameters setValue:@"" forKey:@"length"];
-    [parameters setValue:self.gID forKey:@"gid"];
+    [parameters setValue:@"1" forKey:@"x:filetype"];
+    [parameters setValue:_inputTextView.text forKey:@"x:content"];
+    [parameters setValue:@"" forKey:@"x:length"];
+    [parameters setValue:self.gID forKey:@"x:gid"];
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-        //        [formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
+//        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
+        NSData * imageData = UIImageJPEGRepresentation(self.postImage, 1);
+          [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
         SLog(@"responseObject %@",responseObject);
@@ -210,7 +211,9 @@
                 glist.group_id = self.gID;
                 glist.time = [[NSDate date] timeIntervalSinceNow];
                 
-                [_needRefreshViewController.activities addObject:glist];
+                [_needRefreshViewController.activities insertObject:glist atIndex:0];
+                [_needRefreshViewController.tableView reloadData];
+                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
                 /*
                  "replycount":0,
                  "uid":4,
@@ -222,7 +225,7 @@
                  "like":0
                  */
 //                [_needRefreshViewController.refreshView beginRefreshing];
-                [_needRefreshViewController.tableView setContentOffset:CGPointMake(0, -_needRefreshViewController.tableView.contentInset.top) animated:YES];
+               // [_needRefreshViewController.tableView setContentOffset:CGPointMake(0, -_needRefreshViewController.tableView.contentInset.top) animated:YES];
                 [self.navigationController popViewControllerAnimated:YES];
             }
         }
