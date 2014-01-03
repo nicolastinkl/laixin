@@ -281,7 +281,7 @@
     
     if (_activity.imageURL && _activity.imageURL.length > 5) {
         _activityImageView.hidden = NO;
-        _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, self.frameWidth-xOffset-10);
+        _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
         yOffset += _activityImageView.frameHeight+10;
     }else{
         _activityImageView.hidden = YES;

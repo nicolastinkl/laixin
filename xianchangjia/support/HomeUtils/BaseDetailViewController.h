@@ -16,6 +16,7 @@
 @property (nonatomic,strong) MLScrollRefreshHeader *refreshView;
 @property (nonatomic,strong) UITableView *tableView;
 @property (nonatomic,strong) NSMutableArray *activities;
+@property (nonatomic,strong) NSMutableArray *cellHeights;
 
 @property (nonatomic,strong) UILabel *noDataHintLabel;
 @property (nonatomic,strong) NSString * titleString;

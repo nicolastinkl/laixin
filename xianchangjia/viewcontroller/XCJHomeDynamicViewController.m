@@ -38,12 +38,12 @@
 #import "Sequencer.h"
 #import "PostActivityViewController.h"
 #import "LXChatDBStoreManager.h"
+#import "MLScrollRefreshHeader.h"
 
 
 @interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate>
 {
     NSArray * JsonArray;
-    NSString * Currentgid;
 }
 @end
 
@@ -62,34 +62,18 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
-    
-    if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
-        [self OpenLoginview:nil];
-    }else{
-        [self initHomeData];
-        //        [self.view showIndicatorViewLargeBlue];
-    }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
-    [self runSequucer];
-   
-}
--(void) uploadDataWithLogin:(NSNotification *) notify
-{
     [self initHomeData];
+    
+    [self.refreshView beginRefreshing];
+
 }
 
 
--(IBAction)OpenLoginview:(id)sender
-{
-    UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
-    //XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
-    // XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    //    [delegate.mainNavigateController pushViewController:viewContr animated:NO];
-    //    [self presentViewController:delegate.mainNavigateController animated:NO completion:^{}];
-    [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
+- (IBAction)openGroupClick:(id)sender {
+    XCJDomainsViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJDomainsViewController"];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:viewContr];
+    viewContr.title = @"我的群组";
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 -(void)   initHomeData
@@ -100,101 +84,32 @@
     /**
      *  gid,content
      */
-    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-    NSDictionary * parames = @{@"sessionid":sessionid};
-    [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:parames success:^(MLRequest *request, id responseObject) {
-        if (responseObject) {
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * groupsDict =  groups[@"groups"];
-            if (groupsDict && groupsDict.count > 0 ) {
-                [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    Currentgid = [tools getStringValue:obj[@"gid"] defaultValue:@""];
-                    
-                    /*  add group
-                     NSDictionary * parames = @{@"content":@"来上班5天迟到4次然后人就不见了",@"gid":gid};
-                     [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                     //    postid = 12;
-                     } failure:^(MLRequest *request, NSError *error) {
-                     }];*/
-                }];
-            }
-        }
-    } failure:^(MLRequest *request, NSError *error) {
-    }];
-     
-    [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-        //首次登陆返回的用户信息
-        NSDictionary * userinfo = responseObject[@"result"];
-        LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
-        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-        [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
-        [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
-        [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
-        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
-        [USER_DEFAULT synchronize];
-        
-    } failure:^(MLRequest *request, NSError *error) {
-    }];
-    
-    [self runSequucer];
-}
-
--(void) runSequucer
-{
-    //    Sequencer *sequencer = [[Sequencer alloc] init];
-    //    [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
-    ////        NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-    //
-    //    }];
-    //
-    //    [sequencer run];
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
-            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@100};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
-                self.navigationItem.rightBarButtonItem.enabled = YES;
-                NSArray * friends = responseObject[@"result"][@"friend_id"];
-                NSMutableArray * arrayIDS = [[NSMutableArray alloc] init];
-                [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
-                }];
-                if (arrayIDS.count > 0) {
-                    NSDictionary * parameIDS = @{@"uid":arrayIDS};
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {
-                        // "users":[....]
-                        NSDictionary * userinfo = responseObject[@"result"];
-                        NSArray * userArray = userinfo[@"users"];
-                        [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            LXUser * luser = [[LXUser alloc] initWithDict:obj];
-                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
-                        }];
-                    } failure:^(MLRequest *request, NSError *error) {
+    if (_Currentgid == nil) {
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * groupsDict =  groups[@"groups"];
+                if (groupsDict && groupsDict.count > 0 ) {
+                    [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        _Currentgid = [tools getStringValue:obj[@"gid"] defaultValue:@""];
+                        
+                        /*  add group
+                         NSDictionary * parames = @{@"content":@"来上班5天迟到4次然后人就不见了",@"gid":gid};
+                         [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                         //    postid = 12;
+                         } failure:^(MLRequest *request, NSError *error) {
+                         }];*/
                     }];
+//                    [self postGetActivitiesWithLastID:0];
                 }
-                
-                // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
-                
-                
-            } failure:^(MLRequest *request, NSError *error) {
-                
-            }];
-        }
-        
-        
-    });
-    
-    //
-    //    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-    //    NSDictionary * parames = @{@"uid":userid,@"pos":@0,@"count":@100};
-    //    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
-    //        self.navigationItem.rightBarButtonItem.enabled = YES;
-    //
-    //
-    //    } failure:^(MLRequest *request, NSError *error) {
-    //        
-    //    }];
+
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }else
+    {
+//        [self postGetActivitiesWithLastID:0];
+    }
 }
 
 
@@ -208,7 +123,6 @@
         [self presentViewController:photoLibrary animated:YES completion:nil];
     }
 }
-
 
 #pragma mark - IBActionSheet/UIActionSheet Delegate Method
 
@@ -244,10 +158,10 @@
 
 - (void)postGetActivitiesWithLastID:(NSInteger)lastID
 {
-    if (Currentgid == nil) {
-        Currentgid  = @"2";
+    if (_Currentgid == nil) {
+        _Currentgid  = @"2";
     }
-    if (Currentgid == nil) {
+    if (_Currentgid == nil) {
         [self failedGetActivitiesWithLastID:0];
         return;
     }
@@ -261,9 +175,9 @@
         NSDictionary * parames ;
         if(lastID == 0)
         {
-            parames = @{@"gid":Currentgid,@"pos":@0,@"count":@"20"};
+            parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
         }else{
-            parames = @{@"gid":Currentgid,@"pos":@(self.activities.count),@"count":@"20"};
+            parames = @{@"gid":_Currentgid,@"pos":@(self.activities.count),@"count":@"20"};
         }
         
         [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -408,10 +322,10 @@
     
     NSURL * url = [self uploadContent:theInfo];
     PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
-    if (Currentgid == nil) {
-        Currentgid = @"2";
+    if (_Currentgid == nil) {
+        _Currentgid = @"2";
     }
-    postVC.gID = Currentgid;
+    postVC.gID = _Currentgid;
     postVC.filePath = [url copy];
     postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
     postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
@@ -432,7 +346,7 @@
     
     NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
-        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,Currentgid]];
+        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,_Currentgid]];
         NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
         NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
         NSLog(@"Upload Path: %@", filePath);

@@ -23,6 +23,10 @@
 		865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632DF185FFDDA00E9903C /* XCJSettingsViewController.m */; };
 		865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632E1185FFDDA00E9903C /* XCJUserViewController.m */; };
 		865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632F1186000D300E9903C /* XCJSendCommentViewController.m */; };
+		86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC01876BB78007477C0 /* XCJHomeMenuView.m */; };
+		86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */; };
+		86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */; };
+		86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */; };
 		8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E44B187517C000D20C9E /* XCJGroupPost_list.m */; };
 		8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E453187540DB00D20C9E /* BaseDetailViewController.m */; };
 		8668E474187540DB00D20C9E /* ActivityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E456187540DB00D20C9E /* ActivityTableViewCell.m */; };
@@ -340,6 +344,13 @@
 		865632EF185FFF1300E9903C /* XCJExtendClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJExtendClass.h; sourceTree = "<group>"; };
 		865632F0186000D300E9903C /* XCJSendCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendCommentViewController.h; path = viewcontroller/XCJSendCommentViewController.h; sourceTree = "<group>"; };
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
+		86660DBF1876BB78007477C0 /* XCJHomeMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeMenuView.h; path = viewcontroller/views/XCJHomeMenuView.h; sourceTree = "<group>"; };
+		86660DC01876BB78007477C0 /* XCJHomeMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeMenuView.m; path = viewcontroller/views/XCJHomeMenuView.m; sourceTree = "<group>"; };
+		86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJHomeMenuView.xib; path = viewcontroller/views/XCJHomeMenuView.xib; sourceTree = "<group>"; };
+		86660DC71876DA0D007477C0 /* XCJCreateNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateNaviController.h; path = viewcontroller/XCJCreateNaviController.h; sourceTree = "<group>"; };
+		86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateNaviController.m; path = viewcontroller/XCJCreateNaviController.m; sourceTree = "<group>"; };
+		86660DCA1876DA37007477C0 /* XCJCreateGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateGroupTableViewController.h; path = viewcontroller/XCJCreateGroupTableViewController.h; sourceTree = "<group>"; };
+		86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateGroupTableViewController.m; path = viewcontroller/XCJCreateGroupTableViewController.m; sourceTree = "<group>"; };
 		8668E44A187517C000D20C9E /* XCJGroupPost_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJGroupPost_list.h; sourceTree = "<group>"; };
 		8668E44B187517C000D20C9E /* XCJGroupPost_list.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJGroupPost_list.m; sourceTree = "<group>"; };
 		8668E452187540DB00D20C9E /* BaseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseDetailViewController.h; path = support/HomeUtils/BaseDetailViewController.h; sourceTree = "<group>"; };
@@ -845,15 +856,40 @@
 			name = PostPhoto;
 			sourceTree = "<group>";
 		};
+		86660DBE1876BB51007477C0 /* MenuView */ = {
+			isa = PBXGroup;
+			children = (
+				86660DBF1876BB78007477C0 /* XCJHomeMenuView.h */,
+				86660DC01876BB78007477C0 /* XCJHomeMenuView.m */,
+				86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */,
+			);
+			name = MenuView;
+			sourceTree = "<group>";
+		};
+		86660DC61876D9E7007477C0 /* CreateGroup */ = {
+			isa = PBXGroup;
+			children = (
+				86660DC71876DA0D007477C0 /* XCJCreateNaviController.h */,
+				86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */,
+				86660DCA1876DA37007477C0 /* XCJCreateGroupTableViewController.h */,
+				86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */,
+			);
+			name = CreateGroup;
+			sourceTree = "<group>";
+		};
 		8668E44F18751AB500D20C9E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				86660DC61876D9E7007477C0 /* CreateGroup */,
+				86660DBE1876BB51007477C0 /* MenuView */,
 				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
 				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				865632D8185FFDDA00E9903C /* XCJNearbyHomeViewController.h */,
 				865632D9185FFDDA00E9903C /* XCJNearbyHomeViewController.m */,
 				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
 				8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */,
+				865632CE185FFDDA00E9903C /* XCJDomainsViewController.h */,
+				865632CF185FFDDA00E9903C /* XCJDomainsViewController.m */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -1368,8 +1404,6 @@
 				86A306A61871A89700C7168B /* SuperViewController */,
 				865632CC185FFDDA00E9903C /* XCJCommentViewController.h */,
 				865632CD185FFDDA00E9903C /* XCJCommentViewController.m */,
-				865632CE185FFDDA00E9903C /* XCJDomainsViewController.h */,
-				865632CF185FFDDA00E9903C /* XCJDomainsViewController.m */,
 				865632D0185FFDDA00E9903C /* XCJDyScenceViewController.h */,
 				865632D1185FFDDA00E9903C /* XCJDyScenceViewController.m */,
 				865632D2185FFDDA00E9903C /* XCJFriendViewController.h */,
@@ -1954,6 +1988,7 @@
 				ORGANIZATIONNAME = jijia;
 				TargetAttributes = {
 					86D181C91834822C0005901D = {
+						DevelopmentTeam = 89RFBF2W4Q;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1998,6 +2033,7 @@
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				8668E478187540DB00D20C9E /* btn_comment_disable@2x.png in Resources */,
+				86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
 				8668E47D187540DB00D20C9E /* like_comment_bg@2x.png in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
@@ -2077,6 +2113,7 @@
 				869CE4C0186A73880004C1EC /* NSAttributedString+Attributes.m in Sources */,
 				869CE4CC186AB9270004C1EC /* NSString+FontAwesome.m in Sources */,
 				86D182801834AED30005901D /* NSStringAddition.m in Sources */,
+				86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */,
 				86EB76D4185AA6CC00836947 /* AFURLRequestSerialization.m in Sources */,
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
@@ -2193,6 +2230,7 @@
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
 				8681BE3D1839AABA00521D36 /* UserInfo.m in Sources */,
+				86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */,
 				865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */,
 				869D15131839BDBB00B14A02 /* JSONKit.m in Sources */,
 				869CE4E0186BE37B0004C1EC /* Sequencer.m in Sources */,
@@ -2207,6 +2245,7 @@
 				86EB76E0185AA6CC00836947 /* NSData+SRB64Additions.m in Sources */,
 				869CE546186BE3A00004C1EC /* DDXMLElement.m in Sources */,
 				869CE521186BE38D0004C1EC /* NSObject+MagicalDataImport.m in Sources */,
+				86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */,
 				86D182F41834AF540005901D /* FMDatabaseQueue.m in Sources */,
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
@@ -2337,7 +2376,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yao zhang (3NW254563D)";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2355,6 +2395,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2376,7 +2417,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2387,6 +2429,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2397,7 +2440,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yao zhang (3NW254563D)";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -2415,6 +2459,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
+				PROVISIONING_PROFILE = "BF2423F2-8203-49EF-B523-DDC7521DDE94";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -2426,7 +2471,8 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -2444,6 +2490,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
+				PROVISIONING_PROFILE = "BF2423F2-8203-49EF-B523-DDC7521DDE94";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;

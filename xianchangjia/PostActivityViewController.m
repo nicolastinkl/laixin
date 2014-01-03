@@ -212,8 +212,9 @@
                 glist.time = [[NSDate date] timeIntervalSinceNow];
                 
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
-                [_needRefreshViewController.tableView reloadData];
+                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
                 [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                
                 /*
                  "replycount":0,
                  "uid":4,

@@ -99,7 +99,7 @@ typedef enum {
 
 - (void)showIndicatorViewBlue
 {
-    CGPoint point = CGPointMake((self.width-20)/2, (self.height-20)/2);
+    CGPoint point = CGPointMake((self.width-28)/2, (self.height-28)/2);
     UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
     
     if (!indicator) {
@@ -116,7 +116,7 @@ typedef enum {
 
 - (void)showIndicatorViewLargeBlue
 {
-    CGPoint point = CGPointMake((self.width-20)/2, (self.height-20)/2);
+    CGPoint point = CGPointMake((self.width-55)/2, (self.height-155)/2);
     UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
     
     if (!indicator) {

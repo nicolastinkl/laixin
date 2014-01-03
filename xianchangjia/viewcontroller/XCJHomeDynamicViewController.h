@@ -13,4 +13,5 @@
 
 @interface XCJHomeDynamicViewController : BaseDetailViewController
 
+@property (nonatomic,strong) NSString * Currentgid;
 @end

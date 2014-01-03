@@ -14,6 +14,7 @@
 }
 @property (strong, nonatomic) UIWindow                  *window;
 @property (readonly, nonatomic) SinaWeibo				*sinaweiboMain;
+@property (nonatomic,strong) NSDictionary				*launchingWithAps;
 @property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;
 @property (nonatomic,strong) UITabBarController *tabBarController;
 -(void) initWeiboView;

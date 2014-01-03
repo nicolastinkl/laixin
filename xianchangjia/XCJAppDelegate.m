@@ -17,8 +17,9 @@
 #import "LXAPIController.h"
 #import "CoreData+MagicalRecord.h"
 #import "LXChatDBStoreManager.h"
+#import "UIAlertViewAddition.h"
 #import "XCJLoginNaviController.h"
-
+#import <AudioToolbox/AudioToolbox.h>
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
@@ -31,7 +32,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 @implementation XCJAppDelegate
 @synthesize sinaweiboMain;
 @synthesize mainNavigateController;
-
+@synthesize launchingWithAps;
 
 #pragma mark ChatListNeedUpdateToalUnreadCountNotification
 
@@ -67,28 +68,14 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    /**
-     *  login view navigationbar
-     */
-//    mainNavigateController = [[XCJLoginNaviController alloc] init];
-//    [[mainNavigateController navigationBar] setBarStyle:UIBarStyleBlack];
-//
-//    
-//     [[mainNavigateController navigationBar] setTranslucent:YES];
-    //NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xFFFFFF).CGColor, (id)UIColorFromRGB(0xFFFFFF).CGColor, nil];
-    //    ///setup 4:
-    //[[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
-//    [[mainNavigateController navigationBar] setTranslucent:YES];
-//    [[mainNavigateController navigationBar] setHidden:YES];
-
+    self.launchingWithAps=[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    //注册推送通知
+    [[UIApplication sharedApplication]
+     registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                         UIRemoteNotificationTypeSound |
+                                         UIRemoteNotificationTypeAlert |
+                                         UIRemoteNotificationTypeNewsstandContentAvailability)];
     
-//    [[ChatList shareInstance]getDataFromLocalDB]; //从本地存储获得
-//    [self updateMessageTabBarItemBadge]; //更新未读条目数
-//    //添加监视
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMessageTabBarItemBadge) name:ChatListNeedUpdateToalUnreadCountNotification object:nil];
-    
-    //添加WebSocket监视
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:) name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
 
     [self copyDefaultStoreIfNecessary];
     [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
@@ -175,6 +162,55 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    NSString* devtokenstring=[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@" " withString:@""];
+	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    //devtokenstring:  d8009e6c8e074d1bbcb592f321367feaef5674a82fc4cf3b78b066b7c8ad59bd
+    NSLog(@"devtokenstring : %@",devtokenstring);
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0)
+{
+    NSLog(@"error : %@",[error.userInfo objectForKey:NSLocalizedDescriptionKey]);
+}
+
+//接受到苹果推送的回调
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    /*{
+     aps =     {
+     alert = "you id code:38434";
+     badge = 1;
+     sound = default;
+     };
+     }*/
+    NSLog(@"Receive Notify: %@", userInfo);
+    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    
+    //    NSLog(@"Receive Notify: %@", userInfo);
+    //NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    //如果当前程序状态是激活的。
+    
+    if (application.applicationState == UIApplicationStateActive) {
+        // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
+        SystemSoundID id = 1007; //声音
+        AudioServicesPlaySystemSound(id);
+        //下面是发送一个本地消息，暂时不知道是为何
+        UILocalNotification* _localNotification = [[UILocalNotification alloc] init];
+        _localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
+        _localNotification.alertBody = [NSString stringWithFormat:@"%@",alert];
+        _localNotification.alertAction = [NSString stringWithFormat:@"%@",alert];
+        [[UIApplication sharedApplication] presentLocalNotificationNow:_localNotification];
+        //显示这个推送消息
+        [UIAlertView showAlertViewWithTitle:@"来信" message:[NSString stringWithFormat:@"%@",alert]];
+    }
+    
+    // [BPush handleNotification:userInfo];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

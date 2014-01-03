@@ -22,7 +22,6 @@
 
 @interface BaseDetailViewController () <UITableViewDataSource,UITableViewDelegate,MLScrollRefreshHeaderDelegate,ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate>
 
-@property (nonatomic,strong) NSMutableArray *cellHeights;
 
 @property (nonatomic,strong) UIView *inputView;
 @property (nonatomic,strong) UITextView *inputTextView;
@@ -67,13 +66,15 @@
 
 - (void)viewDidLoad
 {
+    
+    [super viewDidLoad];
+    
     UIView *origView = self.view;
     self.view = [[InterceptTouchView alloc]initWithFrame:origView.frame];
     
     ((InterceptTouchView*)self.view).interceptTouchViewDelegate = self;
     
-    [super viewDidLoad];
-    
+    origView.backgroundColor = [UIColor whiteColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -97,7 +98,7 @@
     
     [self.titleString  addObserver:self forKeyPath:@"changeTitle" options:NSKeyValueObservingOptionNew context:nil];
 
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-64-44) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-64) style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -150,11 +151,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source
@@ -463,7 +459,7 @@
     
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                      animations:^{
-                         _inputView.frameY = self.view.frameBottom;
+                         _inputView.frameY = self.view.frameBottom + 100;
                      }
                      completion:^(BOOL finished) {
                          _tableView.userInteractionEnabled = YES;
@@ -509,7 +505,6 @@
     if (row == _activities.count-1) {
         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
-    return;
     
 //    NSArray *arr = @[[NSIndexPath indexPathForRow:row inSection:0]];
 //    

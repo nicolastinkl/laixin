@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Model.h"
 
+/**
+ *  动态model
+ */
 @interface XCJGroupPost_list : Model
 @property (strong, nonatomic) NSString *postid;
 @property (strong, nonatomic) NSString *uid;
@@ -31,3 +34,29 @@
 //@property (assign, nonatomic) NSInteger height;
 //@property (assign, nonatomic) NSInteger length;
 @end
+
+/**
+ *  群info
+ */
+@interface XCJGroup_list : Model
+@property (strong, nonatomic) NSString *gid;
+@property (strong, nonatomic) NSString *creator;
+@property (strong, nonatomic) NSString *group_name;
+@property (strong, nonatomic) NSString *group_board;
+@property (assign, nonatomic) NSInteger type;
+@property (assign, nonatomic) NSTimeInterval time;
+@property (strong, nonatomic) NSString * timeText;
+@end
+
+
+
+
+
+
+
+
+
+
+
+
+

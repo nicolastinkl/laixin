@@ -29,20 +29,24 @@
 #import "XCJLoginNaviController.h"
 #import "UIView+Additon.h"
 #import "XCJGroupPost_list.h"
+#import "XCJHomeMenuView.h"
+#import "XCJHomeDynamicViewController.h"
+#import "XCJCreateNaviController.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
-@interface XCJNearbyHomeViewController ()<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate>
+@interface XCJNearbyHomeViewController ()<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate,XCJHomeMenuViewDelegate>
 {
     NSMutableArray * _dataSource;
     CLLocationManager *locationManager;
     CLLocation *checkinLocation;
     NSArray * JsonArray;
     NSString * Currentgid;
+    XCJHomeMenuView * menuView;
 }
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UIButton *ShowMenubutton;
 @property (strong, nonatomic) CLLocation *checkinLocation;
-@property (strong, nonatomic) IBOutlet UITableView *tableview;
 @end
 
 @implementation XCJNearbyHomeViewController
@@ -58,33 +62,88 @@
     return self;
 }
 
+- (IBAction)ShowMenuClick:(id)sender {
+    
+    if (!menuView) {
+        menuView = [[NSBundle mainBundle] loadNibNamed:@"XCJHomeMenuView" owner:self options:nil][0];
+        [self.view addSubview:menuView];
+        menuView.alpha = 0;
+        menuView.top = -600;
+        menuView.delegate =  self;
+    }
+    
+    if (menuView.top == 0) {
+        // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
+        
+        [UIView animateWithDuration:.3f animations:^{
+            menuView.alpha = 0;
+            menuView.top = -600;
+            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
+        } completion:^(BOOL finished) {
+        }];
+    }else{
+        // show
+        menuView.alpha = 0;
+        menuView.top = -600;
+        [UIView animateWithDuration:.3f animations:^{
+            menuView.alpha = 1;
+            menuView.top = 0;
+            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
+        } completion:^(BOOL finished) {
+        }];
+        
+    }
+}
+
+- (void) hiddenSelfViewClick;
+{
+    [self ShowMenuClick:nil];
+}
+
+- (void) createGroupClick
+{
+    XCJCreateNaviController * navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCreateNaviController"];
+            [self presentViewController:navi animated:YES completion:^{
+            [self ShowMenuClick:nil];
+    }];
+    
+}
+
+- (void) addFriendClick
+{
+    [self ShowMenuClick:nil];
+}
+
+- (void) findandfindCodeClick
+{
+    [self ShowMenuClick:nil];
+}
+
 SINGLETON_GCD(XCJNearbyHomeViewController)
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    NSMutableArray * array = [[NSMutableArray alloc] init];
+    _dataSource = array;
     // Uncomment the following line to preserve selection between presentations.
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl addTarget:self // self is a UITableViewController
-                       action:@selector(refreshTableView:)
-             forControlEvents:UIControlEventValueChanged];
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
-    self.refreshControl = refreshControl;
+//    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+//    [refreshControl addTarget:self // self is a UITableViewController
+//                       action:@selector(refreshTableView:)
+//             forControlEvents:UIControlEventValueChanged];
+//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
+//    self.refreshControl = refreshControl;
     
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
         [self initHomeData];
-//        [self.view showIndicatorViewLargeBlue];
+        [self.tableView showIndicatorViewLargeBlue];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
     
     /**
      *  16 group.create(name,board,type) 创建群
@@ -97,55 +156,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 //    } failure:^(MLRequest *request, NSError *error) {
 //    }];
     
-    double delayInSeconds = 1.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        /**
-         *  gid,content
-         */
-        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * groupsDict =  groups[@"groups"];
-                if (groupsDict && groupsDict.count > 0 ) {
-                    [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        Currentgid = [tools getStringValue:obj[@"gid"] defaultValue:@""];
-                        
-                        /*  add group
-                         NSDictionary * parames = @{@"content":@"来上班5天迟到4次然后人就不见了",@"gid":gid};
-                         [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                                //    postid = 12;
-                         } failure:^(MLRequest *request, NSError *error) {
-                         }];*/
-                        
-                        /* get all list data*/
-                        NSDictionary * parames = @{@"gid":Currentgid,@"pos":@0,@"count":@"20"};
-                        [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                            //    postid = 12;
-                            /*        
-                             Result={
-                             “posts”:[*/
-                            NSDictionary * groups = responseObject[@"result"];
-                            NSArray * postsDict =  groups[@"posts"];
-                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                                [_dataSource addObject:post];
-                            }];
-                        } failure:^(MLRequest *request, NSError *error) {
-                        }];
-                    }];
-                }
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
-    });
-    /*
-      set title color and title font
-     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-     [UIColor whiteColor], UITextAttributeTextColor,
-     [UIFont boldSystemFontOfSize:16.0f], UITextAttributeFont, [UIColor darkGrayColor], UITextAttributeTextShadowColor, [NSValue valueWithCGSize:CGSizeMake(0.0, -1.0)], UITextAttributeTextShadowOffset,
-     nil] forState:UIControlStateNormal];
-     */
 
 }
 -(void)   initHomeData
@@ -167,6 +177,50 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         
     } failure:^(MLRequest *request, NSError *error) {
     }];
+    
+    
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        /**
+         *  gid,content
+         */
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * groupsDict =  groups[@"groups"];
+                NSMutableArray * array = [[NSMutableArray alloc] init];
+                [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    /*  add group
+                     
+                     “gid”:
+                     “type”:
+                     “time”:
+                     
+                     */
+                    NSString * str = [tools getStringValue:obj[@"gid"] defaultValue:@""];
+                    [array addObject:str];
+                }];
+                if (array.count > 0) {
+                    //group.info (gid<群id或者id数组>)
+                    NSDictionary * paramess = @{@"gid":array};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                        NSDictionary * groupsss = responseObjects[@"result"];
+                        NSArray * groupsDicts =  groupsss[@"groups"];
+                        [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                            [_dataSource addObject:list];
+                        }];
+                        [self.tableView reloadData];
+                        [self.tableView hideIndicatorViewBlueOrGary];
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                }
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            [self.tableView hideIndicatorViewBlueOrGary];
+        }];
+    });
     
     [self runSequucer];
 }
@@ -238,9 +292,9 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 -(void)changeDomainID:(NSNotification *) notify
 {
     if (notify.object) {
-        Nearest_areas_Info * info = (Nearest_areas_Info*)notify.object;
-        [self refershCurrentScene:info.area_id];
-        self.title = info.area_name;
+        XCJGroup_list * info = (XCJGroup_list*)notify.object;
+        [_dataSource addObject:info];
+        [self.tableView reloadData];
     }
 }
 
@@ -304,7 +358,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 -(void) refershCurrentScene:(NSInteger) sceneID
 {
     [_dataSource removeAllObjects];
-    [self.tableview reloadData];
+    [self.tableView reloadData];
     [self showIndicatorView];
     //根据圈子拿取所有现场
     NSMutableDictionary * params_two = [[NSMutableDictionary alloc] init];
@@ -332,7 +386,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         [newlist addObject:data];
     }];
     _dataSource = newlist;
-    [self.tableview reloadData];
+    [self.tableView reloadData];
     [self.refreshControl endRefreshing];
 //  PS: UIRefreshControl在完成之后会与以下代码冲突，导致位置出错。
 //    [UIView beginAnimations:nil context:NULL];
@@ -380,27 +434,33 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     return 1;
 }
 
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"我加入的群组";
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
     return _dataSource.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.0f;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
     // Configure the cell...
     NSUInteger row = indexPath.row;
-    Scene_Whole_info * info  = _dataSource[row];
-    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
-    /*JsonArray get url*/
-    [imgView setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",info.sceneinfo.SceneInfo_showcase_image]] ];
-//  int index = random()%121;  [imgView setImageWithURL:[NSURL URLWithString:JsonArray[index]] placeholderImage:[UIImage imageNamed:@"default_album.png"]];
-
+    XCJGroup_list * info  = _dataSource[row];
+//    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
     UILabel *label = (UILabel *)[cell.contentView viewWithTag:2];
-    label.text = info.sceneinfo.SceneInfo_name;
+    label.text = info.group_name;
     return cell;
 }
 
@@ -451,13 +511,13 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.ShowDymaic
-    if ([[segue identifier] isEqualToString:@"ShowDymaic"])
+    if ([[segue identifier] isEqualToString:@"showDynamic"])
     {
-        XCJDyScenceViewController *vc = (XCJDyScenceViewController *)[segue destinationViewController];
-         NSIndexPath *selectedIndexPath = [self.tableview indexPathForSelectedRow];
-        Scene_Whole_info * info  = _dataSource[selectedIndexPath.row];
-        vc.scene_id = info.sceneinfo.SceneInfo_id;
-        vc.title =info.sceneinfo.SceneInfo_name;
+        XCJHomeDynamicViewController *vc = (XCJHomeDynamicViewController *)[segue destinationViewController];
+         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+        XCJGroup_list * info  = _dataSource[selectedIndexPath.row];
+        vc.Currentgid = info.gid;
+        vc.title =info.group_name;
     }
 }
 

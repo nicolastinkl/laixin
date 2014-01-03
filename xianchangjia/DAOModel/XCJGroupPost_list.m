@@ -56,3 +56,43 @@
     return result;
 }
 @end
+
+
+/**
+ *
+ {“gid”:
+ “creator”:
+ “group_name”:
+ “group_board”:
+ “type”:
+ “time”:
+ },
+ */
+@implementation XCJGroup_list
++ (instancetype)turnObject:(NSDictionary*)dict
+{
+    XCJGroup_list *result = [[self alloc]init];
+    
+    result.gid = [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
+    result.creator = [DataHelper getStringValue:dict[@"creator"] defaultValue:@""];
+    result.group_board = [DataHelper getStringValue:dict[@"board"] defaultValue:@""];
+    result.group_name = [DataHelper getStringValue:dict[@"name"] defaultValue:@""];
+    result.type = [DataHelper getIntegerValue:dict[@"type"] defaultValue:0];
+    NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
+    result.time = timeinter;
+    result.timeText = [tools timeLabelTextOfTime:timeinter];
+    
+    return result;
+}
+@end
+
+
+
+
+
+
+
+
+
+
+
