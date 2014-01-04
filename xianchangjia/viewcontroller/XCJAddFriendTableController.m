@@ -15,7 +15,7 @@
 #import "LXAPIController.h"
 #import "FCUserDescription.h"
 #import "XCJAddUserTableViewController.h"
-
+#import "UIAlertViewAddition.h"
 
 @interface XCJAddFriendTableController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nickNameText;
@@ -62,6 +62,11 @@
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
                 NSDictionary * groupsss = responseObjects[@"result"];
                 NSArray * array = groupsss[@"users"];
+                if(array.count  <= 0)
+                {
+                    [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
+                    return ;
+                }
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
                     [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
