@@ -27,6 +27,8 @@
 		86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */; };
 		86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */; };
 		86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */; };
+		86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DCF18780BB6007477C0 /* XCJAddFriendNaviController.m */; };
+		86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DD218780BCF007477C0 /* XCJAddFriendTableController.m */; };
 		8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E44B187517C000D20C9E /* XCJGroupPost_list.m */; };
 		8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E453187540DB00D20C9E /* BaseDetailViewController.m */; };
 		8668E474187540DB00D20C9E /* ActivityTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E456187540DB00D20C9E /* ActivityTableViewCell.m */; };
@@ -241,6 +243,7 @@
 		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
+		86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
 		86EB76451859A66800836947 /* logo120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76421859A66800836947 /* logo120x120.png */; };
@@ -351,6 +354,10 @@
 		86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateNaviController.m; path = viewcontroller/XCJCreateNaviController.m; sourceTree = "<group>"; };
 		86660DCA1876DA37007477C0 /* XCJCreateGroupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateGroupTableViewController.h; path = viewcontroller/XCJCreateGroupTableViewController.h; sourceTree = "<group>"; };
 		86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateGroupTableViewController.m; path = viewcontroller/XCJCreateGroupTableViewController.m; sourceTree = "<group>"; };
+		86660DCE18780BB6007477C0 /* XCJAddFriendNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddFriendNaviController.h; path = viewcontroller/XCJAddFriendNaviController.h; sourceTree = "<group>"; };
+		86660DCF18780BB6007477C0 /* XCJAddFriendNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddFriendNaviController.m; path = viewcontroller/XCJAddFriendNaviController.m; sourceTree = "<group>"; };
+		86660DD118780BCF007477C0 /* XCJAddFriendTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddFriendTableController.h; path = viewcontroller/XCJAddFriendTableController.h; sourceTree = "<group>"; };
+		86660DD218780BCF007477C0 /* XCJAddFriendTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddFriendTableController.m; path = viewcontroller/XCJAddFriendTableController.m; sourceTree = "<group>"; };
 		8668E44A187517C000D20C9E /* XCJGroupPost_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJGroupPost_list.h; sourceTree = "<group>"; };
 		8668E44B187517C000D20C9E /* XCJGroupPost_list.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJGroupPost_list.m; sourceTree = "<group>"; };
 		8668E452187540DB00D20C9E /* BaseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseDetailViewController.h; path = support/HomeUtils/BaseDetailViewController.h; sourceTree = "<group>"; };
@@ -656,6 +663,8 @@
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
+		86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddUserTableViewController.h; path = viewcontroller/XCJAddUserTableViewController.h; sourceTree = "<group>"; };
+		86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddUserTableViewController.m; path = viewcontroller/XCJAddUserTableViewController.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
 		86EB76411859A66800836947 /* logo80x80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo80x80.png; sourceTree = "<group>"; };
 		86EB76421859A66800836947 /* logo120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo120x120.png; sourceTree = "<group>"; };
@@ -875,6 +884,19 @@
 				86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */,
 			);
 			name = CreateGroup;
+			sourceTree = "<group>";
+		};
+		86660DCD18780A2E007477C0 /* AddFriend */ = {
+			isa = PBXGroup;
+			children = (
+				86660DCE18780BB6007477C0 /* XCJAddFriendNaviController.h */,
+				86660DCF18780BB6007477C0 /* XCJAddFriendNaviController.m */,
+				86660DD118780BCF007477C0 /* XCJAddFriendTableController.h */,
+				86660DD218780BCF007477C0 /* XCJAddFriendTableController.m */,
+				86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */,
+				86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */,
+			);
+			name = AddFriend;
 			sourceTree = "<group>";
 		};
 		8668E44F18751AB500D20C9E /* Home */ = {
@@ -1395,6 +1417,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86660DCD18780A2E007477C0 /* AddFriend */,
 				86489EF4187586BE001AB9BA /* PostPhoto */,
 				8668E44F18751AB500D20C9E /* Home */,
 				86F9B9B318729C3900ED768B /* Chat */,
@@ -2101,6 +2124,7 @@
 				869CE4C2186A73880004C1EC /* RegexKitLite.m in Sources */,
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
+				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
@@ -2215,6 +2239,7 @@
 				86F9B9AE1872865600ED768B /* XCJChangeUserInfoController.m in Sources */,
 				862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */,
 				86EB76C6185AA6CC00836947 /* MLRequest.m in Sources */,
+				86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */,
 				869CE51E186BE38D0004C1EC /* NSAttributeDescription+MagicalDataImport.m in Sources */,
 				86EB76D3185AA6CC00836947 /* AFURLConnectionOperation.m in Sources */,
 				86D182F21834AF540005901D /* FMDatabasePool.m in Sources */,
@@ -2249,6 +2274,7 @@
 				86D182F41834AF540005901D /* FMDatabaseQueue.m in Sources */,
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
+				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
 				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,

@@ -432,14 +432,12 @@
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                      animations:^{
                           CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                         _inputView.frameY =  self.view.height - keyboardFrame.size.height + 2;// newY;
+                         _inputView.frameY =  self.view.height - keyboardFrame.size.height - 44;// newY;
                          _tableView.contentOffset = CGPointMake(0, newYOffset);
                      }
                     completion:^(BOOL finished) {
                         _tableView.userInteractionEnabled = YES;
                     }];
-    
-    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification

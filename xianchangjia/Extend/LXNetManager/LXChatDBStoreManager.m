@@ -167,7 +167,7 @@
 {
     FCUserDescription* old =  [self fetchFCUserDescriptionByUID:fcuserdesp.uid];
     if (old && [old.nick isEqualToString:fcuserdesp.nick] ) {
-        
+         completion(old, nil);
     }else{
         NSManagedObjectContext *localContext    = [NSManagedObjectContext MR_contextForCurrentThread];
         FCUserDescription * newFcObj = [FCUserDescription MR_createInContext:localContext];

@@ -17,9 +17,9 @@
 @interface XCJUserInfoController ()
 @property (weak, nonatomic) IBOutlet UIImageView *Image_user;
 @property (weak, nonatomic) IBOutlet UIImageView *Image_sex;
-@property (weak, nonatomic) IBOutlet UILabel *Label_nick;
 @property (weak, nonatomic) IBOutlet UIButton *Button_Sendmsg;
 @property (weak, nonatomic) IBOutlet UIImageView *Image_btnBG;
+@property (weak, nonatomic) IBOutlet UILabel *Label_nick;
 @property (weak, nonatomic) IBOutlet UILabel *Label_sign;
 @property (weak, nonatomic) IBOutlet UILabel *Label_address;
 

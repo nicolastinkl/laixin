@@ -32,6 +32,7 @@
 #import "XCJHomeMenuView.h"
 #import "XCJHomeDynamicViewController.h"
 #import "XCJCreateNaviController.h"
+#import "XCJAddFriendNaviController.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -43,6 +44,7 @@
     NSArray * JsonArray;
     NSString * Currentgid;
     XCJHomeMenuView * menuView;
+    int tryCatchCount;
 }
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UIButton *ShowMenubutton;
@@ -111,7 +113,10 @@
 
 - (void) addFriendClick
 {
-    [self ShowMenuClick:nil];
+    XCJAddFriendNaviController *navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddFriendNaviController"];
+    [self presentViewController:navi animated:YES completion:^{
+        [self ShowMenuClick:nil];
+    }];
 }
 
 - (void) findandfindCodeClick
@@ -131,13 +136,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
     
-//    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-//    [refreshControl addTarget:self // self is a UITableViewController
-//                       action:@selector(refreshTableView:)
-//             forControlEvents:UIControlEventValueChanged];
-//    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
-//    self.refreshControl = refreshControl;
-    
+    tryCatchCount = 0;
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
@@ -146,6 +145,15 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     }
     
     /**
+     
+     
+     //    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+     //    [refreshControl addTarget:self // self is a UITableViewController
+     //                       action:@selector(refreshTableView:)
+     //             forControlEvents:UIControlEventValueChanged];
+     //    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
+     //    self.refreshControl = refreshControl;
+     
      *  16 group.create(name,board,type) 创建群
         Result={“gid”:1}
      */
@@ -174,12 +182,23 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
         [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
         [USER_DEFAULT synchronize];
-        
+        [self  reLoadData]; // load data
+        [self runSequucer];
+        tryCatchCount = 4;
     } failure:^(MLRequest *request, NSError *error) {
+//         re request login
+         tryCatchCount ++ ;
+        if (tryCatchCount <= 2) {
+            [self initHomeData];
+        }
+
     }];
+}
+
+- (void ) reLoadData
+{
     
-    
-    double delayInSeconds = 1.0;
+    double delayInSeconds = 0.3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         /**
@@ -218,11 +237,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
+            [self.tableView reloadData];
             [self.tableView hideIndicatorViewBlueOrGary];
         }];
     });
-    
-    [self runSequucer];
 }
 
 -(void) runSequucer
@@ -437,7 +455,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"我加入的群组";
+    if (_dataSource.count > 0) {
+        return @"我加入的群组";
+    }
+    return  @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
