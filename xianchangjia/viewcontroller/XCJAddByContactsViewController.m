@@ -15,8 +15,14 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "XCJAddressBook.h"
 #import "MLNetworkingManager.h"
+#import "DataHelper.h"
 
-@interface XCJAddByContactsViewController ()<UIAlertViewDelegate>
+@interface XCJAddByContactsViewController ()<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    NSMutableDictionary * dictPhones;
+    NSMutableArray * _datasource;
+}
+@property (weak, nonatomic) IBOutlet UITableView *tableContacts;
 
 @end
 
@@ -35,11 +41,56 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
-    
+    self.tableContacts.dataSource = self;
+    self.tableContacts.delegate = self;
+    NSMutableArray * array  = [[NSMutableArray alloc] init];
+    _datasource = array;
+    NSMutableDictionary * dict  = [[NSMutableDictionary alloc] init];
+    dictPhones = dict;
 }
 
 
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    return dictPhones.allValues.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"cellContacts";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UILabel * titleName  =  (UILabel * ) [cell.contentView subviewWithTag:1];
+    UILabel * contentSign  =  (UILabel * ) [cell.contentView subviewWithTag:2];
+    UIImageView * contentSignimage  =  (UIImageView * ) [cell.contentView subviewWithTag:3];
+    XCJAddressBook * addressbook =  dictPhones.allValues[indexPath.row];
+    if (addressbook.HasRegister) {
+        contentSign.text = @"添加";
+        contentSignimage.hidden = NO;
+        contentSign.textColor = [UIColor colorWithHex:0x444444];
+    }else{
+        contentSign.text = @"邀请";
+        contentSign.textColor = [UIColor grayColor];
+        contentSignimage.hidden = YES;
+    }
+    titleName.text = addressbook.name;
+
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return  44.0f;
+}
+ 
 -(void) reloadContacts
 {
     // Request authorization to Address Book
@@ -149,7 +200,7 @@
         }
         //将个人信息添加到数组中，循环完成后addressBookTemp中包含所有联系人的信息
         [addarray addObject:addressBook];
-        
+        [dictPhones setValue:addressBook forKey:addressBook.tel];
         if (abName) CFRelease(abName);
         if (abLastName) CFRelease(abLastName);
         if (abFullName) CFRelease(abFullName);
@@ -167,14 +218,43 @@
             }
         }
     }];
+//    [_datasource  addObjectsFromArray:addarray];
+    
     if (arrays.count > 0) {
         NSDictionary * parames = @{@"phone_list":arrays};
         [[MLNetworkingManager sharedManager] sendWithAction:@"phonebook.upload"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = responseObject[@"data"];
+                NSArray * array =  dict[@"users"];
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * phone=[DataHelper getStringValue:obj[@"phone"] defaultValue:@""];
+                    if ([dictPhones.allKeys containsObject:phone]) {
+                        SLog(@"phone %@",phone);
+                        XCJAddressBook * addressbook =  [dictPhones.allKeys valueForKey:phone];
+                        NSString * uid=[DataHelper getStringValue:obj[@"uid"] defaultValue:@""];
+                        addressbook.UID = uid;
+                        addressbook.HasRegister = YES;
+//                        [dictPhones setObject:addressbook forKey:phone];
+                    }
+                }];
+                
+                [dictPhones.allValues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                    XCJAddressBook * addressbook1 = obj1;
+                    XCJAddressBook * addressbook2 = obj2;
+                    if (addressbook1.HasRegister > addressbook2.HasRegister) {
+                        return NSOrderedAscending;
+                    }
+                    return NSOrderedDescending;
+                }];
+            }
+            [self.tableContacts reloadData];
         } failure:^(MLRequest *request, NSError *error) {
+            [self.tableContacts reloadData];
         }];
         
     }
-    SLog(@"json : %@",[arrays JSONString]);
+
+
     
 }
 

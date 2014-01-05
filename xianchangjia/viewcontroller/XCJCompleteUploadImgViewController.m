@@ -56,6 +56,7 @@
     UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.delegate = self;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        imagePicker.allowsEditing  = YES;
         imagePicker.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
         imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
         [self presentViewController:imagePicker animated:YES completion:^{
@@ -88,16 +89,13 @@
     
     NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
     
-    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
-        NSString * namefile =  [self getMd5_32Bit_String:timeDesc];
-        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
-        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-        NSLog(@"Upload Path: %@", filePath);
-        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
-        [webData writeToFile:filePath atomically:YES];
-        [self uploadFile:filePath  key:key];
-    }
+    NSString * namefile =  [self getMd5_32Bit_String:timeDesc];
+    NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+    NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+    NSLog(@"Upload Path: %@", filePath);
+    NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
+    [webData writeToFile:filePath atomically:YES];
+    [self uploadFile:filePath  key:key];
 }
 
 - (NSString *)getMd5_32Bit_String:(NSString *)srcString{

@@ -56,6 +56,16 @@
     }];
 }
 
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+}
+
+
 -(void) LoadData
 {
     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
@@ -70,6 +80,8 @@
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"position"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_position];
+            
             [USER_DEFAULT synchronize];
             
             self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];

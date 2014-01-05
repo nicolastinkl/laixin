@@ -18,9 +18,11 @@
 
 }
 
-@property NSInteger sectionNumber;
-@property NSInteger recordID;
+@property (nonatomic,assign) NSInteger sectionNumber;
+@property (nonatomic,assign) NSInteger recordID;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *tel;
+@property (nonatomic, retain) NSString *UID;
+@property (nonatomic,assign) BOOL HasRegister;
 @end

@@ -79,6 +79,7 @@ typedef enum {
 #define KeyChain_Laixin_account_user_nick       @"KeyChain_Laixin_account_user_nick"
 #define KeyChain_Laixin_account_user_headpic    @"KeyChain_Laixin_account_user_headpic"
 #define KeyChain_Laixin_account_user_signature    @"KeyChain_Laixin_account_user_signature"
+#define KeyChain_Laixin_account_user_position    @"KeyChain_Laixin_account_user_position"
 #define KeyChain_Laixin_account_sessionid       @"KeyChain_Laixin_account_sessionid"
 
 #define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"

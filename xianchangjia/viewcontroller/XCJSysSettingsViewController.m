@@ -26,6 +26,11 @@
     }
     return self;
 }
+
+
+
+
+
 - (IBAction)logoutClick:(id)sender {
     UIAlertView * alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"注销当前账号" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"注销", nil];
     [alertview show];

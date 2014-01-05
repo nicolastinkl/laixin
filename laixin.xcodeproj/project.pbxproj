@@ -249,6 +249,15 @@
 		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
+		86E57CD818794DF600978AFA /* XCJChangeNickNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */; };
+		86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CDF18794E1100978AFA /* XCJChangeSignNaviController.m */; };
+		86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CE218794E2900978AFA /* XCJChangeNickViewController.m */; };
+		86E57CE618794E3500978AFA /* XCJChangeSignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CE518794E3500978AFA /* XCJChangeSignViewController.m */; };
+		86E57CEE18795CC900978AFA /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86E57CE818795CC900978AFA /* area.plist */; };
+		86E57CEF18795CC900978AFA /* city.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86E57CE918795CC900978AFA /* city.plist */; };
+		86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CEB18795CC900978AFA /* HZAreaPickerView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		86E57CF118795CC900978AFA /* HZLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CED18795CC900978AFA /* HZLocation.m */; };
+		86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E57CF218795FD800978AFA /* HZAreaPickerView.xib */; };
 		86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
@@ -707,6 +716,21 @@
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
+		86E57CD618794DF600978AFA /* XCJChangeNickNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeNickNaviController.h; path = viewcontroller/XCJChangeNickNaviController.h; sourceTree = "<group>"; };
+		86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeNickNaviController.m; path = viewcontroller/XCJChangeNickNaviController.m; sourceTree = "<group>"; };
+		86E57CDE18794E1100978AFA /* XCJChangeSignNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeSignNaviController.h; path = viewcontroller/XCJChangeSignNaviController.h; sourceTree = "<group>"; };
+		86E57CDF18794E1100978AFA /* XCJChangeSignNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeSignNaviController.m; path = viewcontroller/XCJChangeSignNaviController.m; sourceTree = "<group>"; };
+		86E57CE118794E2900978AFA /* XCJChangeNickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeNickViewController.h; path = viewcontroller/XCJChangeNickViewController.h; sourceTree = "<group>"; };
+		86E57CE218794E2900978AFA /* XCJChangeNickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeNickViewController.m; path = viewcontroller/XCJChangeNickViewController.m; sourceTree = "<group>"; };
+		86E57CE418794E3500978AFA /* XCJChangeSignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeSignViewController.h; path = viewcontroller/XCJChangeSignViewController.h; sourceTree = "<group>"; };
+		86E57CE518794E3500978AFA /* XCJChangeSignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeSignViewController.m; path = viewcontroller/XCJChangeSignViewController.m; sourceTree = "<group>"; };
+		86E57CE818795CC900978AFA /* area.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = area.plist; sourceTree = "<group>"; };
+		86E57CE918795CC900978AFA /* city.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = city.plist; sourceTree = "<group>"; };
+		86E57CEA18795CC900978AFA /* HZAreaPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZAreaPickerView.h; sourceTree = "<group>"; };
+		86E57CEB18795CC900978AFA /* HZAreaPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZAreaPickerView.m; sourceTree = "<group>"; };
+		86E57CEC18795CC900978AFA /* HZLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZLocation.h; sourceTree = "<group>"; };
+		86E57CED18795CC900978AFA /* HZLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZLocation.m; sourceTree = "<group>"; };
+		86E57CF218795FD800978AFA /* HZAreaPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HZAreaPickerView.xib; sourceTree = "<group>"; };
 		86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddUserTableViewController.h; path = viewcontroller/XCJAddUserTableViewController.h; sourceTree = "<group>"; };
 		86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddUserTableViewController.m; path = viewcontroller/XCJAddUserTableViewController.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
@@ -1725,6 +1749,36 @@
 			name = LXDatabaseManager;
 			sourceTree = "<group>";
 		};
+		86E57CDD18794DFB00978AFA /* change */ = {
+			isa = PBXGroup;
+			children = (
+				86E57CE718795CC900978AFA /* areaPick */,
+				86E57CD618794DF600978AFA /* XCJChangeNickNaviController.h */,
+				86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */,
+				86E57CDE18794E1100978AFA /* XCJChangeSignNaviController.h */,
+				86E57CDF18794E1100978AFA /* XCJChangeSignNaviController.m */,
+				86E57CE118794E2900978AFA /* XCJChangeNickViewController.h */,
+				86E57CE218794E2900978AFA /* XCJChangeNickViewController.m */,
+				86E57CE418794E3500978AFA /* XCJChangeSignViewController.h */,
+				86E57CE518794E3500978AFA /* XCJChangeSignViewController.m */,
+			);
+			name = change;
+			sourceTree = "<group>";
+		};
+		86E57CE718795CC900978AFA /* areaPick */ = {
+			isa = PBXGroup;
+			children = (
+				86E57CE818795CC900978AFA /* area.plist */,
+				86E57CE918795CC900978AFA /* city.plist */,
+				86E57CF218795FD800978AFA /* HZAreaPickerView.xib */,
+				86E57CEA18795CC900978AFA /* HZAreaPickerView.h */,
+				86E57CEB18795CC900978AFA /* HZAreaPickerView.m */,
+				86E57CEC18795CC900978AFA /* HZLocation.h */,
+				86E57CED18795CC900978AFA /* HZLocation.m */,
+			);
+			path = areaPick;
+			sourceTree = "<group>";
+		};
 		86EB764B185AA6CC00836947 /* DAOModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2027,6 +2081,7 @@
 		86F9B9AF18728ADA00ED768B /* User */ = {
 			isa = PBXGroup;
 			children = (
+				86E57CDD18794DFB00978AFA /* change */,
 				865632E0185FFDDA00E9903C /* XCJUserViewController.h */,
 				865632E1185FFDDA00E9903C /* XCJUserViewController.m */,
 				86F9B9B018728AFE00ED768B /* XCJUserInfoController.h */,
@@ -2183,12 +2238,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
+				86E57CEE18795CC900978AFA /* area.plist in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				8668E478187540DB00D20C9E /* btn_comment_disable@2x.png in Resources */,
 				86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */,
+				86E57CEF18795CC900978AFA /* city.plist in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
 				8668E47D187540DB00D20C9E /* like_comment_bg@2x.png in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
+				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
 				8692E3BE18642DB700F9E1DD /* Default-568h@2x.png in Resources */,
 				86EB76441859A66800836947 /* logo80x80.png in Resources */,
 				8668E47B187540DB00D20C9E /* btn_unlike@2x.png in Resources */,
@@ -2300,6 +2358,7 @@
 				86EB76BE185AA6CC00836947 /* MessageList.m in Sources */,
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
 				86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */,
+				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
 				86D1827E1834AED30005901D /* NSDataAddition.m in Sources */,
 				866F0621185724EE007A57CF /* SinaWeibo.m in Sources */,
 				869CE4AB18698D3F0004C1EC /* AsyncImageView.m in Sources */,
@@ -2313,6 +2372,7 @@
 				8668E475187540DB00D20C9E /* ActivityCommentsView.m in Sources */,
 				86D181DA1834822C0005901D /* main.m in Sources */,
 				86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */,
+				86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */,
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
@@ -2338,6 +2398,7 @@
 				86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */,
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,
+				86E57CF118795CC900978AFA /* HZLocation.m in Sources */,
 				86EB76CE185AA6CC00836947 /* AFHTTPRequestOperation.m in Sources */,
 				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
 				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
@@ -2359,6 +2420,7 @@
 				869CE52F186BE38D0004C1EC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				869CE533186BE38D0004C1EC /* MagicalRecord+Options.m in Sources */,
+				86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */,
 				866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */,
 				865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */,
 				86D183021834AF9F0005901D /* tools.m in Sources */,
@@ -2373,6 +2435,7 @@
 				86EB76D3185AA6CC00836947 /* AFURLConnectionOperation.m in Sources */,
 				86D182F21834AF540005901D /* FMDatabasePool.m in Sources */,
 				869CE531186BE38D0004C1EC /* MagicalRecord+ErrorHandling.m in Sources */,
+				86E57CD818794DF600978AFA /* XCJChangeNickNaviController.m in Sources */,
 				869CE547186BE3A00004C1EC /* DDXMLNode.m in Sources */,
 				86EB76BF185AA6CC00836947 /* Model.m in Sources */,
 				8668E47F187540DB00D20C9E /* InterceptTouchView.m in Sources */,
@@ -2396,6 +2459,7 @@
 				869CE520186BE38D0004C1EC /* NSNumber+MagicalDataImport.m in Sources */,
 				86D182821834AED30005901D /* BundleHelper.m in Sources */,
 				869CE51F186BE38D0004C1EC /* NSEntityDescription+MagicalDataImport.m in Sources */,
+				86E57CE618794E3500978AFA /* XCJChangeSignViewController.m in Sources */,
 				86EB76E0185AA6CC00836947 /* NSData+SRB64Additions.m in Sources */,
 				866995E61879087100233C47 /* XCJErWeiCodeViewController.m in Sources */,
 				869CE546186BE3A00004C1EC /* DDXMLElement.m in Sources */,
