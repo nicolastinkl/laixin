@@ -162,8 +162,8 @@
 		86D1827D1834AED30005901D /* MCProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1821C1834AED30005901D /* MCProgressBarView.m */; };
 		86D1827E1834AED30005901D /* NSDataAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1821E1834AED30005901D /* NSDataAddition.m */; };
 		86D1827F1834AED30005901D /* NSDataAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1821E1834AED30005901D /* NSDataAddition.m */; };
-		86D182801834AED30005901D /* NSStringAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182201834AED30005901D /* NSStringAddition.m */; };
-		86D182811834AED30005901D /* NSStringAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182201834AED30005901D /* NSStringAddition.m */; };
+		86D182801834AED30005901D /* NSString+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182201834AED30005901D /* NSString+Addition.m */; };
+		86D182811834AED30005901D /* NSString+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182201834AED30005901D /* NSString+Addition.m */; };
 		86D182821834AED30005901D /* BundleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182231834AED30005901D /* BundleHelper.m */; };
 		86D182831834AED30005901D /* BundleHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182231834AED30005901D /* BundleHelper.m */; };
 		86D182841834AED30005901D /* GCDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182251834AED30005901D /* GCDHelper.m */; };
@@ -267,7 +267,6 @@
 		86EB76C6185AA6CC00836947 /* MLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB766B185AA6CC00836947 /* MLRequest.m */; };
 		86EB76C7185AA6CC00836947 /* ObjcRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB766E185AA6CC00836947 /* ObjcRuntime.m */; };
 		86EB76C8185AA6CC00836947 /* DataHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB7671185AA6CC00836947 /* DataHelper.m */; };
-		86EB76C9185AA6CC00836947 /* NSString+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB7673185AA6CC00836947 /* NSString+Addition.m */; };
 		86EB76CA185AA6CC00836947 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB7675185AA6CC00836947 /* UIColor+Expanded.m */; };
 		86EB76CB185AA6CC00836947 /* UIImage+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB7677185AA6CC00836947 /* UIImage+Addition.m */; };
 		86EB76CC185AA6CC00836947 /* UIView+AutolayoutDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB7679185AA6CC00836947 /* UIView+AutolayoutDebug.m */; };
@@ -311,6 +310,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8669983618792F5800233C47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = ZXingWidget;
+		};
+		8669983818792F5800233C47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1D60398D13DF7CAD006F4B51;
+			remoteInfo = ZXingTests;
+		};
+		866998421879301300233C47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9672D35713BD662F0002B0E2;
+			remoteInfo = qrencoder;
+		};
+		866998441879301300233C47 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9621844115431DBA00447877;
+			remoteInfo = QRCodeEncoderDemo;
+		};
 		86D181F31834822D0005901D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86D181C21834822C0005901D /* Project object */;
@@ -405,6 +432,8 @@
 		8669982018792BE300233C47 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8669982218792BEF00233C47 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		8669982418792BF700233C47 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		8669983118792F5700233C47 /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingWidget.xcodeproj; path = zxing/iphone/ZXingWidget/ZXingWidget.xcodeproj; sourceTree = SOURCE_ROOT; };
+		8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QRCodeEncoderObjectiveCAtGithub.xcodeproj; path = QRCodeEncoder/QRCodeEncoderObjectiveCAtGithub.xcodeproj; sourceTree = SOURCE_ROOT; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -581,8 +610,8 @@
 		86D1821C1834AED30005901D /* MCProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCProgressBarView.m; sourceTree = "<group>"; };
 		86D1821D1834AED30005901D /* NSDataAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataAddition.h; sourceTree = "<group>"; };
 		86D1821E1834AED30005901D /* NSDataAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataAddition.m; sourceTree = "<group>"; };
-		86D1821F1834AED30005901D /* NSStringAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAddition.h; sourceTree = "<group>"; };
-		86D182201834AED30005901D /* NSStringAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAddition.m; sourceTree = "<group>"; };
+		86D1821F1834AED30005901D /* NSString+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Addition.h"; sourceTree = "<group>"; };
+		86D182201834AED30005901D /* NSString+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Addition.m"; sourceTree = "<group>"; };
 		86D182221834AED30005901D /* BundleHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BundleHelper.h; sourceTree = "<group>"; };
 		86D182231834AED30005901D /* BundleHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BundleHelper.m; sourceTree = "<group>"; };
 		86D182241834AED30005901D /* GCDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDHelper.h; sourceTree = "<group>"; };
@@ -712,8 +741,6 @@
 		86EB766E185AA6CC00836947 /* ObjcRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjcRuntime.m; sourceTree = "<group>"; };
 		86EB7670185AA6CC00836947 /* DataHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataHelper.h; sourceTree = "<group>"; };
 		86EB7671185AA6CC00836947 /* DataHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataHelper.m; sourceTree = "<group>"; };
-		86EB7672185AA6CC00836947 /* NSString+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Addition.h"; sourceTree = "<group>"; };
-		86EB7673185AA6CC00836947 /* NSString+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Addition.m"; sourceTree = "<group>"; };
 		86EB7674185AA6CC00836947 /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Expanded.h"; sourceTree = "<group>"; };
 		86EB7675185AA6CC00836947 /* UIColor+Expanded.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Expanded.m"; sourceTree = "<group>"; };
 		86EB7676185AA6CC00836947 /* UIImage+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Addition.h"; sourceTree = "<group>"; };
@@ -1026,8 +1053,28 @@
 		8669981318792B2500233C47 /* ThreeXcode */ = {
 			isa = PBXGroup;
 			children = (
+				8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */,
+				8669983118792F5700233C47 /* ZXingWidget.xcodeproj */,
 			);
 			name = ThreeXcode;
+			sourceTree = "<group>";
+		};
+		8669983218792F5700233C47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8669983718792F5800233C47 /* libZXingWidget.a */,
+				8669983918792F5800233C47 /* ZXingTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8669983E1879301300233C47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				866998431879301300233C47 /* libqrencoder.a */,
+				866998451879301300233C47 /* QRCodeEncoderDemo.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		866F0617185724EE007A57CF /* SinaWeibo */ = {
@@ -1505,8 +1552,8 @@
 				86D1821C1834AED30005901D /* MCProgressBarView.m */,
 				86D1821D1834AED30005901D /* NSDataAddition.h */,
 				86D1821E1834AED30005901D /* NSDataAddition.m */,
-				86D1821F1834AED30005901D /* NSStringAddition.h */,
-				86D182201834AED30005901D /* NSStringAddition.m */,
+				86D1821F1834AED30005901D /* NSString+Addition.h */,
+				86D182201834AED30005901D /* NSString+Addition.m */,
 				86D182211834AED30005901D /* OtherAddtion */,
 				86D182281834AED30005901D /* UIAlertViewAddition.h */,
 				86D182291834AED30005901D /* UIAlertViewAddition.m */,
@@ -1791,8 +1838,6 @@
 				869CE4A818698D3F0004C1EC /* AsyncImageView */,
 				86EB7670185AA6CC00836947 /* DataHelper.h */,
 				86EB7671185AA6CC00836947 /* DataHelper.m */,
-				86EB7672185AA6CC00836947 /* NSString+Addition.h */,
-				86EB7673185AA6CC00836947 /* NSString+Addition.m */,
 				869CE4CA186AB9270004C1EC /* NSString+FontAwesome.h */,
 				869CE4CB186AB9270004C1EC /* NSString+FontAwesome.m */,
 				86EB7674185AA6CC00836947 /* UIColor+Expanded.h */,
@@ -2083,6 +2128,16 @@
 			mainGroup = 86D181C11834822C0005901D;
 			productRefGroup = 86D181CB1834822C0005901D /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8669983E1879301300233C47 /* Products */;
+					ProjectRef = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
+				},
+				{
+					ProductGroup = 8669983218792F5700233C47 /* Products */;
+					ProjectRef = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				86D181C91834822C0005901D /* laixin */,
@@ -2090,6 +2145,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		8669983718792F5800233C47 /* libZXingWidget.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libZXingWidget.a;
+			remoteRef = 8669983618792F5800233C47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8669983918792F5800233C47 /* ZXingTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ZXingTests.octest;
+			remoteRef = 8669983818792F5800233C47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		866998431879301300233C47 /* libqrencoder.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libqrencoder.a;
+			remoteRef = 866998421879301300233C47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		866998451879301300233C47 /* QRCodeEncoderDemo.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = QRCodeEncoderDemo.app;
+			remoteRef = 866998441879301300233C47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		86D181C81834822C0005901D /* Resources */ = {
@@ -2179,7 +2265,7 @@
 				865632E6185FFDDA00E9903C /* XCJDyScenceViewController.m in Sources */,
 				869CE4C0186A73880004C1EC /* NSAttributedString+Attributes.m in Sources */,
 				869CE4CC186AB9270004C1EC /* NSString+FontAwesome.m in Sources */,
-				86D182801834AED30005901D /* NSStringAddition.m in Sources */,
+				86D182801834AED30005901D /* NSString+Addition.m in Sources */,
 				86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */,
 				86EB76D4185AA6CC00836947 /* AFURLRequestSerialization.m in Sources */,
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
@@ -2261,7 +2347,6 @@
 				8681BDC41834B53C00521D36 /* DAImageResizedImageView.m in Sources */,
 				869CE526186BE38D0004C1EC /* NSManagedObject+MagicalFinders.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
-				86EB76C9185AA6CC00836947 /* NSString+Addition.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
 				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
@@ -2370,7 +2455,7 @@
 				86D182D81834AF2D0005901D /* DADataEnvironment.m in Sources */,
 				86D182851834AED30005901D /* GCDHelper.m in Sources */,
 				86D183071834AFB00005901D /* XCDataDBFactory.m in Sources */,
-				86D182811834AED30005901D /* NSStringAddition.m in Sources */,
+				86D182811834AED30005901D /* NSString+Addition.m in Sources */,
 				86D1830F1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
 				86D1830B1834AFD90005901D /* DAHttpClient.m in Sources */,
 				8681BE421839AACD00521D36 /* InviteInfo.m in Sources */,
@@ -2510,11 +2595,12 @@
 		86D182001834822D0005901D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -2522,6 +2608,9 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
 					/usr/include/libxml2,
+					"./zxing/iphone/ZXingWidget/Classes/**",
+					./zxing/cpp/core/src,
+					./QRCodeEncoder/QRCodeEncoderObjectiveCAtGithub,
 				);
 				INFOPLIST_FILE = "xianchangjia/laixin-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -2541,11 +2630,12 @@
 		86D182011834822D0005901D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -2553,6 +2643,9 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"\"$(BUILT_PRODUCTS_DIR)/../../Headers\"",
 					/usr/include/libxml2,
+					"./zxing/iphone/ZXingWidget/Classes/**",
+					./zxing/cpp/core/src,
+					./QRCodeEncoder/QRCodeEncoderObjectiveCAtGithub,
 				);
 				INFOPLIST_FILE = "xianchangjia/laixin-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

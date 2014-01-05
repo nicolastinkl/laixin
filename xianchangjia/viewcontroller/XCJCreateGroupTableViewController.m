@@ -10,7 +10,6 @@
 #import "XCAlbumAdditions.h"
 #import "MLNetworkingManager.h"
 #import "NSString+Addition.h"
-#import "NSStringAddition.h"
 #import "DataHelper.h"
 #import "XCJGroupPost_list.h"
 #import "UIAlertViewAddition.h"

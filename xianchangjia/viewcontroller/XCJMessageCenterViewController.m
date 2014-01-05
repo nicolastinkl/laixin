@@ -14,7 +14,7 @@
 #import "XCModelAllEntity.h"
 #import "MessageManager.h"
 #import "JSONKit.h"
-#import "NSStringAddition.h"
+#import "NSString+Addition.h"
 
 @interface XCJMessageCenterViewController ()
 @property (strong, nonatomic) IBOutlet UITableView *tableview;

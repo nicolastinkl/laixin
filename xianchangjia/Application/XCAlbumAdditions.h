@@ -27,5 +27,4 @@
 #import "SINGLETONGCD.h"
 #import "blocktypedef.h"
 #import "NSString+Addition.h"
-#import "NSStringAddition.h"
 #endif
