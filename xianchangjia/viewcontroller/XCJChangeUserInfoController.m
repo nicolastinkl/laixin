@@ -56,7 +56,11 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-   
+    
+    self.Label_nick.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
+    self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
+    [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
 }
 
 -(void)viewDidAppear:(BOOL)animated

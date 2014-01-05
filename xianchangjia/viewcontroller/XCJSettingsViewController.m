@@ -31,7 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -41,6 +40,8 @@
 //    LXUser * user =  [[LXAPIController sharedLXAPIController] currentUser];
 //    self.title = user.nick;
     
+    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
     [self LoadData];
 }
 

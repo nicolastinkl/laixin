@@ -258,6 +258,10 @@
 		86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CEB18795CC900978AFA /* HZAreaPickerView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		86E57CF118795CC900978AFA /* HZLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CED18795CC900978AFA /* HZLocation.m */; };
 		86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E57CF218795FD800978AFA /* HZAreaPickerView.xib */; };
+		86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CF618796D1100978AFA /* THBubbleColor.m */; };
+		86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CF818796D1100978AFA /* THContactBubble.m */; };
+		86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CFA18796D1100978AFA /* THContactPickerView.m */; };
+		86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */; };
 		86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
@@ -731,6 +735,14 @@
 		86E57CEC18795CC900978AFA /* HZLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZLocation.h; sourceTree = "<group>"; };
 		86E57CED18795CC900978AFA /* HZLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZLocation.m; sourceTree = "<group>"; };
 		86E57CF218795FD800978AFA /* HZAreaPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HZAreaPickerView.xib; sourceTree = "<group>"; };
+		86E57CF518796D1100978AFA /* THBubbleColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THBubbleColor.h; sourceTree = "<group>"; };
+		86E57CF618796D1100978AFA /* THBubbleColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THBubbleColor.m; sourceTree = "<group>"; };
+		86E57CF718796D1100978AFA /* THContactBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THContactBubble.h; sourceTree = "<group>"; };
+		86E57CF818796D1100978AFA /* THContactBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THContactBubble.m; sourceTree = "<group>"; };
+		86E57CF918796D1100978AFA /* THContactPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = THContactPickerView.h; sourceTree = "<group>"; };
+		86E57CFA18796D1100978AFA /* THContactPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THContactPickerView.m; sourceTree = "<group>"; };
+		86E57CFF18796EB500978AFA /* XCJCreateChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateChatViewController.h; path = xianchangjia/viewcontroller/XCJCreateChatViewController.h; sourceTree = SOURCE_ROOT; };
+		86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateChatViewController.m; path = xianchangjia/viewcontroller/XCJCreateChatViewController.m; sourceTree = SOURCE_ROOT; };
 		86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddUserTableViewController.h; path = viewcontroller/XCJAddUserTableViewController.h; sourceTree = "<group>"; };
 		86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddUserTableViewController.m; path = viewcontroller/XCJAddUserTableViewController.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
@@ -1779,6 +1791,30 @@
 			path = areaPick;
 			sourceTree = "<group>";
 		};
+		86E57CF418796D1100978AFA /* CreateTalk */ = {
+			isa = PBXGroup;
+			children = (
+				86E57CFE18796D4B00978AFA /* Views */,
+				86E57CF518796D1100978AFA /* THBubbleColor.h */,
+				86E57CF618796D1100978AFA /* THBubbleColor.m */,
+				86E57CF718796D1100978AFA /* THContactBubble.h */,
+				86E57CF818796D1100978AFA /* THContactBubble.m */,
+				86E57CF918796D1100978AFA /* THContactPickerView.h */,
+				86E57CFA18796D1100978AFA /* THContactPickerView.m */,
+			);
+			name = CreateTalk;
+			path = createTalk;
+			sourceTree = "<group>";
+		};
+		86E57CFE18796D4B00978AFA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				86E57CFF18796EB500978AFA /* XCJCreateChatViewController.h */,
+				86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		86EB764B185AA6CC00836947 /* DAOModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -2095,6 +2131,7 @@
 		86F9B9B318729C3900ED768B /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				86E57CF418796D1100978AFA /* CreateTalk */,
 				865632C8185FFDDA00E9903C /* ChatListViewController.h */,
 				865632C9185FFDDA00E9903C /* ChatListViewController.m */,
 				865632CA185FFDDA00E9903C /* ChatViewController.h */,
@@ -2312,6 +2349,7 @@
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
+				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
@@ -2337,6 +2375,7 @@
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
 				86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */,
 				86D182FE1834AF7E0005901D /* GlobalData.m in Sources */,
+				86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */,
 				869CE524186BE38D0004C1EC /* NSManagedObject+MagicalAggregation.m in Sources */,
 				8681BE411839AACD00521D36 /* InviteInfo.m in Sources */,
 				86D182BA1834AED30005901D /* UIHyperlinksButton.m in Sources */,
@@ -2407,6 +2446,7 @@
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
 				8681BDC41834B53C00521D36 /* DAImageResizedImageView.m in Sources */,
 				869CE526186BE38D0004C1EC /* NSManagedObject+MagicalFinders.m in Sources */,
+				86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
 				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
@@ -2469,6 +2509,7 @@
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,
+				86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
 				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
