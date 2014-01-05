@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJDyScenceViewController : UITableViewController
+
 @property (nonatomic)  NSInteger scene_id;
+
 @end

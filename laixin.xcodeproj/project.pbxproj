@@ -51,6 +51,10 @@
 		8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */; };
 		866995E31878F56F00233C47 /* XCJAddByContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */; };
 		866995E61879087100233C47 /* XCJErWeiCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 866995E51879087100233C47 /* XCJErWeiCodeViewController.m */; };
+		866995EC1879130400233C47 /* XCJScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 866995EB1879130400233C47 /* XCJScanViewController.m */; };
+		8669982118792BE300233C47 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982018792BE300233C47 /* AudioToolbox.framework */; };
+		8669982318792BEF00233C47 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982218792BEF00233C47 /* CoreMedia.framework */; };
+		8669982518792BF700233C47 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982418792BF700233C47 /* CoreVideo.framework */; };
 		866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 866F0618185724EE007A57CF /* SinaWeibo.bundle */; };
 		866F0621185724EE007A57CF /* SinaWeibo.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061A185724EE007A57CF /* SinaWeibo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061C185724EE007A57CF /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -396,6 +400,11 @@
 		866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddByContactsViewController.m; path = viewcontroller/XCJAddByContactsViewController.m; sourceTree = "<group>"; };
 		866995E41879087100233C47 /* XCJErWeiCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJErWeiCodeViewController.h; path = viewcontroller/XCJErWeiCodeViewController.h; sourceTree = "<group>"; };
 		866995E51879087100233C47 /* XCJErWeiCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJErWeiCodeViewController.m; path = viewcontroller/XCJErWeiCodeViewController.m; sourceTree = "<group>"; };
+		866995EA1879130400233C47 /* XCJScanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJScanViewController.h; path = viewcontroller/XCJScanViewController.h; sourceTree = "<group>"; };
+		866995EB1879130400233C47 /* XCJScanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJScanViewController.m; path = viewcontroller/XCJScanViewController.m; sourceTree = "<group>"; };
+		8669982018792BE300233C47 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		8669982218792BEF00233C47 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		8669982418792BF700233C47 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -800,6 +809,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86D183171834B0950005901D /* libiconv.dylib in Frameworks */,
+				8669982518792BF700233C47 /* CoreVideo.framework in Frameworks */,
+				8669982318792BEF00233C47 /* CoreMedia.framework in Frameworks */,
+				8669982118792BE300233C47 /* AudioToolbox.framework in Frameworks */,
 				86D1831D1834B0B10005901D /* AssetsLibrary.framework in Frameworks */,
 				86D183231834B0CE0005901D /* MobileCoreServices.framework in Frameworks */,
 				86D1832B1834B0E80005901D /* Security.framework in Frameworks */,
@@ -811,7 +824,6 @@
 				86EB770F185AB1AE00836947 /* libz.1.dylib in Frameworks */,
 				86EB770D185AB14F00836947 /* libicucore.dylib in Frameworks */,
 				86D1831B1834B0A40005901D /* libsqlite3.dylib in Frameworks */,
-				86D183171834B0950005901D /* libiconv.dylib in Frameworks */,
 				8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */,
 				86D1831F1834B0BC0005901D /* CFNetwork.framework in Frameworks */,
 				86D181D01834822C0005901D /* CoreGraphics.framework in Frameworks */,
@@ -999,6 +1011,23 @@
 				8668E470187540DB00D20C9E /* MLScrollRefreshHeader.m */,
 			);
 			path = MLScrollRefreshHeader;
+			sourceTree = "<group>";
+		};
+		866995E9187912EC00233C47 /* ScanView */ = {
+			isa = PBXGroup;
+			children = (
+				8669981318792B2500233C47 /* ThreeXcode */,
+				866995EA1879130400233C47 /* XCJScanViewController.h */,
+				866995EB1879130400233C47 /* XCJScanViewController.m */,
+			);
+			name = ScanView;
+			sourceTree = "<group>";
+		};
+		8669981318792B2500233C47 /* ThreeXcode */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ThreeXcode;
 			sourceTree = "<group>";
 		};
 		866F0617185724EE007A57CF /* SinaWeibo */ = {
@@ -1317,6 +1346,9 @@
 		86D181CC1834822C0005901D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8669982418792BF700233C47 /* CoreVideo.framework */,
+				8669982218792BEF00233C47 /* CoreMedia.framework */,
+				8669982018792BE300233C47 /* AudioToolbox.framework */,
 				869CE54C186BEC1A0004C1EC /* CoreData.framework */,
 				869CE54A186BEBE80004C1EC /* libxml2.2.dylib */,
 				869CE548186BEBAF0004C1EC /* libresolv.dylib */,
@@ -1425,6 +1457,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				866995E9187912EC00233C47 /* ScanView */,
 				86660DCD18780A2E007477C0 /* AddFriend */,
 				86489EF4187586BE001AB9BA /* PostPhoto */,
 				8668E44F18751AB500D20C9E /* Home */,
@@ -2297,6 +2330,7 @@
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
+				866995EC1879130400233C47 /* XCJScanViewController.m in Sources */,
 				86EB76D7185AA6CC00836947 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
@@ -2493,7 +2527,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/applepc/Documents/project/ios7Project/xianchangjia/xianchangjia/Extend/Vendor/SDWebImage,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
@@ -2524,7 +2558,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/applepc/Documents/project/ios7Project/xianchangjia/xianchangjia/Extend/Vendor/SDWebImage,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
