@@ -41,9 +41,97 @@
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="nc1-gf-4A4">
-                                <cells/>
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="5H4-Tl-yBZ">
+                                        <rect key="frame" x="0.0" y="194" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5H4-Tl-yBZ" id="VGy-4F-fh6">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="二维码名片" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="efH-kM-h9r">
+                                                    <rect key="frame" x="20" y="11" width="107" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_qrcode" id="HCE-lP-Dsz">
+                                                    <rect key="frame" x="265" y="11" width="22" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="aJk-HQ-8iS" kind="push" id="7xw-xs-yZu"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="9sy-Et-8TP">
+                                        <rect key="frame" x="0.0" y="238" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9sy-Et-8TP" id="wxc-i8-Nmc">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="扫一扫" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SYw-1m-M62">
+                                                    <rect key="frame" x="20" y="11" width="107" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_qrcode" id="NsW-mY-SzV">
+                                                    <rect key="frame" x="265" y="11" width="22" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
                             </tableViewSection>
                             <tableViewSection id="Odm-R7-euM">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="r8W-38-J7l">
+                                        <rect key="frame" x="0.0" y="302" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r8W-38-J7l" id="1Cd-6j-B0h">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="邀请" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gae-1Y-gSc">
+                                                    <rect key="frame" x="20" y="11" width="107" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contact_add" id="n9N-x1-2s9">
+                                                    <rect key="frame" x="265" y="11" width="22" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="xUw-2c-kbx">
+                                        <rect key="frame" x="0.0" y="346" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xUw-2c-kbx" id="53q-R4-b1D">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="热门动态" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="K6k-Qr-p50">
+                                                    <rect key="frame" x="20" y="11" width="107" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_feed" id="ZRj-CY-gcb">
+                                                    <rect key="frame" x="265" y="11" width="22" height="22"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="YP8-sD-vRv">
                                 <cells/>
                             </tableViewSection>
                         </sections>
@@ -218,6 +306,85 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CdR-dv-67b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1775" y="-732"/>
+        </scene>
+        <!--Er Wei Code View Controller - 二维码名片-->
+        <scene sceneID="yX8-mt-IXI">
+            <objects>
+                <viewController restorationIdentifier="XCJErWeiCodeViewController" storyboardIdentifier="XCJErWeiCodeViewController" hidesBottomBarWhenPushed="YES" id="aJk-HQ-8iS" customClass="XCJErWeiCodeViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rTV-AP-rkW">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="Fv1-ph-Jaa">
+                                <rect key="frame" x="0.0" y="-8" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_TextEntryField_light_0_6_0_6" id="agk-KM-2Qn">
+                                        <rect key="frame" x="10" y="100" width="300" height="363"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.40000000000000002" y="0.29999999999999999" width="0.20000000000000001" height="0.49999999999999994"/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Uvw-Ex-GWL">
+                                        <rect key="frame" x="20" y="110" width="56" height="56"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="chrome-filter-selection" id="EbF-ze-Cjq">
+                                        <rect key="frame" x="18" y="108" width="60" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sXs-fY-EOO">
+                                        <rect key="frame" x="91" y="127" width="142" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="DbW-MM-pCP">
+                                        <rect key="frame" x="52" y="188" width="216" height="216"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2wS-4Q-5Oz">
+                                        <rect key="frame" x="0.0" y="0.0" width="216" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="扫一扫上面的二维码,加我来信" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ffl-rr-6xM">
+                                        <rect key="frame" x="59" y="416" width="209" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="二维码名片" id="ZZB-gx-OGL">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="gzs-3n-G5b">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HNe-pH-7YG">
+                                <rect key="frame" x="285" y="13" width="19" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" image="more">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="ShowMoreClick:" destination="aJk-HQ-8iS" eventType="touchUpInside" id="YTO-IC-13s"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="Image_erwei" destination="DbW-MM-pCP" id="iva-MB-cbA"/>
+                        <outlet property="Image_user" destination="Uvw-Ex-GWL" id="ZTJ-HI-B53"/>
+                        <outlet property="label_nick" destination="sXs-fY-EOO" id="FXv-Gs-kOp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hxM-QN-aw2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2160" y="-727"/>
         </scene>
         <!--Sys Settings View Controller - 设置-->
         <scene sceneID="kfK-mQ-V3p">
@@ -1404,15 +1571,15 @@
             </objects>
             <point key="canvasLocation" x="1677" y="5151"/>
         </scene>
-        <!--View Controller - 手机通讯录-->
+        <!--Add By Contacts View Controller - 手机通讯录-->
         <scene sceneID="bmC-Dg-x4A">
             <objects>
-                <viewController id="HOH-o4-8Zd" sceneMemberID="viewController">
+                <viewController restorationIdentifier="XCJAddByContactsViewController" storyboardIdentifier="XCJAddByContactsViewController" id="HOH-o4-8Zd" customClass="XCJAddByContactsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="X2D-A0-gVn">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="W45-n9-C7x">
+                            <view tag="1" contentMode="scaleToFill" id="W45-n9-C7x">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -1438,11 +1605,14 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="kZA-Ed-v9s">
                                 <rect key="frame" x="20" y="398" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="添加通讯录好友">
+                                <state key="normal" title="上传通讯录寻找好友">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted" title="添加通讯录好友"/>
+                                <state key="highlighted" title="上传通讯录寻找好友"/>
+                                <connections>
+                                    <action selector="findAllLocalContacts:" destination="HOH-o4-8Zd" eventType="touchUpInside" id="vz7-LF-nsc"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -2401,6 +2571,7 @@
         <image name="chrome-checkmark-nux-ios7" width="75" height="75"/>
         <image name="chrome-filter-selection" width="60" height="60"/>
         <image name="composeIcon" width="18" height="18"/>
+        <image name="contact_add" width="37" height="37"/>
         <image name="edit_text_bg" width="248" height="33"/>
         <image name="facebookOnlyUserMaskMedium" width="42" height="42"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
@@ -2409,6 +2580,7 @@
         <image name="fbc_promobutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="header_icon_newchat" width="22" height="22"/>
         <image name="icon_board" width="26" height="26"/>
+        <image name="icon_feed" width="25" height="25"/>
         <image name="icon_qrcode" width="21" height="21"/>
         <image name="img_add_phone_friends" width="320" height="320"/>
         <image name="img_player_bg" width="750" height="473"/>
@@ -2417,6 +2589,7 @@
         <image name="md_girl" width="10" height="10"/>
         <image name="menu_icon_bulb_pressed" width="28" height="28"/>
         <image name="messengerUserMask" width="60" height="60"/>
+        <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
         <image name="searchFieldIcon" width="13" height="13"/>

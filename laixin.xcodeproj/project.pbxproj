@@ -49,6 +49,8 @@
 		8668E489187541BB00D20C9E /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E487187541BB00D20C9E /* Comment.m */; };
 		8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E491187543B900D20C9E /* UIImageView+Addtion.m */; };
 		8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */; };
+		866995E31878F56F00233C47 /* XCJAddByContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */; };
+		866995E61879087100233C47 /* XCJErWeiCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 866995E51879087100233C47 /* XCJErWeiCodeViewController.m */; };
 		866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 866F0618185724EE007A57CF /* SinaWeibo.bundle */; };
 		866F0621185724EE007A57CF /* SinaWeibo.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061A185724EE007A57CF /* SinaWeibo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061C185724EE007A57CF /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -390,6 +392,10 @@
 		8668E491187543B900D20C9E /* UIImageView+Addtion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Addtion.m"; sourceTree = "<group>"; };
 		8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeDynamicViewController.h; path = viewcontroller/XCJHomeDynamicViewController.h; sourceTree = "<group>"; };
 		8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeDynamicViewController.m; path = viewcontroller/XCJHomeDynamicViewController.m; sourceTree = "<group>"; };
+		866995E11878F56F00233C47 /* XCJAddByContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddByContactsViewController.h; path = viewcontroller/XCJAddByContactsViewController.h; sourceTree = "<group>"; };
+		866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddByContactsViewController.m; path = viewcontroller/XCJAddByContactsViewController.m; sourceTree = "<group>"; };
+		866995E41879087100233C47 /* XCJErWeiCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJErWeiCodeViewController.h; path = viewcontroller/XCJErWeiCodeViewController.h; sourceTree = "<group>"; };
+		866995E51879087100233C47 /* XCJErWeiCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJErWeiCodeViewController.m; path = viewcontroller/XCJErWeiCodeViewController.m; sourceTree = "<group>"; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -895,6 +901,8 @@
 				86660DD218780BCF007477C0 /* XCJAddFriendTableController.m */,
 				86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */,
 				86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */,
+				866995E11878F56F00233C47 /* XCJAddByContactsViewController.h */,
+				866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */,
 			);
 			name = AddFriend;
 			sourceTree = "<group>";
@@ -1945,6 +1953,8 @@
 				865632E1185FFDDA00E9903C /* XCJUserViewController.m */,
 				86F9B9B018728AFE00ED768B /* XCJUserInfoController.h */,
 				86F9B9B118728AFE00ED768B /* XCJUserInfoController.m */,
+				866995E41879087100233C47 /* XCJErWeiCodeViewController.h */,
+				866995E51879087100233C47 /* XCJErWeiCodeViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2223,6 +2233,7 @@
 				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
 				865632EC185FFDDA00E9903C /* XCJSendNewContentViewController.m in Sources */,
+				866995E31878F56F00233C47 /* XCJAddByContactsViewController.m in Sources */,
 				869CE52C186BE38D0004C1EC /* NSManagedObjectContext+MagicalThreading.m in Sources */,
 				86EB76D2185AA6CC00836947 /* AFSecurityPolicy.m in Sources */,
 				869CE4D4186BDB160004C1EC /* IQSocialRequestBaseClient.m in Sources */,
@@ -2268,6 +2279,7 @@
 				86D182821834AED30005901D /* BundleHelper.m in Sources */,
 				869CE51F186BE38D0004C1EC /* NSEntityDescription+MagicalDataImport.m in Sources */,
 				86EB76E0185AA6CC00836947 /* NSData+SRB64Additions.m in Sources */,
+				866995E61879087100233C47 /* XCJErWeiCodeViewController.m in Sources */,
 				869CE546186BE3A00004C1EC /* DDXMLElement.m in Sources */,
 				869CE521186BE38D0004C1EC /* NSObject+MagicalDataImport.m in Sources */,
 				86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */,

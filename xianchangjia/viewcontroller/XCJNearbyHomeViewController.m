@@ -7,7 +7,6 @@
 //
 
 #import "XCJNearbyHomeViewController.h"
-
 #import "XCAlbumAdditions.h"
 #import "XCJSceneInfo.h"
 #import "InviteInfo.h"

@@ -38,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.title = @"详细资料";
     NSMutableDictionary * array = [[NSMutableDictionary alloc] init];
     UserDict = array;
     if (self.UserInfo) {
