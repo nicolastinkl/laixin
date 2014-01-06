@@ -91,7 +91,6 @@
     [self reloadFetchedResults:nil];
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseDataConver" object:[[UIApplication sharedApplication] delegate]];
-    
 }
 
 #pragma mark -
@@ -100,12 +99,10 @@
 - (NSFetchedResultsController *)fetchedResultsController {
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
-        self.fetchedResultsController = [Conversation MR_fetchAllSortedBy:@"lastMessageDate" ascending:YES withPredicate:nil groupBy:nil delegate:self];
+        self.fetchedResultsController = [Conversation MR_fetchAllSortedBy:@"lastMessageDate" ascending:NO withPredicate:nil groupBy:nil delegate:self];
     }
 	return _fetchedResultsController;
 }
-
-
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -120,9 +117,6 @@
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
-
-
 
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {
@@ -142,10 +136,9 @@
             
             NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
             
-            
             //out view
-            NSString * content = dicMessage[@"content"];
-            
+            NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
@@ -156,13 +149,28 @@
             }
                 
             FCMessage *msg = [FCMessage MR_createInContext:localContext];
+            if ([content isNilOrEmpty]) {
+                content = @"";
+            }
             msg.text = content;
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
             msg.sentDate = date;
             // message did come, this will be on left
             msg.messageStatus = @(YES);
-            conversation.lastMessage = content;
+            
+            if (imageurl.length > 5)
+            {
+                msg.messageType = @(messageType_image);
+                conversation.lastMessage = @"[图片]";
+            }
+            else
+            {
+                msg.messageType = @(messageType_text);
+                conversation.lastMessage = content;
+            }
+            msg.imageUrl = imageurl;
+            
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
             conversation.messageStutes = @(messageStutes_incoming);
@@ -179,6 +187,58 @@
             
             [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
             
+        } else if([requestKey isEqualToString:@"newpost"]){
+            
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"post"];
+            NSString * gid = [tools getStringValue:dicMessage[@"group_id"] defaultValue:@""];
+            NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+            NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+            //out view
+            NSString * content = dicMessage[@"content"];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+            
+            // Build the predicate to find the person sought
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+            if(conversation == nil)
+            {
+                conversation =  [Conversation MR_createInContext:localContext];
+            }
+            FCMessage *msg = [FCMessage MR_createInContext:localContext];
+            msg.text = content;
+            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+            msg.sentDate = date;
+            if (imageurl.length > 5)
+            {
+                msg.messageType = @(messageType_image);
+                conversation.lastMessage = @"[图片]";
+            }
+            else
+            {
+                msg.messageType = @(messageType_text);
+                conversation.lastMessage = content;
+            }
+            // message did come, this will be on left
+            msg.messageStatus = @(YES);
+            msg.messageId =  uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                FCUserDescription * localdespObject = response;
+                conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+            } withuid:uid];
+            conversation.lastMessageDate = date;
+            conversation.messageStutes = @(messageStutes_incoming);
+            // increase badge number.
+            int badgeNumber = [conversation.badgeNumber intValue];
+            badgeNumber ++;
+            conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+            
+            [conversation addMessagesObject:msg];
+            [localContext MR_saveToPersistentStoreAndWait];
+            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
         }
     }
     
@@ -252,28 +312,47 @@
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated
 {
     ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
+    // private or group
+    switch ([friend.messageType intValue]) {
+        case XCMessageActivity_UserGroupMessage:
+        {
+            chatview.title = @"群聊";
+            NSString * gid =[friend.facebookId stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
+            chatview.gid = gid;
+        }
+            break;
+        case XCMessageActivity_UserPrivateMessage:
+        {
+            chatview.title = friend.facebookName;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
     chatview.conversation = friend;
+    //[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+    
     [self.navigationController pushViewController:chatview animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
+    UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
+    UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
     switch ([conver.messageType intValue]) {
         case XCMessageActivity_UserPrivateMessage:
         {// 私信
-            
-            UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
-            UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
-            UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
-
             @try {
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
                     FCUserDescription * localdespObject = response;
                     ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
                     [imageIcon setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",localdespObject.headpic]]];
                 } withuid:conver.facebookId];
-
             }
             @catch (NSException *exception) {
                 SLog(@"icon %@",exception.userInfo);
@@ -282,38 +361,43 @@
                 
             }
             
-            ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
-            ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time
-            
-          
-            
-            switch ([conver.messageStutes intValue]) {
-                case messageStutes_incoming:
-                    [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
-                    break;
-                case messageStutes_outcoming:
-                    [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
-                    break;
-                case messageStutes_error:
-                    [imageStuts setImage:[UIImage imageNamed:@"inboxErrorIcon"]];
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            if ([conver.badgeNumber intValue] > 0) {
-                [self showBadgeValue:[NSString stringWithFormat:@"%d",[conver.badgeNumber intValue]] inView:imageFrame];
-            }else{
-                [self removeBadgeValueInView:imageFrame];
-            }
         }
             break;
-            
+        case XCMessageActivity_UserGroupMessage:
+        {
+            [imageIcon setImage:[UIImage imageNamed:@"tabBarContactsIcon-iOS6"]];
+            ((UILabel *)[cell.contentView viewWithTag:1]).text  = conver.facebookName;
+        }
+            break;
         default:
             // ok
             
             break;
+    }
+    
+    
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
+    ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time
+    
+    switch ([conver.messageStutes intValue]) {
+        case messageStutes_incoming:
+            [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
+            break;
+        case messageStutes_outcoming:
+            [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
+            break;
+        case messageStutes_error:
+            [imageStuts setImage:[UIImage imageNamed:@"inboxErrorIcon"]];
+            break;
+            
+        default:
+            break;
+    }
+    
+    if ([conver.badgeNumber intValue] > 0) {
+        [self showBadgeValue:[NSString stringWithFormat:@"%d",[conver.badgeNumber intValue]] inView:imageFrame];
+    }else{
+        [self removeBadgeValueInView:imageFrame];
     }
     ((UILabel *)[cell.contentView viewWithTag:11]).height = 0.5f;
 }
@@ -429,6 +513,7 @@
         id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
         [managedObject MR_deleteEntity];
         [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
 	}
 }
 

@@ -20,6 +20,10 @@
 #import "UIAlertViewAddition.h"
 #import "XCJLoginNaviController.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "blocktypedef.h"
+#import "XCAlbumDefines.h"
+#import "Conversation.h"
+
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
@@ -38,24 +42,32 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 - (void)updateMessageTabBarItemBadge
 {
-    if (!self.tabBarController) {
-        self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
-    }
     //更新其未读消息总数
-    NSUInteger totalCount = [[[ChatList shareInstance] valueForKeyPath:@"array.@sum.unreadCount"] integerValue];
-    if (totalCount>0) {
-        NSString *badge = @"99+";
-        if (totalCount<=99) {
-            badge = [NSString stringWithFormat:@"%d",totalCount];
+//    NSUInteger totalCount = [[[ChatList shareInstance] valueForKeyPath:@"array.@sum.unreadCount"] integerValue];
+    if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]) {
+        if (!self.tabBarController) {
+            self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
         }
-        [self.tabBarController.tabBar.items[2] setBadgeValue:badge];
-        [UIApplication sharedApplication].applicationIconBadgeNumber = totalCount;
-    }else{
-        [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
-        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        __block int brage = 0;
+        NSArray * array = [Conversation MR_findAll];
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            Conversation * con = obj;
+            brage += [con.badgeNumber integerValue];
+        }];
+        if (brage > 0) {
+            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
+            [UIApplication sharedApplication].applicationIconBadgeNumber = brage;
+        }else{
+            [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
+            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        }
     }
 }
- 
+
+- (void)webSocketDidReceivePushMessage:(NSNotification *)notification
+{
+    [self updateMessageTabBarItemBadge];
+}
 -(void)applicationDidFinishLaunching:(UIApplication *)application
 {
     
@@ -75,11 +87,22 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert |
                                          UIRemoteNotificationTypeNewsstandContentAvailability)];
-    
-
+     
     [self copyDefaultStoreIfNecessary];
     [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
     
+    /* receive websocket message*/
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(webSocketDidReceivePushMessage:)
+                                                 name:MLNetworkingManagerDidReceivePushMessageNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateMessageTabBarItemBadge)
+                                                 name:@"updateMessageTabBarItemBadge"
+                                               object:nil];
+
+    
+    [self updateMessageTabBarItemBadge];
     // Override point for customization after application launch.
     return YES;
 }
@@ -172,6 +195,16 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     //devtokenstring:  d8009e6c8e074d1bbcb592f321367feaef5674a82fc4cf3b78b066b7c8ad59bd
     NSLog(@"devtokenstring : %@",devtokenstring);
+    
+    double delayInSeconds = 3.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        //1 debug    ....   0 release
+        NSDictionary * parames = @{@"device_token":devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    });
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0)

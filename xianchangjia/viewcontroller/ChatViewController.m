@@ -36,6 +36,8 @@
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
     NSString * ImageFile;
+    NSString * PasteboardStr;
+    NSArray * userArray;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
@@ -60,7 +62,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.title = self.conversation.facebookName;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -79,20 +80,35 @@
     self.inputTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     
 //    [self.tableView reloadData];
-    
     //KVO监控chatList单例数组
 //    [self.messageList addObserver:self forKeyPath:@"array" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionPrior context:nil];
     
     [self setUpSequencer];
-    
-    if (!self.userinfo) {
-        // from db or networking
-          [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-              if (response) {
-                  self.userinfo = response;
-                  self.title = self.userinfo.nick;
-              }
-          } withuid:self.conversation.facebookId];
+    if (self.gid) {
+        // get user count
+        {
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.members" parameters:@{@"gid":self.gid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dict =  responseObject[@"result"];
+                    NSArray * arr =  dict[@"members"];
+                    if (arr.count > 0) {
+                        userArray = arr;
+                        self.title = [NSString stringWithFormat:@"群聊(%d)",arr.count+1];
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        }
+    }else{
+        if (!self.userinfo) {
+            // from db or networking
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                if (response) {
+                    self.userinfo = response;
+                    self.title = self.userinfo.nick;
+                }
+            } withuid:self.conversation.facebookId];
+        }
     }
 }
 
@@ -110,6 +126,7 @@
         completion(nil);
     }];
     [sequencer run];
+    
 }
 
 //- (MessageList*)messageList
@@ -127,7 +144,7 @@
         
         self.conversation.badgeNumber = @(0);
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
     }
     /* receive websocket message*/
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -163,7 +180,7 @@
             NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
             if ([self.conversation.facebookId isEqualToString:facebookID]) {
                 // int view
-                NSString * content = dicMessage[@"content"];
+                NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
@@ -190,6 +207,7 @@
                 
                 self.conversation.lastMessageDate = date;
                 self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_incoming);
                 [self.conversation addMessagesObject:msg];
                 [self.messageList addObject:msg]; //table reload
                 [localContext MR_saveToPersistentStoreAndWait];
@@ -221,7 +239,96 @@
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 self.conversation.lastMessage = content;
                 self.conversation.lastMessageDate = date;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                // increase badge number.
+                int badgeNumber = [self.conversation.badgeNumber intValue];
+                badgeNumber ++;
+                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
                 
+                [self.conversation addMessagesObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
+            }
+        }else if ([requestKey isEqualToString:@"newpost"]){
+            // group new msg
+            /*
+             “data”:{
+             “post”:{
+             “postid”:
+             “uid”:
+             “group_id”:
+             “content”:
+                */
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"post"];
+            NSString * gid = [tools getStringValue:dicMessage[@"group_id"] defaultValue:@""];
+            NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+            NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+            if ([self.conversation.facebookId isEqualToString:facebookID]) {
+                // int view
+                NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
+                NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                if (imageurl.length > 5)
+                {
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
+                }
+                
+                else
+                {
+                    msg.messageType = @(messageType_text);
+                    self.conversation.lastMessage = content;
+                }
+                
+                msg.imageUrl = imageurl;
+                msg.messageId = uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                
+                self.conversation.lastMessageDate = date;
+                self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg]; //table reload
+                [localContext MR_saveToPersistentStoreAndWait];
+                [self insertTableRow];
+                
+            }else if(![self.conversation.facebookId isEqualToString:facebookID]){
+                //out view
+                NSString * content = dicMessage[@"content"];
+                NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                if (imageurl.length > 5)
+                {
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
+                }
+                
+                else
+                {
+                    msg.messageType = @(messageType_text);
+                    self.conversation.lastMessage = content;
+                }
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId =  uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                    FCUserDescription * localdespObject = response;
+                     self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                } withuid:uid];
+                self.conversation.lastMessageDate = date;
+                self.conversation.messageStutes = @(messageStutes_incoming);
                 // increase badge number.
                 int badgeNumber = [self.conversation.badgeNumber intValue];
                 badgeNumber ++;
@@ -256,37 +363,75 @@
 }
 
 - (IBAction)SendTextMsgClick:(id)sender {
-    NSString * text = self.inputTextView.text;
-    if ([text trimWhitespace].length > 0) {
-        //send to websocket message.send(uid,content) 私信 Result={“msgid”:}
+// 群聊
+    if (self.gid) {
+        NSString * text = self.inputTextView.text;
+        if ([text trimWhitespace].length > 0) {
+            NSDictionary * parames = @{@"gid":self.gid,@"content":text};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.add" parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSDictionary * dic = [responseObject objectForKey:@"result"];
+                if (dic) {
+                    //postid  none nessciary
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = text;
+                    msg.sentDate = [NSDate date];
+                    msg.messageType = @(messageType_text);
+                    // message did not come, this will be on rigth
+                    msg.messageStatus = @(NO);
+                    msg.messageId = [tools getStringValue:dic[@"postid"] defaultValue:@"0"];
+                    self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick],text];
+                    self.conversation.lastMessageDate = [NSDate date];
+                    self.conversation.badgeNumber = @0;
+                    self.conversation.messageStutes = @(messageStutes_outcoming);
+                    self.inputTextView.text = @"";
+                    [self.conversation addMessagesObject:msg];
+                    [self.messageList addObject:msg];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+                    [button defaultStyle];
+                    [self insertTableRow];
+                    
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+            
+        }
         
-        NSDictionary * parames = @{@"uid":self.conversation.facebookId,@"content":text};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"message.send"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
-            NSDictionary * dic = [responseObject objectForKey:@"result"];
-            if (dic) {
-                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                msg.text = text;
-                msg.sentDate = [NSDate date];
-                msg.messageType = @(messageType_text);
-                // message did not come, this will be on rigth
-                msg.messageStatus = @(NO);
-                msg.messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@"0"];
-                self.conversation.lastMessage = text;
-                self.conversation.lastMessageDate = [NSDate date];
-                self.conversation.badgeNumber = @0;
-                self.inputTextView.text = @"";
-                [self.conversation addMessagesObject:msg];
-                [self.messageList addObject:msg];
-                [localContext MR_saveToPersistentStoreAndWait];
-                UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
-                [button defaultStyle];
-                [self insertTableRow];
-            }
-           
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
+    }else{
+        NSString * text = self.inputTextView.text;
+        if ([text trimWhitespace].length > 0) {
+            //send to websocket message.send(uid,content) 私信 Result={“msgid”:}
+            NSDictionary * parames = @{@"uid":self.conversation.facebookId,@"content":text};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"message.send"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
+                NSDictionary * dic = [responseObject objectForKey:@"result"];
+                if (dic) {
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = text;
+                    msg.sentDate = [NSDate date];
+                    msg.messageType = @(messageType_text);
+                    // message did not come, this will be on rigth
+                    msg.messageStatus = @(NO);
+                    msg.messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@"0"];
+                    self.conversation.lastMessage = text;
+                    self.conversation.lastMessageDate = [NSDate date];
+                    self.conversation.badgeNumber = @0;
+                    self.conversation.messageStutes = @(messageStutes_outcoming);
+                    self.inputTextView.text = @"";
+                    [self.conversation addMessagesObject:msg];
+                    [self.messageList addObject:msg];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+                    [button defaultStyle];
+                    [self insertTableRow];
+                }
+                
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        }
     }
 }
 
@@ -306,6 +451,7 @@
 - (IBAction)addImage:(id)sender {
     //ActionSheet选择拍照还是相册
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册",nil];
+    actionSheet.tag = 2;
     [actionSheet showInView:self.view];
     //必须隐藏键盘否则会出问题。
     [self.inputTextView resignFirstResponder];
@@ -340,27 +486,44 @@
 #pragma mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
-        case 0:{
-            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                UIImagePickerController *camera = [[UIImagePickerController alloc] init];
-                camera.delegate = self;
-                camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-                [self presentViewController:camera animated:YES completion:nil];
+    if (actionSheet.tag == 2) {
+        switch (buttonIndex) {
+            case 0:{
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                    UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                    camera.delegate = self;
+                    camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    [self presentViewController:camera animated:YES completion:nil];
+                }
             }
-        }
-            break;
-        case 1:{
-            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-                UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
-                photoLibrary.delegate = self;
-                photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                [self presentViewController:photoLibrary animated:YES completion:nil];
+                break;
+            case 1:{
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                    UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+                    photoLibrary.delegate = self;
+                    photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    [self presentViewController:photoLibrary animated:YES completion:nil];
+                }
             }
+                break;
+            default:
+                break;
         }
-            break;
-        default:
-            break;
+    }
+    if (actionSheet.tag == 1) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                if (PasteboardStr) {
+                    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                    [pasteboard setString:PasteboardStr];
+                }
+            }
+                break;
+                
+            default:
+                break;
+        }
     }
 
 }
@@ -412,8 +575,6 @@
 
 - (void) SendImageWithMeImageurl:(NSString * ) url withMsgID:(NSString *) msgid
 {
-    
-    
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     FCMessage *msg = [FCMessage MR_createInContext:localContext];
     msg.text = @"";
@@ -426,6 +587,7 @@
     self.conversation.lastMessage = @"[图片]";
     self.conversation.lastMessageDate = [NSDate date];
     self.conversation.badgeNumber = @0;
+    self.conversation.messageStutes = @(messageStutes_outcoming);    
     [self.conversation addMessagesObject:msg];
     [self.messageList addObject:msg];
     [localContext MR_saveToPersistentStoreAndWait];
@@ -475,7 +637,7 @@
     [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-        //        [formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
+        //[formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
         SLog(@"responseObject %@",responseObject);
@@ -692,13 +854,22 @@
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
     
     if ([message.messageStatus boolValue]) {
-        //Incoming
-        [imageview setImageWithURL:[NSURL URLWithString:self.userinfo.headpic]];
-        labelName.text = self.userinfo.nick;
+        if (self.gid) {
+            //message.messageId // this is uid
+            
+        }else{
+            //Incoming
+            [imageview setImageWithURL:[NSURL URLWithString:self.userinfo.headpic]];
+            labelName.text = self.userinfo.nick;
+        }
+        imageview_BG.image = [UIImage imageNamed:@"bubbleLeftTail"];
+        labelContent.textColor = [UIColor blackColor];
     }else{
         //Outcoming
+        imageview_BG.image = [UIImage imageNamed:@"bubbleRightTail-1"];
         [imageview setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
         labelName.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+        labelContent.textColor = [UIColor whiteColor];
     }
     labelTime.text = [tools FormatStringForDate:message.sentDate];
     labelContent.text = message.text;
@@ -754,6 +925,18 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if ([self.inputTextView isFirstResponder]) {
         [self.inputTextView resignFirstResponder];
+    }else
+    {
+        UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"复制", nil];
+        action.tag = 1;
+        FCMessage *message = self.messageList[indexPath.row];
+        if ([message.messageType intValue] == messageType_image) {
+            PasteboardStr = message.imageUrl;
+        }else{
+            PasteboardStr = message.text;
+        }
+        
+        [action showInView:self.view];
     }
 }
 

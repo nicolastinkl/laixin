@@ -15,5 +15,7 @@
 
 @property (readwrite, nonatomic, strong) FCUserDescription *userinfo;
 
+@property (nonatomic, strong) NSString * gid;
+
 
 @end

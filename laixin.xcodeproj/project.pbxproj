@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
+		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
 		865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CB185FFDDA00E9903C /* ChatViewController.m */; };
@@ -364,6 +365,8 @@
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		8646F8BE187A90EA004A8696 /* XCJSettingGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSettingGroupViewController.h; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.h; sourceTree = SOURCE_ROOT; };
+		8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSettingGroupViewController.m; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.m; sourceTree = SOURCE_ROOT; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		865632C8185FFDDA00E9903C /* ChatListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListViewController.h; path = viewcontroller/ChatListViewController.h; sourceTree = "<group>"; };
@@ -935,6 +938,15 @@
 				86EB76421859A66800836947 /* logo120x120.png */,
 			);
 			name = image;
+			sourceTree = "<group>";
+		};
+		8646F8B9187A90CE004A8696 /* groupView */ = {
+			isa = PBXGroup;
+			children = (
+				8646F8BE187A90EA004A8696 /* XCJSettingGroupViewController.h */,
+				8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */,
+			);
+			name = groupView;
 			sourceTree = "<group>";
 		};
 		86489EF4187586BE001AB9BA /* PostPhoto */ = {
@@ -1794,6 +1806,7 @@
 		86E57CF418796D1100978AFA /* CreateTalk */ = {
 			isa = PBXGroup;
 			children = (
+				8646F8B9187A90CE004A8696 /* groupView */,
 				86E57CFE18796D4B00978AFA /* Views */,
 				86E57CF518796D1100978AFA /* THBubbleColor.h */,
 				86E57CF618796D1100978AFA /* THBubbleColor.m */,
@@ -2400,6 +2413,7 @@
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
 				86D1827E1834AED30005901D /* NSDataAddition.m in Sources */,
 				866F0621185724EE007A57CF /* SinaWeibo.m in Sources */,
+				8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */,
 				869CE4AB18698D3F0004C1EC /* AsyncImageView.m in Sources */,
 				86D182921834AED30005901D /* UIImageView+Exetension.m in Sources */,
 				869CE535186BE38D0004C1EC /* MagicalRecord+ShorthandSupport.m in Sources */,

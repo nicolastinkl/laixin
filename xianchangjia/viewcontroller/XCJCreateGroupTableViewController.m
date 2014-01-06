@@ -49,7 +49,7 @@
     [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //Result={“gid”:1}
         if (responseObject) {
-            NSDictionary * dict =  responseObject[@"Result"];
+            NSDictionary * dict =  responseObject[@"result"];
             NSString * gid =  [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
             XCJGroup_list * list = [[XCJGroup_list alloc] init];
             list.gid = gid;

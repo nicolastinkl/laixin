@@ -11,6 +11,8 @@
 #import "XCAlbumAdditions.h"
 #import "UIView+Additon.h"
 #import "MLNetworkingManager.h"
+#import "LXAPIController.h"
+#import "LXChatDBStoreManager.h"
 
 @interface XCJAddUserTableViewController ()
 {
@@ -63,13 +65,6 @@
         if (![self.UserInfo.signature isNilOrEmpty]) {
             UserDict[@"个性签名"] = self.UserInfo.signature;
         }
-        
-        if (![self.UserInfo.marriage isNilOrEmpty]) {
-            UserDict[@"婚姻状态"] = self.UserInfo.marriage;
-        }
-        
-        UserDict[@"地区"] = @"成都";
-
         if (self.UserInfo.create_time) {
             @try {
                 UserDict[@"注册时间"] = [tools timeLabelTextOfTime:[self.UserInfo.create_time doubleValue]];
@@ -80,8 +75,15 @@
             @finally {
                 
             }
-            
         }
+        
+        if (![self.UserInfo.marriage isNilOrEmpty]) {
+            UserDict[@"婚姻状态"] = self.UserInfo.marriage;
+        }
+        if (![self.UserInfoJson.position isNilOrEmpty]) {
+            UserDict[@"地区"] = self.UserInfoJson.position;
+        }
+        
     }
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -106,12 +108,14 @@
 -(IBAction)touchBtnUp:(id)sender
 {
     [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
-    
     {
         NSDictionary * parames = @{@"uid":@[self.UserInfo.uid]};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
             // add this user to friends DB
-            
+            // setFriendsObject
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:self.UserInfoJson withCompletion:^(id response, NSError *error) {
+                
+            }];
         } failure:^(MLRequest *request, NSError *error) {
             
         }];

@@ -143,8 +143,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         [self.tableView showIndicatorViewLargeBlue];
     }
     
-    /**
-     
+    /** 
      
      //    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
      //    [refreshControl addTarget:self // self is a UITableViewController

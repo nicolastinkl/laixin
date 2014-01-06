@@ -19,6 +19,7 @@
 @property (nonatomic, strong, readonly) NSString *birthday;
 @property (nonatomic, strong, readonly) NSString *background_image;
 @property (nonatomic, strong, readonly) NSString *marriage;
+@property (nonatomic, strong, readonly) NSString *position;
 @property (nonatomic, assign, readonly) int sex;
 @property (nonatomic, assign, readonly) int height;
 @property (nonatomic, assign, readonly) int create_time;

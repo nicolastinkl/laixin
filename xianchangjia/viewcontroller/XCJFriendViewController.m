@@ -129,7 +129,6 @@
     if (_fetchedResultsController == nil) {
 //        [[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts]
         self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:nil groupBy:nil delegate:self] ;//[FCFriends MR_fetchAllWithDelegate:self];
-        //
     }
 	return _fetchedResultsController;
 }
@@ -374,6 +373,7 @@
 
 - (void)showRecipe:(FCFriends *) friend animated:(BOOL)animated
 {
+   
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     infoview.frend = friend;
     infoview.title = @"详细资料";
@@ -382,13 +382,15 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+   
+    DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
     FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     ((UILabel *)[cell.contentView viewWithTag:2]).text  =userdesp.friendRelation.nick;// [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, ];
-//    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
-    DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
+    //    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
     [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];
     
     ((UILabel *)[cell.contentView viewWithTag:6]).height = 0.5f;
+        
 }
 
 #pragma mark - Table view data source
@@ -433,20 +435,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     FCFriends *recipe = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     [self showRecipe:recipe animated:YES];
-//    UserInfo_default * info = _dataSource[indexPath.row];
-//    
-//    XCJUserViewController *viewcon = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserViewController"];
-//    viewcon.userinfo = info;
-//    viewcon.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:viewcon animated:YES];
 }
 
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 

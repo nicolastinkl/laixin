@@ -37,6 +37,7 @@
         _marriage = [tools getStringValue:dic[@"marriage"] defaultValue:@""];
         _sex = [[tools getStringValue:dic[@"sex"] defaultValue:@""] intValue];
         _signature = [tools getStringValue:dic[@"signature"] defaultValue:@""];
+        _position = [tools getStringValue:dic[@"position"] defaultValue:@""];
     }
     return self;
 }

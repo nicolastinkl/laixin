@@ -117,12 +117,14 @@ typedef enum {
 	XCMessageActivity_SceneSmallanchor			= 5,
 	XCMessageActivity_SceneBusniessMessage		= 6,
 	XCMessageActivity_NotityUserUseXC			= 7,
+    XCMessageActivity_UserGroupMessage          = 8,
 } _XCMessageActivity;
  
 #define  XCMessageActivity_photocomment_str @"comment-added"
 #define  XCMessageActivity_beingAddingFriends_str @"friends-added"
 #define  XCMessageActivity_musiccheckin_str @"musiccheckin-added"
 #define  XCMessageActivity_User_privateMessage @"User_privateMessage-added"
+#define  XCMessageActivity_User_GroupMessage @"User_GroupMessage-added"
 #define  XCMessageActivity_str_SceneSmallanchorMessage @"SceneSmallanchorMessage-added"
 #define  XCMessageActivity_str_SceneBusniessMessage @"SceneBusniessMessage-added"
 #define  XCMessageActivity_str_NotityUserUseXC @"NotityUserUseXC-added"
