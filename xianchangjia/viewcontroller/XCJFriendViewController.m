@@ -27,6 +27,7 @@
 #import "FCFriends.h"
 #import "CoreData+MagicalRecord.h"
 #import "XCJUserInfoController.h"
+#import "XCJAddFriendNaviController.h"
 
 @interface XCJFriendViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 {
@@ -84,24 +85,26 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     NSMutableArray * array = [[NSMutableArray alloc] init];
     _dataSource = array;
-    self.title = @"好友";
-//    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];
-    
-    self.tableView.rowHeight = 70.0f;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    //test  add friends
-//     {
-//     NSDictionary * parames = @{@"uid":@[@12,@11,@14]};
-//     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
-//     
-//     } failure:^(MLRequest *request, NSError *error) {
-//         
-//     }];
-//    }
+    {
+        
+        //    self.title = @"好友";
+        //    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
+        //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];
+        //test  add friends
+        //     {
+        //     NSDictionary * parames = @{@"uid":@[@12,@11,@14]};
+        //     [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+        //
+        //     } failure:^(MLRequest *request, NSError *error) {
+        //         
+        //     }];
+        //    }
+        
+        
+    }
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
     [self reloadFetchedResults:nil];
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
@@ -109,6 +112,13 @@
     
 //    [self reload:nil];
 //    [self reloadContacts];
+}
+
+-(IBAction) AddFriendClick:(id)sender
+{
+    XCJAddFriendNaviController *navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddFriendNaviController"];
+    [self presentViewController:navi animated:YES completion:^{
+    }];
 }
 
 #pragma mark -
@@ -417,7 +427,7 @@
 
 - (CGFloat)tableView:(__unused UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 68.0f;
+    return 55.0f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

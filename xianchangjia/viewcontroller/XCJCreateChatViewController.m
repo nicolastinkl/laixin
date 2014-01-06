@@ -8,6 +8,11 @@
 
 #import "XCJCreateChatViewController.h"
 #import "THContactPickerView.h"
+#import "FCFriends.h"
+#import "XCAlbumAdditions.h"
+#import "XCAlbumDefines.h"
+#import "CoreData+MagicalRecord.h"
+#import "FCUserDescription.h"
 
 @interface XCJCreateChatViewController ()<THContactPickerDelegate,UITableViewDataSource,UITableViewDelegate>
 
@@ -45,13 +50,10 @@
 
 }
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    
+	// Do any additional setup after loading the view.    
     // Initialize and add Contact Picker View
     self.contactPickerView = [[THContactPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     self.contactPickerView.delegate = self;
@@ -59,10 +61,15 @@
     [self.view addSubview:self.contactPickerView];
     
     // Fill the rest of the view with the table view
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.contactPickerView.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.contactPickerView.frame.size.height ) style:UITableViewStylePlain]; //- kKeyboardHeight
+//    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.contactPickerView.frame.size.height+44, self.view.frame.size.width, self.view.frame.size.height - self.contactPickerView.frame.size.height ) style:UITableViewStylePlain]; //- kKeyboardHeight
 //    self.tableView.delegate = self;
 //    self.tableView.dataSource = self;
 //    [self.view insertSubview:self.tableView belowSubview:self.contactPickerView];
+    self.tableView.top = self.contactPickerView.height + 44;
+    self.contacts = [FCFriends MR_findAll];
+    self.selectedContacts = [NSMutableArray array];
+    self.filteredContacts = self.contacts;
+    
 }
 
 
@@ -85,10 +92,12 @@
 }
 
 - (void)adjustTableViewFrame {
-    CGRect frame = self.tableView.frame;
-    frame.origin.y = self.contactPickerView.frame.size.height;
-    frame.size.height = self.view.frame.size.height - self.contactPickerView.frame.size.height;// - kKeyboardHeight;
-    self.tableView.frame = frame;
+//    CGRect frame = self.tableView.frame;
+//    frame.origin.y = self.contactPickerView.frame.size.height;
+//    frame.size.height = self.view.frame.size.height - self.contactPickerView.frame.size.height;// - kKeyboardHeight;
+//    self.tableView.frame = frame;
+    
+    self.tableView.top = 44 + self.contactPickerView.height;
 }
 
 
@@ -102,6 +111,11 @@
     return self.filteredContacts.count;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 64.0f;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *cellIdentifier = @"ContactCell";
     
@@ -109,7 +123,14 @@
     if (cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [self.filteredContacts objectAtIndex:indexPath.row];
+    FCFriends * userdesp = [self.filteredContacts objectAtIndex:indexPath.row];
+    
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  =userdesp.friendRelation.nick;// [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, ];
+    //    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
+    DAImageResizedImageView* image = (DAImageResizedImageView *)[cell.contentView viewWithTag:1];
+    [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];
+    
+    ((UILabel *)[cell.contentView viewWithTag:6]).height = 0.5f;
     
     if ([self.selectedContacts containsObject:[self.filteredContacts objectAtIndex:indexPath.row]]){
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -126,7 +147,7 @@
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
-    NSString *user = [self.filteredContacts objectAtIndex:indexPath.row];
+    FCFriends *user = [self.filteredContacts objectAtIndex:indexPath.row];
     
     if ([self.selectedContacts containsObject:user]){ // contact is already selected so remove it from ContactPickerView
         cell.accessoryType = UITableViewCellAccessoryNone;
@@ -136,11 +157,29 @@
         // Contact has not been selected, add it to THContactPickerView
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.selectedContacts addObject:user];
-        [self.contactPickerView addContact:user withName:user];
+        [self.contactPickerView addContact:user withName:user.friendRelation.nick];
     }
-    
+    if (self.selectedContacts.count > 0) {
+        self.title = [NSString stringWithFormat:@"发起聊天(%d)",self.selectedContacts.count];
+    }else{
+        self.title = @"发起聊天";
+    }
+
     self.filteredContacts = self.contacts;
     [self.tableView reloadData];
+}
+
+-(IBAction) cancelClick:(id)sender
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+    }];
+}
+
+-(IBAction) complateClick:(id)sender
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        // create new talk;
+    }];
 }
 
 #pragma mark - THContactPickerTextViewDelegate
