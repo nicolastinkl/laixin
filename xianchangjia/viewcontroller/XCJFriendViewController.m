@@ -390,7 +390,7 @@
     [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];
     
     ((UILabel *)[cell.contentView viewWithTag:6]).height = 0.5f;
-        
+    
 }
 
 #pragma mark - Table view data source

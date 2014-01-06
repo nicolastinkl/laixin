@@ -32,6 +32,8 @@
 #import "XCJHomeDynamicViewController.h"
 #import "XCJCreateNaviController.h"
 #import "XCJAddFriendNaviController.h"
+#import "FDStatusBarNotifierView.h"
+
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -44,6 +46,7 @@
     NSString * Currentgid;
     XCJHomeMenuView * menuView;
     int tryCatchCount;
+    FDStatusBarNotifierView *notifierView ;
 }
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UIButton *ShowMenubutton;
@@ -128,6 +131,14 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (notifierView == nil) {
+        notifierView = [[FDStatusBarNotifierView alloc] initWithMessage:@"莎娃迪卡" delegate:nil];
+        notifierView.timeOnScreen = 4.0;
+        notifierView.shouldHideOnTap = YES;
+    }
+    [notifierView showInWindow];
+    
     NSMutableArray * array = [[NSMutableArray alloc] init];
     _dataSource = array;
     // Uncomment the following line to preserve selection between presentations.
@@ -161,9 +172,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 //        
 //    } failure:^(MLRequest *request, NSError *error) {
 //    }];
-    
 
 }
+
+
 -(void)   initHomeData
 {
 //    [self.refreshControl beginRefreshing];

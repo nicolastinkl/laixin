@@ -10,6 +10,7 @@
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
+		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
 		865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CB185FFDDA00E9903C /* ChatViewController.m */; };
@@ -367,6 +368,8 @@
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8646F8BE187A90EA004A8696 /* XCJSettingGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSettingGroupViewController.h; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.h; sourceTree = SOURCE_ROOT; };
 		8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSettingGroupViewController.m; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.m; sourceTree = SOURCE_ROOT; };
+		8646F8C2187AA00D004A8696 /* FDStatusBarNotifierView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStatusBarNotifierView.h; sourceTree = "<group>"; };
+		8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStatusBarNotifierView.m; sourceTree = "<group>"; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		865632C8185FFDDA00E9903C /* ChatListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListViewController.h; path = viewcontroller/ChatListViewController.h; sourceTree = "<group>"; };
@@ -947,6 +950,15 @@
 				8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */,
 			);
 			name = groupView;
+			sourceTree = "<group>";
+		};
+		8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */ = {
+			isa = PBXGroup;
+			children = (
+				8646F8C2187AA00D004A8696 /* FDStatusBarNotifierView.h */,
+				8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */,
+			);
+			path = FDStatusBarNotifierView;
 			sourceTree = "<group>";
 		};
 		86489EF4187586BE001AB9BA /* PostPhoto */ = {
@@ -1535,6 +1547,7 @@
 		86D1820518349B0A0005901D /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */,
 				86D1820618349B150005901D /* CRGradientNavigationBar */,
 			);
 			name = Support;
@@ -2376,6 +2389,7 @@
 				869CE4CC186AB9270004C1EC /* NSString+FontAwesome.m in Sources */,
 				86D182801834AED30005901D /* NSString+Addition.m in Sources */,
 				86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */,
+				8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */,
 				86EB76D4185AA6CC00836947 /* AFURLRequestSerialization.m in Sources */,
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
