@@ -186,7 +186,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if ([self.tableView isIndicatorViewLargeBlueRunning]) {
-        [self.tableView showIndicatorViewLargeBlue];        
+        [self.tableView showIndicatorViewLargeBlue];
     }
 
 }

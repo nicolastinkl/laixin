@@ -30,6 +30,7 @@
 #import <Foundation/Foundation.h>
 #import "FDStatusBarNotifierView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "XCJSettingGroupViewController.h"
 
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate>
@@ -100,7 +101,7 @@
             } failure:^(MLRequest *request, NSError *error) {
             }];
         }
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks  target:self action:@selector(SeeGroupInfoClick:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStyleDone  target:self action:@selector(SeeGroupInfoClick:)];
     }else{
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Ta的资料" style:UIBarButtonItemStyleDone target:self action:@selector(SeeUserInfoClick:)];
         if (!self.userinfo) {
@@ -122,7 +123,9 @@
 
 -(IBAction)SeeGroupInfoClick:(id)sender
 {
-
+    XCJSettingGroupViewController * groupsettingview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSettingGroupViewController"];
+    groupsettingview.title = @"群设置";
+    [self.navigationController pushViewController:groupsettingview animated:YES];
 }
 
 - (void) setUpSequencer
