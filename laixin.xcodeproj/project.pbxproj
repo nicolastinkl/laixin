@@ -26,6 +26,8 @@
 		865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632E1185FFDDA00E9903C /* XCJUserViewController.m */; };
 		865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632F1186000D300E9903C /* XCJSendCommentViewController.m */; };
 		86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */; };
+		8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */; };
+		8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8665168C187BEF75001F05F6 /* SVProgressHUD.m */; };
 		86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC01876BB78007477C0 /* XCJHomeMenuView.m */; };
 		86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */; };
 		86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */; };
@@ -326,34 +328,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8669983618792F5800233C47 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = ZXingWidget;
-		};
-		8669983818792F5800233C47 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1D60398D13DF7CAD006F4B51;
-			remoteInfo = ZXingTests;
-		};
-		866998421879301300233C47 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9672D35713BD662F0002B0E2;
-			remoteInfo = qrencoder;
-		};
-		866998441879301300233C47 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9621844115431DBA00447877;
-			remoteInfo = QRCodeEncoderDemo;
-		};
 		86D181F31834822D0005901D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86D181C21834822C0005901D /* Project object */;
@@ -402,6 +376,10 @@
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
 		86651681187BD19E001F05F6 /* XCJSelectCroupTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectCroupTypeViewController.h; path = viewcontroller/XCJSelectCroupTypeViewController.h; sourceTree = "<group>"; };
 		86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectCroupTypeViewController.m; path = viewcontroller/XCJSelectCroupTypeViewController.m; sourceTree = "<group>"; };
+		86651689187BEF75001F05F6 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
+		8665168B187BEF75001F05F6 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
+		8665168C187BEF75001F05F6 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		86660DBF1876BB78007477C0 /* XCJHomeMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeMenuView.h; path = viewcontroller/views/XCJHomeMenuView.h; sourceTree = "<group>"; };
 		86660DC01876BB78007477C0 /* XCJHomeMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeMenuView.m; path = viewcontroller/views/XCJHomeMenuView.m; sourceTree = "<group>"; };
 		86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJHomeMenuView.xib; path = viewcontroller/views/XCJHomeMenuView.xib; sourceTree = "<group>"; };
@@ -454,8 +432,6 @@
 		8669982018792BE300233C47 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8669982218792BEF00233C47 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		8669982418792BF700233C47 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		8669983118792F5700233C47 /* ZXingWidget.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ZXingWidget.xcodeproj; path = zxing/iphone/ZXingWidget/ZXingWidget.xcodeproj; sourceTree = SOURCE_ROOT; };
-		8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = QRCodeEncoderObjectiveCAtGithub.xcodeproj; path = QRCodeEncoder/QRCodeEncoderObjectiveCAtGithub.xcodeproj; sourceTree = SOURCE_ROOT; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -973,6 +949,17 @@
 			name = PostPhoto;
 			sourceTree = "<group>";
 		};
+		86651688187BEF75001F05F6 /* SVProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				86651689187BEF75001F05F6 /* SVProgressHUD-Prefix.pch */,
+				8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */,
+				8665168B187BEF75001F05F6 /* SVProgressHUD.h */,
+				8665168C187BEF75001F05F6 /* SVProgressHUD.m */,
+			);
+			path = SVProgressHUD;
+			sourceTree = "<group>";
+		};
 		86660DBE1876BB51007477C0 /* MenuView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1108,38 +1095,10 @@
 		866995E9187912EC00233C47 /* ScanView */ = {
 			isa = PBXGroup;
 			children = (
-				8669981318792B2500233C47 /* ThreeXcode */,
 				866995EA1879130400233C47 /* XCJScanViewController.h */,
 				866995EB1879130400233C47 /* XCJScanViewController.m */,
 			);
 			name = ScanView;
-			sourceTree = "<group>";
-		};
-		8669981318792B2500233C47 /* ThreeXcode */ = {
-			isa = PBXGroup;
-			children = (
-				8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */,
-				8669983118792F5700233C47 /* ZXingWidget.xcodeproj */,
-			);
-			name = ThreeXcode;
-			sourceTree = "<group>";
-		};
-		8669983218792F5700233C47 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				8669983718792F5800233C47 /* libZXingWidget.a */,
-				8669983918792F5800233C47 /* ZXingTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8669983E1879301300233C47 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				866998431879301300233C47 /* libqrencoder.a */,
-				866998451879301300233C47 /* QRCodeEncoderDemo.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		866F0617185724EE007A57CF /* SinaWeibo */ = {
@@ -1552,6 +1511,7 @@
 		86D1820518349B0A0005901D /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				86651688187BEF75001F05F6 /* SVProgressHUD */,
 				8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */,
 				86D1820618349B150005901D /* CRGradientNavigationBar */,
 			);
@@ -2251,16 +2211,6 @@
 			mainGroup = 86D181C11834822C0005901D;
 			productRefGroup = 86D181CB1834822C0005901D /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 8669983E1879301300233C47 /* Products */;
-					ProjectRef = 8669983D1879301300233C47 /* QRCodeEncoderObjectiveCAtGithub.xcodeproj */;
-				},
-				{
-					ProductGroup = 8669983218792F5700233C47 /* Products */;
-					ProjectRef = 8669983118792F5700233C47 /* ZXingWidget.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				86D181C91834822C0005901D /* laixin */,
@@ -2269,42 +2219,12 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		8669983718792F5800233C47 /* libZXingWidget.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libZXingWidget.a;
-			remoteRef = 8669983618792F5800233C47 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8669983918792F5800233C47 /* ZXingTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ZXingTests.octest;
-			remoteRef = 8669983818792F5800233C47 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		866998431879301300233C47 /* libqrencoder.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libqrencoder.a;
-			remoteRef = 866998421879301300233C47 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		866998451879301300233C47 /* QRCodeEncoderDemo.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = QRCodeEncoderDemo.app;
-			remoteRef = 866998441879301300233C47 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
 		86D181C81834822C0005901D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86E57CEE18795CC900978AFA /* area.plist in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
@@ -2521,6 +2441,7 @@
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
 				8681BE3D1839AABA00521D36 /* UserInfo.m in Sources */,
+				8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */,
 				86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */,
 				865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */,
 				869D15131839BDBB00B14A02 /* JSONKit.m in Sources */,

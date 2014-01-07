@@ -27,4 +27,5 @@
 #import "SINGLETONGCD.h"
 #import "blocktypedef.h"
 #import "NSString+Addition.h"
+#import "SVProgressHUD.h"
 #endif

@@ -9,8 +9,23 @@
 #import <UIKit/UIKit.h>
 
 #import <AVFoundation/AVFoundation.h>
+enum ScanTypeEnum {
+    findUser = 1,
+    findGroup = 2,
+    findAll = 3,
+    };
 
-
-@interface XCJScanViewController : UIViewController
+@interface XCJScanViewController : UIViewController<AVCaptureMetadataOutputObjectsDelegate>
+{
+    int num;
+    BOOL upOrdown;
+    NSTimer * timer;
+}
+@property (strong,nonatomic)AVCaptureDevice * device;
+@property (strong,nonatomic)AVCaptureDeviceInput * input;
+@property (strong,nonatomic)AVCaptureMetadataOutput * output;
+@property (strong,nonatomic)AVCaptureSession * session;
+@property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
+@property (assign,nonatomic) NSInteger  scanTypeIndex;
 
 @end

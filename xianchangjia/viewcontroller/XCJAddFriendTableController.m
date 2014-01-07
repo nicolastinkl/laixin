@@ -58,8 +58,8 @@
         
         [self.nickNameText resignFirstResponder];
         
-        NSDictionary * paramess = @{@"uid":@[self.nickNameText.text]};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+        NSDictionary * paramess = @{@"nick":self.nickNameText.text};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
             NSDictionary * groupsss = responseObjects[@"result"];
             NSArray * array = groupsss[@"users"];
             if(array.count  <= 0)
