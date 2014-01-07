@@ -133,15 +133,18 @@
 {
     [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
     {
+        [SVProgressHUD showWithStatus:@"正在添加"];
         NSDictionary * parames = @{@"uid":@[self.UserInfo.uid]};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
             // add this user to friends DB
             // setFriendsObject
-            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:self.UserInfoJson withCompletion:^(id response, NSError *error) {
-                
-            }];
+            if (responseObject) {
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:self.UserInfoJson];
+                [SVProgressHUD showSuccessWithStatus:@"添加成功"];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         } failure:^(MLRequest *request, NSError *error) {
-            
+            [SVProgressHUD showErrorWithStatus:@"添加失败"];
         }];
     }
 

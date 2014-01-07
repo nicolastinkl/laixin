@@ -207,6 +207,7 @@
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
     NSArray * result = [FCFriends MR_findAllWithPredicate:pre];
     if (result && result.count > 0) {
+        
     }else{
         NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
         FCFriends *newfriends = [FCFriends MR_createInContext:localContext];

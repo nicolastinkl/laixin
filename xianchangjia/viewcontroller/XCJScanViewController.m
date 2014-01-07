@@ -122,9 +122,6 @@
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
 {
-    
-
-    
     if ([metadataObjects count] >0)
     {
         AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
@@ -132,14 +129,78 @@
     }
     
     if (![stringValue isNilOrEmpty] && stringValue.length > 0) {
-        [_session stopRunning];
-//        [timer invalidate];
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"扫描结果" message:stringValue delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"查看", nil];
-        [alert show];
         NSLog(@"%@",stringValue);
         stringValueNew  = [NSString stringWithFormat:@"%@",stringValue];
         stringValue = @"";
+        [_session stopRunning];
+//        [timer invalidate];
+        if (![stringValueNew isNilOrEmpty]) {
+            if ([stringValueNew isHttpUrl]) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringValue]];
+            }else{
+                [self findUser];
+//                switch (self.scanTypeIndex) {
+//                    case findUser:
+//                    {
+//                        [self findUser];
+//                    }
+//                        break;
+//                    case findGroup:
+//                    {
+//                        
+//                    }
+//                        break;
+//                    case findAll:
+//                    {
+//                        [self findUser];
+//                    }
+//                        break;
+//                    default:
+//                        break;
+//                }
+            }
+            
+            
+        }
+//        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"扫描结果" message:stringValueNew delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"查看", nil];
+//        [alert show];
+       
     }
+}
+
+- (void) findUser
+{
+    [SVProgressHUD showWithStatus:@"正在查找"];
+    NSDictionary * paramess = @{@"nick":stringValueNew};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+        NSDictionary * groupsss = responseObjects[@"result"];
+        NSArray * array = groupsss[@"users"];
+        if(array.count  <= 0)
+        {
+            //                            [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
+            [SVProgressHUD showErrorWithStatus:@"无法找到该用户,请检查您填写的昵称是否正常"];
+            [_session startRunning];
+            return ;
+        }
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
+                if (response) {
+                    //FCUserDescription
+                    XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                    addUser.UserInfo = response;
+                    addUser.UserInfoJson = currentUser;
+                    addUser.title = @"详细资料";
+                    [self.navigationController pushViewController:addUser animated:YES];
+                    [SVProgressHUD dismiss];
+                }
+            }];
+        }];
+        
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"请求失败,请检查网络"];
+        [_session startRunning];
+    }];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -156,7 +217,7 @@
             switch (buttonIndex) {
                 case findUser:
                 {
-                    [SVProgressHUD showWithStatus:@"正在查找" maskType:SVProgressHUDMaskTypeClear];
+                    [SVProgressHUD showWithStatus:@"正在查找"];
                     NSDictionary * paramess = @{@"nick":stringValueNew};
                     [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
                         NSDictionary * groupsss = responseObjects[@"result"];

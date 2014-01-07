@@ -28,6 +28,14 @@
 		86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */; };
 		8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */; };
 		8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8665168C187BEF75001F05F6 /* SVProgressHUD.m */; };
+		866516A0187BF276001F05F6 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 86651690187BF276001F05F6 /* bitstream.c */; };
+		866516A1187BF276001F05F6 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = 86651692187BF276001F05F6 /* mask.c */; };
+		866516A2187BF276001F05F6 /* QRCodeGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651695187BF276001F05F6 /* QRCodeGenerator.m */; };
+		866516A3187BF276001F05F6 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = 86651696187BF276001F05F6 /* qrencode.c */; };
+		866516A4187BF276001F05F6 /* qrinput.c in Sources */ = {isa = PBXBuildFile; fileRef = 86651698187BF276001F05F6 /* qrinput.c */; };
+		866516A5187BF276001F05F6 /* qrspec.c in Sources */ = {isa = PBXBuildFile; fileRef = 8665169A187BF276001F05F6 /* qrspec.c */; };
+		866516A6187BF276001F05F6 /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = 8665169C187BF276001F05F6 /* rscode.c */; };
+		866516A7187BF276001F05F6 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = 8665169E187BF276001F05F6 /* split.c */; };
 		86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC01876BB78007477C0 /* XCJHomeMenuView.m */; };
 		86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */; };
 		86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */; };
@@ -380,6 +388,22 @@
 		8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SVProgressHUD.bundle; sourceTree = "<group>"; };
 		8665168B187BEF75001F05F6 /* SVProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVProgressHUD.h; sourceTree = "<group>"; };
 		8665168C187BEF75001F05F6 /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
+		86651690187BF276001F05F6 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
+		86651691187BF276001F05F6 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
+		86651692187BF276001F05F6 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
+		86651693187BF276001F05F6 /* mask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mask.h; sourceTree = "<group>"; };
+		86651694187BF276001F05F6 /* QRCodeGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeGenerator.h; sourceTree = "<group>"; };
+		86651695187BF276001F05F6 /* QRCodeGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeGenerator.m; sourceTree = "<group>"; };
+		86651696187BF276001F05F6 /* qrencode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrencode.c; sourceTree = "<group>"; };
+		86651697187BF276001F05F6 /* qrencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrencode.h; sourceTree = "<group>"; };
+		86651698187BF276001F05F6 /* qrinput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrinput.c; sourceTree = "<group>"; };
+		86651699187BF276001F05F6 /* qrinput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrinput.h; sourceTree = "<group>"; };
+		8665169A187BF276001F05F6 /* qrspec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrspec.c; sourceTree = "<group>"; };
+		8665169B187BF276001F05F6 /* qrspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrspec.h; sourceTree = "<group>"; };
+		8665169C187BF276001F05F6 /* rscode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rscode.c; sourceTree = "<group>"; };
+		8665169D187BF276001F05F6 /* rscode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rscode.h; sourceTree = "<group>"; };
+		8665169E187BF276001F05F6 /* split.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = split.c; sourceTree = "<group>"; };
+		8665169F187BF276001F05F6 /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
 		86660DBF1876BB78007477C0 /* XCJHomeMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeMenuView.h; path = viewcontroller/views/XCJHomeMenuView.h; sourceTree = "<group>"; };
 		86660DC01876BB78007477C0 /* XCJHomeMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeMenuView.m; path = viewcontroller/views/XCJHomeMenuView.m; sourceTree = "<group>"; };
 		86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJHomeMenuView.xib; path = viewcontroller/views/XCJHomeMenuView.xib; sourceTree = "<group>"; };
@@ -960,6 +984,30 @@
 			path = SVProgressHUD;
 			sourceTree = "<group>";
 		};
+		8665168F187BF276001F05F6 /* libqrencode */ = {
+			isa = PBXGroup;
+			children = (
+				86651690187BF276001F05F6 /* bitstream.c */,
+				86651691187BF276001F05F6 /* bitstream.h */,
+				86651692187BF276001F05F6 /* mask.c */,
+				86651693187BF276001F05F6 /* mask.h */,
+				86651694187BF276001F05F6 /* QRCodeGenerator.h */,
+				86651695187BF276001F05F6 /* QRCodeGenerator.m */,
+				86651696187BF276001F05F6 /* qrencode.c */,
+				86651697187BF276001F05F6 /* qrencode.h */,
+				86651698187BF276001F05F6 /* qrinput.c */,
+				86651699187BF276001F05F6 /* qrinput.h */,
+				8665169A187BF276001F05F6 /* qrspec.c */,
+				8665169B187BF276001F05F6 /* qrspec.h */,
+				8665169C187BF276001F05F6 /* rscode.c */,
+				8665169D187BF276001F05F6 /* rscode.h */,
+				8665169E187BF276001F05F6 /* split.c */,
+				8665169F187BF276001F05F6 /* split.h */,
+			);
+			name = libqrencode;
+			path = libs/libqrencode;
+			sourceTree = "<group>";
+		};
 		86660DBE1876BB51007477C0 /* MenuView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1511,6 +1559,7 @@
 		86D1820518349B0A0005901D /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				8665168F187BF276001F05F6 /* libqrencode */,
 				86651688187BEF75001F05F6 /* SVProgressHUD */,
 				8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */,
 				86D1820618349B150005901D /* CRGradientNavigationBar */,
@@ -2276,6 +2325,7 @@
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
 				869CE52A186BE38D0004C1EC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
+				866516A7187BF276001F05F6 /* split.c in Sources */,
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
 				869DDC621874422600560AFD /* Conversation.m in Sources */,
@@ -2287,6 +2337,7 @@
 				86D182881834AED30005901D /* UIAlertViewAddition.m in Sources */,
 				869CE530186BE38D0004C1EC /* MagicalRecord+Actions.m in Sources */,
 				869CE4BF186A73880004C1EC /* MarkupParser.m in Sources */,
+				866516A6187BF276001F05F6 /* rscode.c in Sources */,
 				86EB76E1185AA6CC00836947 /* SRWebSocket.m in Sources */,
 				86EB76C2185AA6CC00836947 /* MLActionSheet.m in Sources */,
 				86D182B21834AED30005901D /* LKDBUtils.m in Sources */,
@@ -2304,6 +2355,7 @@
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
+				866516A3187BF276001F05F6 /* qrencode.c in Sources */,
 				86D182981834AED30005901D /* UIView+Shadow.m in Sources */,
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
@@ -2319,6 +2371,7 @@
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
 				86EB76BB185AA6CC00836947 /* Chat.m in Sources */,
+				866516A1187BF276001F05F6 /* mask.c in Sources */,
 				86D1830A1834AFD90005901D /* DAHttpClient.m in Sources */,
 				86D1830E1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
@@ -2422,6 +2475,7 @@
 				869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */,
 				86EB76DA185AA6CC00836947 /* UIButton+AFNetworking.m in Sources */,
 				86F9B9AE1872865600ED768B /* XCJChangeUserInfoController.m in Sources */,
+				866516A0187BF276001F05F6 /* bitstream.c in Sources */,
 				862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */,
 				86EB76C6185AA6CC00836947 /* MLRequest.m in Sources */,
 				86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */,
@@ -2438,9 +2492,11 @@
 				8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				866516A5187BF276001F05F6 /* qrspec.c in Sources */,
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
 				8681BE3D1839AABA00521D36 /* UserInfo.m in Sources */,
+				866516A2187BF276001F05F6 /* QRCodeGenerator.m in Sources */,
 				8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */,
 				86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */,
 				865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */,
@@ -2461,6 +2517,7 @@
 				869CE521186BE38D0004C1EC /* NSObject+MagicalDataImport.m in Sources */,
 				86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */,
 				86D182F41834AF540005901D /* FMDatabaseQueue.m in Sources */,
+				866516A4187BF276001F05F6 /* qrinput.c in Sources */,
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,

@@ -29,7 +29,6 @@ typedef void (^CompletionBlockTinkl)(id, NSError *);
 - (void)setFCUserObject:(LXUser *) fcuserdesp
                     withCompletion:(CompletionBlockTinkl) completion ;
 - (void)setFriendsObject:(LXUser *) fcuserdesp;
-
 /**
  *  获取所有好友数据
  *

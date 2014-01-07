@@ -28,4 +28,5 @@
 #import "blocktypedef.h"
 #import "NSString+Addition.h"
 #import "SVProgressHUD.h"
+#import "MyMD5.h"
 #endif

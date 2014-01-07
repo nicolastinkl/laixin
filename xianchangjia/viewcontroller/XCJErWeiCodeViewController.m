@@ -8,6 +8,8 @@
 
 #import "XCJErWeiCodeViewController.h"
 #import "XCAlbumAdditions.h"
+#import "QRCodeGenerator.h"
+#import "LXAPIController.h"
 
 @interface XCJErWeiCodeViewController ()<UIActionSheetDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *Image_erwei;
@@ -35,11 +37,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
-    [self.Image_erwei setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://qr.liantu.com/api.php?text=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]]];
+	// Do any additional setup after loading the view.
+    NSString * nick = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    if ([nick isNilOrEmpty]) {
+        nick = [LXAPIController sharedLXAPIController].currentUser.nick;
+    }
+//    NSString * md5str = [MyMD5 md5:nick];
+    self.Image_erwei.image = [QRCodeGenerator qrImageForString:nick imageSize:216.0f];
+
+//    [self.Image_erwei setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://qr.liantu.com/api.php?text=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]]]];
     self.label_nick.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-    [self.Image_user setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+    [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]]];
     
 }
 

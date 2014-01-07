@@ -112,11 +112,11 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 #pragma mark - Show Methods
 
 + (void)show {
-    [[self sharedView] showProgress:-1 status:nil maskType:SVProgressHUDMaskTypeNone];
+    [[self sharedView] showProgress:-1 status:nil maskType:SVProgressHUDMaskTypeBlack];
 }
 
 + (void)showWithStatus:(NSString *)status {
-    [[self sharedView] showProgress:-1 status:status maskType:SVProgressHUDMaskTypeNone];
+    [[self sharedView] showProgress:-1 status:status maskType:SVProgressHUDMaskTypeBlack];
 }
 
 + (void)showWithMaskType:(SVProgressHUDMaskType)maskType {
@@ -150,7 +150,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 }
 
 + (void)showImage:(UIImage *)image status:(NSString *)string {
-    NSTimeInterval displayInterval = [[SVProgressHUD sharedView] displayDurationForString:string];
+    NSTimeInterval displayInterval = [[SVProgressHUD sharedView] displayDurationForString:string] + 1.5;
     [[self sharedView] showImage:image status:string duration:displayInterval];
 }
 
