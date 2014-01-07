@@ -387,7 +387,7 @@
     FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     ((UILabel *)[cell.contentView viewWithTag:2]).text  =userdesp.friendRelation.nick;// [NSString stringWithFormat:@"id:%@ name:%@", userdesp.friendRelation.uid, ];
     //    ((UILabel *)[cell.contentView viewWithTag:3]).text  = userdesp.friendRelation.signature;
-    [image setImageWithURL:[NSURL URLWithString:userdesp.friendRelation.headpic]];
+    [image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:userdesp.friendRelation.headpic Size:100]]];
     
     ((UILabel *)[cell.contentView viewWithTag:6]).height = 0.5f;
     

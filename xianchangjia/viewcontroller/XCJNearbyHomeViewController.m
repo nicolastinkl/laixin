@@ -33,6 +33,7 @@
 #import "XCJCreateNaviController.h"
 #import "XCJAddFriendNaviController.h"
 #import "FDStatusBarNotifierView.h"
+#import "XCJErWeiCodeViewController.h"
 
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
@@ -123,6 +124,8 @@
 
 - (void) findandfindCodeClick
 {
+    // go to erwei code
+    
     [self ShowMenuClick:nil];
 }
 
@@ -225,7 +228,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                      “gid”:
                      “type”:
                      “time”:
-                     
                      */
                     NSString * str = [tools getStringValue:obj[@"gid"] defaultValue:@""];
                     [array addObject:str];
@@ -238,7 +240,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                         NSArray * groupsDicts =  groupsss[@"groups"];
                         [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             XCJGroup_list * list = [XCJGroup_list turnObject:obj];
-                            [_dataSource addObject:list];
+                            if (list.type == 1) {
+                                [_dataSource addObject:list];
+                            }
+
                         }];
                         [self.tableView reloadData];
                         [self.tableView hideIndicatorViewBlueOrGary];

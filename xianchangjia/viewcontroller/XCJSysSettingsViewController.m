@@ -12,7 +12,8 @@
 #import "XCJAppDelegate.h"
 #import "UIAlertViewAddition.h"
 #import "XCJLoginNaviController.h"
-@interface XCJSysSettingsViewController ()<UIAlertViewDelegate>
+
+@interface XCJSysSettingsViewController ()<UIAlertViewDelegate >
 
 @end
 
@@ -26,9 +27,6 @@
     }
     return self;
 }
-
-
-
 
 
 - (IBAction)logoutClick:(id)sender {

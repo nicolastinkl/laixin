@@ -51,6 +51,40 @@
 
 //XCJAddUserTableViewController
 
+
+-(IBAction) searchClick:(id)sender
+{
+    if (![self.nickNameText.text isNilOrEmpty]) {
+        
+        [self.nickNameText resignFirstResponder];
+        
+        NSDictionary * paramess = @{@"uid":@[self.nickNameText.text]};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+            NSDictionary * groupsss = responseObjects[@"result"];
+            NSArray * array = groupsss[@"users"];
+            if(array.count  <= 0)
+            {
+                [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
+                return ;
+            }
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
+                    if (response) {
+                        //FCUserDescription
+                        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                        addUser.UserInfo = response;
+                        addUser.UserInfoJson = currentUser;
+                        [self.navigationController pushViewController:addUser animated:YES];
+                    }
+                }];
+                
+            }];
+            
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
+}
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField == self.nickNameText) {

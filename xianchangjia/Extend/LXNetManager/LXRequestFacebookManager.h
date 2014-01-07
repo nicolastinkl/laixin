@@ -31,4 +31,12 @@
  */
 -(void) getUserDesPtionCompletion:(CompletionBlock)completion withuid:(NSString * ) uid;
 
+/**
+ *  限制请求用户数据
+ *
+ *  @param completion <#completion description#>
+ *  @param uid        <#uid description#>
+ */
+-(void) getUserDesByNetCompletion:(CompletionBlock)completion withuid:(NSString * ) uid;
+
 @end

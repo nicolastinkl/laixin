@@ -13,8 +13,13 @@
 #import "Conversation.h"
 #import "CoreData+MagicalRecord.h"
 #import "ChatViewController.h"
+#import "XCAlbumDefines.h"
+#import "DataHelper.h"
 
 @interface XCJUserInfoController ()
+{
+        NSMutableDictionary * UserDict;
+}
 @property (weak, nonatomic) IBOutlet UIImageView *Image_user;
 @property (weak, nonatomic) IBOutlet UIImageView *Image_sex;
 @property (weak, nonatomic) IBOutlet UIButton *Button_Sendmsg;
@@ -45,9 +50,10 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSMutableDictionary * array = [[NSMutableDictionary alloc] init];
+    UserDict = array;
     
     if (self.UserInfo) {
-        
         self.Label_nick.text  = self.UserInfo.nick;
         self.Label_sign.text  = self.UserInfo.signature;
         self.Label_address.text = @"成都";
@@ -71,13 +77,42 @@
         }
         
         [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""]]];
-
     }
     
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUpOut:) forControlEvents:UIControlEventTouchUpOutside];
+    if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
+        self.Button_Sendmsg.hidden = YES;
+        self.Image_btnBG.hidden = YES;
+    }else{
+        
+        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
+        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
+        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUpOut:) forControlEvents:UIControlEventTouchUpOutside];
+    }
     
+    
+   
+    if (self.UserInfo.create_time) {
+        @try {
+            UserDict[@"注册时间"] = [tools timeLabelTextOfTime:[self.UserInfo.create_time doubleValue]];
+        }
+        @catch (NSException *exception) {
+            
+        }
+        @finally {
+            
+        }
+    }
+    
+    if (![self.UserInfo.marriage isNilOrEmpty]) {
+        UserDict[@"婚姻状态"] = self.UserInfo.marriage;
+    }
+    if (![[DataHelper getStringValue:self.UserInfo.position defaultValue:@""] isNilOrEmpty]) {
+        UserDict[@"地区"] = self.UserInfo.position;
+    }
+    if (![self.UserInfo.signature isNilOrEmpty]) {
+        UserDict[@"个性签名"] = self.UserInfo.signature;
+    }
+    [self.tableView reloadData];
 }
 
 -(IBAction)touchBtnUpOut:(id)sender
@@ -116,7 +151,51 @@
          chatview.conversation = conversation;
      }
      chatview.userinfo = self.UserInfo;
+    chatview.title = self.UserInfo.nick;
      [self.navigationController pushViewController:chatview animated:YES];
+}
+
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Return the number of rows in the section.
+    return UserDict.allKeys.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"CellFriend";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    UILabel * title  =  (UILabel * ) [cell.contentView subviewWithTag:1];
+    UILabel * content  =  (UILabel * ) [cell.contentView subviewWithTag:2];
+    title.text =  UserDict.allKeys[indexPath.row];
+    NSString * text  = UserDict.allValues[indexPath.row];
+    content.text = text;
+    [content setHeight:[self sizebyText:text]]; // set label content frame with tinkl
+    return cell;
+}
+
+-(CGFloat) sizebyText:(NSString * ) text
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [ text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(186.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return fmaxf(35.0f, sizeToFit.height + 18.0f );
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString * text  = UserDict.allValues[indexPath.row];
+    return  [self sizebyText:text] + 10;
 }
 
 - (void)didReceiveMemoryWarning

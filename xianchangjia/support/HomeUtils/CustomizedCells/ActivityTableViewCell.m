@@ -19,6 +19,8 @@
 #import "LXRequestFacebookManager.h"
 #import "Comment.h"
 #import "tools.h"
+#import "FCUserDescription.h"
+#import "XCAlbumDefines.h"
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
 
@@ -129,7 +131,7 @@
         [_ReportButton setTitle:@"举报" forState:UIControlStateNormal];
         _ReportButton.titleLabel.font = [UIFont systemFontOfSize:11.5];
         _ReportButton.tag = 805;
-        [self addSubview:_ReportButton];
+//        [self addSubview:_ReportButton];
         
         //赞按钮
         self.likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -197,16 +199,24 @@
 {
     //在这里根据activity的内容去设置各个subView的frame和细节
     _activity = activity;
-    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-        LXUser * user = response;
-        //内容
-        if (user.headpic) {
-            [_avatarButton setImageWithURL:[NSURL URLWithString:user.headpic] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
-        }else{
-            [_avatarButton setImage:[UIImage imageNamed:@"avatar_fault"] forState:UIControlStateNormal];
-        }
-        [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
-    } withuid:activity.uid];
+    if([activity.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+    {
+         [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+        [_userNameButton setTitle:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] forState:UIControlStateNormal];
+    }else{
+        
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            FCUserDescription * user = response;
+            //内容
+            if (user.headpic) {
+                [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+            }else{
+                [_avatarButton setImage:[UIImage imageNamed:@"avatar_fault"] forState:UIControlStateNormal];
+            }
+            [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
+        } withuid:activity.uid];
+    }
+    
     
     _timeLabel.text = [self timeLabelTextOfTime:_activity.time];
     _contentLabel.text = _activity.content;
@@ -218,8 +228,9 @@
     if (_activity.imageURL) {
 //        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
 //        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
-        [_activityImageView setImageWithURL:[NSURL URLWithString:_activity.imageURL] placeholderImage:nil displayProgress:YES];
-        _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
+        
+        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:160]] placeholderImage:nil displayProgress:YES];
+        _activityImageView.fullScreenImageURL = [NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:640]];
     }
     
     if (_activity.ilike) {

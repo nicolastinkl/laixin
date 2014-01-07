@@ -13,6 +13,7 @@
 #import "MLTapGrayView.h"
 #import "LXAPIController.h"
 #import "LXRequestFacebookManager.h"
+#import "XCAlbumDefines.h"
 
 
 @interface ActivityCommentsView()<TTTAttributedLabelDelegate,UIGestureRecognizerDelegate>
@@ -61,13 +62,20 @@
         [label.activeLinkAttributes setValue:[UIColor redColor] forKey:(NSString *)kCTForegroundColorAttributeName];
         label.delegate = self;
         
-        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-            LXUser * user = response;
-            label.text = [NSString stringWithFormat:@"%@: %@",user.nick,comment.content];
-            [label addLinkToCommand:user.uid withRange: NSMakeRange (0,user.nick.length)];
+        if([comment.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+        {
+            label.text = [NSString stringWithFormat:@"%@: %@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick],comment.content];
+            [label addLinkToCommand:comment.uid withRange: NSMakeRange (0,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick].length)];
             [label sizeToFit];
-        } withuid:comment.uid];
-        
+        }else
+        {
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                LXUser * user = response;
+                label.text = [NSString stringWithFormat:@"%@: %@",user.nick,comment.content];
+                [label addLinkToCommand:user.uid withRange: NSMakeRange (0,user.nick.length)];
+                [label sizeToFit];
+            } withuid:comment.uid];
+        }
         label.frameHeight += 5*2;//多来点间距
         
         //此cell的作用是左右给label有8的间距，然后点按时候背景有灰色

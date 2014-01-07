@@ -23,6 +23,11 @@
 @property (nonatomic, retain) NSNumber * sex;
 @property (nonatomic, retain) NSString * signature;
 @property (nonatomic, retain) NSString * uid;
+@property (nonatomic, retain) NSNumber * active_by;
+@property (nonatomic, retain) NSNumber * active_level;
+@property (nonatomic, retain) NSNumber * actor;
+@property (nonatomic, retain) NSNumber * actor_level;
+@property (nonatomic, retain) NSString * position;
 @property (nonatomic, retain) FCAccount *userDesp;
 @property (nonatomic, retain) FCFriends *userDespFriends;
 

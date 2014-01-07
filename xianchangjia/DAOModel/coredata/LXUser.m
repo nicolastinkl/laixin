@@ -36,6 +36,10 @@
         _height = [[tools getStringValue:dic[@"height"] defaultValue:@""] intValue];
         _marriage = [tools getStringValue:dic[@"marriage"] defaultValue:@""];
         _sex = [[tools getStringValue:dic[@"sex"] defaultValue:@""] intValue];
+        _active_by = [[tools getStringValue:dic[@"active_by"] defaultValue:@""] intValue];
+        _active_level = [[tools getStringValue:dic[@"active_level"] defaultValue:@""] intValue];
+        _actor = [[tools getStringValue:dic[@"active_level"] defaultValue:@""] intValue];
+        _actor_level = [[tools getStringValue:dic[@"actor_level"] defaultValue:@""] intValue];
         _signature = [tools getStringValue:dic[@"signature"] defaultValue:@""];
         _position = [tools getStringValue:dic[@"position"] defaultValue:@""];
     }

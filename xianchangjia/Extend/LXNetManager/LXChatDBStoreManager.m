@@ -110,16 +110,15 @@
 
 -(FCUserDescription *)fetchFCUserDescriptionByUID:(NSString * ) UserID
 {
-    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSEntityDescription * entity = [NSEntityDescription entityForName:@"FCUserDescription" inManagedObjectContext:localContext];
-    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-    [fetch setEntity:entity];
+    
+
+//    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+//    NSEntityDescription * entity = [NSEntityDescription entityForName:@"FCUserDescription" inManagedObjectContext:localContext];
+//    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+//    [fetch setEntity:entity];
     
     NSPredicate * qcmd = [NSPredicate predicateWithFormat:@"uid = %@ ",UserID];
-    
-    [fetch setPredicate:qcmd];
-    
-    NSArray * obs = [localContext executeFetchRequest:fetch error:nil];
+    NSArray * obs = [FCUserDescription MR_findAllWithPredicate:qcmd];//[localContext executeFetchRequest:fetch error:nil];
     if (obs && obs.count > 0) {
         return (FCUserDescription * )obs[0];
     }
@@ -165,12 +164,14 @@
  */
 - (void)setFCUserObject:(LXUser *) fcuserdesp withCompletion:(CompletionBlockTinkl) completion
 {
-    FCUserDescription* old =  [self fetchFCUserDescriptionByUID:fcuserdesp.uid];
-    if (old && [old.nick isEqualToString:fcuserdesp.nick] ) {
-         completion(old, nil);
+    FCUserDescription* newFcObj =  [self fetchFCUserDescriptionByUID:fcuserdesp.uid];
+    if (newFcObj && [newFcObj.nick isEqualToString:fcuserdesp.nick] && [newFcObj.signature isEqualToString:fcuserdesp.signature] && [newFcObj.headpic isEqualToString:fcuserdesp.headpic]) {
+         completion(newFcObj, nil);
     }else{
-        NSManagedObjectContext *localContext    = [NSManagedObjectContext MR_contextForCurrentThread];
-        FCUserDescription * newFcObj = [FCUserDescription MR_createInContext:localContext];
+        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+        if (newFcObj == nil) {
+             newFcObj = [FCUserDescription MR_createInContext:localContext];
+        }
         newFcObj.uid  = fcuserdesp.uid;
         newFcObj.nick = fcuserdesp.nick;
         newFcObj.headpic = fcuserdesp.headpic;
@@ -181,6 +182,11 @@
         newFcObj.signature = fcuserdesp.signature;
         newFcObj.birthday = fcuserdesp.birthday;
         newFcObj.height = @(fcuserdesp.height);
+        newFcObj.position = fcuserdesp.position;
+        newFcObj.actor_level = @(fcuserdesp.actor_level);
+        newFcObj.actor = @(fcuserdesp.actor);
+        newFcObj.active_by = @(fcuserdesp.active_by);
+        newFcObj.active_level = @(fcuserdesp.active_level);
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL sucess, NSError *error){
             if (sucess) {
                 NSLog(@"GOOD");
@@ -216,6 +222,11 @@
         newFcObj.signature = fcuserdesp.signature;
         newFcObj.birthday = fcuserdesp.birthday;
         newFcObj.height = @(fcuserdesp.height);
+        newFcObj.position = fcuserdesp.position;
+        newFcObj.actor_level = @(fcuserdesp.actor_level);
+        newFcObj.actor = @(fcuserdesp.actor);
+        newFcObj.active_by = @(fcuserdesp.active_by);
+        newFcObj.active_level = @(fcuserdesp.active_level);
         newfriends.friendRelation = newFcObj;
         [localContext MR_saveToPersistentStoreAndWait];
     }

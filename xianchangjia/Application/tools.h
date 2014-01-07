@@ -53,4 +53,6 @@
 + (NSString *)getStringValue:(id)object
                 defaultValue:(NSString *)defaultValue;
 
++ (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value;
+
 @end

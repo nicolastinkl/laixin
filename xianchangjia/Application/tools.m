@@ -8,6 +8,7 @@
 
 #import "tools.h"
 #import "XCAlbumDefines.h"
+#import "NSString+Addition.h"
 
 #pragma  mark 使用Category来计算同一时代（AD|BC）两个日期午夜之间的天数：
 @implementation NSCalendar (SameSpecialCalculations)
@@ -448,6 +449,14 @@
         }
     }
     return defaultValue;
+}
+
++ (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value
+{
+    if ([url isNilOrEmpty]) {
+        return @"";
+    }
+    return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,value,value];
 }
 
 

@@ -30,7 +30,11 @@ typedef void (^CompletionBlockTinkl)(id, NSError *);
                     withCompletion:(CompletionBlockTinkl) completion ;
 - (void)setFriendsObject:(LXUser *) fcuserdesp;
 
-
+/**
+ *  获取所有好友数据
+ *
+ *  @return <#return value description#>
+ */
 -(NSArray * ) fetchAlAccounts;
 
 @end

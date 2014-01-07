@@ -23,5 +23,10 @@
 @property (nonatomic, assign, readonly) int sex;
 @property (nonatomic, assign, readonly) int height;
 @property (nonatomic, assign, readonly) int create_time;
+@property (nonatomic, assign, readonly) int active_by;
+@property (nonatomic, assign, readonly) int active_level;
+@property (nonatomic, assign, readonly) int actor;
+@property (nonatomic, assign, readonly) int actor_level;
+
 - (id)initWithDict:(NSDictionary *)dic;
 @end

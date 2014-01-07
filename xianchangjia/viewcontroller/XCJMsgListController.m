@@ -185,8 +185,7 @@
             [conversation addMessagesObject:msg];
             [localContext MR_saveOnlySelfAndWait];// MR_saveOnlySelfAndWait];
             
-            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
-            
+            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];            
         } else if([requestKey isEqualToString:@"newpost"]){
             
             NSDictionary * dicResult = MsgContent[@"data"];
@@ -351,7 +350,7 @@
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
                     FCUserDescription * localdespObject = response;
                     ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
-                    [imageIcon setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",localdespObject.headpic]]];
+                    [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[NSString stringWithFormat:@"%@",localdespObject.headpic] Size:100]]];
                 } withuid:conver.facebookId];
             }
             @catch (NSException *exception) {

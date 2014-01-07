@@ -12,7 +12,6 @@
 
 
 @implementation FCUserDescription
-
 @dynamic background_image;
 @dynamic birthday;
 @dynamic create_time;
@@ -25,5 +24,5 @@
 @dynamic uid;
 @dynamic userDesp;
 @dynamic userDespFriends;
-
+@dynamic active_by,active_level,actor,actor_level,position;
 @end

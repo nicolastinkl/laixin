@@ -13,6 +13,7 @@
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
 #import "LXChatDBStoreManager.h"
+#import "FCFriends.h"
 
 @interface XCJAddUserTableViewController ()
 {
@@ -90,6 +91,29 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:self.UserInfo.uid]) {
+        self.Image_btnBG.hidden = YES;
+        self.Button_Sendmsg.hidden = YES;
+    }
+    
+    // 查找是否是我的好友
+    
+    {
+        NSArray * arr =   [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts];
+        [arr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            FCFriends * friends = obj;
+            if ([friends.friendID isEqualToString:self.UserInfo.uid]) {
+                
+                self.Image_btnBG.hidden = YES;
+                self.Button_Sendmsg.hidden = YES;
+            }
+        }];
+    }
+    ((UILabel *) [self.tableView.tableFooterView subviewWithTag:1]).height = 0.3f;
+    ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3f;
+    
+    
     [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
     [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
     [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUpOut:) forControlEvents:UIControlEventTouchUpOutside];
@@ -178,13 +202,26 @@
     UILabel * title  =  (UILabel * ) [cell.contentView subviewWithTag:1];
     UILabel * content  =  (UILabel * ) [cell.contentView subviewWithTag:2];
     title.text =  UserDict.allKeys[indexPath.row];
-    content.text =  UserDict.allValues[indexPath.row];
+    NSString * text = UserDict.allValues[indexPath.row];
+    content.text = text;
+    [content setHeight:[self sizebyText:text]]; // set label content frame with tinkl
     return cell;
+}
+
+
+-(CGFloat) sizebyText:(NSString * ) text
+{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [ text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(186.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return fmaxf(35.0f, sizeToFit.height + 18.0f );
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return  44.0f;
+    NSString * text  = UserDict.allValues[indexPath.row];
+    return  [self sizebyText:text] + 10;
 }
 
 @end

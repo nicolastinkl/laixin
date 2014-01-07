@@ -25,6 +25,7 @@
 		865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632DF185FFDDA00E9903C /* XCJSettingsViewController.m */; };
 		865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632E1185FFDDA00E9903C /* XCJUserViewController.m */; };
 		865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632F1186000D300E9903C /* XCJSendCommentViewController.m */; };
+		86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */; };
 		86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC01876BB78007477C0 /* XCJHomeMenuView.m */; };
 		86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */; };
 		86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */; };
@@ -399,6 +400,8 @@
 		865632EF185FFF1300E9903C /* XCJExtendClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJExtendClass.h; sourceTree = "<group>"; };
 		865632F0186000D300E9903C /* XCJSendCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendCommentViewController.h; path = viewcontroller/XCJSendCommentViewController.h; sourceTree = "<group>"; };
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
+		86651681187BD19E001F05F6 /* XCJSelectCroupTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectCroupTypeViewController.h; path = viewcontroller/XCJSelectCroupTypeViewController.h; sourceTree = "<group>"; };
+		86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectCroupTypeViewController.m; path = viewcontroller/XCJSelectCroupTypeViewController.m; sourceTree = "<group>"; };
 		86660DBF1876BB78007477C0 /* XCJHomeMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJHomeMenuView.h; path = viewcontroller/views/XCJHomeMenuView.h; sourceTree = "<group>"; };
 		86660DC01876BB78007477C0 /* XCJHomeMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJHomeMenuView.m; path = viewcontroller/views/XCJHomeMenuView.m; sourceTree = "<group>"; };
 		86660DC21876BB8B007477C0 /* XCJHomeMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJHomeMenuView.xib; path = viewcontroller/views/XCJHomeMenuView.xib; sourceTree = "<group>"; };
@@ -987,6 +990,8 @@
 				86660DC81876DA0D007477C0 /* XCJCreateNaviController.m */,
 				86660DCA1876DA37007477C0 /* XCJCreateGroupTableViewController.h */,
 				86660DCB1876DA37007477C0 /* XCJCreateGroupTableViewController.m */,
+				86651681187BD19E001F05F6 /* XCJSelectCroupTypeViewController.h */,
+				86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */,
 			);
 			name = CreateGroup;
 			sourceTree = "<group>";
@@ -2437,6 +2442,7 @@
 				86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */,
 				869CE4C9186AB88F0004C1EC /* UIButton+Bootstrap.m in Sources */,
 				8668E475187540DB00D20C9E /* ActivityCommentsView.m in Sources */,
+				86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */,
 				86D181DA1834822C0005901D /* main.m in Sources */,
 				86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */,
 				86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */,
