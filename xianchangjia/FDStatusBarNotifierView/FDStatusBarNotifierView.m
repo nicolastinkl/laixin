@@ -7,6 +7,7 @@
 //
 
 #import "FDStatusBarNotifierView.h"
+#import "SINGLETONGCD.h"
 
 NSTimeInterval const kTimeOnScreen = 2.0;
 
@@ -19,6 +20,10 @@ NSTimeInterval const kTimeOnScreen = 2.0;
 
 
 @implementation FDStatusBarNotifierView
+
+#pragma mark  - shareInstance
+
+SINGLETON_GCD(FDStatusBarNotifierView)
 
 #pragma mark - Init
 
@@ -65,6 +70,12 @@ NSTimeInterval const kTimeOnScreen = 2.0;
 }
 
 #pragma mark - Presentation
+
+- (void)showInWindowMessage:(NSString *)message
+{
+    self.message = message;
+    [self showInWindow];
+}
 
 - (void)showInWindow
 {
@@ -227,7 +238,7 @@ NSTimeInterval const kTimeOnScreen = 2.0;
                              [self removeFromSuperview];
                              
                              UIWindow * wind = ((UIWindow*)[UIApplication sharedApplication].windows[0]);
-                             wind.windowLevel =  UIWindowLevelNormal;
+                             wind.windowLevel =  UIWindowLevelNormal-1;
                              [wind makeKeyWindow];
                          }
                      }];

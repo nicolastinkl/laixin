@@ -30,6 +30,8 @@ extern NSTimeInterval const kTimeOnScreen;
 - (void)showAboveNavigationController:(UINavigationController *)navigationController;
 - (void)hide;
 
++ (FDStatusBarNotifierView *)sharedFDStatusBarNotifierView;
+- (void)showInWindowMessage:(NSString *)message;
 @end
 
 

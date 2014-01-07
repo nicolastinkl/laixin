@@ -45,6 +45,15 @@ typedef enum {
 }
 
 - (void)hideIndicatorView{
+    
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isMemberOfClass:[UIActivityIndicatorView class]]) {
+            [obj stopAnimating];
+            [obj removeFromSuperview]; obj = nil;
+            return;
+        }
+    }];
+    
     UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self subviewWithTag:kTagIndicatorViewImg];
     
     if(indicator){
@@ -114,6 +123,14 @@ typedef enum {
     [self startAnimation:indicator];
 }
 
+- (BOOL)isIndicatorViewLargeBlueRunning
+{
+    UIImageView *indicator = (UIImageView *)[self subviewWithTag:kTagIndicatorViewImg];
+    if (indicator) {
+        return YES;
+    }
+    return NO;
+}
 - (void)showIndicatorViewLargeBlue
 {
     CGPoint point = CGPointMake((self.width-55)/2, (self.height-155)/2);

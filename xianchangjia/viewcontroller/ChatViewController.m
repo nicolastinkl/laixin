@@ -28,6 +28,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Foundation/Foundation.h>
+#import "FDStatusBarNotifierView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
@@ -99,7 +100,9 @@
             } failure:^(MLRequest *request, NSError *error) {
             }];
         }
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks  target:self action:@selector(SeeGroupInfoClick:)];
     }else{
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Ta的资料" style:UIBarButtonItemStyleDone target:self action:@selector(SeeUserInfoClick:)];
         if (!self.userinfo) {
             // from db or networking
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
@@ -110,6 +113,16 @@
             } withuid:self.conversation.facebookId];
         }
     }
+}
+
+-(IBAction)SeeUserInfoClick:(id)sender
+{
+    
+}
+
+-(IBAction)SeeGroupInfoClick:(id)sender
+{
+
 }
 
 - (void) setUpSequencer
@@ -234,6 +247,7 @@
                     msg.messageType = @(messageType_text);
                     self.conversation.lastMessage = content;
                 }
+                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
@@ -261,7 +275,7 @@
             NSDictionary * dicResult = MsgContent[@"data"];
             
             NSDictionary * dicMessage = dicResult[@"post"];
-            NSString * gid = [tools getStringValue:dicMessage[@"group_id"] defaultValue:@""];
+            NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
             NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
             NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
             if ([self.conversation.facebookId isEqualToString:facebookID]) {
@@ -314,12 +328,12 @@
                     msg.messageType = @(messageType_image);
                     self.conversation.lastMessage = @"[图片]";
                 }
-                
                 else
                 {
                     msg.messageType = @(messageType_text);
                     self.conversation.lastMessage = content;
                 }
+                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);
                 msg.messageId =  uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
@@ -364,6 +378,9 @@
 
 - (IBAction)SendTextMsgClick:(id)sender {
 // 群聊
+    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+    [button showIndicatorView];
+    button.userInteractionEnabled = NO;
     if (self.gid) {
         NSString * text = self.inputTextView.text;
         if ([text trimWhitespace].length > 0) {
@@ -393,8 +410,12 @@
                     [self insertTableRow];
                     
                 }
+                [button hideIndicatorView];
+                button.userInteractionEnabled = YES;
             } failure:^(MLRequest *request, NSError *error) {
                 
+                [button hideIndicatorView];
+                button.userInteractionEnabled = YES;
             }];
             
         }
@@ -429,7 +450,12 @@
                     [self insertTableRow];
                 }
                 
+                [button hideIndicatorView];
+                button.userInteractionEnabled = YES;
             } failure:^(MLRequest *request, NSError *error) {
+                
+                [button hideIndicatorView];
+                button.userInteractionEnabled = YES;
             }];
         }
     }
@@ -535,6 +561,7 @@
     
 //    UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     
+    [SVProgressHUD showWithStatus:@"正在发送..."];
     //upload image
     [self performSelector:@selector(uploadContent:) withObject:theInfo];
     
@@ -648,12 +675,13 @@
                 NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
                 [self SendImageWithMeImageurl:url withMsgID:msgID];
             }
-           
+               [SVProgressHUD dismiss];
           //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         SLog(@"error :%@",error.userInfo);
+          [SVProgressHUD dismiss];
 //        [img hideIndicatorViewBlueOrGary];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
         [alert show];
@@ -763,7 +791,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    SLog(@" nuount : %d",self.messageList.count );
     // Return the number of rows in the section.
     return self.messageList.count;
 }
@@ -850,16 +877,22 @@
     UILabel * labelTime = (UILabel *) [cell.contentView subviewWithTag:3];
     UILabel * labelContent = (UILabel *) [cell.contentView subviewWithTag:4];
 //    labelContent.delegate = self;
-    UIImageView * imageview_Img = (UIImageView *)[cell.contentView subviewWithTag:5];
+    MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
     
     if ([message.messageStatus boolValue]) {
         if (self.gid) {
             //message.messageId // this is uid
-            
+            if (![message.messageId isNilOrEmpty]) {
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id obj, NSError *error) {
+                    FCUserDescription * localdespObject = obj;
+                    [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+                    labelName.text = localdespObject.nick;
+                } withuid:message.messageId];
+            }
         }else{
             //Incoming
-            [imageview setImageWithURL:[NSURL URLWithString:self.userinfo.headpic]];
+            [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:self.userinfo.headpic Size:100]]];
             labelName.text = self.userinfo.nick;
         }
         imageview_BG.image = [UIImage imageNamed:@"bubbleLeftTail"];
@@ -867,7 +900,7 @@
     }else{
         //Outcoming
         imageview_BG.image = [UIImage imageNamed:@"bubbleRightTail-1"];
-        [imageview setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]]];
         labelName.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
         labelContent.textColor = [UIColor whiteColor];
     }
@@ -878,7 +911,8 @@
     [labelContent sizeToFit];
     if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
-        [imageview_Img setImageWithURL:[NSURL URLWithString:message.imageUrl]];
+        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
+        imageview_Img.fullScreenImageURL = [NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:640]];
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
@@ -888,7 +922,7 @@
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         CGSize sizeToFit = [ message.text sizeWithFont:labelContent.font constrainedToSize:CGSizeMake(222.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
-        [labelContent setWidth:sizeToFit.width];
+        [labelContent setWidth:sizeToFit.width+2];
         [labelContent setHeight:sizeToFit.height]; // set label content frame with tinkl
        
         //min height and width  is 35.0f

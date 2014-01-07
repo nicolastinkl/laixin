@@ -139,12 +139,13 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 {
     [super viewDidLoad];
     
-    if (notifierView == nil) {
-        notifierView = [[FDStatusBarNotifierView alloc] initWithMessage:@"莎娃迪卡" delegate:nil];
-        notifierView.timeOnScreen = 4.0;
-        notifierView.shouldHideOnTap = YES;
-    }
-    [notifierView showInWindow];
+//    if (notifierView == nil) {
+//        notifierView = [[FDStatusBarNotifierView alloc] initWithMessage:@"刷新在线时间" delegate:nil];
+//        notifierView.timeOnScreen = 4.0;
+//        notifierView.shouldHideOnTap = YES;
+//    }
+    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"刷新在线时间"];
+//    [notifierView showInWindow];
     
     NSMutableArray * array = [[NSMutableArray alloc] init];
     _dataSource = array;
@@ -182,6 +183,13 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if ([self.tableView isIndicatorViewLargeBlueRunning]) {
+        [self.tableView showIndicatorViewLargeBlue];        
+    }
+
+}
 
 -(void)   initHomeData
 {
@@ -255,8 +263,9 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
+             [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"群组获取失败 请点击重试"];
             [self.tableView reloadData];
-            [self.tableView hideIndicatorViewBlueOrGary];
+            [self.view hideIndicatorViewBlueOrGary];
         }];
     });
 }

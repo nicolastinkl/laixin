@@ -18,7 +18,7 @@ NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.ml
 
 #define kRequestKeyName @"cdata"// @"client_code"
 #define kRequestKeyLength 5
-#define kTimeOut 5 //暂时设置10秒
+#define kTimeOut 30 //暂时设置10秒
 
 
 //static NSString * const MLNetworkingManagerBaseURLString = LaixinWebsocketURL;

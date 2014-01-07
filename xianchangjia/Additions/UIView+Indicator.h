@@ -24,6 +24,7 @@
 - (void)showIndicatorViewGary;
 - (void)showIndicatorViewBlue;
 - (void)showIndicatorViewLargeBlue;
+- (BOOL)isIndicatorViewLargeBlueRunning;
 - (void)hideIndicatorViewBlueOrGary;
 
 @end
