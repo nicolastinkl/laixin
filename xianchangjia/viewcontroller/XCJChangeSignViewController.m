@@ -52,15 +52,18 @@
         if (nicktext.text.length > 1000) {
             return;
         }
+        [SVProgressHUD show];
         //        if ([nicktext.text isEqualToString:[USER_DEFAULT stringForKey:<#(NSString *)#>]]) {}
         NSDictionary * parames = @{@"signature":nicktext.text};
         //nick, signature,sex, birthday, marriage, height
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            
+            [SVProgressHUD dismiss];
             [USER_DEFAULT setObject:nicktext.text forKey:KeyChain_Laixin_account_user_signature];
             [USER_DEFAULT synchronize];
             [self  dismissThisNavi:nil];
+
         } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"修改失败"];
         }];
     }
 }

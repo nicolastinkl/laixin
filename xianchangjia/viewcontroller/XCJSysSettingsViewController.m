@@ -12,6 +12,8 @@
 #import "XCJAppDelegate.h"
 #import "UIAlertViewAddition.h"
 #import "XCJLoginNaviController.h"
+#import "XCJAboutViewController.h"
+
 
 @interface XCJSysSettingsViewController ()<UIAlertViewDelegate>
 
@@ -50,6 +52,27 @@
     }
 }
 
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    /*
+     ShowService
+     ShowPrivate
+     ShowAboutLaixin
+     */
+    XCJAboutViewController * view = (XCJAboutViewController *)  segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"ShowService"]) {
+        view.title = @"服务协议";
+        view.viewTypeIndex = serviceview;
+    }else if ([segue.identifier isEqualToString:@"ShowPrivate"]) {
+        view.title = @"隐私政策";
+        view.viewTypeIndex = privateview;
+    }else if ([segue.identifier isEqualToString:@"ShowAboutLaixin"]) {
+        view.title = @"关于来信";
+        view.viewTypeIndex = aboutview;
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -61,5 +84,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 @end

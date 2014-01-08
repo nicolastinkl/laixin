@@ -151,13 +151,16 @@
 - (void) complate
 {
     [self cancelLocatePicker];
+    [SVProgressHUD show];
     // upload networking
     NSDictionary * parames = @{@"position":self.Label_address.text};
     //nick, signature,sex, birthday, marriage, height
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
         [USER_DEFAULT setObject:self.Label_address.text forKey:KeyChain_Laixin_account_user_position];
         [USER_DEFAULT synchronize];
+        [SVProgressHUD dismiss];
     } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"修改失败"];
     }];
 }
 
@@ -254,6 +257,7 @@
 }
 
 - (void)uploadFile:(NSString *)filePath  key:(NSString *)key {
+    
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
     
@@ -269,6 +273,7 @@
 
 -(void) uploadImage:(NSString *)filePath  token:(NSString *)token
 {
+    [SVProgressHUD showWithStatus:@"正在上传头像..."];
     [self.Image_userIcon setImage:[UIImage imageWithContentsOfFile:filePath]];
     [self.Image_userIcon showIndicatorViewBlue];
     // setup 2: upload image
@@ -293,6 +298,7 @@
                 UIImageView * successImg = (UIImageView *) [self.view subviewWithTag:3];
                 [successImg setHidden:NO];
             }];
+            [SVProgressHUD dismiss];
             [self.Image_userIcon hideIndicatorViewBlueOrGary];
             //nick, signature,sex, birthday, marriage, height
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -302,6 +308,7 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.Image_userIcon hideIndicatorViewBlueOrGary];
+        [SVProgressHUD dismiss];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
         [alert show];
     }];

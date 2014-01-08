@@ -13,6 +13,8 @@
 		8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8622C881187D2BFA00776A38 /* XCJErrorView.xib */; };
 		8622C888187D4EC100776A38 /* FCBeAddFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C887187D4EC100776A38 /* FCBeAddFriend.m */; };
 		8622C88B187D551100776A38 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88A187D551100776A38 /* FCBeInviteGroup.m */; };
+		8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */; };
+		8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8622C890187D711100776A38 /* aboutLaixinInfo.plist */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -364,6 +366,9 @@
 		8622C887187D4EC100776A38 /* FCBeAddFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeAddFriend.m; path = DAOModel/coredata/FCBeAddFriend.m; sourceTree = "<group>"; };
 		8622C889187D551100776A38 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8622C88A187D551100776A38 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
+		8622C88D187D6F3A00776A38 /* XCJAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAboutViewController.h; path = viewcontroller/XCJAboutViewController.h; sourceTree = "<group>"; };
+		8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAboutViewController.m; path = viewcontroller/XCJAboutViewController.m; sourceTree = "<group>"; };
+		8622C890187D711100776A38 /* aboutLaixinInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = aboutLaixinInfo.plist; path = Application/aboutLaixinInfo.plist; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -966,6 +971,15 @@
 			name = ErrorInfoView;
 			sourceTree = "<group>";
 		};
+		8622C88C187D6F2500776A38 /* aboutview */ = {
+			isa = PBXGroup;
+			children = (
+				8622C88D187D6F3A00776A38 /* XCJAboutViewController.h */,
+				8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */,
+			);
+			name = aboutview;
+			sourceTree = "<group>";
+		};
 		862D25B818585D4B005208C8 /* Appicon */ = {
 			isa = PBXGroup;
 			children = (
@@ -1474,6 +1488,7 @@
 		86A306AB18725EE600C7168B /* SystemSettings */ = {
 			isa = PBXGroup;
 			children = (
+				8622C88C187D6F2500776A38 /* aboutview */,
 				865632DE185FFDDA00E9903C /* XCJSettingsViewController.h */,
 				865632DF185FFDDA00E9903C /* XCJSettingsViewController.m */,
 				86F9B9AC1872865600ED768B /* XCJChangeUserInfoController.h */,
@@ -1572,6 +1587,7 @@
 			isa = PBXGroup;
 			children = (
 				86D181D51834822C0005901D /* laixin-Info.plist */,
+				8622C890187D711100776A38 /* aboutLaixinInfo.plist */,
 				86D181D61834822C0005901D /* InfoPlist.strings */,
 				86D181D91834822C0005901D /* main.m */,
 				86D181DB1834822C0005901D /* laixin-Prefix.pch */,
@@ -2320,6 +2336,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */,
 				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86E57CEE18795CC900978AFA /* area.plist in Resources */,
@@ -2585,6 +2602,7 @@
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
+				8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */,
 				866995EC1879130400233C47 /* XCJScanViewController.m in Sources */,
 				86EB76D7185AA6CC00836947 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,

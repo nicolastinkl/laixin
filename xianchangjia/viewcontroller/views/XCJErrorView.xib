@@ -33,6 +33,11 @@
                             <nil key="highlightedColor"/>
                             <color key="shadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="fbc_primarybutton_28_3_3_3_3_normal_ios7" translatesAutoresizingMaskIntoConstraints="NO" id="cqk-2a-bAS">
+                            <rect key="frame" x="98" y="283" width="124" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="contentStretch" x="0.29999999999999999" y="0.29999999999999999" width="0.34999999999999964" height="0.19999999999999968"/>
+                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e4l-Q4-vkM">
                             <rect key="frame" x="80" y="279" width="160" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -57,6 +62,7 @@
         </view>
     </objects>
     <resources>
+        <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="fullscreenErrorNetworkIcon" width="134" height="134"/>
     </resources>
 </document>

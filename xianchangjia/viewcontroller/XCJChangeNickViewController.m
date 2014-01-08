@@ -48,15 +48,17 @@
 {
     UITextField * nicktext = (UITextField *)  [self.view subviewWithTag:1];
     if (![nicktext.text isNilOrEmpty]) {
+        [SVProgressHUD show];
 //        if ([nicktext.text isEqualToString:[USER_DEFAULT stringForKey:<#(NSString *)#>]]) {}
         NSDictionary * parames = @{@"nick":nicktext.text};
         //nick, signature,sex, birthday, marriage, height
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            
             [USER_DEFAULT setObject:nicktext.text forKey:KeyChain_Laixin_account_user_nick];
             [USER_DEFAULT synchronize];
+            [SVProgressHUD dismiss];
             [self  dismissThisNavi:nil];
         } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"修改失败"];
         }];
     }
 }

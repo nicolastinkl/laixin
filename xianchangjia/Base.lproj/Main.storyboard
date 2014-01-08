@@ -409,6 +409,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zGV-AP-zdb" kind="push" identifier="ShowService" id="FpW-Pc-1ro"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="l1E-xR-Gou">
                                         <rect key="frame" x="0.0" y="240" width="320" height="44"/>
@@ -425,6 +428,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zGV-AP-zdb" kind="push" identifier="ShowPrivate" id="uPb-b9-Uuj"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="Bz9-6h-Eel">
                                         <rect key="frame" x="0.0" y="284" width="320" height="44"/>
@@ -441,6 +447,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="zGV-AP-zdb" kind="push" identifier="ShowAboutLaixin" id="Wou-0M-BBA"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -496,7 +505,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JNX-7c-3Wi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1800" y="-88"/>
+            <point key="canvasLocation" x="3104" y="-680"/>
         </scene>
         <!--Er Wei Code View Controller - 二维码名片-->
         <scene sceneID="yX8-mt-IXI">
@@ -520,7 +529,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sXs-fY-EOO">
-                                        <rect key="frame" x="91" y="127" width="142" height="21"/>
+                                        <rect key="frame" x="91" y="127" width="209" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
@@ -1104,7 +1113,7 @@
         <scene sceneID="WbA-yy-c0w">
             <objects>
                 <navigationController definesPresentationContext="YES" id="Nc8-3p-yJM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="好友" image="tabBarContactsIcon" id="duZ-Rb-2fm"/>
+                    <tabBarItem key="tabBarItem" title="好友" image="index_friends" id="duZ-Rb-2fm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Ndl-W6-Xmj">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1496,7 +1505,7 @@
             <objects>
                 <navigationController storyboardIdentifier="XCJLoginNaviController" definesPresentationContext="YES" navigationBarHidden="YES" id="XY9-A0-ycR" customClass="XCJLoginNaviController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
-                    <navigationBar key="navigationBar" clipsSubviews="YES" contentMode="scaleToFill" translucent="NO" id="Rmt-DD-ghU">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" contentMode="scaleToFill" barStyle="black" id="Rmt-DD-ghU">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2425,6 +2434,7 @@
                             <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sdL-2Z-XJk">
                                 <rect key="frame" x="9" y="42" width="68" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="上一步" image="backChevron">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3293,6 +3303,31 @@
             </objects>
             <point key="canvasLocation" x="2801" y="34"/>
         </scene>
+        <!--About View Controller-->
+        <scene sceneID="6FD-7R-5od">
+            <objects>
+                <viewController restorationIdentifier="XCJAboutViewController" storyboardIdentifier="XCJAboutViewController" id="zGV-AP-zdb" customClass="XCJAboutViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="keW-bc-aja">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView tag="1" contentMode="scaleToFill" scalesPageToFit="YES" id="FiV-H6-xzs">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                            </webView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="d4S-33-8Il">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="68n-VP-AcS"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E1j-aX-BCg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3533" y="-680"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Default.png" width="320" height="480"/>
@@ -3330,6 +3365,7 @@
         <image name="img_add_phone_friends" width="320" height="320"/>
         <image name="img_player_bg" width="750" height="473"/>
         <image name="inboxRepliedIcon" width="13" height="12"/>
+        <image name="index_friends" width="25" height="25"/>
         <image name="index_msg_50x50_gray" width="25" height="25"/>
         <image name="line" width="220" height="5"/>
         <image name="md_boy" width="10" height="10"/>
@@ -3355,6 +3391,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Wou-0M-BBA"/>
         <segue reference="Ycq-sy-Nhc"/>
     </inferredMetricsTieBreakers>
 </document>

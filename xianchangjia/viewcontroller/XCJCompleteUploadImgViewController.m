@@ -113,6 +113,7 @@
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
    
+  
      [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
          if (response) {
              NSString * token =  [response objectForKey:@"token"];
@@ -125,6 +126,7 @@
 
 -(void) uploadImage:(NSString *)filePath  token:(NSString *)token
 {
+    [SVProgressHUD showWithStatus:@"正在上传头像..."];
     UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
     [img setImage:[UIImage imageWithContentsOfFile:filePath]];
     [img showIndicatorViewBlue];
@@ -148,14 +150,15 @@
                 [successImg setHidden:NO];
             }];
             [img hideIndicatorViewBlueOrGary];
+            [SVProgressHUD dismiss];
             //nick, signature,sex, birthday, marriage, height
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-               
             } failure:^(MLRequest *request, NSError *error) {
             }];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [img hideIndicatorViewBlueOrGary];
+        [SVProgressHUD dismiss];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
         [alert show];
     }];

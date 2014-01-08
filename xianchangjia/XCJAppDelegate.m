@@ -203,7 +203,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     }
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[1];
-        item.selectedImage = [UIImage imageNamed:@"tabBarContactsIconSelected"];
+        item.selectedImage = [UIImage imageNamed:@"index_friends_hi"];
     }
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[2];
@@ -303,16 +303,18 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     //devtokenstring:  d8009e6c8e074d1bbcb592f321367feaef5674a82fc4cf3b78b066b7c8ad59bd
     NSLog(@"devtokenstring : %@",devtokenstring);
+    if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1){
+        double delayInSeconds = 3.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            //1 debug    ....   0 release
+            NSDictionary * parames = @{@"device_token":devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        });
+    }
     
-    double delayInSeconds = 3.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        //1 debug    ....   0 release
-        NSDictionary * parames = @{@"device_token":devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:parames success:^(MLRequest *request, id responseObject) {
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
-    });
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0)

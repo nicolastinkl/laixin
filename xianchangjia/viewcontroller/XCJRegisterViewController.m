@@ -35,7 +35,10 @@
 - (IBAction)GetYanzhengClick:(id)sender {
     // 验证手机号码是否正确
     if ([self.PhoneNumber.text isValidPhone])
+    {
+        [self.PhoneNumber resignFirstResponder];
         [self runSequncer:self.PhoneNumber.text];
+    }
     else
     {
         [UIAlertView showAlertViewWithMessage:@"手机号码格式错误"];
@@ -87,6 +90,7 @@
 -(IBAction)CompleteClick:(id)sender
 {
     if ( self.yanzhengNumber.text &&  self.PhoneNumber.text) {
+        [SVProgressHUD show];
         NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",self.PhoneNumber.text,self.yanzhengNumber.text];
         //                     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response2, NSError * error2) {
@@ -103,7 +107,7 @@
                     [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                     [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                     [USER_DEFAULT synchronize];
-             
+                    [SVProgressHUD dismiss];
                     /*
                      {
                      "func":"function_name",
@@ -130,21 +134,23 @@
                     //setup next viewcontroller
                 }
             }else{
+                
                 [self loginError];
             }
         } withParems:paremsResult];
     }
-}
-
+} 
 
 - (void)runSequncer :(NSString * )phone
 {
     Sequencer *sequencer = [[Sequencer alloc] init];
     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
+        [SVProgressHUD showWithStatus:@"正在获取验证码"];
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError * error) {
             if (!error) {
                 NSString * yanzhengCode =  [response objectForKey:@"code"];
                 if (yanzhengCode) {
+                    [SVProgressHUD dismiss];
                     self.yanzhengNumber.text = yanzhengCode;
                 }else{
                     [self loginError:@"获取验证码出错"];
@@ -154,22 +160,20 @@
             }
         } withParems:[NSString stringWithFormat:@"getcode?phone=%@",phone]];
     }];
-    
     [sequencer run];
 }
 
 -(void) loginError
 {
+    [SVProgressHUD dismiss];
     [UIAlertView showAlertViewWithTitle:@"登陆失败" message:@"用户或密码错误"];
 }
 
 -(void) loginError:(NSString * ) msg
 {
+    [SVProgressHUD dismiss];
     [UIAlertView showAlertViewWithTitle:msg message:@"错误"];
 }
-
-
-
 
 - (void)didReceiveMemoryWarning
 {

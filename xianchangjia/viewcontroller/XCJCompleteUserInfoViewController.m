@@ -94,15 +94,18 @@
             }else{
                 sex  = 0;
             }
+            [SVProgressHUD show];
             NSDictionary * parames = @{@"nick":self.NickText.text,@"sex":@(sex)};
             //nick, signature,sex, birthday, marriage, height
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                [SVProgressHUD dismiss];
                 
                 XCJCompleteUploadImgViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCompleteUploadImgViewController"];
                 [self.navigationController pushViewController:viewContr animated:YES];
             } failure:^(MLRequest *request, NSError *error) {
             }];
         }else{
+            [SVProgressHUD dismiss];
             [UIAlertView showAlertViewWithMessage:@"昵称不可用"];
         } 
     }

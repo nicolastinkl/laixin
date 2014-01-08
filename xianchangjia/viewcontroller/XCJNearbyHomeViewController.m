@@ -164,24 +164,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         [self initHomeData];
         [self.tableView showIndicatorViewLargeBlue];
     }
-    
-    /**
-     //    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-     //    [refreshControl addTarget:self // self is a UITableViewController
-     //                       action:@selector(refreshTableView:)
-     //             forControlEvents:UIControlEventValueChanged];
-     //    self.refreshControl.attributedTitle = [[NSAttributedString alloc]initWithString:@"Pull To Refresh"];
-     //    self.refreshControl = refreshControl;
-     
-     *  16 group.create(name,board,type) 创建群
-        Result={“gid”:1}
-     */
-//    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-//    NSDictionary * parames = @{@"name":@"乐百汇公馆",@"board":@"成都好玩的都市圈子",@"type":@1};
-//    [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
-//        
-//    } failure:^(MLRequest *request, NSError *error) {
-//    }];
 }
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
@@ -269,6 +251,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                         [self.tableView hideIndicatorViewBlueOrGary];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
+                }else{
+                    [self.view hideIndicatorViewBlueOrGary];
+                    // no one more
+                    
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
@@ -340,7 +326,8 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
-    [self initHomeData];
+    [self initHomeData];  // get all data
+    [self.tableView showIndicatorViewLargeBlue];
 }
 
 
