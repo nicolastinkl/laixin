@@ -15,7 +15,7 @@
                         <sections>
                             <tableViewSection id="f5m-hr-WLF">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="75" id="wdt-VT-ZJW">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="75" id="wdt-VT-ZJW">
                                         <rect key="frame" x="0.0" y="99" width="320" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wdt-VT-ZJW" id="JWd-dq-gMF">
@@ -32,6 +32,10 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" highlightedImage="groupMaskPressed" id="qVl-oK-ThG">
+                                                    <rect key="frame" x="8" y="8" width="60" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -185,6 +189,10 @@
                                                     <rect key="frame" x="227" y="7" width="60" height="60"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="Qqi-dd-6PG">
+                                                    <rect key="frame" x="227" y="7" width="60" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -328,7 +336,7 @@
                                         <rect key="contentStretch" x="0.40000000000000002" y="0.29999999999999999" width="0.20000000000000001" height="0.49999999999999994"/>
                                     </imageView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Uvw-Ex-GWL">
-                                        <rect key="frame" x="20" y="110" width="56" height="56"/>
+                                        <rect key="frame" x="20" y="110" width="60" height="60"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sXs-fY-EOO">
@@ -338,7 +346,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="DbW-MM-pCP">
-                                        <rect key="frame" x="52" y="188" width="216" height="216"/>
+                                        <rect key="frame" x="52" y="195" width="216" height="216"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2wS-4Q-5Oz">
@@ -348,12 +356,24 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="扫一扫上面的二维码,加我来信" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ffl-rr-6xM">
-                                        <rect key="frame" x="59" y="416" width="209" height="21"/>
+                                        <rect key="frame" x="59" y="423" width="209" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5499999999999996" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oIX-sg-3po">
+                                        <rect key="frame" x="10" y="180" width="300" height="1"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.79679528061224492" green="0.79679528061224492" blue="0.79679528061224492" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile-frame" id="BqI-Fc-AOu">
+                                        <rect key="frame" x="17" y="107" width="66" height="66"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
@@ -3130,10 +3150,11 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <rect key="contentStretch" x="0.40000000000000002" y="0.29999999999999999" width="0.20000000000000001" height="0.49999999999999994"/>
                                 </imageView>
-                                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="fWJ-o3-DD2">
+                                <view clipsSubviews="YES" tag="11" contentMode="scaleToFill" id="wI7-eD-6PH">
                                     <rect key="frame" x="15" y="15" width="290" height="135"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                </scrollView>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
@@ -3311,6 +3332,8 @@
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="fbc_promobutton_28_2_5_2_5_normal" width="11" height="32"/>
         <image name="fbc_promobutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
+        <image name="groupMask" width="60" height="60"/>
+        <image name="groupMaskPressed" width="60" height="60"/>
         <image name="header_icon_newchat" width="22" height="22"/>
         <image name="icon_board" width="26" height="26"/>
         <image name="icon_feed" width="25" height="25"/>
@@ -3326,6 +3349,7 @@
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
+        <image name="profile-frame" width="90" height="90"/>
         <image name="searchFieldIcon" width="13" height="13"/>
         <image name="square_heart" width="55" height="50"/>
         <image name="tabBarBackground" width="1" height="50"/>

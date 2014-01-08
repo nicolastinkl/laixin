@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
+		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -346,6 +348,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8622C876187D192100776A38 /* ListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItem.h; sourceTree = "<group>"; };
+		8622C877187D192100776A38 /* ListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListItem.m; sourceTree = "<group>"; };
+		8622C878187D192100776A38 /* POHorizontalList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POHorizontalList.h; sourceTree = "<group>"; };
+		8622C879187D192100776A38 /* POHorizontalList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POHorizontalList.m; sourceTree = "<group>"; };
+		8622C87A187D192100776A38 /* POHorizontalListDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POHorizontalListDelegate.h; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -925,6 +932,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8622C875187D192100776A38 /* POHorizontalList */ = {
+			isa = PBXGroup;
+			children = (
+				8622C876187D192100776A38 /* ListItem.h */,
+				8622C877187D192100776A38 /* ListItem.m */,
+				8622C878187D192100776A38 /* POHorizontalList.h */,
+				8622C879187D192100776A38 /* POHorizontalList.m */,
+				8622C87A187D192100776A38 /* POHorizontalListDelegate.h */,
+			);
+			name = POHorizontalList;
+			path = support/POHorizontalList;
+			sourceTree = "<group>";
+		};
 		862D25B818585D4B005208C8 /* Appicon */ = {
 			isa = PBXGroup;
 			children = (
@@ -1559,6 +1579,7 @@
 		86D1820518349B0A0005901D /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				8622C875187D192100776A38 /* POHorizontalList */,
 				8665168F187BF276001F05F6 /* libqrencode */,
 				86651688187BEF75001F05F6 /* SVProgressHUD */,
 				8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */,
@@ -2358,6 +2379,7 @@
 				866516A3187BF276001F05F6 /* qrencode.c in Sources */,
 				86D182981834AED30005901D /* UIView+Shadow.m in Sources */,
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
+				8622C87B187D192100776A38 /* ListItem.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,
 				86EB76CA185AA6CC00836947 /* UIColor+Expanded.m in Sources */,
@@ -2492,6 +2514,7 @@
 				8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				8622C87C187D192100776A38 /* POHorizontalList.m in Sources */,
 				866516A5187BF276001F05F6 /* qrspec.c in Sources */,
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
