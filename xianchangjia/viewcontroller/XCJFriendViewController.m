@@ -110,6 +110,8 @@
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
+    ((UILabel * )[self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3;
+    ((UILabel * )[self.tableView.tableHeaderView subviewWithTag:2]).height = 0.3;
 //    [self reload:nil];
 //    [self reloadContacts];
 }
@@ -178,7 +180,6 @@
         // Send an alert telling user to change privacy setting in settings app
     }
 }
-
 
 /**
  Delegate methods of NSFetchedResultsController to respond to additions, removals and so on.

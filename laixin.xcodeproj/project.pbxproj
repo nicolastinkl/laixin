@@ -16,6 +16,8 @@
 		8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */; };
 		8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8622C890187D711100776A38 /* aboutLaixinInfo.plist */; };
 		8622C893187D866300776A38 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8622C892187D866300776A38 /* MessageUI.framework */; };
+		8622C897187D8F5100776A38 /* XCJNewAddFriendTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */; };
+		8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -371,6 +373,10 @@
 		8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAboutViewController.m; path = viewcontroller/XCJAboutViewController.m; sourceTree = "<group>"; };
 		8622C890187D711100776A38 /* aboutLaixinInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = aboutLaixinInfo.plist; path = Application/aboutLaixinInfo.plist; sourceTree = "<group>"; };
 		8622C892187D866300776A38 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		8622C895187D8F5100776A38 /* XCJNewAddFriendTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJNewAddFriendTabViewController.h; path = viewcontroller/XCJNewAddFriendTabViewController.h; sourceTree = "<group>"; };
+		8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNewAddFriendTabViewController.m; path = viewcontroller/XCJNewAddFriendTabViewController.m; sourceTree = "<group>"; };
+		8622C898187D8F6400776A38 /* XCJNewAddGroupTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJNewAddGroupTabViewController.h; path = viewcontroller/XCJNewAddGroupTabViewController.h; sourceTree = "<group>"; };
+		8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNewAddGroupTabViewController.m; path = viewcontroller/XCJNewAddGroupTabViewController.m; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -981,6 +987,19 @@
 				8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */,
 			);
 			name = aboutview;
+			sourceTree = "<group>";
+		};
+		8622C894187D8F2400776A38 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				865632D2185FFDDA00E9903C /* XCJFriendViewController.h */,
+				865632D3185FFDDA00E9903C /* XCJFriendViewController.m */,
+				8622C895187D8F5100776A38 /* XCJNewAddFriendTabViewController.h */,
+				8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */,
+				8622C898187D8F6400776A38 /* XCJNewAddGroupTabViewController.h */,
+				8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */,
+			);
+			name = Friends;
 			sourceTree = "<group>";
 		};
 		862D25B818585D4B005208C8 /* Appicon */ = {
@@ -1642,6 +1661,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8622C894187D8F2400776A38 /* Friends */,
 				866995E9187912EC00233C47 /* ScanView */,
 				86660DCD18780A2E007477C0 /* AddFriend */,
 				86489EF4187586BE001AB9BA /* PostPhoto */,
@@ -1655,8 +1675,6 @@
 				865632CD185FFDDA00E9903C /* XCJCommentViewController.m */,
 				865632D0185FFDDA00E9903C /* XCJDyScenceViewController.h */,
 				865632D1185FFDDA00E9903C /* XCJDyScenceViewController.m */,
-				865632D2185FFDDA00E9903C /* XCJFriendViewController.h */,
-				865632D3185FFDDA00E9903C /* XCJFriendViewController.m */,
 				865632D4185FFDDA00E9903C /* XCJLoginViewController.h */,
 				865632D5185FFDDA00E9903C /* XCJLoginViewController.m */,
 				865632D6185FFDDA00E9903C /* XCJMessageCenterViewController.h */,
@@ -2479,6 +2497,7 @@
 				866F0621185724EE007A57CF /* SinaWeibo.m in Sources */,
 				8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */,
 				869CE4AB18698D3F0004C1EC /* AsyncImageView.m in Sources */,
+				8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */,
 				86D182921834AED30005901D /* UIImageView+Exetension.m in Sources */,
 				869CE535186BE38D0004C1EC /* MagicalRecord+ShorthandSupport.m in Sources */,
 				869CE523186BE38D0004C1EC /* NSString+MagicalDataImport.m in Sources */,
@@ -2529,6 +2548,7 @@
 				86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
+				8622C897187D8F5100776A38 /* XCJNewAddFriendTabViewController.m in Sources */,
 				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
 				869CE4C3186A73880004C1EC /* SCGIFImageView.m in Sources */,
 				865632EC185FFDDA00E9903C /* XCJSendNewContentViewController.m in Sources */,
