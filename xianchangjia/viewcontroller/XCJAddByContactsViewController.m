@@ -16,8 +16,10 @@
 #import "XCJAddressBook.h"
 #import "MLNetworkingManager.h"
 #import "DataHelper.h"
+#import <MessageUI/MessageUI.h>
+#import "XCAlbumDefines.h"
 
-@interface XCJAddByContactsViewController ()<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface XCJAddByContactsViewController ()<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate>
 {
     NSMutableDictionary * dictPhones;
     NSMutableArray * _datasource;
@@ -63,6 +65,51 @@
     // Return the number of rows in the section.
     return dictPhones.allValues.count;
 }
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    XCJAddressBook * addressbook =  dictPhones.allValues[indexPath.row];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if( [MFMessageComposeViewController canSendText] ){
+        
+        MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc]init]; //autorelease];
+        
+        controller.recipients = [NSArray arrayWithObject:addressbook.tel];
+        controller.body = [NSString stringWithFormat:@"来信可以用语音发短信，挺简单的，推荐你用一下。下载地址：http://laixin.com/m  记得安装后加我的来信号：%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
+        
+        controller.messageComposeDelegate = self;
+        
+        [self presentViewController:controller animated:YES completion:^{
+            
+        }];
+        
+        [[[[controller viewControllers] lastObject] navigationItem] setTitle:@"短信"];//修改短信界面标题
+    }else{
+        [UIAlertView showAlertViewWithMessage:@"设备没有短信功能"];
+    }
+}
+#pragma mark MFMessageComposeViewControllerDelegate
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result{
+    
+    [controller dismissViewControllerAnimated:NO completion:nil];//关键的一句   不能为YES
+    
+    switch ( result ) {
+            
+        case MessageComposeResultCancelled:
+            
+           // [UIAlertView showAlertViewWithMessage:@"发送取消"];
+            break;
+        case MessageComposeResultFailed:// send failed
+           // [UIAlertView showAlertViewWithMessage:@"发送成功"];
+            break;
+        case MessageComposeResultSent:
+            //[UIAlertView showAlertViewWithMessage:@"发送失败"];
+            break;
+        default:
+            break;
+    }
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -248,8 +295,10 @@
                 }];
             }
             [self.tableContacts reloadData];
+            [SVProgressHUD dismiss];
         } failure:^(MLRequest *request, NSError *error) {
             [self.tableContacts reloadData];
+            [SVProgressHUD dismiss];
         }];
         
     }
@@ -269,6 +318,7 @@
     if (buttonIndex == 1) {
         UIView *subView = (UIView * ) [self.view subviewWithTag:1];
         subView.hidden = YES;
+        [SVProgressHUD show];
         [self reloadContacts];
     }
 }

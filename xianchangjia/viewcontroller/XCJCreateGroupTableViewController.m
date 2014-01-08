@@ -70,6 +70,7 @@
         return;
     }
     // self.textType.text
+    [SVProgressHUD show];
     NSDictionary * parames = @{@"name":self.GroupName.text ,@"board":self.Label_address.text,@"type":@1};
     [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //Result={“gid”:1}
@@ -81,10 +82,12 @@
             list.group_name = self.GroupName.text;
             list.group_board = @"";
             list.type  = 0;
+            [SVProgressHUD dismiss];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:list];
             [self cancelClick:nil];
         }
     } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
         [UIAlertView showAlertViewWithMessage:@"创建失败"];
     }];
 }

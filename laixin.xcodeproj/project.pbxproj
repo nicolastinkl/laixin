@@ -15,6 +15,7 @@
 		8622C88B187D551100776A38 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88A187D551100776A38 /* FCBeInviteGroup.m */; };
 		8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */; };
 		8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8622C890187D711100776A38 /* aboutLaixinInfo.plist */; };
+		8622C893187D866300776A38 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8622C892187D866300776A38 /* MessageUI.framework */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -369,6 +370,7 @@
 		8622C88D187D6F3A00776A38 /* XCJAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAboutViewController.h; path = viewcontroller/XCJAboutViewController.h; sourceTree = "<group>"; };
 		8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAboutViewController.m; path = viewcontroller/XCJAboutViewController.m; sourceTree = "<group>"; };
 		8622C890187D711100776A38 /* aboutLaixinInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = aboutLaixinInfo.plist; path = Application/aboutLaixinInfo.plist; sourceTree = "<group>"; };
+		8622C892187D866300776A38 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -904,6 +906,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8622C893187D866300776A38 /* MessageUI.framework in Frameworks */,
 				86D183171834B0950005901D /* libiconv.dylib in Frameworks */,
 				8669982518792BF700233C47 /* CoreVideo.framework in Frameworks */,
 				8669982318792BEF00233C47 /* CoreMedia.framework in Frameworks */,
@@ -1521,6 +1524,7 @@
 		86D181CC1834822C0005901D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8622C892187D866300776A38 /* MessageUI.framework */,
 				8669982418792BF700233C47 /* CoreVideo.framework */,
 				8669982218792BEF00233C47 /* CoreMedia.framework */,
 				8669982018792BE300233C47 /* AudioToolbox.framework */,

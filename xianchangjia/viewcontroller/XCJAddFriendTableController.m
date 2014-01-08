@@ -57,13 +57,14 @@
     if (![self.nickNameText.text isNilOrEmpty]) {
         
         [self.nickNameText resignFirstResponder];
-        
+        [SVProgressHUD showWithStatus:@"正在查找..."];
         NSDictionary * paramess = @{@"nick":self.nickNameText.text};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
             NSDictionary * groupsss = responseObjects[@"result"];
             NSArray * array = groupsss[@"users"];
             if(array.count  <= 0)
             {
+                [SVProgressHUD dismiss];
                 [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
                 return ;
             }
@@ -72,6 +73,7 @@
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
                     if (response) {
                         //FCUserDescription
+                        [SVProgressHUD dismiss];
                         XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
                         addUser.UserInfo = response;
                         addUser.UserInfoJson = currentUser;
@@ -82,6 +84,7 @@
             }];
             
         } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD dismiss];
         }];
     }
 }
@@ -91,13 +94,14 @@
         if (![self.nickNameText.text isNilOrEmpty]) {
             
             [self.nickNameText resignFirstResponder];
-            
-            NSDictionary * paramess = @{@"uid":@[self.nickNameText.text]};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+            [SVProgressHUD showWithStatus:@"正在查找..."];
+            NSDictionary * paramess = @{@"nick":self.nickNameText.text};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"   parameters:paramess success:^(MLRequest *request, id responseObjects) {
                 NSDictionary * groupsss = responseObjects[@"result"];
                 NSArray * array = groupsss[@"users"];
                 if(array.count  <= 0)
                 {
+                    [SVProgressHUD dismiss];
                     [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
                     return ;
                 }
@@ -106,6 +110,7 @@
                     [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
                         if (response) {
                             //FCUserDescription
+                            [SVProgressHUD dismiss];
                             XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
                             addUser.UserInfo = response;
                             addUser.UserInfoJson = currentUser;
@@ -116,6 +121,7 @@
                 }];
                 
             } failure:^(MLRequest *request, NSError *error) {
+                [SVProgressHUD dismiss];
             }];
         }
         else{

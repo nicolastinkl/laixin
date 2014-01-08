@@ -141,7 +141,7 @@
             if (responseObject) {
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:self.UserInfoJson];
                 [SVProgressHUD showSuccessWithStatus:@"添加成功"];
-                [self.navigationController popViewControllerAnimated:YES];
+                //[self.navigationController popViewControllerAnimated:YES];
             }
         } failure:^(MLRequest *request, NSError *error) {
             [SVProgressHUD showErrorWithStatus:@"添加失败"];

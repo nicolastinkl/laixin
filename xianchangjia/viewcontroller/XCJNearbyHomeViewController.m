@@ -254,7 +254,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                 }else{
                     [self.view hideIndicatorViewBlueOrGary];
                     // no one more
-                    
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
