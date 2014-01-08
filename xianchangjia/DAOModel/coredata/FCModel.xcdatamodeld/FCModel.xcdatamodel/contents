@@ -19,6 +19,18 @@
         <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="account" inverseEntity="Conversation" syncable="YES"/>
         <relationship name="fcindefault" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDesp" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
+    <entity name="FCBeAddFriend" representedClassName="FCBeAddFriend" syncable="YES">
+        <attribute name="addTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="beAddFriendShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCBeInviteGroup" representedClassName="FCBeInviteGroup" syncable="YES">
+        <attribute name="beaddTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="groupID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupJson" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="fcBeinviteGroupShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship1" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
     <entity name="FCFriends" representedClassName="FCFriends" syncable="YES">
         <attribute name="friendID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
@@ -50,15 +62,19 @@
         <attribute name="sex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeAddFriend" inverseName="beAddFriendShips" inverseEntity="FCBeAddFriend" syncable="YES"/>
+        <relationship name="newRelationship1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupShips" inverseEntity="FCBeInviteGroup" syncable="YES"/>
         <relationship name="userDesp" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="fcindefault" inverseEntity="FCAccount" syncable="YES"/>
         <relationship name="userDespFriends" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCFriends" inverseName="friendRelation" inverseEntity="FCFriends" syncable="YES"/>
         <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
     <elements>
         <element name="Conversation" positionX="0" positionY="0" width="128" height="195"/>
-        <element name="FCAccount" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="FCAccount" positionX="0" positionY="0" width="128" height="118"/>
+        <element name="FCBeAddFriend" positionX="-416" positionY="54" width="128" height="88"/>
         <element name="FCFriends" positionX="0" positionY="0" width="128" height="75"/>
         <element name="FCMessage" positionX="0" positionY="0" width="128" height="180"/>
-        <element name="FCUserDescription" positionX="0" positionY="0" width="128" height="313"/>
+        <element name="FCUserDescription" positionX="-207" positionY="-99" width="128" height="343"/>
+        <element name="FCBeInviteGroup" positionX="-378" positionY="252" width="128" height="103"/>
     </elements>
 </model>

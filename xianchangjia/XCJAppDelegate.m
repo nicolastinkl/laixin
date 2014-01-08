@@ -8,11 +8,9 @@
 
 #import "XCJAppDelegate.h"
 #import "CRGradientNavigationBar.h"
-#import "XCAlbumDefines.h"
+#import "XCAlbumAdditions.h"
 #import "SinaWeibo.h"
 #import "XCJLoginViewController.h"
-#import "tools.h"
-#import "ChatList.h"
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
 #import "CoreData+MagicalRecord.h"
@@ -23,6 +21,11 @@
 #import "blocktypedef.h"
 #import "XCAlbumDefines.h"
 #import "Conversation.h"
+#import "LXUser.h"
+#import <Foundation/Foundation.h>
+#import "FCBeAddFriend.h"
+#import "XCJGroupPost_list.h"
+#import "FCBeInviteGroup.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -43,9 +46,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     //更新其未读消息总数
 //    NSUInteger totalCount = [[[ChatList shareInstance] valueForKeyPath:@"array.@sum.unreadCount"] integerValue];
     if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]) {
-        if (!self.tabBarController) {
-            self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
-        }
+        
         __block int brage = 0;
         NSArray * array = [Conversation MR_findAll];
         [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -62,10 +63,87 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     }
 }
 
+/**
+ *  收到消息处理 全局请求
+ *
+ *  @param notification  noti
+ */
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {
-    
-    [self updateMessageTabBarItemBadge];
+    /*
+     “push”:true，//推送标记，客户端用来识别推送信息和一般应答
+     “type”:“add_friend”
+     “data”:{
+        “user”:
+        {“uid”:,
+     */
+    NSDictionary * MsgContent = notification.userInfo;
+    NSInteger innum = [DataHelper getIntegerValue:MsgContent[@"push"] defaultValue:0];
+    if (innum == 1) {
+        NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
+        if ([requestKey isEqualToString:@"add_friend"]) {
+            
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"user"];
+            
+            LXUser * user = [[LXUser alloc] initWithDict:dicMessage];
+            if (user) {
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:user withCompletion:^(id response, NSError *error) {
+                    FCUserDescription* newFcObj = response;
+                    // Build the predicate to find the person sought
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", user.uid];
+                    FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
+                    if(conversation == nil)
+                    {
+                        conversation =  [FCBeAddFriend MR_createInContext:localContext];
+                    }
+                    conversation.facebookID = user.uid;
+                    conversation.beAddFriendShips = newFcObj;
+                    conversation.addTime = [NSDate date];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                }];
+
+            }
+        }else if ([requestKey isEqualToString:@"group_invite"])
+        {
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage_user = dicResult[@"inviteby"];
+            NSDictionary * dicMessage_group = dicResult[@"group"];
+            /*	{“gid”:
+             “creator”:
+             “group_name”:
+             “group_board”:
+             “type”:
+             “time”:}*/
+            LXUser * user = [[LXUser alloc] initWithDict:dicMessage_user];
+            XCJGroup_list * list = [XCJGroup_list turnObject:dicMessage_group];
+            
+            if (user && list) {
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:user withCompletion:^(id response, NSError *error) {
+                    FCUserDescription* newFcObj = response;
+                    // Build the predicate to find the person sought
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", list.gid];
+                    FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
+                    if(conversation == nil)
+                    {
+                        conversation =  [FCBeInviteGroup MR_createInContext:localContext];
+                    }
+                    conversation.groupID = list.gid;
+                    conversation.groupJson = [dicMessage_group JSONString];
+                    conversation.fcBeinviteGroupShips = newFcObj;
+                    conversation.beaddTime = [NSDate date];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                }];
+            }
+          
+            
+        }
+    }
+//    [self updateMessageTabBarItemBadge];
 }
 -(void)applicationDidFinishLaunching:(UIApplication *)application
 {
@@ -79,6 +157,8 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     self.launchingWithAps=[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    [self initAllControlos];
+    
     //注册推送通知
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
@@ -104,6 +184,35 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     [self updateMessageTabBarItemBadge];
     // Override point for customization after application launch.
     return YES;
+}
+
+- (void) initAllControlos
+{
+    if (!self.tabBarController) {
+        self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
+    }
+//    [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabBarBackground"]];
+    //     [self.tabBarController.tabBar.items[0] setBadgeValue:@"New"];
+    
+    UIImage * tabBG =  [UIImage imageNamed:@"tabBarBackground"];
+//    tabBG =  [tabBG imageWithAlignmentRectInsets:UIEdgeInsetsMake(1,1,1,1)];
+    [self.tabBarController.tabBar setBackgroundImage:tabBG];
+    {
+        UITabBarItem * item = self.tabBarController.tabBar.items[0];
+        item.selectedImage = [UIImage imageNamed:@"tabBarRecentsIconSelected"];
+    }
+    {
+        UITabBarItem * item = self.tabBarController.tabBar.items[1];
+        item.selectedImage = [UIImage imageNamed:@"tabBarContactsIconSelected"];
+    }
+    {
+        UITabBarItem * item = self.tabBarController.tabBar.items[2];
+        item.selectedImage = [UIImage imageNamed:@"index_msg"];
+    }
+    {
+        UITabBarItem * item = self.tabBarController.tabBar.items[3];
+        item.selectedImage = [UIImage imageNamed:@"tabBarContactsIconSelected"];
+    }
 }
 
 ///bak of the database

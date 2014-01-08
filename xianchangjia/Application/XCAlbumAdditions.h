@@ -29,4 +29,5 @@
 #import "NSString+Addition.h"
 #import "SVProgressHUD.h"
 #import "MyMD5.h"
+#import "DataHelper.h"
 #endif

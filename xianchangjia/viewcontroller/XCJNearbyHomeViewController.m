@@ -144,8 +144,9 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 //        notifierView.timeOnScreen = 4.0;
 //        notifierView.shouldHideOnTap = YES;
 //    }
-    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"刷新在线时间"];
+//    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"刷新在线时间"];
 //    [notifierView showInWindow];
+   // [SVProgressHUD showWithStatus:@"In iOS v7.0, all subclasses of UIView derive their behavior for tintColor from the base class. See the discussion of tintColor at the UIView level for more information."];
     
     NSMutableArray * array = [[NSMutableArray alloc] init];
     _dataSource = array;
@@ -153,6 +154,8 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition object:nil];
     
     tryCatchCount = 0;
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
@@ -162,8 +165,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         [self.tableView showIndicatorViewLargeBlue];
     }
     
-    /** 
-     
+    /**
      //    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
      //    [refreshControl addTarget:self // self is a UITableViewController
      //                       action:@selector(refreshTableView:)
@@ -180,7 +182,14 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 //        
 //    } failure:^(MLRequest *request, NSError *error) {
 //    }];
+}
 
+-(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
+{
+    [self hiddeErrorInfoWithRetry];
+    // start retry
+    [self.tableView showIndicatorViewLargeBlue];
+    [self reLoadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -263,9 +272,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
-             [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"群组获取失败 请点击重试"];
-            [self.tableView reloadData];
+//             [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"群组获取失败 请点击重试"];
+//            [self.tableView reloadData];
             [self.view hideIndicatorViewBlueOrGary];
+            [self showErrorInfoWithRetry];
         }];
     });
 }
@@ -337,6 +347,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 -(void)changeDomainID:(NSNotification *) notify
 {
     if (notify.object) {
+        [self hiddeErrorInfoWithRetry];
         XCJGroup_list * info = (XCJGroup_list*)notify.object;
         [_dataSource addObject:info];
         [self.tableView reloadData];

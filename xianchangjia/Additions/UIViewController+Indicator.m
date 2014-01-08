@@ -8,10 +8,11 @@
 
 #import "UIViewController+Indicator.h"
 #import "UIView+Additon.h"
-
+#import "XCJErrorView.h"
 typedef enum {
     kTagIndicatorView = 2900,
-    kTaglabelView = 2901
+    kTaglabelView = 2901,
+    kTagErrorView = 2902,
 }kUIViewIndicatorTags;
 
 
@@ -114,6 +115,22 @@ typedef enum {
     };
     voidFun(voidblock);
     */
+}
+
+- (void) showErrorInfoWithRetry
+{
+    XCJErrorView * errorView = [[NSBundle mainBundle] loadNibNamed:@"XCJErrorView" owner:self options:nil][0];
+    errorView.tag  = kTagErrorView;
+    [self.view addSubview:errorView];
+}
+
+- (void) hiddeErrorInfoWithRetry
+{
+    UIView *textLabel = (UIView *)[self.view subviewWithTag:kTagErrorView];
+    if (textLabel) {
+        [textLabel removeFromSuperview];
+        textLabel = nil;
+    }
 }
 
 @end

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface XCJSysSettingsViewController : UIViewController
+@interface XCJSysSettingsViewController : UITableViewController
 
 @end

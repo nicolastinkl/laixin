@@ -29,7 +29,7 @@
 #import "XCJUserInfoController.h"
 #import "XCJAddFriendNaviController.h"
 
-@interface XCJFriendViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
+@interface XCJFriendViewController ()<NSFetchedResultsControllerDelegate>
 {
     NSMutableArray * _dataSource;
 }
@@ -128,11 +128,10 @@
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
 //        [[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts]
-        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:nil groupBy:nil delegate:self] ;//[FCFriends MR_fetchAllWithDelegate:self];
+        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:nil groupBy:nil delegate:self] ;
     }
 	return _fetchedResultsController;
 }
-
 
 // clean up our new observers
 - (void)viewDidUnload {
@@ -189,7 +188,6 @@
 	// The fetch controller is about to start sending change notifications, so prepare the table view for updates.
 	[self.tableView beginUpdates];
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	UITableView *tableView = self.tableView;
@@ -373,7 +371,6 @@
 
 - (void)showRecipe:(FCFriends *) friend animated:(BOOL)animated
 {
-   
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     infoview.frend = friend;
     infoview.title = @"详细资料";
@@ -405,6 +402,11 @@
 	
     return count;
 }
+
+//-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    return @"我的好友";
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

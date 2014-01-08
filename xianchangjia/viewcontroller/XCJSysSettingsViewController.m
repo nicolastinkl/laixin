@@ -13,21 +13,20 @@
 #import "UIAlertViewAddition.h"
 #import "XCJLoginNaviController.h"
 
-@interface XCJSysSettingsViewController ()<UIAlertViewDelegate >
+@interface XCJSysSettingsViewController ()<UIAlertViewDelegate>
 
 @end
 
 @implementation XCJSysSettingsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
     }
     return self;
 }
-
 
 - (IBAction)logoutClick:(id)sender {
     UIAlertView * alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"注销当前账号" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"注销", nil];

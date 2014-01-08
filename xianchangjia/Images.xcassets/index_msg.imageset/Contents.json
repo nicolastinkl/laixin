@@ -1,14 +1,14 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
+      "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Tabbar_contacts~iphone.png"
+      "filename" : "index_msg.png"
     },
     {
-      "idiom" : "iphone",
+      "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Tabbar_contacts@2x~iphone.png"
+      "filename" : "index_msg@2x.png"
     }
   ],
   "info" : {

@@ -67,6 +67,8 @@ typedef enum {
 #define RGBCOLOR(r,g,b)             [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 #define RGBACOLOR(r,g,b,a)          [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
+#define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
+
 #define APP_STORE_LINK_http         @"https://itunes.apple.com/cn/app/xian-chang-jia//id541873451?ls=1&mt=8"
 #define APP_STORE_LINK_iTunes       @"itms-apps://itunes.apple.com/cn/app/541873451?mt=8"
 
