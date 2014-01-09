@@ -81,8 +81,10 @@
         if (![self.UserInfo.marriage isNilOrEmpty]) {
             UserDict[@"婚姻状态"] = self.UserInfo.marriage;
         }
-        if (![self.UserInfoJson.position isNilOrEmpty]) {
-            UserDict[@"地区"] = self.UserInfoJson.position;
+        if (self.UserInfoJson) {            
+            if (![self.UserInfoJson.position isNilOrEmpty]) {
+                UserDict[@"地区"] = self.UserInfoJson.position;
+            }
         }
         
     }

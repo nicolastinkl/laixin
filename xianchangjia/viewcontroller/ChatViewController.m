@@ -124,7 +124,15 @@
 -(IBAction)SeeGroupInfoClick:(id)sender
 {
     XCJSettingGroupViewController * groupsettingview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSettingGroupViewController"];
-    groupsettingview.title = @"群设置";
+    groupsettingview.title = self.title;
+    NSMutableArray * array = [[NSMutableArray alloc] init];
+    [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString * uid = [DataHelper getStringValue:obj[@"uid"] defaultValue:@""];
+        if (uid.length > 0) {
+            [array addObject:uid];
+        }
+    }];
+    groupsettingview.uidArray = array;
     [self.navigationController pushViewController:groupsettingview animated:YES];
 }
 

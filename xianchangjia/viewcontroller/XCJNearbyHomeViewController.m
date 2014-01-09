@@ -237,6 +237,20 @@
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+    
+    // select all unread bradge number
+    
+    NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"gbadgeNumber > %d",0];
+    NSInteger  inter =  [FCHomeGroupMsg MR_countOfEntitiesWithPredicate:preCMD];
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    if (inter > 0) {
+        [delegate.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
+    }else{
+        [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
+    }
+    
+    
 	UITableView *tableView = self.tableView;
 	
 	switch(type) {
@@ -249,7 +263,11 @@
 			break;
 			
 		case NSFetchedResultsChangeUpdate:
+        {
+        
 			[self configureCell:(UITableViewCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+           
+        }
 			break;
 			
 		case NSFetchedResultsChangeMove:
@@ -258,7 +276,6 @@
             break;
 	}
 }
-
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 	switch(type) {
@@ -298,8 +315,6 @@
     if ([info.gbadgeNumber intValue] > 0)
     {
         imgView.hidden = NO;
-        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-        [delegate.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
     }
     else
         imgView.hidden = YES;
@@ -343,7 +358,6 @@
         [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
         [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
         [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"position"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_position];
-        
         [USER_DEFAULT synchronize];
         
         

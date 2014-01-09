@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LXRequestFacebookManager.h"
+#import "LXChatDBStoreManager.h"
+
 #import "LXUser.h"
+
 #define kFCMessageDidComeNotification @"kFCMessageDidComeNotification"
 
 @class LXRequestFacebookManager,LXChatDBStoreManager;

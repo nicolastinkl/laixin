@@ -8,8 +8,6 @@
 
 #import "LXAPIController.h"
 #import "XCAlbumAdditions.h"
-#import "LXRequestFacebookManager.h"
-#import "LXChatDBStoreManager.h"
 
 @interface LXAPIController()
 @property (nonatomic, strong) LXRequestFacebookManager *requestLaixinManager;

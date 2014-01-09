@@ -9,6 +9,10 @@
 #import "XCJSettingGroupViewController.h"
 #import "POHorizontalList.h"
 #import "XCAlbumAdditions.h"
+#import "LXUser.h"
+#import "MLNetworkingManager.h"
+#import "XCJAddUserTableViewController.h"
+#import "LXAPIController.h"
 
 @interface XCJSettingGroupViewController ()<POHorizontalListDelegate>
 {
@@ -30,23 +34,46 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:@"" nick:@"tinkl" uid:@"1"];
-    ListItem *item2 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:@"" nick:@"tinkl2" uid:@"1"];
-    ListItem *item3 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:@"" nick:@"tinkl3" uid:@"1"];
-    freeList = [[NSMutableArray alloc] initWithObjects: item1, item2, item3, nil];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    NSMutableArray * ar  = [[NSMutableArray alloc] init];
+    freeList = ar;
+     ListItem *item = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] nick:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] uid:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
+    [freeList addObject:item];
+    if (self.uidArray) {
+        NSDictionary * parames = @{@"uid":@[self.uidArray]};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+            // "users":[....]
+            NSDictionary * userinfo = responseObject[@"result"];
+            NSArray * userArray = userinfo[@"users"];
+           [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+               LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+               ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:currentUser.headpic nick:currentUser.nick uid:currentUser.uid];
+               [freeList addObject:item1];
+           }];
+           
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
     POHorizontalList *  list = [[POHorizontalList alloc] initWithFrame:CGRectMake(0.0, 0.0, 290.0, 135.0) title:@"群成员" items:freeList];
     [list setDelegate:self];
     UIView * view =  [self.tableView.tableHeaderView subviewWithTag:11];
     [view addSubview:list];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+   
 }
 
 #pragma mark  POHorizontalListDelegate
 
 - (void) didSelectItem:(ListItem *)item {
-    NSLog(@"Horizontal List Item %@ selected", item.imageTitle);
+    FCUserDescription * user = [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:item.uid];
+    if (user) {
+        //FCUserDescription
+        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+        addUser.UserInfo = user;
+        [self.navigationController pushViewController:addUser animated:YES];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,6 +84,11 @@
 
 #pragma mark - Table view data source
 
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 //- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //{
 //#warning Potentially incomplete method implementation.

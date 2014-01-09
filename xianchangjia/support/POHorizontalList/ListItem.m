@@ -8,6 +8,7 @@
 
 #import "ListItem.h"
 #import "UIImageView+AFNetworking.h"
+#import "tools.h"
 
 @implementation ListItem
 
@@ -61,7 +62,7 @@
         self.uid = uid;
         
         UIImageView *imageView = [[UIImageView alloc] init];
-        [imageView setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
+        [imageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:image Size:160]] placeholderImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
         
         CALayer *roundCorner = [imageView layer];
         [roundCorner setMasksToBounds:YES];
@@ -77,7 +78,7 @@
         title.textAlignment = NSTextAlignmentCenter;
         title.textColor = [UIColor darkGrayColor];
         imageRect = CGRectMake(0.0, 0.0, 75.0, 75.0);
-        textRect = CGRectMake(0.0, imageRect.origin.y + imageRect.size.height + 5.0, 80.0, 20.0);
+        textRect = CGRectMake(0.0, imageRect.origin.y + imageRect.size.height + 0.0, 80.0, 20.0);
         
         [title setFrame:textRect];
         [imageView setFrame:imageRect];
