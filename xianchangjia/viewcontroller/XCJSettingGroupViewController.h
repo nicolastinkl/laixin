@@ -11,4 +11,5 @@
 @interface XCJSettingGroupViewController : UITableViewController
 
 @property (nonatomic,strong) NSMutableArray * uidArray;
+@property (nonatomic,strong) NSString * gid;
 @end

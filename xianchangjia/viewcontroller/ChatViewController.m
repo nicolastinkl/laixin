@@ -133,6 +133,7 @@
         }
     }];
     groupsettingview.uidArray = array;
+    groupsettingview.gid = self.gid;
     [self.navigationController pushViewController:groupsettingview animated:YES];
 }
 

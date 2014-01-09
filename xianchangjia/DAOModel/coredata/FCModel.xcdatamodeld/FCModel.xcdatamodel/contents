@@ -22,6 +22,7 @@
     <entity name="FCBeAddFriend" representedClassName="FCBeAddFriend" syncable="YES">
         <attribute name="addTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasAdd" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="beAddFriendShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
     <entity name="FCBeInviteGroup" representedClassName="FCBeInviteGroup" syncable="YES">
@@ -83,8 +84,8 @@
         <element name="FCBeAddFriend" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FCBeInviteGroup" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FCFriends" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FCMessage" positionX="0" positionY="0" width="0" height="0"/>
         <element name="FCUserDescription" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

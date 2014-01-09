@@ -11,7 +11,6 @@
 		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
 		8622C880187D2BEC00776A38 /* XCJErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C87F187D2BEC00776A38 /* XCJErrorView.m */; };
 		8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8622C881187D2BFA00776A38 /* XCJErrorView.xib */; };
-		8622C888187D4EC100776A38 /* FCBeAddFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C887187D4EC100776A38 /* FCBeAddFriend.m */; };
 		8622C88B187D551100776A38 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88A187D551100776A38 /* FCBeInviteGroup.m */; };
 		8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */; };
 		8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8622C890187D711100776A38 /* aboutLaixinInfo.plist */; };
@@ -37,6 +36,7 @@
 		865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632DF185FFDDA00E9903C /* XCJSettingsViewController.m */; };
 		865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632E1185FFDDA00E9903C /* XCJUserViewController.m */; };
 		865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632F1186000D300E9903C /* XCJSendCommentViewController.m */; };
+		86581E04187E95E500FCDC85 /* FCBeAddFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 86581E03187E95E500FCDC85 /* FCBeAddFriend.m */; };
 		86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */; };
 		8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */; };
 		8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8665168C187BEF75001F05F6 /* SVProgressHUD.m */; };
@@ -366,8 +366,6 @@
 		8622C87E187D2BEC00776A38 /* XCJErrorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJErrorView.h; path = viewcontroller/views/XCJErrorView.h; sourceTree = "<group>"; };
 		8622C87F187D2BEC00776A38 /* XCJErrorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJErrorView.m; path = viewcontroller/views/XCJErrorView.m; sourceTree = "<group>"; };
 		8622C881187D2BFA00776A38 /* XCJErrorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJErrorView.xib; path = viewcontroller/views/XCJErrorView.xib; sourceTree = "<group>"; };
-		8622C886187D4EC100776A38 /* FCBeAddFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeAddFriend.h; path = DAOModel/coredata/FCBeAddFriend.h; sourceTree = "<group>"; };
-		8622C887187D4EC100776A38 /* FCBeAddFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeAddFriend.m; path = DAOModel/coredata/FCBeAddFriend.m; sourceTree = "<group>"; };
 		8622C889187D551100776A38 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8622C88A187D551100776A38 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		8622C88D187D6F3A00776A38 /* XCJAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAboutViewController.h; path = viewcontroller/XCJAboutViewController.h; sourceTree = "<group>"; };
@@ -416,6 +414,8 @@
 		865632EF185FFF1300E9903C /* XCJExtendClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJExtendClass.h; sourceTree = "<group>"; };
 		865632F0186000D300E9903C /* XCJSendCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendCommentViewController.h; path = viewcontroller/XCJSendCommentViewController.h; sourceTree = "<group>"; };
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
+		86581E02187E95E500FCDC85 /* FCBeAddFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeAddFriend.h; path = DAOModel/coredata/FCBeAddFriend.h; sourceTree = "<group>"; };
+		86581E03187E95E500FCDC85 /* FCBeAddFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeAddFriend.m; path = DAOModel/coredata/FCBeAddFriend.m; sourceTree = "<group>"; };
 		86651681187BD19E001F05F6 /* XCJSelectCroupTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectCroupTypeViewController.h; path = viewcontroller/XCJSelectCroupTypeViewController.h; sourceTree = "<group>"; };
 		86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectCroupTypeViewController.m; path = viewcontroller/XCJSelectCroupTypeViewController.m; sourceTree = "<group>"; };
 		86651689187BEF75001F05F6 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -1866,11 +1866,11 @@
 			children = (
 				86D9A898186D30C700147631 /* FCAccount.h */,
 				86D9A899186D30C700147631 /* FCAccount.m */,
-				8622C886187D4EC100776A38 /* FCBeAddFriend.h */,
-				8622C887187D4EC100776A38 /* FCBeAddFriend.m */,
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				86581E02187E95E500FCDC85 /* FCBeAddFriend.h */,
+				86581E03187E95E500FCDC85 /* FCBeAddFriend.m */,
 				8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */,
 				8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */,
 				8622C889187D551100776A38 /* FCBeInviteGroup.h */,
@@ -2435,6 +2435,7 @@
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
 				86D182B41834AED30005901D /* NSObject+LKDBHelper.m in Sources */,
 				8668E474187540DB00D20C9E /* ActivityTableViewCell.m in Sources */,
+				86581E04187E95E500FCDC85 /* FCBeAddFriend.m in Sources */,
 				86D182881834AED30005901D /* UIAlertViewAddition.m in Sources */,
 				869CE530186BE38D0004C1EC /* MagicalRecord+Actions.m in Sources */,
 				869CE4BF186A73880004C1EC /* MarkupParser.m in Sources */,
@@ -2478,7 +2479,6 @@
 				86D1830A1834AFD90005901D /* DAHttpClient.m in Sources */,
 				86D1830E1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
-				8622C888187D4EC100776A38 /* FCBeAddFriend.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
 				86D182961834AED30005901D /* UIView+Indicator.m in Sources */,
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
