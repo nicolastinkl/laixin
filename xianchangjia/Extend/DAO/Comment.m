@@ -9,7 +9,6 @@
 #import "Comment.h"
 #import "DataHelper.h"
 #import "tools.h"
-
 @implementation Comment
 
 + (instancetype)turnObject:(NSDictionary*)dict
@@ -23,6 +22,18 @@
     result.replyid = [DataHelper getStringValue:dict[@"replyid"] defaultValue:@""];
     result.postid = [DataHelper getStringValue:dict[@"postid"] defaultValue:@""];
     result.content = [DataHelper getStringValue:dict[@"content"] defaultValue:@""];
+    
+    return result;
+}
+
+@end
+
+
+@implementation postlikes
++ (instancetype)turnObject:(NSDictionary*)dict
+{
+    postlikes *result = [[self alloc]init];
+    result.uid = [DataHelper getStringValue:dict[@"uid"] defaultValue:@""];
     
     return result;
 }

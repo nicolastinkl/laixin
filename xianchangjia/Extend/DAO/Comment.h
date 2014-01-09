@@ -27,3 +27,11 @@
 @property (strong, nonatomic) NSString * timeText;
 
 @end
+
+
+
+@interface postlikes : Model
+
+@property (nonatomic,strong) NSString *uid;
+@end
+

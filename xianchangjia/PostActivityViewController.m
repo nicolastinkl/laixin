@@ -17,9 +17,11 @@
 #import "LXRequestFacebookManager.h"
 #import "MLScrollRefreshHeader.h"
 #import "XCJGroupPost_list.h"
+#import <CommonCrypto/CommonDigest.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 
-@interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate>
+@interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
     AFHTTPRequestOperation  * operation;
     NSString * TokenAPP;
@@ -85,7 +87,7 @@
     self.title = @"发布动态";
     
     //scrollView
-    self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frameWidth, self.view.frameHeight-64)];
+    self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frameWidth, self.view.frameHeight)];
     _scrollView.scrollsToTop = NO;
     //动起来
     _scrollView.contentSize = CGSizeMake(_scrollView.frameWidth, _scrollView.frameHeight+1);
@@ -118,9 +120,16 @@
     self.postImageView = [[UIImageView alloc]initWithFrame:CGRectMake(8, _inputTextBackView.frameBottom+10, 70, 70)];
     _postImageView.contentMode = UIViewContentModeScaleAspectFill;
     _postImageView.clipsToBounds = YES;
-    _postImageView.layer.borderColor = [UIColor grayColor].CGColor;
+    _postImageView.layer.borderColor = [UIColor whiteColor].CGColor;
     _postImageView.layer.borderWidth = 0.5f;
+    [_postImageView makeInsetShadowWithRadius:2 Alpha:0.8];
+    
     [_scrollView addSubview:_postImageView];
+    
+    _postImageView.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeImage)];
+    [_postImageView addGestureRecognizer:tapGes];
     
     if (_postImage) {
         _postImageView.image = self.postImage;
@@ -130,9 +139,67 @@
     
 }
 
+- (void) changeImage
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+        photoLibrary.delegate = self;
+        photoLibrary.allowsEditing = YES;
+        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:photoLibrary animated:YES completion:nil];
+    }
+}
+
 -(IBAction)CompletionPostImage:(id)sender
 {
     [self postAction];
+}
+
+
+- (NSURL * )uploadContent:(NSDictionary *)theInfo {
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
+    //Optionally for time zone conversions
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    
+    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
+    
+    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
+        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,self.gID]];
+        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+        NSLog(@"Upload Path: %@", filePath);
+        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
+        [webData writeToFile:filePath atomically:YES];
+        return [NSURL URLWithString:filePath];
+    }
+    return nil;
+}
+
+- (NSString *)getMd5_32Bit_String:(NSString *)srcString{
+    const char *cStr = [srcString UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5( cStr, strlen(cStr), digest );
+    NSMutableString *result = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [result appendFormat:@"%02x", digest[i]];
+    
+    return result;
+}
+
+
+#pragma mark - UIImagePickerController delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImage * image =  [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    
+    _postImageView.image = image;
+    
+    self.filePath = [self uploadContent:theInfo];
 }
 
 
@@ -168,14 +235,22 @@
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
         if (response) {
             NSString * token =  [response objectForKey:@"token"];
-            TokenAPP = token;
-            [self uploadImagetoken:token];
+            if ([token isNilOrEmpty]) {
+                [SVProgressHUD dismiss];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
+                [alert show];
+            }else{
+                TokenAPP = token;
+                [self uploadImagetoken:token];
+            }
         }
     } withParems:[NSString stringWithFormat:@"upload/Post?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
 -(void) uploadImagetoken:(NSString *)token
 {
+    [self.inputTextView resignFirstResponder];
+    [SVProgressHUD showWithStatus:@"正在发送..."];
     //    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
     //    [img setImage:[UIImage imageWithContentsOfFile:filePath]];
     //    [img showIndicatorViewBlue];
@@ -193,7 +268,13 @@
         NSData * imageData = UIImageJPEGRepresentation(self.postImage, 1);
           [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
+        //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3" }
+        
+// responseObject {
+//        errno = 5;
+//        error = "No known serializer for object: datetime.datetime(2014, 1, 9, 17, 35, 39)";
+//    }
+        
         SLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
@@ -214,7 +295,7 @@
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
                 [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
                 [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-                
+                [SVProgressHUD dismiss];
                 /*
                  "replycount":0,
                  "uid":4,
@@ -228,9 +309,13 @@
 //                [_needRefreshViewController.refreshView beginRefreshing];
                // [_needRefreshViewController.tableView setContentOffset:CGPointMake(0, -_needRefreshViewController.tableView.contentInset.top) animated:YES];
                 [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                [SVProgressHUD dismiss];
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+ 
+        [SVProgressHUD dismiss];
         SLog(@"error :%@",error.userInfo);
         //        [img hideIndicatorViewBlueOrGary];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
@@ -278,6 +363,13 @@
     return YES;
 }
 
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"请勿发布带有色情或者非法不良信息"]) {
+        textView.text = @"";
+    }
+    return YES;
+}
 
 - (void)textViewDidChange:(UITextView *)textView
 {

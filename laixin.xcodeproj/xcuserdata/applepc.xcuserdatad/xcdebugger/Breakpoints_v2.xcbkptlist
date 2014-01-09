@@ -1032,11 +1032,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410526293.525063"
+            timestampString = "410956790.646639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
+            startingLineNumber = "675"
+            endingLineNumber = "675"
             landmarkName = "-postGetActivitiesWithLastID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1048,11 +1048,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410526293.525063"
+            timestampString = "410956790.646639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "468"
-            endingLineNumber = "468"
+            startingLineNumber = "505"
+            endingLineNumber = "505"
             landmarkName = "@implementation BaseDetailViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1080,11 +1080,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410526293.525063"
+            timestampString = "410956790.646639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "614"
-            endingLineNumber = "614"
+            startingLineNumber = "651"
+            endingLineNumber = "651"
             landmarkName = "-failedGetActivitiesWithLastID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1128,11 +1128,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410526293.525063"
+            timestampString = "410956790.646639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "545"
-            endingLineNumber = "545"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
             landmarkName = "@implementation BaseDetailViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1144,11 +1144,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410526293.525063"
+            timestampString = "410956790.646639"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "585"
-            endingLineNumber = "585"
+            startingLineNumber = "622"
+            endingLineNumber = "622"
             landmarkName = "-successGetActivities:withLastID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1160,11 +1160,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/PostActivityViewController.m"
-            timestampString = "410364574.242563"
+            timestampString = "410952880.471603"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
             landmarkName = "-uploadImagetoken:"
             landmarkType = "5">
             <Locations>
@@ -1206,11 +1206,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/support/HomeUtils/BaseDetailViewController.m"
-            timestampString = "410422184.816937"
+            timestampString = "410953543.042034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>

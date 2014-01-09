@@ -11,6 +11,7 @@
 #import "UIImage+Addition.h"
 #import "UIImage+RoundedCorner.h"
 #import "UIView+Indicator.h"
+#import "UIView+Shadow.h"
 #import "UIImageView+WebCache.h"
 #import "DAImageResizedImageView.h"
 #import "UIView+Shadow.h"

@@ -36,6 +36,8 @@
 ////刷新对应行[self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
 @property (nonatomic, assign) BOOL HasLoad;
 
+@property (nonatomic, assign) BOOL HasLoadlisks;
+
 //delegate
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 

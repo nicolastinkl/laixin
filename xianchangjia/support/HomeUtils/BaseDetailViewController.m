@@ -64,6 +64,18 @@
     
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    NSArray *ws = [[UIApplication sharedApplication] windows];
+    for(UIView *w in ws){
+        NSArray *vs = [w subviews];
+        for(UIView *v in vs){
+            if([[NSString stringWithUTF8String:object_getClassName(v)] isEqualToString:@"UIKeyboard"]){
+                v.backgroundColor = [UIColor whiteColor];
+            }
+        }
+    }
+}
+
 - (void)viewDidLoad
 {
     
@@ -244,22 +256,46 @@
                 [activity.comments addObjectsFromArray:mutaArray];
                 //indexofActivitys
                 [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
-                cell.HasLoad = YES;
+                
             }
-            else{
-                cell.HasLoad = NO;
-            }
-           
+            cell.HasLoad = YES;
         } failure:^(MLRequest *request, NSError *error) {
-                cell.HasLoad = YES;
+                cell.HasLoad = NO;
+        }];
+    }
+    
+    if (activity.like > 0 &&!cell.HasLoadlisks) {
+        
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * postsDict =  groups[@"users"];
+            if (postsDict&& postsDict.count > 0) {
+                 NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    /*
+                     “users”:[
+                     {
+                     “uid”:
+                     “time”:
+                     },
+                     */
+                    postlikes * likes = [postlikes turnObject:obj];
+                    [mutaArray addObject:likes];
+                }];
+                
+                [activity.likeUsers addObjectsFromArray:mutaArray];
+            }
+            cell.HasLoadlisks = YES;
+        } failure:^(MLRequest *request, NSError *error) {
+            cell.HasLoadlisks = NO;
+            
         }];
     }
     
 //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;
     // start requst comments  and likes
-//    post.get_reply(postid,pos=0,count=50) 读取回复
-   
     
     return cell;
 }
@@ -433,11 +469,12 @@
                      animations:^{
                           CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
                          _inputView.frameY =  self.view.height - keyboardFrame.size.height - 44;// newY;
-                         _tableView.contentOffset = CGPointMake(0, newYOffset);
+                         _tableView.contentOffset = CGPointMake(0, newYOffset + 70);
                      }
                     completion:^(BOOL finished) {
                         _tableView.userInteractionEnabled = YES;
                     }];
+    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification

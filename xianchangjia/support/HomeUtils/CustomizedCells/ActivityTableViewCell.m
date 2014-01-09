@@ -21,6 +21,8 @@
 #import "tools.h"
 #import "FCUserDescription.h"
 #import "XCAlbumDefines.h"
+#import "UIView+Additon.h"
+
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
 
@@ -51,6 +53,8 @@
 //评论View
 @property (nonatomic, strong) ActivityCommentsView *commentsView;
 
+//分割线
+@property (nonatomic, strong) UILabel *lineCell;
 
 @property (nonatomic, strong) UIView *imageBackgroundView_FullScreen;
 @property (nonatomic, strong) UIView *imageMaskView_FullScreen;
@@ -92,6 +96,13 @@
         _timeLabel.backgroundColor = [UIColor clearColor];
         _timeLabel.textColor = [UIColor grayColor];
         [self addSubview:_timeLabel];
+        
+        //时间
+        self.lineCell = [[UILabel alloc] init];
+        _lineCell.backgroundColor = [UIColor lightGrayColor];
+        _lineCell.alpha = 0.6f;
+        [self addSubview:_lineCell];
+        
         
         //正文
         self.contentLabel = [[UILabel alloc] init];
@@ -243,11 +254,17 @@
     //根据latestLikeUser和likeCount来设置text
     if (_activity.like>0) {
         NSString *text = @"     ";
+        __block NSString * nicktext;
         NSMutableArray *textCheckingResults = [[NSMutableArray alloc]init];
-        for (LXUser *aUser in _activity.likeUsers) {
-            [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, aUser.nick.length) replacementString:aUser.uid]];
-            text = [text stringByAppendingFormat:@"%@, ",aUser.nick];
+        for (postlikes *aUser in _activity.likeUsers) {
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                FCUserDescription * user = response;
+                [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, user.nick.length) replacementString:user.uid]];
+                 nicktext = user.nick;
+            } withuid:aUser.uid];
+           text = [text stringByAppendingFormat:@"%@, ",nicktext];
         }
+        
         if (text.length>0) {
             text = [text substringToIndex:text.length-2];//去掉最后的，号
             text = [text stringByAppendingString:@" "];
@@ -270,6 +287,8 @@
     //frame
     CGFloat xOffset = 10;
     CGFloat yOffset = 10;
+    
+    _lineCell.frame = CGRectMake(0, 1, 320, 0.5f);
     
     _avatarButton.frame = CGRectMake(xOffset, yOffset, 46, 46);
     _avatarButton.layer.cornerRadius = 23.0;
