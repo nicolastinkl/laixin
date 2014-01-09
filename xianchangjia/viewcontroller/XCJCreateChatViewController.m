@@ -184,7 +184,7 @@
 {
     if(self.selectedContacts.count > 1){
         // 群聊必须至少2人
-        
+        [SVProgressHUD showWithStatus:@"正在创建..."];
         NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@2};
         [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //Result={“gid”:1}
@@ -192,6 +192,7 @@
                 NSDictionary * dict =  responseObject[@"result"];
                 NSString * gid =  [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
                 if ([gid intValue] <= 0) {
+                    [SVProgressHUD dismiss];
                     [UIAlertView showAlertViewWithMessage:@"创建失败"];
                     return ;
                 }
@@ -241,23 +242,26 @@
                             [localContext MR_saveOnlySelfAndWait];
                             chatview.conversation = conversation;
                         }
-                        
+                        [SVProgressHUD dismiss];
                         [self.navigationController dismissViewControllerAnimated:YES completion:^{
                             // create new talk;
-                            [self.navigationController pushViewController:chatview animated:YES];
+//                            [self.navigationController pushViewController:chatview animated:YES];
 //                            UITabBarController * tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
 //                            tabBarController.selectedIndex = 2;
 //                            [tabBarController.selectedViewController.navigationController pushViewController:chatview animated:NO];
                         }];
                     } failure:^(MLRequest *request, NSError *error) {
-                        
+ 
+                        [SVProgressHUD dismiss];
                     }];
                 }
             }
         } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD dismiss];
             //[UIAlertView showAlertViewWithMessage:@"创建失败"];
         }];
     }else{
+        [SVProgressHUD dismiss];
         [UIAlertView showAlertViewWithMessage:@"群聊必须至少2人"];
     }
 }

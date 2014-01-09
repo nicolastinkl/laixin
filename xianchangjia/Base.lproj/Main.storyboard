@@ -962,10 +962,11 @@
         <scene sceneID="kVL-jO-Uy7">
             <objects>
                 <tableViewController restorationIdentifier="XCJFriendViewController" storyboardIdentifier="XCJFriendViewController" id="fwg-X3-bd4" customClass="XCJFriendViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="68" sectionHeaderHeight="22" sectionFooterHeight="22" id="dnf-FS-Euc">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="dnf-FS-Euc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="separatorColor" red="0.88990752549999996" green="0.88990752549999996" blue="0.88990752549999996" alpha="1" colorSpace="calibratedRGB"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" id="pKh-lm-2Uy">
                             <rect key="frame" x="0.0" y="64" width="320" height="96"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -979,7 +980,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1k0-vN-naT">
-                                    <rect key="frame" x="0.0" y="48" width="320" height="1"/>
+                                    <rect key="frame" x="20" y="48" width="320" height="1"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="0.5" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -987,7 +988,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sJZ-VQ-HkN">
-                                    <rect key="frame" x="0.0" y="95" width="320" height="1"/>
+                                    <rect key="frame" x="0.0" y="96" width="320" height="1"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="0.5" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1039,10 +1040,10 @@
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="XCJFriendCell" rowHeight="55" id="Z4V-eO-4lc">
-                                <rect key="frame" x="0.0" y="182" width="320" height="55"/>
+                                <rect key="frame" x="0.0" y="215" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Z4V-eO-4lc" id="7ra-XM-xun">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Xax-pw-Yfe" customClass="DAImageResizedImageView">
@@ -1089,7 +1090,7 @@
         <!--Table View Controller - 群组-->
         <scene sceneID="64X-oI-63O">
             <objects>
-                <tableViewController id="OlQ-bZ-S9d" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="OlQ-bZ-S9d" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="L2S-Tt-wJc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1118,7 +1119,7 @@
         <!--Table View Controller - 新的朋友-->
         <scene sceneID="Dir-Zy-cxQ">
             <objects>
-                <tableViewController id="gQa-Uw-EV7" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="gQa-Uw-EV7" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uva-vx-bA8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1536,11 +1537,11 @@
         <!--Nearby Home View Controller - 动态-->
         <scene sceneID="1ns-Iw-odF">
             <objects>
-                <tableViewController id="vSU-rK-d0f" customClass="XCJNearbyHomeViewController" sceneMemberID="viewController">
+                <tableViewController restorationIdentifier="XCJNearbyHomeViewController" storyboardIdentifier="XCJNearbyHomeViewController" id="vSU-rK-d0f" customClass="XCJNearbyHomeViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="LWP-jU-8Dq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <color key="separatorColor" red="0.88990752551020402" green="0.88990752551020402" blue="0.88990752551020402" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="60" id="Wzq-ym-IsS">
@@ -1559,22 +1560,19 @@
                                             <rect key="frame" x="67" y="19" width="200" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav_badge_6_6_6_6" id="PMh-NL-W4u">
+                                            <rect key="frame" x="274" y="23" width="13" height="13"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <segue destination="jMh-vl-FO0" kind="push" identifier="showDynamic" id="TmU-7N-mNy"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="vSU-rK-d0f" id="fvg-YR-obV"/>
-                            <outlet property="delegate" destination="vSU-rK-d0f" id="w82-nm-m9D"/>
-                        </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="动态" id="Y82-44-1uf">
                         <barButtonItem key="backBarButtonItem" title="返回" id="zVJ-BB-YZI">
@@ -3504,6 +3502,7 @@
         <image name="messengerUserMask" width="60" height="60"/>
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
+        <image name="nav_badge_6_6_6_6" width="13" height="13"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
         <image name="profile-frame" width="90" height="90"/>
         <image name="searchFieldIcon" width="13" height="13"/>

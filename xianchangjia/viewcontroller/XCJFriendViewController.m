@@ -50,7 +50,7 @@
     return self;
 }
 
-#pragma mark -
+#pragma mark - fetchedResultsController
 #pragma mark UIViewController overrides
 
 // because the app delegate now loads the NSPersistentStore into the NSPersistentStoreCoordinator asynchronously
@@ -184,7 +184,7 @@
 /**
  Delegate methods of NSFetchedResultsController to respond to additions, removals and so on.
  */
-
+#pragma mark  NSFetchedResultsController to respond to additions, removals and so on.
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
 	// The fetch controller is about to start sending change notifications, so prepare the table view for updates.
 	[self.tableView beginUpdates];
@@ -404,10 +404,11 @@
     return count;
 }
 
-//-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    return @"我的好友";
-//}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"好友";
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

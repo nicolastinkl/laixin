@@ -295,8 +295,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {    
     NSString* devtokenstring=[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@" " withString:@""];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\n" withString:@""];

@@ -18,6 +18,7 @@
 		8622C893187D866300776A38 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8622C892187D866300776A38 /* MessageUI.framework */; };
 		8622C897187D8F5100776A38 /* XCJNewAddFriendTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */; };
 		8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */; };
+		8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -377,6 +378,8 @@
 		8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNewAddFriendTabViewController.m; path = viewcontroller/XCJNewAddFriendTabViewController.m; sourceTree = "<group>"; };
 		8622C898187D8F6400776A38 /* XCJNewAddGroupTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJNewAddGroupTabViewController.h; path = viewcontroller/XCJNewAddGroupTabViewController.h; sourceTree = "<group>"; };
 		8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNewAddGroupTabViewController.m; path = viewcontroller/XCJNewAddGroupTabViewController.m; sourceTree = "<group>"; };
+		8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCHomeGroupMsg.h; path = DAOModel/coredata/FCHomeGroupMsg.h; sourceTree = "<group>"; };
+		8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCHomeGroupMsg.m; path = DAOModel/coredata/FCHomeGroupMsg.m; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -1126,14 +1129,11 @@
 		8668E44F18751AB500D20C9E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				86B73D93187E670400EF7391 /* PostView */,
 				86660DC61876D9E7007477C0 /* CreateGroup */,
 				86660DBE1876BB51007477C0 /* MenuView */,
-				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
-				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				865632D8185FFDDA00E9903C /* XCJNearbyHomeViewController.h */,
 				865632D9185FFDDA00E9903C /* XCJNearbyHomeViewController.m */,
-				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
-				8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */,
 				865632CE185FFDDA00E9903C /* XCJDomainsViewController.h */,
 				865632CF185FFDDA00E9903C /* XCJDomainsViewController.m */,
 			);
@@ -1521,6 +1521,17 @@
 			name = SystemSettings;
 			sourceTree = "<group>";
 		};
+		86B73D93187E670400EF7391 /* PostView */ = {
+			isa = PBXGroup;
+			children = (
+				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
+				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
+				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
+				8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */,
+			);
+			name = PostView;
+			sourceTree = "<group>";
+		};
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
@@ -1860,6 +1871,8 @@
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */,
+				8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */,
 				8622C889187D551100776A38 /* FCBeInviteGroup.h */,
 				8622C88A187D551100776A38 /* FCBeInviteGroup.m */,
 				869DDC601874422600560AFD /* Conversation.h */,
@@ -2410,6 +2423,7 @@
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
+				8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
 				869CE52A186BE38D0004C1EC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
 				866516A7187BF276001F05F6 /* split.c in Sources */,

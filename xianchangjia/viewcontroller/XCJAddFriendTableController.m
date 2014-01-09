@@ -69,18 +69,19 @@
                 return ;
             }
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
-                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
-                    if (response) {
-                        //FCUserDescription
-                        [SVProgressHUD dismiss];
-                        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                        addUser.UserInfo = response;
-                        addUser.UserInfoJson = currentUser;
-                        [self.navigationController pushViewController:addUser animated:YES];
-                    }
-                }];
-                
+                if (idx == 0) {
+                    LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
+                        if (response) {
+                            //FCUserDescription
+                            [SVProgressHUD dismiss];
+                            XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                            addUser.UserInfo = response;
+                            addUser.UserInfoJson = currentUser;
+                            [self.navigationController pushViewController:addUser animated:YES];
+                        }
+                    }];
+                }
             }];
             
         } failure:^(MLRequest *request, NSError *error) {
@@ -106,17 +107,20 @@
                     return ;
                 }
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
-                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
-                        if (response) {
-                            //FCUserDescription
-                            [SVProgressHUD dismiss];
-                            XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                            addUser.UserInfo = response;
-                            addUser.UserInfoJson = currentUser;
-                            [self.navigationController pushViewController:addUser animated:YES];
-                        }
-                    }];
+                    if (idx == 0) {
+                        LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
+                        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
+                            if (response) {
+                                //FCUserDescription
+                                [SVProgressHUD dismiss];
+                                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                                addUser.UserInfo = response;
+                                addUser.UserInfoJson = currentUser;
+                                [self.navigationController pushViewController:addUser animated:YES];
+                            }
+                        }];
+
+                    }
                     
                 }];
                 

@@ -13,6 +13,7 @@
 #import "XCAlbumDefines.h"
 #import "tools.h"
 #import "tools.h"
+#import "UIAlertViewAddition.h"
 
 NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
@@ -202,7 +203,8 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
-    SLog(@"( Websocket Failed With Error %@", error);
+    SLog(@"Websocket Failed With Error (\n  %@ \n )", error);
+    [UIAlertView showAlertViewWithMessage:@"网络连接失败,请检查网络设置"];
     self.webSocket = nil;
     //这里的话需要执行全部保存的requests的失败和清理操作
     for (MLRequest *request in self.requests) {

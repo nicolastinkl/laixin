@@ -35,6 +35,15 @@
         <attribute name="friendID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
+    <entity name="FCHomeGroupMsg" representedClassName="FCHomeGroupMsg" syncable="YES">
+        <attribute name="gbadgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="gBoard" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gCreatorUid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="gid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gType" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>
@@ -69,12 +78,13 @@
         <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Conversation" positionX="0" positionY="0" width="128" height="195"/>
-        <element name="FCAccount" positionX="0" positionY="0" width="128" height="118"/>
-        <element name="FCBeAddFriend" positionX="-416" positionY="54" width="128" height="88"/>
-        <element name="FCFriends" positionX="0" positionY="0" width="128" height="75"/>
-        <element name="FCMessage" positionX="0" positionY="0" width="128" height="180"/>
-        <element name="FCUserDescription" positionX="-207" positionY="-99" width="128" height="343"/>
-        <element name="FCBeInviteGroup" positionX="-378" positionY="252" width="128" height="103"/>
+        <element name="Conversation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCAccount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCBeAddFriend" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCBeInviteGroup" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCFriends" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCUserDescription" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

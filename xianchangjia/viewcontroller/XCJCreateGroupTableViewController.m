@@ -14,6 +14,9 @@
 #import "XCJGroupPost_list.h"
 #import "UIAlertViewAddition.h"
 #import "HZAreaPickerView.h"
+#import "CoreData+MagicalRecord.h"
+#import "FCHomeGroupMsg.h"
+
 
 @interface XCJCreateGroupTableViewController ()<HZAreaPickerDelegate>
 
@@ -41,6 +44,7 @@
 }
 
 - (IBAction)SelectClick:(id)sender {
+    [self.GroupName resignFirstResponder];
     [self selectAddress:nil];
 }
 
@@ -69,6 +73,7 @@
     if ([self.GroupName.text isNilOrEmpty]) {
         return;
     }
+    [self.GroupName resignFirstResponder];
     // self.textType.text
     [SVProgressHUD show];
     NSDictionary * parames = @{@"name":self.GroupName.text ,@"board":self.Label_address.text,@"type":@1};
@@ -83,7 +88,20 @@
             list.group_board = @"";
             list.type  = 0;
             [SVProgressHUD dismiss];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:list];
+            
+            // Build the predicate to find the person sought
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            FCHomeGroupMsg * msg = [FCHomeGroupMsg MR_createInContext:localContext];
+            msg.gid = list.gid;
+            msg.gCreatorUid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+            msg.gName = list.group_name;
+            msg.gBoard = self.Label_address.text;
+            msg.gDate = [NSDate date];
+            msg.gbadgeNumber = @1;
+            msg.gType = @"1";
+            [localContext MR_saveToPersistentStoreAndWait];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:msg];
             [self cancelClick:nil];
         }
     } failure:^(MLRequest *request, NSError *error) {

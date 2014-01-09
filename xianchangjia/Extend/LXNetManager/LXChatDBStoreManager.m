@@ -201,15 +201,42 @@
     
 }
 
+/**
+ *  设置好友
+ *
+ *  @param fcuserdesp <#fcuserdesp description#>
+ */
 - (void)setFriendsObject:(LXUser *) fcuserdesp
 {
+     NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
     //查看friend是否存在
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
     NSArray * result = [FCFriends MR_findAllWithPredicate:pre];
     if (result && result.count > 0) {
-        
+        FCFriends *newfriends = result[0];
+        if (newfriends == nil) {
+            newfriends = [FCFriends MR_createInContext:localContext];
+        }
+        FCUserDescription * newFcObj =[FCUserDescription MR_createInContext:localContext];
+        newFcObj.uid  = fcuserdesp.uid;
+        newFcObj.nick = fcuserdesp.nick;
+        newFcObj.headpic = fcuserdesp.headpic;
+        newFcObj.background_image = fcuserdesp.background_image;
+        newFcObj.sex = @(fcuserdesp.sex);
+        newFcObj.create_time = @(fcuserdesp.create_time);
+        newFcObj.marriage = fcuserdesp.marriage;
+        newFcObj.signature = fcuserdesp.signature;
+        newFcObj.birthday = fcuserdesp.birthday;
+        newFcObj.height = @(fcuserdesp.height);
+        newFcObj.position = fcuserdesp.position;
+        newFcObj.actor_level = @(fcuserdesp.actor_level);
+        newFcObj.actor = @(fcuserdesp.actor);
+        newFcObj.active_by = @(fcuserdesp.active_by);
+        newFcObj.active_level = @(fcuserdesp.active_level);
+        newfriends.friendRelation = newFcObj;
+        [localContext MR_saveToPersistentStoreAndWait];
     }else{
-        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+       
         FCFriends *newfriends = [FCFriends MR_createInContext:localContext];
         newfriends.friendID = fcuserdesp.uid;
         FCUserDescription * newFcObj =[FCUserDescription MR_createInContext:localContext];

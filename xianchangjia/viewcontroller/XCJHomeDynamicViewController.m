@@ -68,6 +68,13 @@
 
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if ([self.groupInfo.gbadgeNumber intValue] > 0) {
+        self.groupInfo.gbadgeNumber = @(0);
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    }
+}
 
 - (IBAction)openGroupClick:(id)sender {
     XCJDomainsViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJDomainsViewController"];
@@ -285,7 +292,6 @@
     } failure:^(MLRequest *request, NSError *error) {
         [UIAlertView showAlertViewWithMessage:@"回复失败 请重试!"];
     }];
-    
     
 }
 

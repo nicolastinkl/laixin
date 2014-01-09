@@ -10,7 +10,7 @@
 #import "XCAlbumAdditions.h"
 #import "XCJSceneInfo.h"
 #import "InviteInfo.h"
-
+#import "FCHomeGroupMsg.h"
 #import "UIImageView+AFNetworking.h"
 #import <CoreLocation/CoreLocation.h>
 #import "XCJDyScenceViewController.h"
@@ -35,13 +35,13 @@
 #import "FDStatusBarNotifierView.h"
 #import "XCJErWeiCodeViewController.h"
 #import "XCJScanViewController.h"
+#import "CoreData+MagicalRecord.h"
 
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
-@interface XCJNearbyHomeViewController ()<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate,XCJHomeMenuViewDelegate>
+@interface XCJNearbyHomeViewController ()<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate,XCJHomeMenuViewDelegate,NSFetchedResultsControllerDelegate>
 {
-    NSMutableArray * _dataSource;
     CLLocationManager *locationManager;
     CLLocation *checkinLocation;
     NSArray * JsonArray;
@@ -53,12 +53,18 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UIButton *ShowMenubutton;
 @property (strong, nonatomic) CLLocation *checkinLocation;
+
+@property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
+- (void)showRecipe:(FCHomeGroupMsg *) friend animated:(BOOL)animated;
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
 @end
 
 @implementation XCJNearbyHomeViewController
 @synthesize locationManager = _locationManager;
 @synthesize checkinLocation = _checkinLocation;
-
+@synthesize fetchedResultsController = _fetchedResultsController;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -72,13 +78,13 @@
     
     if (!menuView) {
         menuView = [[NSBundle mainBundle] loadNibNamed:@"XCJHomeMenuView" owner:self options:nil][0];
-        [self.view addSubview:menuView];
+        [self.view.window addSubview:menuView];
         menuView.alpha = 0;
         menuView.top = -600;
         menuView.delegate =  self;
     }
     
-    if (menuView.top == 0) {
+    if (menuView.top == 70) {
         // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
         
         [UIView animateWithDuration:.3f animations:^{
@@ -89,11 +95,12 @@
         }];
     }else{
         // show
+        [self.tableView scrollsToTop];
         menuView.alpha = 0;
         menuView.top = -600;
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 1;
-            menuView.top = 0;
+            menuView.top = 70;
             self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
         } completion:^(BOOL finished) {
         }];
@@ -108,49 +115,51 @@
 
 - (void) createGroupClick
 {
+      [self ShowMenuClick:nil];
     XCJCreateNaviController * navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCreateNaviController"];
             [self presentViewController:navi animated:YES completion:^{
-            [self ShowMenuClick:nil];
+          
     }];
     
 }
 
 - (void) addFriendClick
 {
+    [self ShowMenuClick:nil];
     XCJAddFriendNaviController *navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddFriendNaviController"];
     [self presentViewController:navi animated:YES completion:^{
-        [self ShowMenuClick:nil];
+        
     }];
 }
 
 - (void) findandfindCodeClick
 {
+    [self ShowMenuClick:nil];
     // go to erwei code
     XCJScanViewController * view = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJScanViewController"];
     view.scanTypeIndex = findAll;
     [self.navigationController pushViewController:view
                                          animated:YES];
-    [self ShowMenuClick:nil];
+    
 }
 
-SINGLETON_GCD(XCJNearbyHomeViewController)
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-//    if (notifierView == nil) {
-//        notifierView = [[FDStatusBarNotifierView alloc] initWithMessage:@"刷新在线时间" delegate:nil];
-//        notifierView.timeOnScreen = 4.0;
-//        notifierView.shouldHideOnTap = YES;
-//    }
 //    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:@"刷新在线时间"];
-//    [notifierView showInWindow];
-   // [SVProgressHUD showWithStatus:@"In iOS v7.0, all subclasses of UIView derive their behavior for tintColor from the base class. See the discussion of tintColor at the UIView level for more information."];
     
-    NSMutableArray * array = [[NSMutableArray alloc] init];
-    _dataSource = array;
     // Uncomment the following line to preserve selection between presentations.
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
+   self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
+    
+    // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HomeReloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
@@ -164,7 +173,138 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         [self initHomeData];
         [self.tableView showIndicatorViewLargeBlue];
     }
+    
 }
+
+#pragma mark -
+#pragma mark Fetched results controller
+
+- (NSFetchedResultsController *)fetchedResultsController {
+    // Set up the fetched results controller if needed.
+    if (_fetchedResultsController == nil) {
+        /*
+         http://stackoverflow.com/questions/14690681/nsfetchedresultschangeupdate-fired-instead-of-nsfetchedresultschangedelete#new-answer
+         
+         If I update this property to [NSNumber numberWithBool:YES] the NSFetchedResultsControllerDelegate calls didChangeObject but firing NSFetchedResultsChangeUpdate instead of NSFetchedResultsChangeDelete.
+         
+     MARK:     [NSPredicate predicateWithFormat:@" gType = 1"];  get error
+         
+         */
+        NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType = %@ ",@"1"];
+        self.fetchedResultsController = [FCHomeGroupMsg MR_fetchAllSortedBy:@"gbadgeNumber" ascending:NO withPredicate:parCMD groupBy:nil delegate:self]; //@"gbadgeNumber"
+    }
+	return _fetchedResultsController;
+}
+
+// clean up our new observers
+- (void)viewDidUnload {
+    self.fetchedResultsController = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+#pragma mark - fetchedResultsController
+#pragma mark UIViewController overrides
+
+// because the app delegate now loads the NSPersistentStore into the NSPersistentStoreCoordinator asynchronously
+// we will see the NSManagedObjectContext set up before any persistent stores are registered
+// we will need to fetch again after the persistent store is loaded
+- (void)HomeReloadFetchedResults:(NSNotification*)note {
+    
+    NSError *error = nil;
+	if (![[self fetchedResultsController] performFetch:&error]) {
+		/*
+		 Replace this implementation with code to handle the error appropriately.
+		 
+		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+		 */
+		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		abort();
+	}
+    
+    if (note) {
+        [self.tableView reloadData];
+    }
+}
+
+/**
+ Delegate methods of NSFetchedResultsController to respond to additions, removals and so on.
+ */
+#pragma mark  NSFetchedResultsController to respond to additions, removals and so on.
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+	// The fetch controller is about to start sending change notifications, so prepare the table view for updates.
+	[self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
+	UITableView *tableView = self.tableView;
+	
+	switch(type) {
+		case NSFetchedResultsChangeInsert:
+			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+			
+		case NSFetchedResultsChangeDelete:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+			break;
+			
+		case NSFetchedResultsChangeUpdate:
+			[self configureCell:(UITableViewCell *)[tableView cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
+			break;
+			
+		case NSFetchedResultsChangeMove:
+			[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+            break;
+	}
+}
+
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
+	switch(type) {
+		case NSFetchedResultsChangeInsert:
+			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+			
+		case NSFetchedResultsChangeDelete:
+			[self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+			break;
+	}
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
+	// The fetch controller has sent all current change notifications, so tell the table view to process all updates.
+	[self.tableView endUpdates];
+}
+
+#pragma mark - table fetchview
+
+- (void)showRecipe:(FCHomeGroupMsg *) info animated:(BOOL)animated
+{
+    XCJHomeDynamicViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJHomeDynamicViewController"];
+    vc.Currentgid = info.gid;
+    vc.title = info.gName;
+    vc.groupInfo = info;
+    [self.navigationController pushViewController:vc animated:YES];
+    
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    FCHomeGroupMsg *info = (FCHomeGroupMsg *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:3];
+    UILabel *label = (UILabel *)[cell.contentView viewWithTag:2];
+    label.text = info.gName;
+    if ([info.gbadgeNumber intValue] > 0)
+    {
+        imgView.hidden = NO;
+        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+        [delegate.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
+    }
+    else
+        imgView.hidden = YES;
+}
+
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
 {
@@ -185,8 +325,9 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 -(void)   initHomeData
 {
 //    [self.refreshControl beginRefreshing];
-//    [self setupLocationManager];
+    [self setupLocationManager];
     
+    [self HomeReloadFetchedResults:nil];
     NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
     NSDictionary * parames = @{@"sessionid":sessionid};
     [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -197,9 +338,27 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         
         int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
         [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
+        
+        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
+        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
+        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
+        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"position"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_position];
+        
         [USER_DEFAULT synchronize];
-        [self  reLoadData]; // load data
+        
+        
+        // Return the number of rows in the section.
+        if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
+            // find
+//            [_dataSource addObjectsFromArray:array];
+//            [self.tableView reloadData];
+            [self.tableView hideIndicatorViewBlueOrGary];
+            
+        }else{
+            [self  reLoadData]; // load data
+        }
         [self runSequucer];
+        
         tryCatchCount = 4;
     } failure:^(MLRequest *request, NSError *error) {
 //         re request login
@@ -225,12 +384,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                 NSArray * groupsDict =  groups[@"groups"];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
                 [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    /*  add group
-                     
-                     “gid”:
-                     “type”:
-                     “time”:
-                     */
+                    /*  add group */
                     NSString * str = [tools getStringValue:obj[@"gid"] defaultValue:@""];
                     [array addObject:str];
                 }];
@@ -242,12 +396,20 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                         NSArray * groupsDicts =  groupsss[@"groups"];
                         [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             XCJGroup_list * list = [XCJGroup_list turnObject:obj];
-                            if (list.type == 1) {
-                                [_dataSource addObject:list];
-                            }
-
+                            // Build the predicate to find the person sought
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            FCHomeGroupMsg * msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                            msg.gid = list.gid;
+                            msg.gCreatorUid = list.creator;
+                            msg.gName = list.group_name;
+                            msg.gBoard = list.group_board;
+                            msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+                            msg.gbadgeNumber = @0;
+                            msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                            [localContext MR_saveToPersistentStoreAndWait];
                         }];
-                        [self.tableView reloadData];
+//                        [self HomeReloadFetchedResults:nil];
+//                        [self.tableView reloadData];
                         [self.tableView hideIndicatorViewBlueOrGary];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
@@ -274,7 +436,7 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 //    }];
 //    
 //    [sequencer run];
-    double delayInSeconds = 2.0;
+    double delayInSeconds = 1.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
@@ -296,32 +458,18 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
                             LXUser * luser = [[LXUser alloc] initWithDict:obj];
                             [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
                         }];
+                        
+                        // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
                 }
-                
-                // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
-                
-                
             } failure:^(MLRequest *request, NSError *error) {
-                
             }];
         }
-        
-
     });
-    
-//    
-//    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-//    NSDictionary * parames = @{@"uid":userid,@"pos":@0,@"count":@100};
-//    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
-//        self.navigationItem.rightBarButtonItem.enabled = YES;
-//        
-//        
-//    } failure:^(MLRequest *request, NSError *error) {
-//        
-//    }];
 }
+
+
 
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
@@ -329,14 +477,29 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     [self.tableView showIndicatorViewLargeBlue];
 }
 
-
 -(void)changeDomainID:(NSNotification *) notify
 {
     if (notify.object) {
         [self hiddeErrorInfoWithRetry];
-        XCJGroup_list * info = (XCJGroup_list*)notify.object;
-        [_dataSource addObject:info];
-        [self.tableView reloadData];
+
+        FCHomeGroupMsg * list = (FCHomeGroupMsg*)notify.object;
+        if (list) {
+//            [self HomeReloadFetchedResults:nil];
+//            [self.tableView reloadData];
+//            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+//            [self reloadFetchedResults:nil];
+            // Build the predicate to find the person sought
+//            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+//            FCHomeGroupMsg * msg = [FCHomeGroupMsg MR_createInContext:localContext];
+//            msg.gid = list.gid;
+//            msg.gCreatorUid = list.creator;
+//            msg.gName = list.group_name;
+//            msg.gBoard = list.group_board ;
+//            msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+//            msg.gbadgeNumber = @1;
+//            msg.gType = @"1";
+//            [localContext MR_saveOnlySelfAndWait];
+        }
     }
 }
 
@@ -363,86 +526,6 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
     }  
 }
 
-///获取圈子 然后获取圈子内的现场
--(void) loaddata
-{
-//    {"sessionid":"f57c653a8b55496db0f9abf4e8843524","wave_code":0,"offset":0,"length":10,"location":{"lat":39932130,"lng":116450980}}
-    NSMutableDictionary * params = [[NSMutableDictionary alloc] init];
-    [params setValue:@0  forKey:@"offset"];
-    [params setValue:@1  forKey:@"length"];
-    params[@"stopsync"] = @0;
-    [self showIndicatorView];
-    [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params controller:@"domain" Action:@"domains" success:^(id obj) {
-        NSArray *near_invite=[obj objectForKey:@"domains"];
-        if (near_invite && near_invite.count > 0) {
-            
-            Nearest_areas_Info* invite=[[Nearest_areas_Info alloc] initWithJSONObject:near_invite[0]];
-            if (invite) {
-                self.title = invite.area_name;
-                [self refershCurrentScene:invite.area_id];
-            }
-            [self hideIndicatorView];
-        }else{
-            [self hideIndicatorView:@"没有数据" block:^(SLBlock block) {
-                
-            }];
-        
-        }
-        
-    } error:^(NSInteger index) {
-        [self hideIndicatorView:@"加载失败" block:^(SLBlock block) {
-            
-        }];
-        NSLog(@"error .. ..");
-    }];
-}
-
--(void) refershCurrentScene:(NSInteger) sceneID
-{
-    [_dataSource removeAllObjects];
-    [self.tableView reloadData];
-    [self showIndicatorView];
-    //根据圈子拿取所有现场
-    NSMutableDictionary * params_two = [[NSMutableDictionary alloc] init];
-    [params_two setObject:@0 forKey:@"offset"];
-    [params_two setObject:@20 forKey:@"length"];
-    [params_two setObject:[NSNumber numberWithInt:sceneID] forKey:@"domain_id"];
-    [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params_two controller:@"scene" Action:@"scenes_in_domain" success:^(id obj) {
-        if([self respondsToSelector:@selector(getSubInviteListFin:)])
-        {
-            [self performSelector:@selector(getSubInviteListFin:) withObject:obj];
-        }
-    } error:^(NSInteger index) {
-        [self hideIndicatorView:@"加载失败" block:^(SLBlock block) {
-            
-        }];
-    }];
-}
-
--(void) getSubInviteListFin:(NSMutableDictionary*)data
-{
-    NSMutableArray *newlist=[[NSMutableArray alloc] init];
-    NSArray* list=[data objectForKey:@"list"];
-    [list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        Scene_Whole_info *data=[[Scene_Whole_info alloc] initWithJSONObject:obj];
-        [newlist addObject:data];
-    }];
-    _dataSource = newlist;
-    [self.tableView reloadData];
-    [self.refreshControl endRefreshing];
-//  PS: UIRefreshControl在完成之后会与以下代码冲突，导致位置出错。
-//    [UIView beginAnimations:nil context:NULL];
-//    [UIView setAnimationDuration:0.2];
-//    self.tableview.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
-//    [UIView commitAnimations];
-    if (list && list.count > 0) {
-        [self hideIndicatorView];
-    }else{
-        [self hideIndicatorView:@"没有数据" block:^(SLBlock block) {
-            
-        }];
-    }
-}
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation {
@@ -454,11 +537,23 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
         //
         [USER_DEFAULT setValue:[NSNumber numberWithInt:newLocation.coordinate.longitude*1e6] forKey:GlobalData_lng];
         [USER_DEFAULT setValue:[NSNumber numberWithInt:newLocation.coordinate.latitude*1e6] forKey:GlobalData_lat];
-        [self loaddata];
+      //  [self loaddata];
         [self.locationManager stopUpdatingLocation];
+        
+//        geo.user.report(lat,long) 上报当前坐标,如lat=35.233334 long=134.556743
+        double delayInSeconds = 5.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            NSDictionary * parames = @{@"lat":[NSNumber numberWithFloat:newLocation.coordinate.latitude],@"long":[NSNumber numberWithFloat:newLocation.coordinate.longitude]};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"geo.user.report" parameters:parames success:^(MLRequest *request, id responseObject) {
+                
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        });
 
     }else{
-        [self loaddata];
+      //  [self loaddata];
     }
 }
 
@@ -472,23 +567,39 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 1;
+    NSInteger count = [[self.fetchedResultsController sections] count];
+    
+	if (count == 0) {
+		count = 1;
+	}
+	
+    return count;
 }
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (_dataSource.count > 0) {
-        return @"我加入的群组";
+    if([[self.fetchedResultsController sections] count] > 1)
+    {
+        if (section == 0) {
+            return  @"新动态";
+        }
     }
-    return  @"";
+    
+    return  @"我加入的群组";
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSInteger numberOfRows = 0;
     // Return the number of rows in the section.
-    return _dataSource.count;
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        numberOfRows = [sectionInfo numberOfObjects];
+    }
+    
+    return numberOfRows;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -500,54 +611,10 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    // Configure the cell...
-    NSUInteger row = indexPath.row;
-    XCJGroup_list * info  = _dataSource[row];
-//    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:2];
-    label.text = info.group_name;
+    [self configureCell:cell atIndexPath:indexPath];
+    
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Navigation
 
@@ -556,19 +623,28 @@ SINGLETON_GCD(XCJNearbyHomeViewController)
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.ShowDymaic
+   /*
     if ([[segue identifier] isEqualToString:@"showDynamic"])
     {
-        XCJHomeDynamicViewController *vc = (XCJHomeDynamicViewController *)[segue destinationViewController];
-         NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
-        XCJGroup_list * info  = _dataSource[selectedIndexPath.row];
-        vc.Currentgid = info.gid;
-        vc.title =info.group_name;
+    XCJHomeDynamicViewController *vc = (XCJHomeDynamicViewController *)[segue destinationViewController];
+    NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+    FCHomeGroupMsg * info   = _dataSource[selectedIndexPath.row];
+    vc.Currentgid = info.gid;
+    vc.title =info.gName;
+    if ([info.gbadgeNumber intValue] > 0) {
+    info.gbadgeNumber = @0;
+    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     }
+    info.gbadgeNumber = @0;
+    }
+    */
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    FCHomeGroupMsg *recipe = (FCHomeGroupMsg *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    [self showRecipe:recipe animated:YES];
 }
 
 -(IBAction)OpenDomains:(id)sender

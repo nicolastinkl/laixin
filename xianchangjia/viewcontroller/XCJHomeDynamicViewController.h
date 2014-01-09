@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 
 #import "BaseDetailViewController.h"
-
+#import "FCHomeGroupMsg.h"
 
 @interface XCJHomeDynamicViewController : BaseDetailViewController
 
 @property (nonatomic,strong) NSString * Currentgid;
+
+@property (readwrite, nonatomic, strong) FCHomeGroupMsg * groupInfo;
+
 @end
