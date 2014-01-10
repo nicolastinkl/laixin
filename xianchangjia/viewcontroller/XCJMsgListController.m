@@ -30,6 +30,8 @@
 #import "LXRequestFacebookManager.h"
 #import "ChatViewController.h"
 #import "CoreData+MagicalRecord.h"
+#import "XCJAppDelegate.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -139,6 +141,7 @@
             //out view
             NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
             NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
@@ -185,7 +188,11 @@
             [conversation addMessagesObject:msg];
             [localContext MR_saveOnlySelfAndWait];// MR_saveOnlySelfAndWait];
             
-            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];            
+            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+            
+            SystemSoundID id = 1007; //声音
+            AudioServicesPlaySystemSound(id);
+            
         } else if([requestKey isEqualToString:@"newpost"]){
             
             NSDictionary * dicResult = MsgContent[@"data"];
@@ -223,7 +230,7 @@
             }
             // message did come, this will be on left
             msg.messageStatus = @(YES);
-            msg.messageId =  uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+            msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
                 FCUserDescription * localdespObject = response;
                 conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
@@ -265,10 +272,9 @@
 	[self.tableView beginUpdates];
 }
 
-
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	UITableView *tableView = self.tableView;
-	
+   
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -287,6 +293,26 @@
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
 	}
+    // update unread message badge number
+    if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]) {
+        NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"badgeNumber > %d",0];
+        //        NSInteger  inter =  [Conversation MR_countOfEntitiesWithPredicate:preCMD];
+        NSArray * array = [Conversation MR_findAllWithPredicate:preCMD];
+        __block int badgeNumber = 0;
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            Conversation * con = obj;
+            badgeNumber += [con.badgeNumber intValue];
+        }];
+        SLog(@"badgeNumber %d   ",badgeNumber);
+        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+        if (badgeNumber > 0) {
+            [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",badgeNumber]];
+            [UIApplication sharedApplication].applicationIconBadgeNumber = badgeNumber;
+        }else{
+            [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        }
+    }
 }
 
 
@@ -512,7 +538,7 @@
         id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
         [managedObject MR_deleteEntity];
         [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
+         //[[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
 	}
 }
 

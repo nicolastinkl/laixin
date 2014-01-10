@@ -16,5 +16,5 @@
 @dynamic facebookID;
 @dynamic hasAdd;
 @dynamic beAddFriendShips;
-
+@dynamic eid;
 @end

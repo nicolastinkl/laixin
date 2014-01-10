@@ -63,10 +63,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     //加个拖动手势
 //    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
@@ -166,11 +162,16 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if ([self.conversation.badgeNumber intValue] > 0) {
-        
         self.conversation.badgeNumber = @(0);
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
+      //  [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
     }
+    
+	// Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
     /* receive websocket message*/
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(webSocketDidReceivePushMessage:)
@@ -315,7 +316,7 @@
                 }
                 
                 msg.imageUrl = imageurl;
-                msg.messageId = uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 
                 self.conversation.lastMessageDate = date;
                 self.conversation.badgeNumber = @0;
@@ -348,7 +349,7 @@
                 [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);
-                msg.messageId =  uid;//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
                     FCUserDescription * localdespObject = response;
                      self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];

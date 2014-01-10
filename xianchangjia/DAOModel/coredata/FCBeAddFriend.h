@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSDate * addTime;
 @property (nonatomic, retain) NSString * facebookID;
+@property (nonatomic, retain) NSString * eid;
 @property (nonatomic, retain) NSNumber * hasAdd;
 @property (nonatomic, retain) FCUserDescription *beAddFriendShips;
 

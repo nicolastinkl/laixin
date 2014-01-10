@@ -272,12 +272,12 @@
         NSInteger otherUserCount = _activity.like - _activity.likeUsers.count;
         if (otherUserCount) {
             if (_activity.likeUsers.count>0) {
-                text = [text stringByAppendingFormat:@"等%d人",otherUserCount];
+//                text = [text stringByAppendingFormat:@"等%d人",otherUserCount];
             }else{
                 text = [text stringByAppendingFormat:@"%d人",otherUserCount];
             }
         }
-        text = [text stringByAppendingFormat:@"觉得很赞"];
+       text = [text stringByAppendingFormat:@"觉得很赞"];
         _likeLabel.text = text;
         [_likeLabel addLinksWithTextCheckingResults:textCheckingResults attributes:_likeLabel.linkAttributes];
     }else{

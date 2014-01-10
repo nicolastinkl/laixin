@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
 		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
 		8622C880187D2BEC00776A38 /* XCJErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C87F187D2BEC00776A38 /* XCJErrorView.m */; };
 		8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8622C881187D2BFA00776A38 /* XCJErrorView.xib */; };
-		8622C88B187D551100776A38 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88A187D551100776A38 /* FCBeInviteGroup.m */; };
 		8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */; };
 		8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8622C890187D711100776A38 /* aboutLaixinInfo.plist */; };
 		8622C893187D866300776A38 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8622C892187D866300776A38 /* MessageUI.framework */; };
@@ -358,6 +358,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
+		8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		8622C876187D192100776A38 /* ListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItem.h; sourceTree = "<group>"; };
 		8622C877187D192100776A38 /* ListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListItem.m; sourceTree = "<group>"; };
 		8622C878187D192100776A38 /* POHorizontalList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POHorizontalList.h; sourceTree = "<group>"; };
@@ -366,8 +368,6 @@
 		8622C87E187D2BEC00776A38 /* XCJErrorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJErrorView.h; path = viewcontroller/views/XCJErrorView.h; sourceTree = "<group>"; };
 		8622C87F187D2BEC00776A38 /* XCJErrorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJErrorView.m; path = viewcontroller/views/XCJErrorView.m; sourceTree = "<group>"; };
 		8622C881187D2BFA00776A38 /* XCJErrorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJErrorView.xib; path = viewcontroller/views/XCJErrorView.xib; sourceTree = "<group>"; };
-		8622C889187D551100776A38 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
-		8622C88A187D551100776A38 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		8622C88D187D6F3A00776A38 /* XCJAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAboutViewController.h; path = viewcontroller/XCJAboutViewController.h; sourceTree = "<group>"; };
 		8622C88E187D6F3A00776A38 /* XCJAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAboutViewController.m; path = viewcontroller/XCJAboutViewController.m; sourceTree = "<group>"; };
 		8622C890187D711100776A38 /* aboutLaixinInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = aboutLaixinInfo.plist; path = Application/aboutLaixinInfo.plist; sourceTree = "<group>"; };
@@ -1869,12 +1869,12 @@
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */,
+				8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */,
 				86581E02187E95E500FCDC85 /* FCBeAddFriend.h */,
 				86581E03187E95E500FCDC85 /* FCBeAddFriend.m */,
 				8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */,
 				8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */,
-				8622C889187D551100776A38 /* FCBeInviteGroup.h */,
-				8622C88A187D551100776A38 /* FCBeInviteGroup.m */,
 				869DDC601874422600560AFD /* Conversation.h */,
 				869DDC611874422600560AFD /* Conversation.m */,
 				86F9B9B41872A3CB00ED768B /* FCMessage.h */,
@@ -2471,7 +2471,6 @@
 				86660DCC1876DA37007477C0 /* XCJCreateGroupTableViewController.m in Sources */,
 				8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */,
 				86EB76D4185AA6CC00836947 /* AFURLRequestSerialization.m in Sources */,
-				8622C88B187D551100776A38 /* FCBeInviteGroup.m in Sources */,
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
 				86EB76BB185AA6CC00836947 /* Chat.m in Sources */,
@@ -2611,6 +2610,7 @@
 				869D15131839BDBB00B14A02 /* JSONKit.m in Sources */,
 				869CE4E0186BE37B0004C1EC /* Sequencer.m in Sources */,
 				869CE544186BE3A00004C1EC /* NSString+DDXML.m in Sources */,
+				8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */,
 				86D182F61834AF540005901D /* FMResultSet.m in Sources */,
 				8668E483187540DB00D20C9E /* UItitleView.m in Sources */,
 				8681BDE118361A0800521D36 /* XCJReskitModel.m in Sources */,

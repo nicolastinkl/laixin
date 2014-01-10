@@ -230,8 +230,36 @@
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
     
+    
+    if (activity.like > 0 && !cell.HasLoadlisks) {
+        cell.HasLoadlisks = YES;
+       /*
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"100"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
+        NSDictionary * groups = responseObject[@"result"];
+        NSArray * postsDict =  groups[@"users"];
+        if (postsDict&& postsDict.count > 0) {
+        NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        postlikes * likes = [postlikes turnObject:obj];
+        [mutaArray addObject:likes];
+        }];
+        
+        [activity.likeUsers addObjectsFromArray:mutaArray];
+        //indexofActivitys
+        //[self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+        }
+        cell.HasLoadlisks = YES;
+        } failure:^(MLRequest *request, NSError *error) {
+        cell.HasLoadlisks =YES;
+        
+        }];
+        */
+    }
+
     if (activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
+         cell.HasLoad = YES;
         NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //    postid = 12;
@@ -263,36 +291,6 @@
                 cell.HasLoad = NO;
         }];
     }
-    
-    if (activity.like > 0 &&!cell.HasLoadlisks) {
-        
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * postsDict =  groups[@"users"];
-            if (postsDict&& postsDict.count > 0) {
-                 NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    /*
-                     “users”:[
-                     {
-                     “uid”:
-                     “time”:
-                     },
-                     */
-                    postlikes * likes = [postlikes turnObject:obj];
-                    [mutaArray addObject:likes];
-                }];
-                
-                [activity.likeUsers addObjectsFromArray:mutaArray];
-            }
-            cell.HasLoadlisks = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-            cell.HasLoadlisks = NO;
-            
-        }];
-    }
-    
 //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;
     // start requst comments  and likes

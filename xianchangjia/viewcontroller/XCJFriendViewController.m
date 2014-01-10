@@ -112,6 +112,10 @@
     
     ((UILabel * )[self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3;
     ((UILabel * )[self.tableView.tableHeaderView subviewWithTag:2]).height = 0.3;
+    
+    ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = YES;
+    ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = YES;
+    
 //    [self reload:nil];
 //    [self reloadContacts];
 }
@@ -408,7 +412,6 @@
 {
     return @"好友";
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

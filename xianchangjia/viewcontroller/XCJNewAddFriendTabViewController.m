@@ -195,8 +195,9 @@
     {
         [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:info.beAddFriendShips.headpic Size:160]]];
         labelnick.text = info.beAddFriendShips.nick;
-        labelLiyou.text = info.beAddFriendShips.signature;
+        labelLiyou.text = [tools FormatStringForDate:info.addTime];// info.beAddFriendShips.signature;
     }
+    
     if ([info.hasAdd boolValue]) {
         button.hidden = YES;
         imgViewbuttonBG.hidden = YES;

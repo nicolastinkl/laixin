@@ -26,6 +26,8 @@
 #import "FCBeAddFriend.h"
 #import "XCJGroupPost_list.h"
 #import "FCBeInviteGroup.h"
+#import "FCHomeGroupMsg.h"
+#import "CoreData+MagicalRecord.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -80,68 +82,79 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     NSDictionary * MsgContent = notification.userInfo;
     NSInteger innum = [DataHelper getIntegerValue:MsgContent[@"push"] defaultValue:0];
     if (innum == 1) {
-        NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
-        if ([requestKey isEqualToString:@"add_friend"]) {
-            
+        NSString *eventType = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
+        if ([eventType isEqualToString:@"event"]) {
             NSDictionary * dicResult = MsgContent[@"data"];
             
-            NSDictionary * dicMessage = dicResult[@"user"];
+            NSDictionary * dictEvent = dicResult[@"event"];
             
-            LXUser * user = [[LXUser alloc] initWithDict:dicMessage];
-            if (user) {
-                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:user withCompletion:^(id response, NSError *error) {
-                    FCUserDescription* newFcObj = response;
+            NSString *requestKey =  [tools getStringValue:dictEvent[@"type"] defaultValue:nil];
+            
+            if ([requestKey isEqualToString:@"add_friend"]) {
+                NSString  * uid = [tools getStringValue:dictEvent[@"uid"] defaultValue:nil];
+                NSString  * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                    FCUserDescription * newFcObj = response;
                     // Build the predicate to find the person sought
                     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", user.uid];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", uid];
                     FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
                     if(conversation == nil)
                     {
                         conversation =  [FCBeAddFriend MR_createInContext:localContext];
                     }
-                    conversation.facebookID = user.uid;
+                    conversation.facebookID = uid;
                     conversation.beAddFriendShips = newFcObj;
                     conversation.addTime = [NSDate date];
+                    conversation.hasAdd = @NO;
+                    conversation.eid = eid;
                     [localContext MR_saveToPersistentStoreAndWait];
-                }];
-
+                    [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
+                } withuid:uid];
+                
+            }else if ([requestKey isEqualToString:@"group_invite"])
+            { /*	"gid":49,
+               "create_time":1389322217,
+               "type":"group_invite",
+               "eid":41,
+               "fromuid":4    */
+                NSString * gid = [tools getStringValue:dictEvent[@"gid"] defaultValue:nil];
+                NSString * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
+                NSString * fromuid = [tools getStringValue:dictEvent[@"fromuid"] defaultValue:nil];
+                
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                    FCUserDescription *newFcObj = response;
+                    
+                    NSDictionary * paramess = @{@"gid":@[gid]};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                        NSDictionary * groupsss = responseObjects[@"result"];
+                        NSArray * groupsDicts =  groupsss[@"groups"];
+                        [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                            // Build the predicate to find the person sought
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", gid];
+                            FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
+                            if(conversation == nil)
+                            {
+                                conversation =  [FCBeInviteGroup MR_createInContext:localContext];
+                            }
+                            conversation.groupID = gid;
+                            conversation.eid = eid;
+                            conversation.groupName = list.group_name;
+                            conversation.groupJson = [obj JSONString];
+                            conversation.fcBeinviteGroupShips = newFcObj;
+                            conversation.beaddTime = [NSDate date];
+                            [localContext MR_saveToPersistentStoreAndWait];
+                            [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
+                            
+                        }];
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                } withuid:fromuid];
             }
-        }else if ([requestKey isEqualToString:@"group_invite"])
-        {
-            NSDictionary * dicResult = MsgContent[@"data"];
-            
-            NSDictionary * dicMessage_user = dicResult[@"inviteby"];
-            NSDictionary * dicMessage_group = dicResult[@"group"];
-            /*	{“gid”:
-             “creator”:
-             “group_name”:
-             “group_board”:
-             “type”:
-             “time”:}*/
-            LXUser * user = [[LXUser alloc] initWithDict:dicMessage_user];
-            XCJGroup_list * list = [XCJGroup_list turnObject:dicMessage_group];
-            
-            if (user && list) {
-                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:user withCompletion:^(id response, NSError *error) {
-                    FCUserDescription* newFcObj = response;
-                    // Build the predicate to find the person sought
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", list.gid];
-                    FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
-                    if(conversation == nil)
-                    {
-                        conversation =  [FCBeInviteGroup MR_createInContext:localContext];
-                    }
-                    conversation.groupID = list.gid;
-                    conversation.groupJson = [dicMessage_group JSONString];
-                    conversation.fcBeinviteGroupShips = newFcObj;
-                    conversation.beaddTime = [NSDate date];
-                    [localContext MR_saveToPersistentStoreAndWait];
-                }];
-            }
-          
-            
         }
+        
     }
 //    [self updateMessageTabBarItemBadge];
 }
@@ -174,10 +187,10 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                                              selector:@selector(webSocketDidReceivePushMessage:)
                                                  name:MLNetworkingManagerDidReceivePushMessageNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateMessageTabBarItemBadge)
-                                                 name:@"updateMessageTabBarItemBadge"
-                                               object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(updateMessageTabBarItemBadge)
+//                                                 name:@"updateMessageTabBarItemBadge"
+//                                               object:nil];
 
    
     
