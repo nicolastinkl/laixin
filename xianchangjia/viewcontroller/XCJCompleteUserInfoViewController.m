@@ -37,12 +37,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // Do any additional setup after loading the view.
+    [self setNeedsStatusBarAppearanceUpdate];
+    
 	// Do any additional setup after loading the view.
     double delayInSeconds = 0.2;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self.NickText becomeFirstResponder];
     });
+}
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 
@@ -88,12 +95,14 @@
             int sex = 0;
             if (!self.image_man.hidden) {
                 sex  = 1;
-            }else if (!self.image_male.hidden)
+            }
+            else if (!self.image_male.hidden)
             {
                 sex  = 2;
             }else{
                 sex  = 0;
             }
+            [self.NickText resignFirstResponder];
             [SVProgressHUD show];
             NSDictionary * parames = @{@"nick":self.NickText.text,@"sex":@(sex)};
             //nick, signature,sex, birthday, marriage, height

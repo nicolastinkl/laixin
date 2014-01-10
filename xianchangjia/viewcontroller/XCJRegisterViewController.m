@@ -19,6 +19,12 @@
 @interface XCJRegisterViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *PhoneNumber;
 @property (weak, nonatomic) IBOutlet UITextField *yanzhengNumber;
+@property (weak, nonatomic) IBOutlet UIImageView *image_success;
+@property (weak, nonatomic) IBOutlet UIButton *button_getYanzhengma;
+
+@property (weak, nonatomic) IBOutlet UIButton *button_Next;
+@property (weak, nonatomic) IBOutlet UILabel *Label_text;
+
 
 @end
 
@@ -50,7 +56,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-
+    [self setNeedsStatusBarAppearanceUpdate];
+    self.image_success.hidden = YES;
     double delayInSeconds = 0.2;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -62,9 +69,36 @@
 {
     UIButton * buttonBack = (UIButton *) [self.view subviewWithTag:11];
     UIButton * buttonNext = (UIButton *) [self.view subviewWithTag:12];
-    
     [buttonBack addTarget:self action:@selector(BackClick:) forControlEvents:UIControlEventTouchUpInside];
-    [buttonNext addTarget:self action:@selector(CompleteClick:) forControlEvents:UIControlEventTouchUpInside];
+     [buttonNext addTarget:self action:@selector(CompleteClick:) forControlEvents:UIControlEventTouchUpInside];
+   
+}
+
+- (void) initFindPwdControlls{
+    UIButton * buttonBack = (UIButton *) [self.view subviewWithTag:11];
+    [buttonBack addTarget:self action:@selector(BackClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.Label_text.text = @"";
+    [self.button_Next setTitle:@"完成" forState:UIControlStateNormal];
+    [self.button_Next addTarget:self action:@selector(getPwdClick:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
+#warning get user infomation  with get pwd
+-(IBAction)getPwdClick:(id)sender
+{
+    //get user infomation
+    {
+        return;
+        // connection of websocket server
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+        
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+        
+    }
+    
+    
 }
 
 
@@ -116,7 +150,6 @@
                      }
                      }
                      */
-                    
                     SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
                     SLog(@"state : %d", [websocket readyState]);
                     //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
@@ -139,7 +172,12 @@
             }
         } withParems:paremsResult];
     }
-} 
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+
 
 - (void)runSequncer :(NSString * )phone
 {
@@ -152,6 +190,8 @@
                 if (yanzhengCode) {
                     [SVProgressHUD dismiss];
                     self.yanzhengNumber.text = yanzhengCode;
+                    self.image_success.hidden = NO;
+                    self.button_getYanzhengma.enabled = NO;
                 }else{
                     [self loginError:@"获取验证码出错"];
                 }
@@ -166,7 +206,7 @@
 -(void) loginError
 {
     [SVProgressHUD dismiss];
-    [UIAlertView showAlertViewWithTitle:@"登陆失败" message:@"用户或密码错误"];
+    [UIAlertView showAlertViewWithTitle:@"失败" message:@"用户或密码错误"];
 }
 
 -(void) loginError:(NSString * ) msg

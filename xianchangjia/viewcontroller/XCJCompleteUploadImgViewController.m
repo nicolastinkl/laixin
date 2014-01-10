@@ -17,12 +17,15 @@
 #import "tools.h"
 #import "MLNetworkingManager.h"
 
-@interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate>
+@interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
     NSString * ImageFile;
 }
+
+@property (weak, nonatomic) IBOutlet UIButton * takeButton;
+
 @end
 
 @implementation XCJCompleteUploadImgViewController
@@ -45,24 +48,74 @@
     }];
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
 	// Do any additional setup after loading the view.
+    [self setNeedsStatusBarAppearanceUpdate];
+	// Do any additional setup after loading the view.
+    
+    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
+    img.layer.cornerRadius = img.width/2;
+    [img.layer setMasksToBounds:YES];
+    
+    double delayInSeconds = .3;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self openGallery:nil];
+    });
 }
 
 -(IBAction)openGallery:(id)sender
 {
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    imagePicker.delegate = self;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        imagePicker.allowsEditing  = YES;
-        imagePicker.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        [self presentViewController:imagePicker animated:YES completion:^{
-            
-        }];
+    
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"选择头像" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册", nil];
+    action.tag = 3;
+    [action showInView:self.view];
+    
+//    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+//    imagePicker.delegate = self;
+//    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+//        imagePicker.allowsEditing  = YES;
+//        imagePicker.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
+//        imagePicker.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+//        [self presentViewController:imagePicker animated:YES completion:^{
+//        }];
+//    }
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:{   //拍照
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                camera.delegate = self;
+                camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                camera.allowsEditing = YES;
+                [self presentViewController:camera animated:YES completion:nil];
+            }
+        }
+            break;
+        case 1:{
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+                photoLibrary.delegate = self;
+                photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                photoLibrary.allowsEditing = YES;
+                [self presentViewController:photoLibrary animated:YES completion:nil];
+            }
+        }
+            break;
+        default:
+            break;
     }
+    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
@@ -112,7 +165,8 @@
 - (void)uploadFile:(NSString *)filePath  key:(NSString *)key {
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
-   
+    
+    [self.takeButton setBackgroundImage:nil forState:UIControlStateNormal];
   
      [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
          if (response) {
@@ -150,6 +204,7 @@
                 [successImg setHidden:NO];
             }];
             [img hideIndicatorViewBlueOrGary];
+            [self.takeButton setBackgroundImage:nil forState:UIControlStateNormal];
             [SVProgressHUD dismiss];
             //nick, signature,sex, birthday, marriage, height
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {

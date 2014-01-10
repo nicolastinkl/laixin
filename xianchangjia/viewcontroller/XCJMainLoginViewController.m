@@ -37,6 +37,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -48,8 +54,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
+    [self setNeedsStatusBarAppearanceUpdate];
+    // Do any additional setup after loading the view.
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideKeyboard)];
     [self.view addGestureRecognizer:tapges];
@@ -57,14 +64,61 @@
     {
         UIView * viewKey = (UIView *) [self.view subviewWithTag:2];
         viewKey.top = self.view.height - viewKey.height;
-        UILabel *label = (UILabel *) [viewKey subviewWithTag:4];
-        label.height = .5f;
+        UILabel *label = (UILabel *) [viewKey subviewWithTag:3];
+        label.width = .5f;
     }
     {
         UIView * viewKeyMain = (UIView *) [self.view subviewWithTag:1];
-        UILabel *label = (UILabel *) [viewKeyMain subviewWithTag:4];
-        label.height = .5f;
+        UIButton *loginButton = (UIButton *) [viewKeyMain subviewWithTag:5];
+        
+        {
+//            UIImage* originalImage =[[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"] stretchableImageWithLeftCapWidth:11.0 topCapHeight:0.0];
+            //normal
+            UIImage *originalImage = [UIImage imageNamed:@"fbc_promobutton_36_2_5_2_5_normal"];
+            UIEdgeInsets insets = UIEdgeInsetsMake(2,5,2,5);
+            UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+            [loginButton setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+        }
+        {
+            //Highlighted
+            UIImage *originalImage = [UIImage imageNamed:@"fbc_promobutton_36_2_5_2_5_highlighted.png"];
+            UIEdgeInsets insets = UIEdgeInsetsMake(2,5,2,5);
+            UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+            [loginButton setBackgroundImage:stretchableImage forState:UIControlStateHighlighted];
+        }
+        
+        [loginButton addTarget:self action:@selector(loginClick:) forControlEvents:UIControlEventTouchUpInside];
+        //266 30
     }
+}
+-(IBAction) loginClick:(id)sender
+{
+    UIView * viewKey = (UIView *) [self.view subviewWithTag:1];
+    UITextField * phoneText = (UITextField *) [viewKey subviewWithTag:2];
+    UITextField * pwdText = (UITextField *) [viewKey subviewWithTag:3];
+    
+    if (phoneText.text.length == 11 && pwdText.text.length >= 6) {
+        if ([phoneText.text isValidPhone])
+        {
+            
+            if ([phoneText isFirstResponder]) {
+                [phoneText resignFirstResponder];
+            }
+            
+            if ([pwdText isFirstResponder]) {
+                [pwdText resignFirstResponder];
+            }
+    
+            [self runSequncer:phoneText.text];
+        }
+        else
+        {
+            [UIAlertView showAlertViewWithMessage:@"手机号码格式错误"];
+        }
+    }else{
+        [UIAlertView showAlertViewWithMessage:@"请输入正确手机号或密码"];
+    }
+    
 }
 
 -(void)hideKeyboard
@@ -99,6 +153,28 @@
     }];
 }
 
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    UIView * viewKey = (UIView *) [self.view subviewWithTag:1];
+    UITextField * phoneText = (UITextField *) [viewKey subviewWithTag:2];
+    UITextField * pwdText = (UITextField *) [viewKey subviewWithTag:3];
+    if (textField == phoneText) {
+        if (textField.text.length >= 1)
+            ((UIImageView *) [viewKey subviewWithTag:6]).image = [UIImage imageNamed:@"login_user_highlighted_os7"];
+        else
+            ((UIImageView *) [viewKey subviewWithTag:6]).image = [UIImage imageNamed:@"login_user_os7"];
+        
+    }else if (textField == pwdText)
+    {
+        if (textField.text.length >= 1)
+            ((UIImageView *) [viewKey subviewWithTag:7]).image = [UIImage imageNamed:@"login_key_highlighted_os7"];
+        else
+            ((UIImageView *) [viewKey subviewWithTag:7]).image = [UIImage imageNamed:@"login_key_os7"];
+    }
+    
+    return YES;
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -209,10 +285,10 @@
     {
         XCJRegisterViewController *vc = (XCJRegisterViewController *)[segue destinationViewController];
         UILabel * title  = (UILabel *) [vc.view subviewWithTag:5];
-        title.text = @"找回密码";
-        [vc initControlls];
+        title.text = @"找回密码";  
+        [vc initFindPwdControlls];
+        
     }
-    
 }
 
 - (void)didReceiveMemoryWarning

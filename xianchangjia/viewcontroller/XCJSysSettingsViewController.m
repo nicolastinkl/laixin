@@ -38,17 +38,13 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-//        [USER_DEFAULT removeObjectForKey:GlobalData_main_server];
-        [USER_DEFAULT removeObjectForKey:GlobalData_user_session];
+        [USER_DEFAULT removeObjectForKey:KeyChain_Laixin_account_sessionid];
         [USER_DEFAULT synchronize];
         
-        XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
         XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-        [delegate.mainNavigateController pushViewController:viewContr animated:NO];
-        [self presentViewController:delegate.mainNavigateController animated:NO completion:^{
-            delegate.tabBarController.selectedIndex = 0;
-        }];
-        
+        delegate.tabBarController.selectedIndex = 0;
+        UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
+        [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
     }
 }
 

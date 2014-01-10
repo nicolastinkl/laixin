@@ -194,7 +194,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 //                                               object:nil];
 
    
-    
+
     [self updateMessageTabBarItemBadge];
     // Override point for customization after application launch.
     return YES;

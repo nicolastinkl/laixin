@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJRegisterViewController : UIViewController
+
 - (void) initControlls;
+- (void) initFindPwdControlls;
 @end
