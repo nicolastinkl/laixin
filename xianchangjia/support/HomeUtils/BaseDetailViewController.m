@@ -283,8 +283,7 @@
                 }];
                 [activity.comments addObjectsFromArray:mutaArray];
                 //indexofActivitys
-                [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
-                
+                [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];   
             }
             cell.HasLoad = YES;
         } failure:^(MLRequest *request, NSError *error) {

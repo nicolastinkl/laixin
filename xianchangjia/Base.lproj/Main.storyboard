@@ -1243,10 +1243,10 @@
             </objects>
             <point key="canvasLocation" x="1901" y="826"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Create Chat Navi Controller-->
         <scene sceneID="fnD-kk-XRk">
             <objects>
-                <navigationController definesPresentationContext="YES" id="egt-QR-yt1" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="XCJCreateChatNaviController" storyboardIdentifier="XCJCreateChatNaviController" definesPresentationContext="YES" id="egt-QR-yt1" customClass="XCJCreateChatNaviController" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="2rU-Mt-mE0">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1262,7 +1262,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yec-JP-SpL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1869" y="339"/>
+            <point key="canvasLocation" x="1865" y="283"/>
         </scene>
         <!--Create Chat View Controller - 发起聊天-->
         <scene sceneID="yOR-lJ-fbv">
@@ -1335,7 +1335,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2t9-mg-vny" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2318" y="702"/>
+            <point key="canvasLocation" x="2272" y="283"/>
         </scene>
         <!--Navigation Controller - 好友-->
         <scene sceneID="WbA-yy-c0w">
@@ -1391,24 +1391,63 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="65h-dk-DdH">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="TUc-7S-x9t">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" id="p79-Xu-QMj">
-                                <rect key="frame" x="282" y="11" width="22" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="postAction:" destination="jMh-vl-FO0" eventType="touchUpInside" id="G4f-2x-Bj6"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="backBarButtonItem" title="返回" id="hLv-bY-RZZ"/>
+                        <barButtonItem key="rightBarButtonItem" image="threadInfoButton" style="plain" id="TUc-7S-x9t">
+                            <connections>
+                                <action selector="postAction:" destination="jMh-vl-FO0" id="hdF-Vc-pXi"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ms5-tT-h9b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1746" y="1466"/>
+            <point key="canvasLocation" x="1709" y="1490"/>
+        </scene>
+        <!--Group Users Table View Controller-->
+        <scene sceneID="G74-SM-RVe">
+            <objects>
+                <tableViewController restorationIdentifier="XCJGroupUsersTableViewController" storyboardIdentifier="XCJGroupUsersTableViewController" id="iOg-x8-a0Z" customClass="XCJGroupUsersTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sn4-Ek-4bf">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="60" id="nXC-r8-WxA">
+                                <rect key="frame" x="0.0" y="55" width="320" height="60"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nXC-r8-WxA" id="8Yo-O0-oQg">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="59"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="k00-mu-bKT">
+                                            <rect key="frame" x="10" y="10" width="40" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </imageView>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4NN-VZ-SuX">
+                                            <rect key="frame" x="58" y="19" width="181" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="z3P-5L-nLo">
+                                            <rect key="frame" x="10" y="10" width="40" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="iOg-x8-a0Z" id="qri-om-F6Z"/>
+                            <outlet property="delegate" destination="iOg-x8-a0Z" id="Myq-CF-aIm"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6DO-gB-Akw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2158" y="1490"/>
         </scene>
         <!--Dy Scence View Controller - 现场详情-->
         <scene sceneID="qBS-eM-GQ6">
@@ -1490,7 +1529,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cXp-7c-NVG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2137" y="1495"/>
+            <point key="canvasLocation" x="3301" y="1503"/>
         </scene>
         <!--Send New Content View Controller - 发布-->
         <scene sceneID="IiR-wF-cY9">
@@ -1574,7 +1613,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w3N-0A-roY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2302" y="1476"/>
+            <point key="canvasLocation" x="3753" y="1498"/>
         </scene>
         <!--Navigation Controller - 动态-->
         <scene sceneID="Rwc-1K-lMB">
@@ -1655,7 +1694,7 @@
                                             <color key="backgroundColor" red="0.9338727678571429" green="0.9338727678571429" blue="0.9338727678571429" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ty1-pV-Lee">
-                                            <rect key="frame" x="67" y="19" width="200" height="21"/>
+                                            <rect key="frame" x="67" y="19" width="182" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -1664,6 +1703,10 @@
                                         </label>
                                         <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav_badge_6_6_6_6" id="PMh-NL-W4u">
                                             <rect key="frame" x="274" y="23" width="13" height="13"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="inboxMutedIcon" id="pHc-Mt-wd3">
+                                            <rect key="frame" x="257" y="22" width="15" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -3576,6 +3619,7 @@
         <image name="icon_qrcode" width="21" height="21"/>
         <image name="img_add_phone_friends" width="320" height="320"/>
         <image name="img_player_bg" width="750" height="473"/>
+        <image name="inboxMutedIcon" width="15" height="15"/>
         <image name="inboxRepliedIcon" width="13" height="12"/>
         <image name="index_friends" width="25" height="25"/>
         <image name="index_msg_50x50_gray" width="25" height="25"/>
@@ -3597,6 +3641,7 @@
         <image name="tabBarRecentsIcon" width="25" height="25"/>
         <image name="thread-edit-delete-button" width="13" height="30"/>
         <image name="threadInfoAddPeople" width="25" height="25"/>
+        <image name="threadInfoButton" width="44" height="44"/>
         <image name="threadInfoCallDisabled" width="25" height="25"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -62,7 +62,12 @@
     // Initialize and add Contact Picker View
     self.contactPickerView = [[THContactPickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     self.contactPickerView.delegate = self;
-    [self.contactPickerView setPlaceholderString:@"选择要聊天的好友"];
+    if (self.Currentgid) {
+        [self.contactPickerView setPlaceholderString:@"选择要加入的好友"];
+    }else{
+        [self.contactPickerView setPlaceholderString:@"选择要聊天的好友"];
+    }
+
     [self.view addSubview:self.contactPickerView];
     
     // Fill the rest of the view with the table view
@@ -71,6 +76,7 @@
 //    self.tableView.dataSource = self;
 //    [self.view insertSubview:self.tableView belowSubview:self.contactPickerView];
     self.tableView.top = self.contactPickerView.height + 44;
+    self.tableView.height = self.view.height-44;
     self.contacts = [FCFriends MR_findAll];
     self.selectedContacts = [NSMutableArray array];
     self.filteredContacts = self.contacts;
@@ -182,87 +188,118 @@
 
 -(IBAction) complateClick:(id)sender
 {
-    if(self.selectedContacts.count > 1){
-        // 群聊必须至少2人
-        [SVProgressHUD showWithStatus:@"正在创建..."];
-        NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@2};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //Result={“gid”:1}
-            if (responseObject) {
-                NSDictionary * dict =  responseObject[@"result"];
-                NSString * gid =  [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
-                if ([gid intValue] <= 0) {
-                    [SVProgressHUD dismiss];
-                    [UIAlertView showAlertViewWithMessage:@"创建失败"];
-                    return ;
-                }
-                //group.regupdate(gid) 注册群的消息更新
-                //group.invite (gid,uid)
-                {
-//                  注册群的消息更新
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.regupdate" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
-                        
-                    } failure:^(MLRequest *request, NSError *error) {
-                    }];
-                }
+    if(self.Currentgid)
+    {
+        //加入群组
+        if (self.selectedContacts.count > 0) {
+            NSMutableArray * arrayUIDs = [[NSMutableArray alloc] init];
+            [self.selectedContacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                FCFriends *userss = obj;
+                [arrayUIDs addObject:userss.friendID];
+            }];
+            
+            [SVProgressHUD show];
+            double delayInSeconds = .5;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
-                {
-                    NSMutableArray * arrayUIDs = [[NSMutableArray alloc] init];
-                    __block NSString * strNames;
-                    [self.selectedContacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        FCFriends *userss = obj;
-                        [arrayUIDs addObject:userss.friendID];
-                        if (!strNames) {
-                            strNames = userss.friendRelation.nick;
-                        }else{
-                            strNames = [NSString stringWithFormat:@"%@,%@",strNames,userss.friendRelation.nick];
-                        }
-                    }];
-                    [arrayUIDs addObject:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.invite" parameters:@{@"gid":gid,@"uid":arrayUIDs} success:^(MLRequest *request, id responseObject) {
-                        
-                        // target to chat view
-                        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-                        NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid]];
-                        NSArray * array =  [Conversation MR_findAllWithPredicate:pre inContext:localContext];
-                        ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
-                        if (array.count > 0) {
-                            chatview.conversation = array[0];
-                        }else{
-                            // create new
-                            Conversation * conversation =  [Conversation MR_createInContext:localContext];
-                            conversation.lastMessage = [NSString stringWithFormat:@"你邀请%@加入了群聊",strNames];
-                            conversation.lastMessageDate = [NSDate date];
-                            conversation.messageType = @(XCMessageActivity_UserGroupMessage);
-                            conversation.messageStutes = @(messageStutes_incoming);
-                            conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
-                            conversation.facebookName = strNames;
-                            conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-                            conversation.badgeNumber = @0;
-                            [localContext MR_saveOnlySelfAndWait];
-                            chatview.conversation = conversation;
-                        }
-                        [SVProgressHUD dismiss];
-                        [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                            // create new talk;
-//                            [self.navigationController pushViewController:chatview animated:YES];
-//                            UITabBarController * tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
-//                            tabBarController.selectedIndex = 2;
-//                            [tabBarController.selectedViewController.navigationController pushViewController:chatview animated:NO];
-                        }];
-                    } failure:^(MLRequest *request, NSError *error) {
- 
-                        [SVProgressHUD dismiss];
-                    }];
-                }
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
-            //[UIAlertView showAlertViewWithMessage:@"创建失败"];
-        }];
+                [[MLNetworkingManager sharedManager] sendWithAction:@"group.invite" parameters:@{@"gid":self.Currentgid,@"uid":arrayUIDs} success:^(MLRequest *request, id responseObject) {
+                    [SVProgressHUD dismiss];
+                    [self.navigationController dismissViewControllerAnimated:YES completion:^{}];
+                } failure:^(MLRequest *request, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    [UIAlertView showAlertViewWithMessage:@"邀请失败"];
+                }];
+                
+            });
+            
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"请选择要加入的成员"];
+        }
     }else{
-        [SVProgressHUD dismiss];
-        [UIAlertView showAlertViewWithMessage:@"群聊必须至少2人"];
+        
+        if(self.selectedContacts.count > 1){
+            // 群聊必须至少2人
+            [SVProgressHUD showWithStatus:@"正在创建..."];
+            NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@2};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //Result={“gid”:1}
+                if (responseObject) {
+                    NSDictionary * dict =  responseObject[@"result"];
+                    NSString * gid =  [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
+                    if ([gid intValue] <= 0) {
+                        [SVProgressHUD dismiss];
+                        [UIAlertView showAlertViewWithMessage:@"创建失败"];
+                        return ;
+                    }
+                    //group.regupdate(gid) 注册群的消息更新
+                    //group.invite (gid,uid)
+                    {
+                        //                  注册群的消息更新
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"group.regupdate" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                            
+                        } failure:^(MLRequest *request, NSError *error) {
+                        }];
+                    }
+                    
+                    {
+                        NSMutableArray * arrayUIDs = [[NSMutableArray alloc] init];
+                        __block NSString * strNames;
+                        [self.selectedContacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            FCFriends *userss = obj;
+                            [arrayUIDs addObject:userss.friendID];
+                            if (!strNames) {
+                                strNames = userss.friendRelation.nick;
+                            }else{
+                                strNames = [NSString stringWithFormat:@"%@,%@",strNames,userss.friendRelation.nick];
+                            }
+                        }];
+                        [arrayUIDs addObject:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"group.invite" parameters:@{@"gid":gid,@"uid":arrayUIDs} success:^(MLRequest *request, id responseObject) {
+                            
+                            // target to chat view
+                            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid]];
+                            NSArray * array =  [Conversation MR_findAllWithPredicate:pre inContext:localContext];
+                            ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
+                            if (array.count > 0) {
+                                chatview.conversation = array[0];
+                            }else{
+                                // create new
+                                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                conversation.lastMessage = [NSString stringWithFormat:@"你邀请%@加入了群聊",strNames];
+                                conversation.lastMessageDate = [NSDate date];
+                                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                conversation.messageStutes = @(messageStutes_incoming);
+                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                conversation.facebookName = strNames;
+                                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+                                conversation.badgeNumber = @0;
+                                [localContext MR_saveOnlySelfAndWait];
+                                chatview.conversation = conversation;
+                            }
+                            [SVProgressHUD dismiss];
+                            [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                                // create new talk;
+                                //                            [self.navigationController pushViewController:chatview animated:YES];
+                                //                            UITabBarController * tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
+                                //                            tabBarController.selectedIndex = 2;
+                                //                            [tabBarController.selectedViewController.navigationController pushViewController:chatview animated:NO];
+                            }];
+                        } failure:^(MLRequest *request, NSError *error) {
+                            
+                            [SVProgressHUD dismiss];
+                        }];
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [SVProgressHUD dismiss];
+                //[UIAlertView showAlertViewWithMessage:@"创建失败"];
+            }];
+        }else{
+            [SVProgressHUD dismiss];
+            [UIAlertView showAlertViewWithMessage:@"群聊必须至少2人"];
+        }
     }
 }
 

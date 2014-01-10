@@ -18,5 +18,5 @@
 @dynamic gType;
 @dynamic gDate;
 @dynamic gbadgeNumber;
-
+@dynamic isMute;
 @end

@@ -318,7 +318,13 @@
     }
     else
         imgView.hidden = YES;
+    UIImageView *imgViewMute = (UIImageView *)[cell.contentView viewWithTag:4];
+    if ([info.isMute boolValue])
+        imgViewMute.hidden = NO;
+    else
+        imgViewMute.hidden = YES;
 }
+
 
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify

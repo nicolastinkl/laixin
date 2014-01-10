@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJCreateChatViewController : UIViewController
-
+@property (nonatomic,strong) NSString * Currentgid;
 @end

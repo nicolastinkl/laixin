@@ -28,6 +28,8 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCJUserInfoController.h"
 #import "XCJAddFriendNaviController.h"
+#import "FCBeAddFriend.h"
+#import "FCBeInviteGroup.h"
 
 @interface XCJFriendViewController ()<NSFetchedResultsControllerDelegate>
 {
@@ -118,6 +120,30 @@
     
 //    [self reload:nil];
 //    [self reloadContacts];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(add_friend_Notify:) name:@"add_friend_Notify" object:[[UIApplication sharedApplication] delegate]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(group_invite_Notify:) name:@"group_invite_Notify" object:[[UIApplication sharedApplication] delegate]];
+    
+    [self add_friend_Notify:nil];
+    [self group_invite_Notify:nil];
+}
+
+- (void) add_friend_Notify:(NSNotification * ) notiy
+{
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd = %@",@NO];
+    NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
+    if (cont > 0) {
+        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = NO;
+    }
+}
+
+- (void) group_invite_Notify:(NSNotification * ) notiy
+{
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"groupID > %@",@"1"];
+    NSUInteger cont = [FCBeInviteGroup MR_countOfEntitiesWithPredicate:pre];
+    if (cont > 0) {
+        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = NO;
+    }
 }
 
 -(IBAction) AddFriendClick:(id)sender

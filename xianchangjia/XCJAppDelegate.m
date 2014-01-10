@@ -110,6 +110,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                     conversation.eid = eid;
                     [localContext MR_saveToPersistentStoreAndWait];
                     [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
                 } withuid:uid];
                 
             }else if ([requestKey isEqualToString:@"group_invite"])
@@ -147,7 +148,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             conversation.beaddTime = [NSDate date];
                             [localContext MR_saveToPersistentStoreAndWait];
                             [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
-                            
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
                         }];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];

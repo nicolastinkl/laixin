@@ -55,7 +55,6 @@
         numberOfRows = [sectionInfo numberOfObjects];
     }
     
-    
     if (numberOfRows <= 0) {
         // show info
         [self showErrorText:@"暂时还没有人添加你为好友"];

@@ -103,6 +103,10 @@
 		8681BE3E1839AABA00521D36 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE3A1839AABA00521D36 /* UserInfo.m */; };
 		8681BE411839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
 		8681BE421839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
+		86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DAC187FA7B700DC0CB8 /* XCJGroupMenuView.m */; };
+		86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */; };
+		86893DB3187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */; };
+		86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */; };
 		8692E3BE18642DB700F9E1DD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
@@ -519,6 +523,13 @@
 		8681BE3A1839AABA00521D36 /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
 		8681BE3F1839AACD00521D36 /* InviteInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteInfo.h; sourceTree = "<group>"; };
 		8681BE401839AACD00521D36 /* InviteInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteInfo.m; sourceTree = "<group>"; };
+		86893DAB187FA7B700DC0CB8 /* XCJGroupMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJGroupMenuView.h; path = viewcontroller/views/XCJGroupMenuView.h; sourceTree = "<group>"; };
+		86893DAC187FA7B700DC0CB8 /* XCJGroupMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJGroupMenuView.m; path = viewcontroller/views/XCJGroupMenuView.m; sourceTree = "<group>"; };
+		86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJGroupMenuView.xib; path = viewcontroller/views/XCJGroupMenuView.xib; sourceTree = "<group>"; };
+		86893DB1187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJGroupUsersTableViewController.h; path = viewcontroller/XCJGroupUsersTableViewController.h; sourceTree = "<group>"; };
+		86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJGroupUsersTableViewController.m; path = viewcontroller/XCJGroupUsersTableViewController.m; sourceTree = "<group>"; };
+		86893DB4187FCCC500DC0CB8 /* XCJCreateChatNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateChatNaviController.h; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.h; sourceTree = SOURCE_ROOT; };
+		86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateChatNaviController.m; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.m; sourceTree = SOURCE_ROOT; };
 		8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "defaultPng/Default-568h@2x.png"; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
@@ -1129,6 +1140,7 @@
 		8668E44F18751AB500D20C9E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				86893DAA187FA79300DC0CB8 /* Views */,
 				86B73D93187E670400EF7391 /* PostView */,
 				86660DC61876D9E7007477C0 /* CreateGroup */,
 				86660DBE1876BB51007477C0 /* MenuView */,
@@ -1279,6 +1291,25 @@
 				8681BDCB1836153000521D36 /* YLLabel.m */,
 			);
 			path = YLLabel;
+			sourceTree = "<group>";
+		};
+		86893DAA187FA79300DC0CB8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				86893DAB187FA7B700DC0CB8 /* XCJGroupMenuView.h */,
+				86893DAC187FA7B700DC0CB8 /* XCJGroupMenuView.m */,
+				86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		86893DB0187FB9BC00DC0CB8 /* groupInfo */ = {
+			isa = PBXGroup;
+			children = (
+				86893DB1187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.h */,
+				86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */,
+			);
+			name = groupInfo;
 			sourceTree = "<group>";
 		};
 		869CE4A7186957C30004C1EC /* iPad */ = {
@@ -1524,6 +1555,7 @@
 		86B73D93187E670400EF7391 /* PostView */ = {
 			isa = PBXGroup;
 			children = (
+				86893DB0187FB9BC00DC0CB8 /* groupInfo */,
 				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
 				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
@@ -1949,6 +1981,8 @@
 			children = (
 				86E57CFF18796EB500978AFA /* XCJCreateChatViewController.h */,
 				86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */,
+				86893DB4187FCCC500DC0CB8 /* XCJCreateChatNaviController.h */,
+				86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2390,6 +2424,7 @@
 				8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */,
 				867014A9185185F100518B6D /* JsonImageurls.json in Resources */,
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
+				86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */,
 				8668E481187540DB00D20C9E /* MLScrollRefreshHeader.bundle in Resources */,
 				866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */,
 				8668E477187540DB00D20C9E /* btn_comment@2x.png in Resources */,
@@ -2426,6 +2461,7 @@
 				8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
 				869CE52A186BE38D0004C1EC /* NSManagedObjectContext+MagicalRecord.m in Sources */,
+				86893DB3187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m in Sources */,
 				866516A7187BF276001F05F6 /* split.c in Sources */,
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
@@ -2482,6 +2518,7 @@
 				86D182961834AED30005901D /* UIView+Indicator.m in Sources */,
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
 				86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */,
+				86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */,
 				86D182FE1834AF7E0005901D /* GlobalData.m in Sources */,
 				86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */,
 				869CE524186BE38D0004C1EC /* NSManagedObject+MagicalAggregation.m in Sources */,
@@ -2554,6 +2591,7 @@
 				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
 				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
+				86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
 				8681BDC41834B53C00521D36 /* DAImageResizedImageView.m in Sources */,

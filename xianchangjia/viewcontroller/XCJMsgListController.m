@@ -93,6 +93,21 @@
     [self reloadFetchedResults:nil];
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseDataConver" object:[[UIApplication sharedApplication] delegate]];
+    
+    NSInteger numberOfRows = 0;
+    // Return the number of rows in the section.
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
+        numberOfRows = [sectionInfo numberOfObjects];
+    }
+    
+    if (numberOfRows <= 0) {
+        // show info
+        [self showErrorText:@"暂时还没有消息"];
+    }else{
+        [self hiddeErrorText];
+    }
+    
 }
 
 #pragma mark -
@@ -275,6 +290,14 @@
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
 	UITableView *tableView = self.tableView;
    
+    NSInteger numberOfRows = [[Conversation  MR_findAll] count];
+    if (numberOfRows <= 0) {
+        // show info
+        [self showErrorText:@"暂时还没有消息"];
+    }else{
+        [self hiddeErrorText];
+    }
+    
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];

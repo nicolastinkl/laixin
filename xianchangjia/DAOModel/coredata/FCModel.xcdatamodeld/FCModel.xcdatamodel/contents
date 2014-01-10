@@ -47,6 +47,7 @@
         <attribute name="gid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="gType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isMute" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupInfo" inverseEntity="FCBeInviteGroup" syncable="YES"/>
     </entity>
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
@@ -88,7 +89,7 @@
         <element name="FCBeAddFriend" positionX="169" positionY="96" width="128" height="120"/>
         <element name="FCBeInviteGroup" positionX="-110" positionY="279" width="128" height="148"/>
         <element name="FCFriends" positionX="178" positionY="-27" width="128" height="75"/>
-        <element name="FCHomeGroupMsg" positionX="-333" positionY="228" width="128" height="163"/>
+        <element name="FCHomeGroupMsg" positionX="-333" positionY="228" width="128" height="178"/>
         <element name="FCMessage" positionX="-108" positionY="-288" width="128" height="180"/>
         <element name="FCUserDescription" positionX="-342" positionY="-174" width="128" height="345"/>
     </elements>
