@@ -1326,6 +1326,80 @@
             </objects>
             <point key="canvasLocation" x="2272" y="283"/>
         </scene>
+        <!--Post Text Navi Controller-->
+        <scene sceneID="hoY-JD-6i3">
+            <objects>
+                <navigationController restorationIdentifier="XCJPostTextNaviController" storyboardIdentifier="XCJPostTextNaviController" definesPresentationContext="YES" id="OT9-iO-oOs" customClass="XCJPostTextNaviController" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="C0E-Wd-NDb">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.18779067520000001" green="0.65503207760000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fn9-dt-BQ9" kind="relationship" relationship="rootViewController" id="pfX-Sb-RqS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3Tu-VV-1cK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2425" y="880"/>
+        </scene>
+        <!--Post Text View Controller - 发表动态-->
+        <scene sceneID="jy8-Fa-EES">
+            <objects>
+                <viewController restorationIdentifier="XCJPostTextViewController" storyboardIdentifier="XCJPostTextViewController" id="fn9-dt-BQ9" customClass="XCJPostTextViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nND-8q-kVM">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_TextEntryField_light_0_6_0_6" id="CFl-QT-VhP">
+                                <rect key="frame" x="10" y="73" width="300" height="147"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.40000000000000002" y="0.29999999999999999" width="0.20000000000000001" height="0.49999999999999994"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" id="oCb-De-iZQ">
+                                <rect key="frame" x="17" y="79" width="283" height="133"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="fn9-dt-BQ9" id="UQ1-jZ-cfs"/>
+                                </connections>
+                            </textView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DME-Er-THr">
+                                <rect key="frame" x="264" y="199" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="发表动态" id="hK4-lC-Dlz">
+                        <barButtonItem key="leftBarButtonItem" title="取消" style="plain" id="0e0-g2-8wm">
+                            <connections>
+                                <action selector="dismissThisNavi:" destination="fn9-dt-BQ9" id="IMU-qY-ehw"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="发送" style="done" id="4fl-Ey-ZIA">
+                            <connections>
+                                <action selector="saveAndUpload:" destination="fn9-dt-BQ9" id="XAk-nc-stV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bSp-zR-tZ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2985" y="872"/>
+        </scene>
         <!--Navigation Controller - 好友-->
         <scene sceneID="WbA-yy-c0w">
             <objects>
@@ -1385,7 +1459,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ms5-tT-h9b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1558" y="1480"/>
+            <point key="canvasLocation" x="1756" y="1498"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="cH9-yu-zCh">
@@ -1670,7 +1744,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wKH-G2-tFh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1194" y="2138"/>
+            <point key="canvasLocation" x="1126" y="2144"/>
         </scene>
         <!--Nearby Home View Controller - 动态-->
         <scene sceneID="1ns-Iw-odF">
@@ -1767,7 +1841,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AU2-BJ-Mn4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="839" y="2143"/>
+            <point key="canvasLocation" x="741" y="2144"/>
         </scene>
         <!--Login Navi Controller-->
         <scene sceneID="GwF-qf-eYi">
@@ -2464,7 +2538,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DjJ-bw-935" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1847" y="5531"/>
+            <point key="canvasLocation" x="2147" y="5151"/>
         </scene>
         <!--Add Friend Navi Controller-->
         <scene sceneID="7jm-Qt-SDm">
@@ -2997,7 +3071,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xA8-dU-cPH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1300" y="2186"/>
+            <point key="canvasLocation" x="1464" y="2165"/>
         </scene>
         <!--User View Controller-->
         <scene sceneID="po3-4g-0EZ">
@@ -3168,7 +3242,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ADZ-sV-A1w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1724" y="2193"/>
+            <point key="canvasLocation" x="1823" y="2157"/>
         </scene>
         <!--Comment View Controller-->
         <scene sceneID="GKL-rw-hs8">
@@ -3222,7 +3296,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="moK-BQ-Odb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2111" y="2144"/>
+            <point key="canvasLocation" x="2171" y="2152"/>
         </scene>
         <!--Send Comment View Controller-->
         <scene sceneID="OcQ-i9-cqV">
@@ -3248,7 +3322,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eqk-ja-WtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2504" y="2144"/>
+            <point key="canvasLocation" x="2504" y="2152"/>
         </scene>
         <!--Chat View Controller - 聊天-->
         <scene sceneID="HHe-sk-cBx">
@@ -3556,7 +3630,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yij-37-4XN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2801" y="34"/>
+            <point key="canvasLocation" x="2794" y="72"/>
         </scene>
         <!--About View Controller-->
         <scene sceneID="6FD-7R-5od">

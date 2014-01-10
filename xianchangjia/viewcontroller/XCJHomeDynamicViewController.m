@@ -41,6 +41,8 @@
 #import "MLScrollRefreshHeader.h"
 #import "XCJGroupUsersTableViewController.h"
 #import "CoreData+MagicalRecord.h"
+#import "XCJPostTextNaviController.h"
+#import "XCJPostTextViewController.h"
 #import "XCJCreateChatNaviController.h"
 
 @interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate>
@@ -99,7 +101,7 @@
 
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"拍照",@"相册", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"发送纯文字" otherButtonTitles:@"拍照",@"相册", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
@@ -388,10 +390,20 @@
             break;
         case 3:
         {
-            //拍照
-            
             switch (buttonIndex) {
-                case 0:{
+                case 0:
+                {
+                    //纯文字
+                    XCJPostTextNaviController * postNavi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJPostTextNaviController"];
+                    XCJPostTextViewController *view = (XCJPostTextViewController*)postNavi.visibleViewController;
+                    view.gID = _Currentgid;
+                    view.needRefreshViewController = self;
+                    [self presentViewController:postNavi animated:YES completion:^{
+                        
+                    }];
+                }
+                    break;
+                case 1:{   //拍照
                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                         UIImagePickerController *camera = [[UIImagePickerController alloc] init];
                         camera.delegate = self;
@@ -400,7 +412,7 @@
                     }
                 }
                     break;
-                case 1:{
+                case 2:{
                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
                         UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
                         photoLibrary.delegate = self;

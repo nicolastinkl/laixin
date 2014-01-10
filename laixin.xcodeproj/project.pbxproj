@@ -103,6 +103,8 @@
 		8681BE3E1839AABA00521D36 /* UserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE3A1839AABA00521D36 /* UserInfo.m */; };
 		8681BE411839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
 		8681BE421839AACD00521D36 /* InviteInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BE401839AACD00521D36 /* InviteInfo.m */; };
+		8683FA95187FE26100CEFA45 /* XCJPostTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8683FA94187FE26100CEFA45 /* XCJPostTextViewController.m */; };
+		8683FA98187FE38400CEFA45 /* XCJPostTextNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8683FA97187FE38400CEFA45 /* XCJPostTextNaviController.m */; };
 		86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DAC187FA7B700DC0CB8 /* XCJGroupMenuView.m */; };
 		86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */; };
 		86893DB3187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */; };
@@ -523,6 +525,10 @@
 		8681BE3A1839AABA00521D36 /* UserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo.m; sourceTree = "<group>"; };
 		8681BE3F1839AACD00521D36 /* InviteInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteInfo.h; sourceTree = "<group>"; };
 		8681BE401839AACD00521D36 /* InviteInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteInfo.m; sourceTree = "<group>"; };
+		8683FA93187FE26100CEFA45 /* XCJPostTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPostTextViewController.h; path = viewcontroller/XCJPostTextViewController.h; sourceTree = "<group>"; };
+		8683FA94187FE26100CEFA45 /* XCJPostTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPostTextViewController.m; path = viewcontroller/XCJPostTextViewController.m; sourceTree = "<group>"; };
+		8683FA96187FE38400CEFA45 /* XCJPostTextNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPostTextNaviController.h; path = viewcontroller/XCJPostTextNaviController.h; sourceTree = "<group>"; };
+		8683FA97187FE38400CEFA45 /* XCJPostTextNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPostTextNaviController.m; path = viewcontroller/XCJPostTextNaviController.m; sourceTree = "<group>"; };
 		86893DAB187FA7B700DC0CB8 /* XCJGroupMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJGroupMenuView.h; path = viewcontroller/views/XCJGroupMenuView.h; sourceTree = "<group>"; };
 		86893DAC187FA7B700DC0CB8 /* XCJGroupMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJGroupMenuView.m; path = viewcontroller/views/XCJGroupMenuView.m; sourceTree = "<group>"; };
 		86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJGroupMenuView.xib; path = viewcontroller/views/XCJGroupMenuView.xib; sourceTree = "<group>"; };
@@ -1555,11 +1561,16 @@
 		86B73D93187E670400EF7391 /* PostView */ = {
 			isa = PBXGroup;
 			children = (
+				86489EF4187586BE001AB9BA /* PostPhoto */,
 				86893DB0187FB9BC00DC0CB8 /* groupInfo */,
 				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
 				8668E453187540DB00D20C9E /* BaseDetailViewController.m */,
 				8668E493187545B900D20C9E /* XCJHomeDynamicViewController.h */,
 				8668E494187545B900D20C9E /* XCJHomeDynamicViewController.m */,
+				8683FA93187FE26100CEFA45 /* XCJPostTextViewController.h */,
+				8683FA94187FE26100CEFA45 /* XCJPostTextViewController.m */,
+				8683FA96187FE38400CEFA45 /* XCJPostTextNaviController.h */,
+				8683FA97187FE38400CEFA45 /* XCJPostTextNaviController.m */,
 			);
 			name = PostView;
 			sourceTree = "<group>";
@@ -1707,7 +1718,6 @@
 				8622C894187D8F2400776A38 /* Friends */,
 				866995E9187912EC00233C47 /* ScanView */,
 				86660DCD18780A2E007477C0 /* AddFriend */,
-				86489EF4187586BE001AB9BA /* PostPhoto */,
 				8668E44F18751AB500D20C9E /* Home */,
 				86F9B9B318729C3900ED768B /* Chat */,
 				86F9B9AF18728ADA00ED768B /* User */,
@@ -2598,6 +2608,7 @@
 				869CE526186BE38D0004C1EC /* NSManagedObject+MagicalFinders.m in Sources */,
 				86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
+				8683FA95187FE26100CEFA45 /* XCJPostTextViewController.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
 				8622C897187D8F5100776A38 /* XCJNewAddFriendTabViewController.m in Sources */,
 				86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */,
@@ -2667,6 +2678,7 @@
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,
+				8683FA98187FE38400CEFA45 /* XCJPostTextNaviController.m in Sources */,
 				86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
 				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
