@@ -803,18 +803,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="扫描二维码" id="fjr-fL-Icy">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="cuY-md-pj3">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cMW-2e-TJX">
-                                <rect key="frame" x="285" y="13" width="19" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="more">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="扫描二维码" id="fjr-fL-Icy"/>
                     <connections>
                         <outlet property="line" destination="WPs-Jh-Oeu" id="I2Z-Dp-Dbp"/>
                     </connections>
@@ -1392,16 +1381,28 @@
                     </view>
                     <navigationItem key="navigationItem" id="65h-dk-DdH">
                         <barButtonItem key="backBarButtonItem" title="返回" id="hLv-bY-RZZ"/>
-                        <barButtonItem key="rightBarButtonItem" image="threadInfoButton" style="plain" id="TUc-7S-x9t">
-                            <connections>
-                                <action selector="postAction:" destination="jMh-vl-FO0" id="hdF-Vc-pXi"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ms5-tT-h9b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1709" y="1490"/>
+            <point key="canvasLocation" x="1558" y="1480"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="cH9-yu-zCh">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="wsN-S8-GOJ" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="G8s-GI-R49">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.18779067520000001" green="0.65503207760000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="jMh-vl-FO0" kind="relationship" relationship="rootViewController" id="DkO-5s-sfF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vQY-GB-MSo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1354" y="1480"/>
         </scene>
         <!--Group Users Table View Controller-->
         <scene sceneID="G74-SM-RVe">
@@ -1739,7 +1740,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FdG-SH-qfn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1300" y="1476"/>
+            <point key="canvasLocation" x="1006" y="1446"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="4ja-8e-g42">
@@ -1818,7 +1819,7 @@
                                     <rect key="frame" x="83" y="37" width="15" height="10"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messengerUserMask" id="Id7-Pe-a3T">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="Id7-Pe-a3T">
                                     <rect key="frame" x="20" y="12" width="60" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
@@ -2295,7 +2296,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messengerUserMask" id="VHh-3M-Lve">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="VHh-3M-Lve">
                                     <rect key="frame" x="24" y="27" width="60" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
@@ -2304,7 +2305,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="0eN-2y-Ldw">
                             <rect key="frame" x="0.0" y="204" width="320" height="121"/>
@@ -3641,7 +3642,6 @@
         <image name="tabBarRecentsIcon" width="25" height="25"/>
         <image name="thread-edit-delete-button" width="13" height="30"/>
         <image name="threadInfoAddPeople" width="25" height="25"/>
-        <image name="threadInfoButton" width="44" height="44"/>
         <image name="threadInfoCallDisabled" width="25" height="25"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

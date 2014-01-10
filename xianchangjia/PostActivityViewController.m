@@ -144,7 +144,7 @@
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
         UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
         photoLibrary.delegate = self;
-        photoLibrary.allowsEditing = YES;
+//        photoLibrary.allowsEditing = YES;
         photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:photoLibrary animated:YES completion:nil];
     }
@@ -195,7 +195,7 @@
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
     
-    UIImage * image =  [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    UIImage * image =  [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     
     _postImageView.image = image;
     

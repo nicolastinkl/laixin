@@ -107,7 +107,6 @@
     //对当前VC这样设置无多余布局空间就解决了。。。
     self.edgesForExtendedLayout = UIRectEdgeNone;
  
-    
     [self.titleString  addObserver:self forKeyPath:@"changeTitle" options:NSKeyValueObservingOptionNew context:nil];
 
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height-64) style:UITableViewStylePlain];

@@ -43,7 +43,7 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCJCreateChatNaviController.h"
 
-@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
+@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 {
 
     XCJGroupMenuView  * menuView;
@@ -84,6 +84,10 @@
         [menuView.muteButton setTitle:@"静音" forState:UIControlStateNormal];
     }
     
+    UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"composeIcon"] style:UIBarButtonItemStyleDone target:self action:@selector(SendPostClick:)];
+    UIBarButtonItem * barTwo = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(postAction:)];
+    
+    self.navigationItem.rightBarButtonItems = @[barTwo,barOne];
     
     
 	// Do any additional setup after loading the view.
@@ -91,6 +95,13 @@
     
     [self.refreshView beginRefreshing];
 
+}
+
+-(IBAction)SendPostClick:(id)sender
+{
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"拍照",@"相册", nil];
+    action.tag = 3;
+    [action showInView:self.view];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -214,8 +225,6 @@
 
 -(IBAction)postAction:(id)sender
 {
-    
-   
     if (menuView.top == 0) {
         // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
         
@@ -276,6 +285,25 @@
                         [SVProgressHUD showErrorWithStatus:@"退出失败"];
                     }];
                 });
+            }
+        }
+            break;
+        case 2:
+        {
+            if (buttonIndex == 1) {
+//                alertView.inputView.
+                NSString * str = [alertView textFieldAtIndex:0].text;
+                if (str.length > 0) {
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.update" parameters:@{@"gid":self.Currentgid,@"name":str} success:^(MLRequest *request, id responseObject) {
+                        if (responseObject) {
+                            self.title = str;
+                            self.groupInfo.gName = str;
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                        }
+                    } failure:^(MLRequest *request, NSError *error) {
+                        [UIAlertView showAlertViewWithMessage:@"修改失败"];
+                    }];
+                }
             }
         }
             break;
@@ -344,7 +372,11 @@
                 case 1:
                 {
                     //设置名称
-                    
+                    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"修改群组名称" message:self.title delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"修改", nil];
+                    alert.tag = 2;
+                    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+                    [[alert textFieldAtIndex:0] setDelegate:self];
+                    [alert show];
                 }
                     break;
                     
@@ -364,7 +396,6 @@
                         UIImagePickerController *camera = [[UIImagePickerController alloc] init];
                         camera.delegate = self;
                         camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-                        camera.allowsEditing = YES;
                         [self presentViewController:camera animated:YES completion:nil];
                     }
                 }
@@ -373,7 +404,6 @@
                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
                         UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
                         photoLibrary.delegate = self;
-                        photoLibrary.allowsEditing = YES;
                         photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                         [self presentViewController:photoLibrary animated:YES completion:nil];
                     }
@@ -562,7 +592,7 @@
     postVC.gID = _Currentgid;
     postVC.filePath = [url copy];
     postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
-    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     
     postVC.needRefreshViewController = self;
     [self.navigationController pushViewController:postVC animated:YES];
