@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class ConverReply;
 
 @interface FCReplyMessage : NSManagedObject
 
@@ -18,6 +19,7 @@
 @property (nonatomic, retain) NSNumber * time;
 @property (nonatomic, retain) NSString * uid;
 @property (nonatomic, retain) NSString * typeReply;
-@property (nonatomic, retain) NSString * jsonStr;
+@property (nonatomic, retain) id jsonStr;
+@property (nonatomic, retain) ConverReply *newRelationship;
 
 @end

@@ -66,26 +66,32 @@
         numberOfRows = [sectionInfo numberOfObjects];
     }
     
-    {
-        NSPredicate * pre = [NSPredicate predicateWithFormat:@" badgeNumber > %@",@"0"];
-        
-        ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-        if (contr) {            
-            contr.badgeNumber = @0;
-            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
-   
-        }
-    }
+ 
     
     if (numberOfRows <= 0) {
         // show info
-        [self showErrorText:@"暂时还没有人添加你为好友"];
+        [self showErrorText:@"暂时还没有人评论或赞我"];
     }else{
         [self hiddeErrorText];
     }
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    {
+        NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
+        
+        ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
+        if (contr) {
+            contr.badgeNumber = @0;
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+            
+        }
+    }
+}
 
 #pragma mark -
 #pragma mark Fetched results controller
@@ -192,6 +198,29 @@
 	}
 }
 
+
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        [managedObject MR_deleteEntity];
+        [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+	}
+}
+
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	// The fetch controller has sent all current change notifications, so tell the table view to process all updates.
 	[self.tableView endUpdates];
@@ -229,6 +258,7 @@
     
     if ([info.typeReply isEqualToString:@"newlike"]) {
         imageviewTag.hidden = NO;
+         labelContent.text = @"";
     }else if ([info.typeReply isEqualToString:@"newreply"])
     {
         labelContent.text = info.content;
@@ -236,35 +266,39 @@
         CGFloat height = [self heightForCellWithPost:info.content];
         [labelContent setHeight:height];
         imageviewTag.hidden = YES;
-        labelTime.top = labelContent.top + labelContent.height + 5;
+        labelTime.top = labelContent.top + labelContent.height + 2;
     }
     
     if (info.jsonStr) {
-        // fromat
-        NSData * data =[info.jsonStr JSONData];
-        NSDictionary * obj =  [data objectFromJSONData];
+        // fromat 
+        NSDictionary * obj =  info.jsonStr;//[ objectFromJSONData];
         if (obj) {
             XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
             if (list.imageURL.length > 5) {
                 [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
+                labelText.text = @"";
             }else{
                 labelText.text = list.content;
+                [imgViewbuttonBG setImage:nil];
+                //[labelText sizeToFit];
             }
         }
     }else{
         //post.get(postid) 参数可以是数组
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"post.get": info.postid} success:^(MLRequest *request, id responseObject) {
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"postid": info.postid} success:^(MLRequest *request, id responseObject) {
             if (responseObject) {
-               NSArray *array = responseObject[@"posts"];
+               NSDictionary * dict = responseObject[@"result"];
+               NSArray *array = dict[@"posts"];
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     if (idx == 0) {
-                        info.jsonStr =  [obj JSONString];
+                        info.jsonStr =  obj;
                         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
                         XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
                         if (list.imageURL.length > 5) {
                             [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
                         }else{
                             labelText.text = list.content;
+                            //[labelText sizeToFit];
                         }
                     }
                 }];
@@ -310,14 +344,14 @@
     
     FCReplyMessage *info = (FCReplyMessage *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     if ([info.typeReply isEqualToString:@"newlike"]) {
-        return 83.0f;
+        return 75.0f;
     }else if ([info.typeReply isEqualToString:@"newreply"])
     {
         //info.content
         CGFloat height = [self heightForCellWithPost:info.content];
-        return height + 70;
+        return height + 58;
     }
-    return 83.0f;
+    return 75.0f;
 }
 
 - (CGFloat)heightForCellWithPost:(NSString *)post {

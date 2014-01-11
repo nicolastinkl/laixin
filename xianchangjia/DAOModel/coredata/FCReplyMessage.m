@@ -7,6 +7,7 @@
 //
 
 #import "FCReplyMessage.h"
+#import "ConverReply.h"
 
 
 @implementation FCReplyMessage
@@ -17,5 +18,7 @@
 @dynamic time;
 @dynamic uid;
 @dynamic typeReply;
-@synthesize jsonStr;
+@dynamic jsonStr;
+@dynamic newRelationship;
+
 @end
