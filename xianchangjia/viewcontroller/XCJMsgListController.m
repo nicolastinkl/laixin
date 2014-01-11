@@ -468,7 +468,7 @@
                 [subview removeFromSuperview];
                 //添加到新视图右上角
                 [view addSubview:subview];
-                subview.frame = CGRectMake(view.frame.size.width-subview.frame.size.width/2, -4,
+                subview.frame = CGRectMake(view.frame.size.width-subview.frame.size.width/2-4, -4+4,
                                            subview.frame.size.width, subview.frame.size.height);
                 return subview;
             }

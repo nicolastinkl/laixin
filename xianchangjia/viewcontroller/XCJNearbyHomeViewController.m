@@ -36,7 +36,8 @@
 #import "XCJErWeiCodeViewController.h"
 #import "XCJScanViewController.h"
 #import "CoreData+MagicalRecord.h"
-
+#import "ConverReply.h"
+#import "XCJMessageReplylistController.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -163,6 +164,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition object:nil];
     
@@ -174,6 +177,54 @@
         [self.tableView showIndicatorViewLargeBlue];
     }
     
+    //fbc_specialbutton_28_3_3_3_3_normal_ios7
+    
+    
+}
+
+-(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
+{
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@" badgeNumber > %@",@"0"];
+    
+    ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
+    if (contr) {
+        UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+        UIImage *originalImage = [UIImage imageNamed:@"fbc_specialbutton_28_3_3_3_3_normal_ios7"];
+        UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
+        UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+        [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+        
+        
+        if ([contr.content containString:@"评论"]) {
+            [button setImage:[UIImage imageNamed:@"ufi-overlay-comment"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"ufi-overlay-liked"] forState:UIControlStateNormal];
+        }
+        
+        if ([contr.badgeNumber intValue ] > 0) {
+            [button setTitle: [NSString stringWithFormat:@"%@(%@)",contr.content,contr.badgeNumber] forState:UIControlStateNormal];
+        }else{
+            [button setTitle: contr.content forState:UIControlStateNormal];
+        }
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    }else{
+        
+        UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+        UIImage *originalImage = [UIImage imageNamed:@"fbc_regularbutton_28_3_3_3_3_normal_ios7"];
+        UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
+        UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+        [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+        [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
+        [button setImage:nil forState:UIControlStateNormal];
+        [button setTitleColor:ios7BlueColor forState:UIControlStateNormal];
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self MainappControllerUpdateDataReplyMessage:nil];
 }
 
 #pragma mark -
@@ -643,21 +694,21 @@
 {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.ShowDymaic
-   /*
-    if ([[segue identifier] isEqualToString:@"showDynamic"])
-    {
-    XCJHomeDynamicViewController *vc = (XCJHomeDynamicViewController *)[segue destinationViewController];
-    NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
-    FCHomeGroupMsg * info   = _dataSource[selectedIndexPath.row];
-    vc.Currentgid = info.gid;
-    vc.title =info.gName;
-    if ([info.gbadgeNumber intValue] > 0) {
-    info.gbadgeNumber = @0;
-    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-    }
-    info.gbadgeNumber = @0;
-    }
-    */
+    /* NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+     FCHomeGroupMsg * info   = _dataSource[selectedIndexPath.row];
+     vc.Currentgid = info.gid;
+     vc.title =info.gName;
+     if ([info.gbadgeNumber intValue] > 0) {
+     info.gbadgeNumber = @0;
+     [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+     }
+     info.gbadgeNumber = @0;*/
+//    if ([[segue identifier] isEqualToString:@"ShowMessageList"])
+//    {
+//        XCJMessageReplylistController *vc = (XCJMessageReplylistController *)[segue destinationViewController];
+//        
+//    }
+   
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -124,10 +124,17 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(add_friend_Notify:) name:@"add_friend_Notify" object:[[UIApplication sharedApplication] delegate]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(group_invite_Notify:) name:@"group_invite_Notify" object:[[UIApplication sharedApplication] delegate]];
     
-    [self add_friend_Notify:nil];
-    [self group_invite_Notify:nil];
 }
 
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self add_friend_Notify:nil];
+    [self group_invite_Notify:nil];
+    
+}
 - (void) add_friend_Notify:(NSNotification * ) notiy
 {
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd = %@",@NO];

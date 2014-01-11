@@ -76,13 +76,25 @@
 //    self.tableView.dataSource = self;
 //    [self.view insertSubview:self.tableView belowSubview:self.contactPickerView];
     self.tableView.top = self.contactPickerView.height + 44;
-    self.tableView.height = self.view.height-44;
+    
+    
     self.contacts = [FCFriends MR_findAll];
     self.selectedContacts = [NSMutableArray array];
     self.filteredContacts = self.contacts;
     
 }
-
+/*
+ 
+ -(void)viewDidAppear:(BOOL)animated
+ {
+ [super viewDidAppear:animated];
+ if (IS_4_INCH) {
+ self.tableView.height = self.view.height - self.contactPickerView.height - 44;
+ }else{
+ self.tableView.height = 300;
+ }
+ }
+ */
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
@@ -171,9 +183,20 @@
         [self.contactPickerView addContact:user withName:user.friendRelation.nick];
     }
     if (self.selectedContacts.count > 0) {
-        self.title = [NSString stringWithFormat:@"发起聊天(%d)",self.selectedContacts.count];
+        if (self.Currentgid) {
+            self.title = [NSString stringWithFormat:@"加入群组(%d)",self.selectedContacts.count];
+        }else{
+            self.title = [NSString stringWithFormat:@"发起聊天(%d)",self.selectedContacts.count];
+            
+        }
     }else{
-        self.title = @"发起聊天";
+        
+        if (self.Currentgid) {
+            self.title =@"加入群组";
+        }else{
+             self.title = @"发起聊天";
+            
+        }
     }
 
     self.filteredContacts = self.contacts;

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ConverReply" representedClassName="ConverReply" syncable="YES">
+        <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="fcreplymesgships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FCReplyMessage" inverseName="newRelationship" inverseEntity="FCReplyMessage" syncable="YES"/>
+    </entity>
     <entity name="Conversation" representedClassName="Conversation" syncable="YES">
         <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
@@ -61,6 +69,16 @@
         <relationship name="conversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation" inverseName="messages" inverseEntity="Conversation" syncable="YES"/>
         <relationship name="messageUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespMsg" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
+    <entity name="FCReplyMessage" representedClassName="FCReplyMessage" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jsonStr" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="replyid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="typeReply" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ConverReply" inverseName="fcreplymesgships" inverseEntity="ConverReply" syncable="YES"/>
+    </entity>
     <entity name="FCUserDescription" representedClassName="FCUserDescription" syncable="YES">
         <attribute name="active_by" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="active_level" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -92,5 +110,7 @@
         <element name="FCHomeGroupMsg" positionX="-333" positionY="228" width="128" height="178"/>
         <element name="FCMessage" positionX="-108" positionY="-288" width="128" height="180"/>
         <element name="FCUserDescription" positionX="-342" positionY="-174" width="128" height="345"/>
+        <element name="FCReplyMessage" positionX="153" positionY="315" width="128" height="148"/>
+        <element name="ConverReply" positionX="34" positionY="252" width="128" height="133"/>
     </elements>
 </model>

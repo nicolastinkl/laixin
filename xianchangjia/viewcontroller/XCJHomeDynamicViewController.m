@@ -221,9 +221,11 @@
                              if (post) {
                                  lasID = [post.postid integerValue];
                                  [self.activities insertObject:post atIndex:0];
-                                 [self successGetActivities:self.activities withLastID:lasID];
+                                 [self.cellHeights insertObject:@0 atIndex:0];
+                                 [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
                              }
                          }];
+                          [self successGetActivities:self.activities withLastID:lasID];
                      }else{
                          [self failedGetActivitiesWithLastID:0];
                      }
@@ -264,7 +266,6 @@
                     [self failedGetActivitiesWithLastID:0];
                     [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
                 }];
-                
             }
                 break;
                 

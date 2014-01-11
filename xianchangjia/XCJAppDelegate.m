@@ -21,12 +21,14 @@
 #import "blocktypedef.h"
 #import "XCAlbumDefines.h"
 #import "Conversation.h"
+#import "FCReplyMessage.h"
 #import "LXUser.h"
 #import <Foundation/Foundation.h>
 #import "FCBeAddFriend.h"
 #import "XCJGroupPost_list.h"
 #import "FCBeInviteGroup.h"
 #import "FCHomeGroupMsg.h"
+#import "ConverReply.h"
 #import "CoreData+MagicalRecord.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
@@ -147,13 +149,120 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             conversation.fcBeinviteGroupShips = newFcObj;
                             conversation.beaddTime = [NSDate date];
                             [localContext MR_saveToPersistentStoreAndWait];
-                            [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
+                            [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
+#pragma mark // 处理加入请求
+                            {
+                                NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid = %@", gid];
+                                FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
+                                if(msg == nil)
+                                {
+                                    // 处理加入请求
+                                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                                        if(responseObject){
+                                            // Build the predicate to find the person sought
+                                            
+                                        }
+                                    } failure:^(MLRequest *request, NSError *error) {
+                                        
+                                    }];
+                                    msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                                }
+                                msg.gid = list.gid;
+                                msg.gCreatorUid = list.creator;
+                                msg.gName = list.group_name;
+                                msg.gBoard = list.group_board;
+                                msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+                                msg.gbadgeNumber = @1;
+                                msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                                [localContext MR_saveToPersistentStoreAndWait];
+                            }
+                            
+                            
+                            
                         }];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
                 } withuid:fromuid];
             }
+        }else if ([eventType isEqualToString:@"newlike"])
+        {
+            //被喜欢的照片
+            NSDictionary * dicResult = MsgContent[@"data"];
+            NSDictionary  * likeDict = dicResult[@"like"];
+            /*"postid":83,
+             "uid":4,
+             "time":1389426716*/
+            
+            NSString * postid = [DataHelper getStringValue:likeDict[@"postid"] defaultValue:@""];
+            NSString * uid = [DataHelper getStringValue:likeDict[@"uid"] defaultValue:@""];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSTimeInterval receiveTime = [DataHelper getDoubleValue:likeDict[@"time"] defaultValue:0];
+             NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+            ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+            if (ConverRe == nil) {
+                ConverRe = [ConverReply MR_createInContext:localContext];
+            }
+            FCReplyMessage * message = [FCReplyMessage MR_createInContext:localContext];
+            message.typeReply = @"newlike";
+            message.uid = uid;
+            message.postid = postid;
+            message.time = @(receiveTime);
+            
+            [ConverRe addFcreplymesgshipsObject: message];
+            ConverRe.uid = uid;
+            ConverRe.postid = postid;
+            ConverRe.content = @"新赞";
+            ConverRe.time = @(receiveTime);
+            int unreadNumber  = [ConverRe.badgeNumber intValue];
+            unreadNumber ++;
+            ConverRe.badgeNumber = @(unreadNumber);
+            [localContext MR_saveToPersistentStoreAndWait];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+        }else if ([eventType isEqualToString:@"newreply"])
+        {
+            //被评论的帖子
+            NSDictionary * dicResult = MsgContent[@"data"];
+            NSDictionary  *replyDict = dicResult[@"reply"];
+            /*"content":"刚好合适",
+             "postid":83,
+             "replyid":38,
+             "uid":4,
+             "time":1389426744*/
+            
+            NSString * postid = [DataHelper getStringValue:replyDict[@"postid"] defaultValue:@""];
+            NSString * replyid = [DataHelper getStringValue:replyDict[@"replyid"] defaultValue:@""];
+            NSString * content = [DataHelper getStringValue:replyDict[@"content"] defaultValue:@""];
+            NSString * uid = [DataHelper getStringValue:replyDict[@"uid"] defaultValue:@""];
+            NSTimeInterval receiveTime = [DataHelper getDoubleValue:replyDict[@"time"] defaultValue:0];
+            
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+            ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+            if (ConverRe == nil) {
+                ConverRe = [ConverReply MR_createInContext:localContext];
+            }
+            FCReplyMessage * message = [FCReplyMessage MR_createInContext:localContext];
+            message.typeReply = @"newreply";
+            message.uid = uid;
+            message.postid = postid;
+            message.replyid = replyid;
+            message.content = content;
+            message.time = @(receiveTime);
+            
+           [ConverRe addFcreplymesgshipsObject: message];
+            ConverRe.uid = uid;
+            ConverRe.postid = postid;
+            ConverRe.content = @"新评论";
+            ConverRe.time = @(receiveTime);
+            int unreadNumber  = [ConverRe.badgeNumber intValue];
+            unreadNumber ++;
+            ConverRe.badgeNumber = @(unreadNumber);
+            
+            [localContext MR_saveToPersistentStoreAndWait];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
         }
         
     }

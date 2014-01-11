@@ -23,6 +23,9 @@
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
+		86494CB61881353500C22B14 /* FCReplyMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CB51881353500C22B14 /* FCReplyMessage.m */; };
+		86494CBC188139A100C22B14 /* ConverReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBB188139A100C22B14 /* ConverReply.m */; };
+		86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
 		865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CB185FFDDA00E9903C /* ChatViewController.m */; };
 		865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632CD185FFDDA00E9903C /* XCJCommentViewController.m */; };
@@ -394,6 +397,12 @@
 		8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStatusBarNotifierView.m; sourceTree = "<group>"; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
+		86494CB41881353500C22B14 /* FCReplyMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCReplyMessage.h; path = DAOModel/coredata/FCReplyMessage.h; sourceTree = "<group>"; };
+		86494CB51881353500C22B14 /* FCReplyMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCReplyMessage.m; path = DAOModel/coredata/FCReplyMessage.m; sourceTree = "<group>"; };
+		86494CBA188139A100C22B14 /* ConverReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConverReply.h; path = DAOModel/coredata/ConverReply.h; sourceTree = "<group>"; };
+		86494CBB188139A100C22B14 /* ConverReply.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConverReply.m; path = DAOModel/coredata/ConverReply.m; sourceTree = "<group>"; };
+		86494CBE1881437600C22B14 /* XCJMessageReplylistController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMessageReplylistController.h; path = viewcontroller/XCJMessageReplylistController.h; sourceTree = "<group>"; };
+		86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMessageReplylistController.m; path = viewcontroller/XCJMessageReplylistController.m; sourceTree = "<group>"; };
 		865632C8185FFDDA00E9903C /* ChatListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatListViewController.h; path = viewcontroller/ChatListViewController.h; sourceTree = "<group>"; };
 		865632C9185FFDDA00E9903C /* ChatListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatListViewController.m; path = viewcontroller/ChatListViewController.m; sourceTree = "<group>"; };
 		865632CA185FFDDA00E9903C /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = viewcontroller/ChatViewController.h; sourceTree = "<group>"; };
@@ -1072,6 +1081,15 @@
 			name = PostPhoto;
 			sourceTree = "<group>";
 		};
+		86494CBD1881435400C22B14 /* messagereplyList */ = {
+			isa = PBXGroup;
+			children = (
+				86494CBE1881437600C22B14 /* XCJMessageReplylistController.h */,
+				86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */,
+			);
+			name = messagereplyList;
+			sourceTree = "<group>";
+		};
 		86651688187BEF75001F05F6 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -1564,6 +1582,7 @@
 		86B73D93187E670400EF7391 /* PostView */ = {
 			isa = PBXGroup;
 			children = (
+				86494CBD1881435400C22B14 /* messagereplyList */,
 				86489EF4187586BE001AB9BA /* PostPhoto */,
 				86893DB0187FB9BC00DC0CB8 /* groupInfo */,
 				8668E452187540DB00D20C9E /* BaseDetailViewController.h */,
@@ -1914,6 +1933,8 @@
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				86494CB41881353500C22B14 /* FCReplyMessage.h */,
+				86494CB51881353500C22B14 /* FCReplyMessage.m */,
 				8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */,
 				8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */,
 				86581E02187E95E500FCDC85 /* FCBeAddFriend.h */,
@@ -1921,6 +1942,8 @@
 				8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */,
 				8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */,
 				869DDC601874422600560AFD /* Conversation.h */,
+				86494CBA188139A100C22B14 /* ConverReply.h */,
+				86494CBB188139A100C22B14 /* ConverReply.m */,
 				869DDC611874422600560AFD /* Conversation.m */,
 				86F9B9B41872A3CB00ED768B /* FCMessage.h */,
 				86F9B9B51872A3CB00ED768B /* FCMessage.m */,
@@ -2576,6 +2599,7 @@
 				86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */,
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
+				86494CB61881353500C22B14 /* FCReplyMessage.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,
 				86EB76D1185AA6CC00836947 /* AFNetworkReachabilityManager.m in Sources */,
@@ -2590,6 +2614,7 @@
 				86D1828C1834AED30005901D /* UIImage+Alpha.m in Sources */,
 				86EB76D8185AA6CC00836947 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				86EB76CC185AA6CC00836947 /* UIView+AutolayoutDebug.m in Sources */,
+				86494CBC188139A100C22B14 /* ConverReply.m in Sources */,
 				869CE4C1186A73880004C1EC /* OHAttributedLabel.m in Sources */,
 				8622C880187D2BEC00776A38 /* XCJErrorView.m in Sources */,
 				86EB76BD185AA6CC00836947 /* Message.m in Sources */,
@@ -2623,6 +2648,7 @@
 				86EB76D2185AA6CC00836947 /* AFSecurityPolicy.m in Sources */,
 				869CE4D4186BDB160004C1EC /* IQSocialRequestBaseClient.m in Sources */,
 				865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */,
+				86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */,
 				869CE52F186BE38D0004C1EC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				869CE533186BE38D0004C1EC /* MagicalRecord+Options.m in Sources */,
