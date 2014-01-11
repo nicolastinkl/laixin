@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *Image_erwei;
 @property (weak, nonatomic) IBOutlet UILabel *label_nick;
 @property (weak, nonatomic) IBOutlet UIImageView *Image_user;
+@property (weak, nonatomic) IBOutlet UILabel *label_textContent;
 
 @end
 
@@ -42,20 +43,23 @@
     [super viewDidLoad];
     
     if (self.gid) {
-        //group info
-        
+        //group info        
 //        conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-        
+        self.label_textContent.text = @"扫一扫上面二维码,加入群组";
+       
         NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"facebookId = %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid]];
-        NSArray * arr = [Conversation MR_findAllWithPredicate:preCMD];
-        [arr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if (idx == 0) {
-                Conversation * fchomeg = obj;
-                 self.Image_erwei.image = [QRCodeGenerator qrImageForString:fchomeg.facebookName imageSize:216.0f];
-                self.label_nick.text = fchomeg.facebookName;
-                [self.Image_user setImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
-            }
-        }];
+        Conversation * fchomeg = [Conversation MR_findFirstWithPredicate:preCMD];
+        if (fchomeg) {
+            self.Image_erwei.image = [QRCodeGenerator qrImageForString:fchomeg.facebookName imageSize:216.0f];
+            self.label_nick.text = fchomeg.facebookName;
+           
+        }else{
+            NSPredicate * preCMDTwo = [NSPredicate predicateWithFormat:@"gid = %@", self.gid];
+           FCHomeGroupMsg * mesage = [FCHomeGroupMsg MR_findFirstWithPredicate:preCMDTwo];
+            self.Image_erwei.image = [QRCodeGenerator qrImageForString:mesage.gName imageSize:216.0f];
+            self.label_nick.text = mesage.gName;
+        }
+         [self.Image_user setImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
     }else{
         //user info
         // Do any additional setup after loading the view.

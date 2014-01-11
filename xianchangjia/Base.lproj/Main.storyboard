@@ -588,6 +588,7 @@
                         <outlet property="Image_erwei" destination="DbW-MM-pCP" id="iva-MB-cbA"/>
                         <outlet property="Image_user" destination="Uvw-Ex-GWL" id="ZTJ-HI-B53"/>
                         <outlet property="label_nick" destination="sXs-fY-EOO" id="FXv-Gs-kOp"/>
+                        <outlet property="label_textContent" destination="Ffl-rr-6xM" id="Bp0-AO-UHl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hxM-QN-aw2" userLabel="First Responder" sceneMemberID="firstResponder"/>

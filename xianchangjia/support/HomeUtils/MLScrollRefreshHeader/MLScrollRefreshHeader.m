@@ -30,7 +30,9 @@ typedef enum {
 
 @property (nonatomic, strong) UILabel *stateLabel;
 @property (nonatomic, strong) UIImageView *arrowImageView;
+
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) UIImageView * animationImageView;
 
 @property (nonatomic, assign) RefreshState state;
 
@@ -63,20 +65,33 @@ typedef enum {
         label.backgroundColor = [UIColor clearColor];
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.stateLabel = label];
+        self.stateLabel.hidden = YES;  // change by tinkl
         
-        //箭头图片,左右自适应
-        UIImage *image = [UIImage imageNamed:@"activity_indicator_light.png"];
-        UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:image];
-        arrowImageView.width = 20;
-        arrowImageView.height = 20;
-        arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        [self addSubview:self.arrowImageView = arrowImageView]; //change by tinkl
+        {
+            //箭头图片,左右自适应
+            UIImage *image = [UIImage imageNamed:@"loadingSpinnerSmallBlue"];
+            UIImageView *arrowImageView = [[UIImageView alloc] initWithImage:image];
+            arrowImageView.width = 20;
+            arrowImageView.height = 20;
+            arrowImageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+            [self addSubview:self.arrowImageView = arrowImageView]; //change by tinkl
+            
+            self.animationImageView = [[UIImageView alloc] initWithImage:image];;
+            self.animationImageView.bounds = arrowImageView.bounds;
+            self.animationImageView.autoresizingMask = _arrowImageView.autoresizingMask;
+            [self addSubview:self.animationImageView]; //change by tinkl
+            
+        }
         
-        //指示器，系统默认，灰色样式，左右自适应
-        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        activityView.bounds = arrowImageView.bounds;
-        activityView.autoresizingMask = _arrowImageView.autoresizingMask;
-        [self addSubview:self.activityView = activityView];
+//        //指示器，系统默认，灰色样式，左右自适应
+//        UIActivityIndicatorView *activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//        activityView.bounds = arrowImageView.bounds;
+//        activityView.autoresizingMask = _arrowImageView.autoresizingMask;
+//        [self addSubview:self.activityView = activityView];
+        
+        
+        
+        
         
         //设置默认状态
         self.state = RefreshStateNormal;
@@ -120,6 +135,7 @@ typedef enum {
     _stateLabel.frame = CGRectMake(0, kViewHeight/2-20, _scrollView.bounds.size.width, 20);
     _arrowImageView.center = CGPointMake(_scrollView.bounds.size.width/2, kViewHeight/2+_arrowImageView.frame.size.height/2+5);
     _activityView.center = _arrowImageView.center;
+    _animationImageView.center = _arrowImageView.center;
     
     //设置对应scrollView的KVO
     [_scrollView addSubview:self];
@@ -144,6 +160,26 @@ typedef enum {
     return;//外部不可设置，想设置，只能内部[super setFrame:XXX]
 }
 
+
+- (void)startAnimation{
+    self.animationImageView.hidden = NO;
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];///* full rotation*/ * rotations * duration ];
+    rotationAnimation.duration = 1;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = CGFLOAT_MAX;
+    
+    [self.animationImageView.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
+- (void)stopAnimation{
+    if (self.animationImageView) {
+        [self.animationImageView.layer removeAllAnimations];
+        self.animationImageView.hidden = YES;
+    }
+}
+
 //根据当前state的设置来改变视图和其他
 - (void)setState:(RefreshState)state
 {
@@ -151,13 +187,18 @@ typedef enum {
 
     switch (state) {
 		case RefreshStateNormal:
+        {
             _arrowImageView.hidden = NO; //这俩一个位置，只能显示一个
 			[_activityView stopAnimating];
+            [self stopAnimation];
+        }
 			break;
         case RefreshStatePulling:
             break;
             
 		case RefreshStateRefreshing:
+        {
+            [self startAnimation];
 			[_activityView startAnimating];
 			_arrowImageView.hidden = YES;
             _arrowImageView.transform = CGAffineTransformIdentity;
@@ -166,6 +207,7 @@ typedef enum {
             if ([_delegate respondsToSelector:@selector(refreshHeaderBeginRefreshing:)]) {
                 [_delegate refreshHeaderBeginRefreshing:self];
             }
+        }
 			break;
 	}
     

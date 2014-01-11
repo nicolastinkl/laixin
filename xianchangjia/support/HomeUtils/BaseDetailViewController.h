@@ -10,6 +10,16 @@
 
 #define kEveryGetDataCount 10
 
+
+enum ENUMLoadMoreData {
+    Enum_initData  = 0,
+    Enum_UpdateTopData = 1,
+    Enum_MoreData = 2
+    
+};
+
+
+
 @class MLScrollRefreshHeader;
 @interface BaseDetailViewController : UIViewController< NSCoding>
 

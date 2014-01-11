@@ -20,6 +20,7 @@
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
 
+
 @interface BaseDetailViewController () <UITableViewDataSource,UITableViewDelegate,MLScrollRefreshHeaderDelegate,ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate>
 
 
@@ -121,7 +122,7 @@
     insets.top = [self topInsetOfTableView:_tableView];
     _tableView.contentInset = insets;
     
-    self.refreshView = [[MLScrollRefreshHeader alloc]initWithScrollView:self.tableView andDelegate:self isPlaySound:YES];
+    self.refreshView = [[MLScrollRefreshHeader alloc]initWithScrollView:self.tableView andDelegate:self isPlaySound:NO];
     
     //评论输入框
     self.inputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frameBottom,self.view.frameWidth, 47)];
@@ -337,15 +338,15 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (_isDontNeedLazyLoad) {
-//        return;
-//    }
-//    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
-//        if (!_isLoading) {
-//            self.isLoading = YES;
-//            [self postLoadMoreActivitiesRequest];
-//        }
-//    }
+    if (_isDontNeedLazyLoad) {
+        return;
+    }
+    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
+        if (!_isLoading) {
+            self.isLoading = YES;
+            [self postLoadMoreActivitiesRequest];
+        }
+    }
 }
 
 #pragma mark - ActivityTableViewCellDelegate
@@ -510,7 +511,16 @@
 //    button.hidden = YES;
 //    [indicator stopAnimating];
     
-    [self postGetActivitiesWithLastID:0];
+    NSInteger lastID = 0;
+    if (_activities.count>0) {
+        lastID = [((XCJGroupPost_list*)_activities[0]).postid integerValue];
+    }
+    if (lastID == 0) {
+        [self postGetActivitiesWithLastID:lastID withType:Enum_initData];
+    }else{
+        [self postGetActivitiesWithLastID:lastID withType:Enum_UpdateTopData];
+    }
+    
 }
 
 #pragma mark - InterceptTouchViewDelegate
@@ -563,12 +573,14 @@
 - (void)postLoadMoreActivitiesRequest
 {
     NSInteger lastID = 0;
-    if (_activities.count>0) {
+    if (_activities.count>0 && _activities.count > 20) {
         lastID = [((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue];
+        self.isLoading = YES;
+        _noDataHintLabel.hidden = YES;
+        [self postGetActivitiesWithLastID:lastID withType:Enum_MoreData];
+    }else{
+        self.isLoading = NO;
     }
-    self.isLoading = YES;
-    _noDataHintLabel.hidden = YES;
-    [self postGetActivitiesWithLastID:lastID];
 }
 
 /**
@@ -669,10 +681,8 @@
  *
  *  @return 返回多少条数据，自己定
  */
-- (void)postGetActivitiesWithLastID:(NSInteger)lastID
+- (void)postGetActivitiesWithLastID:(NSInteger)lastID withType:(NSInteger) typeIndex
 {
-    NSLog(@"postGetActivitiesWithLastID %d",lastID);
-//    [self successGetActivities:nil withLastID:lastID];
     
 }
 
