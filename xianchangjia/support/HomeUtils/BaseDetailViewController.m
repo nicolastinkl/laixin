@@ -509,6 +509,7 @@
 //    UIActivityIndicatorView *indicator = (UIActivityIndicatorView *)[self.moreCell viewWithTag:888];
 //    button.hidden = YES;
 //    [indicator stopAnimating];
+    
     [self postGetActivitiesWithLastID:0];
 }
 

@@ -92,16 +92,17 @@
     self.navigationItem.rightBarButtonItems = @[barTwo,barOne];
     
     
-	// Do any additional setup after loading the view.
-    [self initHomeData];
+    //   Do any additional setup after loading the view.
+    //   [self initHomeData];
+    //    [self.refreshView beginRefreshing];
     
-    [self.refreshView beginRefreshing];
-
+    [self postGetActivitiesWithLastID:0];
+    
 }
 
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"发送纯文字" otherButtonTitles:@"拍照",@"相册", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照",@"相册", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
@@ -437,7 +438,7 @@
 - (void)postGetActivitiesWithLastID:(NSInteger)lastID
 {
     if (_Currentgid == nil) {
-        _Currentgid  = @"2";
+        _Currentgid  =  @"2";
     }
     if (_Currentgid == nil) {
         [self failedGetActivitiesWithLastID:0];
@@ -447,8 +448,6 @@
     double delayInSeconds = 0.1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-       
         /* get all list data*/
         NSDictionary * parames ;
         if(lastID == 0)
@@ -477,9 +476,10 @@
                 [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
             }
         } failure:^(MLRequest *request, NSError *error) {
+             [self failedGetActivitiesWithLastID:0];
+            [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
         }];
     });
-    
 }
 
 

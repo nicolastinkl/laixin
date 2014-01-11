@@ -135,14 +135,16 @@
         self.ReportButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_ReportButton setContentMode:UIViewContentModeCenter];
         [_ReportButton setTitleColor:commonColor forState:UIControlStateNormal];
+        [_ReportButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
         [_ReportButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 10.0f, 0.0, 0.0)];
         [_ReportButton addTarget:self
                            action:@selector(ReportButtonClick:)
                  forControlEvents:UIControlEventTouchUpInside];
-        [_ReportButton setTitle:@"举报" forState:UIControlStateNormal];
-        _ReportButton.titleLabel.font = [UIFont systemFontOfSize:11.5];
+        [_ReportButton setTitle:@"删除" forState:UIControlStateNormal];
+        _ReportButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _ReportButton.tag = 805;
-//        [self addSubview:_ReportButton];
+        [self addSubview:_ReportButton];
+        
         
         //赞按钮
         self.likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -158,7 +160,7 @@
         _likeButton.tag = 801;
         [self addSubview:_likeButton];
         
-        self.likeCommentBackView = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"like_comment_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:23]];
+        self.likeCommentBackView = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"like_comment_bg_two.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:23]];
         [self addSubview:_likeCommentBackView];
         
         //赞外包装
@@ -175,7 +177,7 @@
         //超链接样式
         [_likeLabel.linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
         [_likeLabel.linkAttributes setValue:commonColor forKey:(NSString *)kCTForegroundColorAttributeName];
-        [_likeLabel.activeLinkAttributes setValue:[UIColor redColor] forKey:(NSString *)kCTForegroundColorAttributeName];
+        [_likeLabel.activeLinkAttributes setValue:[UIColor lightGrayColor] forKey:(NSString *)kCTForegroundColorAttributeName];
         _likeLabel.delegate = self;
         [_likeBackView addSubview:_likeLabel];
         
@@ -195,7 +197,8 @@
 
 -(IBAction)ReportButtonClick:(id)sender
 {
-    [UIAlertView showAlertViewWithMessage:@"举报成功"];
+    UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"删除该动态" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除", nil];
+    [alertview show];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -210,12 +213,14 @@
 {
     //在这里根据activity的内容去设置各个subView的frame和细节
     _activity = activity;
+    
     if([activity.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
     {
          [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
-        [_userNameButton setTitle:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] forState:UIControlStateNormal];
+         [_userNameButton setTitle:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] forState:UIControlStateNormal];
+        _ReportButton.hidden = NO;
     }else{
-        
+         _ReportButton.hidden = YES;
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
             FCUserDescription * user = response;
             //内容
@@ -274,10 +279,10 @@
             if (_activity.likeUsers.count>0) {
 //                text = [text stringByAppendingFormat:@"等%d人",otherUserCount];
             }else{
-                text = [text stringByAppendingFormat:@"%d人",otherUserCount];
+                text = [text stringByAppendingFormat:@" %d人",otherUserCount];
             }
         }
-       text = [text stringByAppendingFormat:@"觉得很赞"];
+        text = [text stringByAppendingFormat:@"觉得很赞"];
         _likeLabel.text = text;
         [_likeLabel addLinksWithTextCheckingResults:textCheckingResults attributes:_likeLabel.linkAttributes];
     }else{

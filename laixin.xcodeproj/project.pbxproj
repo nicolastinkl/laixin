@@ -113,6 +113,7 @@
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
+		8697EDE61880E2B300743FE2 /* like_comment_bg_two@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8697EDE51880E2B300743FE2 /* like_comment_bg_two@2x.png */; };
 		869CE4AB18698D3F0004C1EC /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 869CE4AA18698D3F0004C1EC /* AsyncImageView.m */; };
 		869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 869CE4B3186A73880004C1EC /* CustomMethod.m */; };
 		869CE4BF186A73880004C1EC /* MarkupParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 869CE4B5186A73880004C1EC /* MarkupParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -542,6 +543,7 @@
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
 		8692E3C41864364F00F9E1DD /* XCJAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJAddressBook.h; sourceTree = "<group>"; };
 		8692E3C51864364F00F9E1DD /* XCJAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJAddressBook.m; sourceTree = "<group>"; };
+		8697EDE51880E2B300743FE2 /* like_comment_bg_two@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "like_comment_bg_two@2x.png"; sourceTree = "<group>"; };
 		869CE4A918698D3F0004C1EC /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		869CE4AA18698D3F0004C1EC /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
 		869CE4B2186A73880004C1EC /* CustomMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMethod.h; sourceTree = "<group>"; };
@@ -1196,6 +1198,7 @@
 		8668E45C187540DB00D20C9E /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8697EDE51880E2B300743FE2 /* like_comment_bg_two@2x.png */,
 				8668E45D187540DB00D20C9E /* btn_comment@2x.png */,
 				8668E45E187540DB00D20C9E /* btn_comment_disable@2x.png */,
 				8668E45F187540DB00D20C9E /* btn_like@2x.png */,
@@ -2419,6 +2422,7 @@
 				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86E57CEE18795CC900978AFA /* area.plist in Resources */,
+				8697EDE61880E2B300743FE2 /* like_comment_bg_two@2x.png in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				8668E478187540DB00D20C9E /* btn_comment_disable@2x.png in Resources */,
 				86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */,

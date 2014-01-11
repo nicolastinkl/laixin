@@ -59,7 +59,7 @@
         //超链接样式
         [label.linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
         [label.linkAttributes setValue:[UIColor colorWithString:@"{116,126,170}"] forKey:(NSString *)kCTForegroundColorAttributeName];
-        [label.activeLinkAttributes setValue:[UIColor redColor] forKey:(NSString *)kCTForegroundColorAttributeName];
+        [label.activeLinkAttributes setValue:[UIColor lightGrayColor] forKey:(NSString *)kCTForegroundColorAttributeName];
         label.delegate = self;
         
         if([comment.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
