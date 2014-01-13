@@ -178,9 +178,6 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                                 msg.gType = [NSString stringWithFormat:@"%d",list.type];
                                 [localContext MR_saveToPersistentStoreAndWait];
                             }
-                            
-                            
-                            
                         }];
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
@@ -433,9 +430,126 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1){
+        // get  event.read(pos=0)
+        NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = responseObject[@"result"];
+                NSArray * array = dict[@"events"];
+                __block NSInteger manEIDTwo = 0;
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
+                    NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
+                    if (manEIDTwo < curretnEid) {
+                        manEIDTwo = curretnEid;
+                    }
+                    [self initEventData:typeStr Data:obj];
+                }];
+                [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {    
+-(void) initEventData:(NSString *) requestKey Data:(NSDictionary  *)dictEvent
+{
+    
+    if ([requestKey isEqualToString:@"add_friend"]) {
+        NSString  * uid = [tools getStringValue:dictEvent[@"uid"] defaultValue:nil];
+        NSString  * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            FCUserDescription * newFcObj = response;
+            // Build the predicate to find the person sought
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", uid];
+            FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
+            if(conversation == nil)
+            {
+                conversation =  [FCBeAddFriend MR_createInContext:localContext];
+            }
+            conversation.facebookID = uid;
+            conversation.beAddFriendShips = newFcObj;
+            conversation.addTime = [NSDate date];
+            conversation.hasAdd = @NO;
+            conversation.eid = eid;
+            [localContext MR_saveToPersistentStoreAndWait];
+            [self.tabBarController.tabBar.items[1] setBadgeValue:@""];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
+        } withuid:uid];
+        
+    }else if ([requestKey isEqualToString:@"group_invite"])
+    { /*	"gid":49,
+       "create_time":1389322217,
+       "type":"group_invite",
+       "eid":41,
+       "fromuid":4    */
+        NSString * gid = [tools getStringValue:dictEvent[@"gid"] defaultValue:nil];
+        NSString * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
+        NSString * fromuid = [tools getStringValue:dictEvent[@"fromuid"] defaultValue:nil];
+        
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            FCUserDescription *newFcObj = response;
+            
+            NSDictionary * paramess = @{@"gid":@[gid]};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                NSDictionary * groupsss = responseObjects[@"result"];
+                NSArray * groupsDicts =  groupsss[@"groups"];
+                [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                    // Build the predicate to find the person sought
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", gid];
+                    FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
+                    if(conversation == nil)
+                    {
+                        conversation =  [FCBeInviteGroup MR_createInContext:localContext];
+                    }
+                    conversation.groupID = gid;
+                    conversation.eid = eid;
+                    conversation.groupName = list.group_name;
+                    conversation.groupJson = [obj JSONString];
+                    conversation.fcBeinviteGroupShips = newFcObj;
+                    conversation.beaddTime = [NSDate date];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
+#pragma mark // 处理加入请求
+                    {
+                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid = %@", gid];
+                        FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
+                        if(msg == nil)
+                        {
+                            // 处理加入请求
+                            [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                                if(responseObject){
+                                    // Build the predicate to find the person sought
+                                    
+                                }
+                            } failure:^(MLRequest *request, NSError *error) {
+                                
+                            }];
+                            msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                        }
+                        msg.gid = list.gid;
+                        msg.gCreatorUid = list.creator;
+                        msg.gName = list.group_name;
+                        msg.gBoard = list.group_board;
+                        msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+                        msg.gbadgeNumber = @1;
+                        msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                        [localContext MR_saveToPersistentStoreAndWait];
+                    }
+                }];
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        } withuid:fromuid];
+    }
+
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSString* devtokenstring=[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@" " withString:@""];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\n" withString:@""];

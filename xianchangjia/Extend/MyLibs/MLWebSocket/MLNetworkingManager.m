@@ -34,8 +34,10 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     return ml_request_is_timeout_judge_queue;
 }
 
-@interface MLNetworkingManager()<SRWebSocketDelegate>
-
+@interface MLNetworkingManager()<SRWebSocketDelegate,UIAlertViewDelegate>
+{
+    UIAlertView * currentAlert;
+}
 
 @end
 
@@ -193,7 +195,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
     SLog(@"Websocket Connected");
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketDidOpen" object:nil];
     //检查如果有准备发送的请求，现在发送
     for (MLRequest *request in self.preparedRequests) {
        [self sendRequest:request];
@@ -204,7 +206,13 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
     SLog(@"Websocket Failed With Error (\n  %@ \n )", error);
-    [UIAlertView showAlertViewWithMessage:@"网络连接失败,请检查网络设置"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
+    
+    if (currentAlert == nil) {
+        currentAlert =  [[UIAlertView alloc] initWithTitle:@"提示" message:@"网络连接失败,请检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+        [currentAlert show];        
+    }
     self.webSocket = nil;
     //这里的话需要执行全部保存的requests的失败和清理操作
     for (MLRequest *request in self.requests) {
@@ -213,6 +221,10 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     }
     [self.sentRequests removeAllObjects];
     [self.preparedRequests removeAllObjects];
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    currentAlert = nil;
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;

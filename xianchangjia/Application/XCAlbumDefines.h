@@ -83,7 +83,7 @@ typedef enum {
 #define KeyChain_Laixin_account_user_signature    @"KeyChain_Laixin_account_user_signature"
 #define KeyChain_Laixin_account_user_position    @"KeyChain_Laixin_account_user_position"
 #define KeyChain_Laixin_account_sessionid       @"KeyChain_Laixin_account_sessionid"
-
+#define KeyChain_Laixin_Max_Event_messageID       @"KeyChain_Laixin_Max_Event_messageID"
 #define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"
 
 

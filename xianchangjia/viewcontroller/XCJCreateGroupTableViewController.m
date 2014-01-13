@@ -132,8 +132,12 @@
 
 - (IBAction)selectAddress:(id)sender
 {
+    if (self.locatePicker) {
+        [self.locatePicker cancelPicker];
+    }
     self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCityAndDistrict delegate:self];
-    [self.locatePicker showInView:self.view];
+   [self.locatePicker showInView:self.view];
+
 }
 - (void)viewDidLoad
 {
@@ -160,7 +164,6 @@
     [super viewDidDisappear:animated];
   
 }
-
 
 -(void) XCJSelectCroupTypeViewControllerNotiy:(NSNotification *) noty
 {

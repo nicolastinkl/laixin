@@ -169,17 +169,32 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition object:nil];
     
+    
+      [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
+    
+      [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
+    
     tryCatchCount = 0;
     if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
         [self OpenLoginview:nil];
     }else{
-        [self initHomeData];
         [self.tableView showIndicatorViewLargeBlue];
+        
+        [self initHomeData];
     }
     
-    //fbc_specialbutton_28_3_3_3_3_normal_ios7
-    
-    
+}
+
+-(void) webSocketDidOpen:(NSNotification * ) noty
+{
+    self.title = @"来信";
+    [self.navigationItem.titleView sizeToFit];
+    [self.tableView hideIndicatorViewBlueOrGary];
+}
+-(void) webSocketdidFailWithError:(NSNotification * ) noty
+{
+    self.title = @"来信(未连接)";
+    [self.navigationItem.titleView sizeToFit];    
 }
 
 -(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
@@ -434,9 +449,11 @@
     } failure:^(MLRequest *request, NSError *error) {
 //         re request login
          tryCatchCount ++ ;
+          [self.tableView hideIndicatorViewBlueOrGary];
         if (tryCatchCount <= 2) {
             [self initHomeData];
         }
+       
     }];
 }
 

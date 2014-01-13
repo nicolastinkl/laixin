@@ -82,7 +82,6 @@
     [self.button_Next addTarget:self action:@selector(getPwdClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-
 #warning get user infomation  with get pwd
 -(IBAction)getPwdClick:(id)sender
 {
@@ -95,7 +94,6 @@
         [self.navigationController dismissViewControllerAnimated:YES completion:^{
             
         }];
-        
     }
     
     
