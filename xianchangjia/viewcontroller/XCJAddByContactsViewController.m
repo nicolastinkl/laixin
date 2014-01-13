@@ -18,6 +18,10 @@
 #import "DataHelper.h"
 #import <MessageUI/MessageUI.h>
 #import "XCAlbumDefines.h"
+#import "FCContactsPhone.h"
+#import "XCAlbumAdditions.h"
+#import "CoreData+MagicalRecord.h"
+#import "XCJAddUserTableViewController.h"
 
 @interface XCJAddByContactsViewController ()<UIAlertViewDelegate,UITableViewDataSource,UITableViewDelegate,MFMessageComposeViewControllerDelegate>
 {
@@ -49,6 +53,22 @@
     _datasource = array;
     NSMutableDictionary * dict  = [[NSMutableDictionary alloc] init];
     dictPhones = dict;
+    
+    FCContactsPhone* phone = [FCContactsPhone MR_findFirst];
+    if (phone) {
+//        [FCContactsPhone MR_deleteAllMatchingPredicate:nil];
+        UIView *subView = (UIView * ) [self.view subviewWithTag:1];
+        subView.hidden = YES;
+
+        NSArray * array = [FCContactsPhone MR_findAllSortedBy:@"hasLaixin" ascending:NO];
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [_datasource addObject:obj];
+        }];
+        [self.tableContacts reloadData];
+
+    } else{
+        [self reloadContacts];
+    }
 }
 
 
@@ -63,28 +83,36 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return dictPhones.allValues.count;
+    return _datasource.count;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    XCJAddressBook * addressbook =  dictPhones.allValues[indexPath.row];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if( [MFMessageComposeViewController canSendText] ){
-        
-        MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc]init]; //autorelease];
-        
-        controller.recipients = [NSArray arrayWithObject:addressbook.tel];
-        controller.body = [NSString stringWithFormat:@"来信可以用语音发短信，挺简单的，推荐你用一下。下载地址：http://laixin.com/m  记得安装后加我的来信号：%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
-        
-        controller.messageComposeDelegate = self;
-        
-        [self presentViewController:controller animated:YES completion:^{
-            
-        }];
-        
-        [[[[controller viewControllers] lastObject] navigationItem] setTitle:@"短信"];//修改短信界面标题
+    FCContactsPhone *phone = _datasource[indexPath.row];
+    if ([phone.hasLaixin boolValue]) {
+        //查看好友资料
+        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+        addUser.UserInfo = phone.phoneFCuserDesships;
+        [self.navigationController pushViewController:addUser animated:YES];
     }else{
-        [UIAlertView showAlertViewWithMessage:@"设备没有短信功能"];
+        if( [MFMessageComposeViewController canSendText] ){
+            
+            MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc]init]; //autorelease];
+            
+            controller.recipients = [NSArray arrayWithObject:phone.phoneNumber];
+            controller.body = [NSString stringWithFormat:@"来信可以用语音发短信，挺简单的，推荐你用一下。下载地址：http://laixin.com/m  记得安装后加我的来信号：%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
+            
+            controller.messageComposeDelegate = self;
+            
+            [self presentViewController:controller animated:YES completion:^{
+                
+            }];
+            
+            [[[[controller viewControllers] lastObject] navigationItem] setTitle:@"短信"];//修改短信界面标题
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"设备没有短信功能"];
+        }
     }
 }
 #pragma mark MFMessageComposeViewControllerDelegate
@@ -110,7 +138,6 @@
     }
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"cellContacts";
@@ -118,18 +145,17 @@
     UILabel * titleName  =  (UILabel * ) [cell.contentView subviewWithTag:1];
     UILabel * contentSign  =  (UILabel * ) [cell.contentView subviewWithTag:2];
     UIImageView * contentSignimage  =  (UIImageView * ) [cell.contentView subviewWithTag:3];
-    XCJAddressBook * addressbook =  dictPhones.allValues[indexPath.row];
-    if (addressbook.HasRegister) {
+     FCContactsPhone * addressbook =  _datasource[indexPath.row];
+    if ([addressbook.hasLaixin boolValue]) {
         contentSign.text = @"添加";
         contentSignimage.hidden = NO;
-        contentSign.textColor = [UIColor colorWithHex:0x444444];
+        contentSign.textColor = ios7BlueColor;// [UIColor colorWithHex:0x444444];
     }else{
         contentSign.text = @"邀请";
         contentSign.textColor = [UIColor grayColor];
         contentSignimage.hidden = YES;
     }
-    titleName.text = addressbook.name;
-
+    titleName.text = addressbook.phoneName;
     return cell;
 }
 
@@ -263,48 +289,62 @@
             }else{
                 [arrays addObject:@{@"phone":addressbook.tel,@"name":@"未知"}];
             }
+            
+            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate * qcmd = [NSPredicate predicateWithFormat:@"phoneNumber = %@ ",addressbook.tel];
+            
+            FCContactsPhone * phone = [FCContactsPhone MR_findFirstWithPredicate:qcmd];
+            if (phone == nil) {
+                phone = [FCContactsPhone MR_createInContext:localContext];
+            }
+            
+            phone.phoneName = addressbook.name;
+            phone.uid = @"";
+            phone.phoneNumber = addressbook.tel;
+            [localContext MR_saveToPersistentStoreAndWait];
+            [_datasource addObject:phone];
         }
     }];
 //    [_datasource  addObjectsFromArray:addarray];
     
     if (arrays.count > 0) {
+        [self.tableContacts reloadData];
+        
         NSDictionary * parames = @{@"phone_list":arrays};
         [[MLNetworkingManager sharedManager] sendWithAction:@"phonebook.upload"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dict = responseObject[@"data"];
-                NSArray * array =  dict[@"users"];
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSString * phone=[DataHelper getStringValue:obj[@"phone"] defaultValue:@""];
-                    if ([dictPhones.allKeys containsObject:phone]) {
-                        SLog(@"phone %@",phone);
-                        XCJAddressBook * addressbook =  [dictPhones.allKeys valueForKey:phone];
-                        NSString * uid=[DataHelper getStringValue:obj[@"uid"] defaultValue:@""];
-                        addressbook.UID = uid;
-                        addressbook.HasRegister = YES;
-//                        [dictPhones setObject:addressbook forKey:phone];
-                    }
-                }];
-                
-                [dictPhones.allValues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                    XCJAddressBook * addressbook1 = obj1;
-                    XCJAddressBook * addressbook2 = obj2;
-                    if (addressbook1.HasRegister > addressbook2.HasRegister) {
-                        return NSOrderedAscending;
-                    }
-                    return NSOrderedDescending;
-                }];
-            }
-            [self.tableContacts reloadData];
+            
+//            [self.tableContacts reloadData];
             [SVProgressHUD dismiss];
         } failure:^(MLRequest *request, NSError *error) {
-            [self.tableContacts reloadData];
+//            [self.tableContacts reloadData];
             [SVProgressHUD dismiss];
         }];
+            /* if (responseObject) { NSDictionary * dict = responseObject[@"data"];
+             NSArray * array =  dict[@"users"];
+             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+             NSString * phone=[DataHelper getStringValue:obj[@"phone"] defaultValue:@""];
+             if ([dictPhones.allKeys containsObject:phone]) {
+             SLog(@"phone %@",phone);
+             XCJAddressBook * addressbook =  [dictPhones.allKeys valueForKey:phone];
+             NSString * uid=[DataHelper getStringValue:obj[@"uid"] defaultValue:@""];
+             addressbook.UID = uid;
+             addressbook.HasRegister = YES;
+             //                        [dictPhones setObject:addressbook forKey:phone];
+             }
+             }];
+             
+             [dictPhones.allValues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+             XCJAddressBook * addressbook1 = obj1;
+             XCJAddressBook * addressbook2 = obj2;
+             if (addressbook1.HasRegister > addressbook2.HasRegister) {
+             return NSOrderedAscending;
+             }
+             return NSOrderedDescending;
+             }];
+             }}
+             */
         
     }
-
-
-    
 }
 
 - (IBAction) findAllLocalContacts:(id)sender

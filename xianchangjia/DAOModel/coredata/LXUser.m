@@ -42,6 +42,7 @@
         _actor_level = [[tools getStringValue:dic[@"actor_level"] defaultValue:@""] intValue];
         _signature = [tools getStringValue:dic[@"signature"] defaultValue:@""];
         _position = [tools getStringValue:dic[@"position"] defaultValue:@""];
+        _phone =[tools getStringValue:dic[@"phone"] defaultValue:@""];
     }
     return self;
 }

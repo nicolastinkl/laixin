@@ -11,5 +11,5 @@
 #import "LXUser.h"
 @interface XCJAddUserTableViewController : UITableViewController
 @property (readwrite, nonatomic, strong) FCUserDescription *UserInfo;
-@property (readwrite, nonatomic, strong) LXUser *UserInfoJson;
+//@property (readwrite, nonatomic, strong) LXUser *UserInfoJson;
 @end

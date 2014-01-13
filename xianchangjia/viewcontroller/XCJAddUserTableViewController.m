@@ -81,9 +81,9 @@
         if (![self.UserInfo.marriage isNilOrEmpty]) {
             UserDict[@"婚姻状态"] = self.UserInfo.marriage;
         }
-        if (self.UserInfoJson) {            
-            if (![self.UserInfoJson.position isNilOrEmpty]) {
-                UserDict[@"地区"] = self.UserInfoJson.position;
+        if (self.UserInfo.position) {
+            if (![self.UserInfo.position isNilOrEmpty]) {
+                UserDict[@"地区"] = self.UserInfo.position;
             }
         }
         
@@ -141,7 +141,7 @@
             // add this user to friends DB
             // setFriendsObject
             if (responseObject) {
-                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:self.UserInfoJson];
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:self.UserInfo];
                 [SVProgressHUD showSuccessWithStatus:@"添加成功"];
                 //[self.navigationController popViewControllerAnimated:YES];
             }

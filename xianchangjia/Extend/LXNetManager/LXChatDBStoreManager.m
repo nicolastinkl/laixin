@@ -208,7 +208,7 @@
  */
 - (void)setFriendsObject:(LXUser *) fcuserdesp
 {
-     NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
     //查看friend是否存在
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
     NSArray * result = [FCFriends MR_findAllWithPredicate:pre];
@@ -258,6 +258,24 @@
         newfriends.friendRelation = newFcObj;
         [localContext MR_saveToPersistentStoreAndWait];
     }
+}
+
+/**
+ *  根据用户信息设置我的好友
+ *
+ *  @param fcuserdesp <#fcuserdesp description#>
+ */
+- (void)setFriendsUserDescription:(FCUserDescription *) fcuserdesp
+{
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    //查看friend是否存在
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
+    FCFriends * newfriends = [FCFriends MR_findFirstWithPredicate:pre];
+    if (newfriends == nil) {
+         newfriends = [FCFriends MR_createInContext:localContext];
+    }
+    newfriends.friendRelation = fcuserdesp;
+    [localContext MR_saveToPersistentStoreAndWait];
 }
 
 /**

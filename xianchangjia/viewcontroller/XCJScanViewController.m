@@ -189,7 +189,7 @@
                     //FCUserDescription
                     XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
                     addUser.UserInfo = response;
-                    addUser.UserInfoJson = currentUser;
+//                    addUser.UserInfoJson = currentUser;
                     addUser.title = @"详细资料";
                     [self.navigationController pushViewController:addUser animated:YES];
                     [SVProgressHUD dismiss];
@@ -236,7 +236,7 @@
                                     //FCUserDescription
                                     XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
                                     addUser.UserInfo = response;
-                                    addUser.UserInfoJson = currentUser;
+//                                    addUser.UserInfoJson = currentUser;
                                     [self.navigationController pushViewController:addUser animated:YES];
                                     [SVProgressHUD dismiss];
                                 }

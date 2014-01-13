@@ -156,7 +156,6 @@
             [SVProgressHUD dismiss];
             XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
             addUser.UserInfo = response;
-            addUser.UserInfoJson = currentUser;
             [self.navigationController pushViewController:addUser animated:YES];
         }
     }];

@@ -43,6 +43,13 @@
         <relationship name="fcBeinviteGroupInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCHomeGroupMsg" inverseName="newRelationship" inverseEntity="FCHomeGroupMsg" syncable="YES"/>
         <relationship name="fcBeinviteGroupShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship1" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>
+    <entity name="FCContactsPhone" representedClassName="FCContactsPhone" syncable="YES">
+        <attribute name="hasLaixin" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="phoneName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="phoneFCuserDesships" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship2" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
     <entity name="FCFriends" representedClassName="FCFriends" syncable="YES">
         <attribute name="friendID" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
@@ -97,11 +104,13 @@
         <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeAddFriend" inverseName="beAddFriendShips" inverseEntity="FCBeAddFriend" syncable="YES"/>
         <relationship name="newRelationship1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupShips" inverseEntity="FCBeInviteGroup" syncable="YES"/>
+        <relationship name="newRelationship2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCContactsPhone" inverseName="phoneFCuserDesships" inverseEntity="FCContactsPhone" syncable="YES"/>
         <relationship name="userDesp" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="fcindefault" inverseEntity="FCAccount" syncable="YES"/>
         <relationship name="userDespFriends" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCFriends" inverseName="friendRelation" inverseEntity="FCFriends" syncable="YES"/>
         <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
     <elements>
+        <element name="ConverReply" positionX="34" positionY="252" width="128" height="133"/>
         <element name="Conversation" positionX="25" positionY="36" width="128" height="195"/>
         <element name="FCAccount" positionX="70" positionY="-234" width="128" height="120"/>
         <element name="FCBeAddFriend" positionX="169" positionY="96" width="128" height="120"/>
@@ -109,8 +118,8 @@
         <element name="FCFriends" positionX="178" positionY="-27" width="128" height="75"/>
         <element name="FCHomeGroupMsg" positionX="-333" positionY="228" width="128" height="178"/>
         <element name="FCMessage" positionX="-108" positionY="-288" width="128" height="180"/>
-        <element name="FCUserDescription" positionX="-342" positionY="-174" width="128" height="345"/>
-        <element name="FCReplyMessage" positionX="153" positionY="315" width="128" height="148"/>
-        <element name="ConverReply" positionX="34" positionY="252" width="128" height="133"/>
+        <element name="FCReplyMessage" positionX="70" positionY="410" width="128" height="148"/>
+        <element name="FCUserDescription" positionX="-342" positionY="-174" width="128" height="358"/>
+        <element name="FCContactsPhone" positionX="-315" positionY="-342" width="128" height="118"/>
     </elements>
 </model>

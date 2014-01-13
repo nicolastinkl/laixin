@@ -30,6 +30,7 @@
 #import "FCHomeGroupMsg.h"
 #import "ConverReply.h"
 #import "CoreData+MagicalRecord.h"
+#import "FCContactsPhone.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -263,6 +264,22 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             [localContext MR_saveToPersistentStoreAndWait];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+        }else if ([eventType isEqualToString:@"fromphonebook"])
+        {
+            NSDictionary * dicResult = MsgContent[@"data"];
+            NSArray * array = dicResult[@"users"];
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                LXUser * lxuser = [[LXUser alloc] initWithDict:obj];
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"phoneNumber = %@",lxuser.phone];
+                FCContactsPhone  * phoneObj = [FCContactsPhone MR_findFirstWithPredicate:preCMD];
+                if (phoneObj) {
+                    phoneObj.hasLaixin = @YES;
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:lxuser withCompletion:^(id reponse, NSError *error) {
+                        phoneObj.phoneFCuserDesships = reponse;
+                        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                    }];                    
+                }
+            }];
         }
         
     }
