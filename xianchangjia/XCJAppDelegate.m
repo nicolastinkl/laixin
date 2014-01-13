@@ -35,7 +35,7 @@
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
-@interface XCJAppDelegate()
+@interface XCJAppDelegate()<UITabBarControllerDelegate>
 
 @end
 
@@ -323,10 +323,20 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     return YES;
 }
 
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSInteger index =  tabBarController.selectedIndex;
+    SLog(@"index: %d",index);
+    if (index == 1) {
+        [tabBarController.tabBar.items[1] setBadgeValue:nil];
+    }
+}
+
 - (void) initAllControlos
 {
     if (!self.tabBarController) {
         self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
+        self.tabBarController.delegate = self;
     }
 //    [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabBarBackground"]];
     //     [self.tabBarController.tabBar.items[0] setBadgeValue:@"New"];
@@ -432,24 +442,34 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1){
         // get  event.read(pos=0)
-        NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
-        [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dict = responseObject[@"result"];
-                NSArray * array = dict[@"events"];
-                __block NSInteger manEIDTwo = 0;
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
-                    NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
-                    if (manEIDTwo < curretnEid) {
-                        manEIDTwo = curretnEid;
-                    }
-                    [self initEventData:typeStr Data:obj];
-                }];
-                [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
-            }
+        
+        NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+        NSDictionary * parames = @{@"sessionid":sessionid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
+            [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dict = responseObject[@"result"];
+                    NSArray * array = dict[@"events"];
+                    __block NSInteger manEIDTwo = 0;
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                        NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
+                        NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
+                        if (manEIDTwo < curretnEid) {
+                            manEIDTwo = curretnEid;
+                            [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
+                        }
+                        //[self initEventData:typeStr Data:obj];
+                    }];
+                    
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
         } failure:^(MLRequest *request, NSError *error) {
         }];
+        
+        
+       
     }
 }
 

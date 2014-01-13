@@ -14,6 +14,7 @@
 #import "LXAPIController.h"
 #import "LXChatDBStoreManager.h"
 #import "LXRequestFacebookManager.h"
+#import "XCJAppDelegate.h"
 
 @interface XCJScanViewController ()<UIAlertViewDelegate>
 {
@@ -75,7 +76,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-     [_session stopRunning];
+    [_session stopRunning];
     [timer invalidate];
     timer = nil;
 }
@@ -130,13 +131,18 @@
     
     if (![stringValue isNilOrEmpty] && stringValue.length > 0) {
         NSLog(@"%@",stringValue);
+        if(stringValueNew && stringValueNew.length > 0){
+            return;
+        }
+            
         stringValueNew  = [NSString stringWithFormat:@"%@",stringValue];
         stringValue = @"";
         [_session stopRunning];
 //        [timer invalidate];
         if (![stringValueNew isNilOrEmpty]) {
             if ([stringValueNew isHttpUrl]) {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringValue]];
+                [self.navigationController popViewControllerAnimated:NO];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringValueNew]];
             }else{
                 [self findUser];
 //                switch (self.scanTypeIndex) {
@@ -159,7 +165,6 @@
 //                        break;
 //                }
             }
-            
             
         }
 //        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"扫描结果" message:stringValueNew delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"查看", nil];
@@ -186,20 +191,42 @@
             LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
             [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
                 if (response) {
-                    //FCUserDescription
-                    XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                    addUser.UserInfo = response;
-//                    addUser.UserInfoJson = currentUser;
-                    addUser.title = @"详细资料";
-                    [self.navigationController pushViewController:addUser animated:YES];
-                    [SVProgressHUD dismiss];
+                    NSArray * array =self.navigationController.viewControllers ;
+                    UIViewController * viewCon =  [array firstObject];
+                    [self.navigationController popViewControllerAnimated:NO];
+                    double delayInSeconds = .3;
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                        [SVProgressHUD dismiss];
+                        stringValueNew = nil;
+                        //FCUserDescription
+                        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                        addUser.UserInfo = response;
+                        //                    addUser.UserInfoJson = currentUser;
+                        addUser.title = @"详细资料";
+                        if (self.preController) {
+                            
+                            [self.preController.navigationController pushViewController:addUser animated:YES];
+                        }else{
+//                            XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+//                            UIViewController * viewCon = delegate.tabBarController.selectedViewController;
+//                            if([viewCon isMemberOfClass:[UINavigationController class]])
+//                            {
+//                                UINavigationController * navi = (UINavigationController*)viewCon;
+//                                [navi pushViewController:addUser animated:YES];
+//                            }
+                            
+                           [viewCon.navigationController pushViewController:addUser animated:YES];
+                        }
+                    });
                 }
             }];
         }];
         
     } failure:^(MLRequest *request, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"请求失败,请检查网络"];
+        stringValueNew = nil;
         [_session startRunning];
+        [SVProgressHUD showErrorWithStatus:@"请求失败,请检查网络"];
     }];
 }
 

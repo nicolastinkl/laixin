@@ -28,4 +28,6 @@ enum ScanTypeEnum {
 @property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
 @property (assign,nonatomic) NSInteger  scanTypeIndex;
 
+@property (readonly,weak,nonatomic)UIViewController *  preController;
+
 @end
