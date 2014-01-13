@@ -7,6 +7,8 @@
 //
 #import "UIButton+Bootstrap.h"
 #import <QuartzCore/QuartzCore.h>
+#import "XCAlbumDefines.h"
+
 @implementation UIButton (Bootstrap)
 
 -(void)bootstrapStyle{
@@ -47,6 +49,9 @@
     self.backgroundColor = [UIColor colorWithRed:91/255.0 green:192/255.0 blue:222/255.0 alpha:1];
     self.layer.borderColor = [[UIColor colorWithRed:70/255.0 green:184/255.0 blue:218/255.0 alpha:1] CGColor];
     [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:57/255.0 green:180/255.0 blue:211/255.0 alpha:1]] forState:UIControlStateHighlighted];
+    
+    self.backgroundColor = ios7BlueColor;
+    self.layer.borderColor = [ios7BlueColor CGColor];
 }
 
 -(void)warningStyle{

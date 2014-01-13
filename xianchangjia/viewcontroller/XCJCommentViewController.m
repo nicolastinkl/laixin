@@ -139,7 +139,6 @@
     return cell;
 }
 
-
 - (CGFloat)heightForCellWithPost:(NSString *)post {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

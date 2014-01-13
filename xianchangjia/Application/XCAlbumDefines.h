@@ -85,8 +85,9 @@ typedef enum {
 #define KeyChain_Laixin_account_sessionid       @"KeyChain_Laixin_account_sessionid"
 #define KeyChain_Laixin_Max_Event_messageID       @"KeyChain_Laixin_Max_Event_messageID"
 #define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"
-
-
+#define KeyChain_Laixin_account_HasLogin       @"KeyChain_Laixin_account_HasLogin"
+#define KeyChain_Laixin_account_devtokenstring @"KeyChain_Laixin_account_devtokenstring"
+#define KeyChain_Laixin_message_PrivateUnreadIndex @"KeyChain_Laixin_message_PrivateUnreadIndex"
 
 /*-----------------------------
  1. 类型1----新的好友动态

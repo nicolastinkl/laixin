@@ -31,7 +31,7 @@
 #import "FDStatusBarNotifierView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "XCJSettingGroupViewController.h"
-
+#import "XCJAddUserTableViewController.h"
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate>
 {
@@ -114,7 +114,10 @@
 
 -(IBAction)SeeUserInfoClick:(id)sender
 {
-    
+    //查看好友资料
+    XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+    addUser.UserInfo = self.userinfo;
+    [self.navigationController pushViewController:addUser animated:YES];
 }
 
 -(IBAction)SeeGroupInfoClick:(id)sender
@@ -203,6 +206,17 @@
             
             NSDictionary * dicMessage = dicResult[@"message"];
             
+            
+            // update lastmessage id index
+            NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
+            
+            NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+            if (messageIndex < indexMsgID) {
+                [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                [USER_DEFAULT synchronize];
+            }
+            
+            
             NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
             if ([self.conversation.facebookId isEqualToString:facebookID]) {
                 // int view
@@ -243,6 +257,17 @@
                 //out view
                 NSString * content = dicMessage[@"content"];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                
+                
+                // update lastmessage id index
+                NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
+                
+                NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                if (messageIndex < indexMsgID) {
+                    [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                    [USER_DEFAULT synchronize];
+                }
+                
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
                 msg.text = content;
@@ -442,6 +467,16 @@
                 //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
                 NSDictionary * dic = [responseObject objectForKey:@"result"];
                 if (dic) {
+                    
+                    // update lastmessage id index
+                    NSInteger indexMsgID = [DataHelper getIntegerValue:dic[@"msgid"] defaultValue:0];
+                    
+                    NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                    if (messageIndex < indexMsgID) {
+                        [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                        [USER_DEFAULT synchronize];
+                    }
+                    
                     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                     FCMessage *msg = [FCMessage MR_createInContext:localContext];
                     msg.text = text;
@@ -684,6 +719,17 @@
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {
+                
+                
+                // update lastmessage id index
+                NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
+                
+                NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                if (messageIndex < indexMsgID) {
+                    [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                    [USER_DEFAULT synchronize];
+                }
+                
                 NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
                 NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
                 [self SendImageWithMeImageurl:url withMsgID:msgID];

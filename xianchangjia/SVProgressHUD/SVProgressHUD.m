@@ -723,7 +723,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
         
         hudView.autoresizingMask = (UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin |
                                     UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin);
-        
+        hudView.alpha = 0.85; // change by tinkl
         //
         // add motion effect
         //
@@ -762,12 +762,12 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 
         // UIAppearance is used when iOS >= 5.0
 		stringLabel.textColor = ios7BlueColor;// self.hudForegroundColor;
-		stringLabel.font = self.hudFont;
+		stringLabel.font = [UIFont systemFontOfSize:15.0f];//self.hudFont;
         
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < 70000
-		stringLabel.shadowColor = self.hudStatusShadowColor;
-		stringLabel.shadowOffset = CGSizeMake(0, -1);
-#endif
+//#if __IPHONE_OS_VERSION_MIN_REQUIRED < 70000
+//		stringLabel.shadowColor = self.hudStatusShadowColor;
+//		stringLabel.shadowOffset = CGSizeMake(0, -1);
+//#endif
         stringLabel.numberOfLines = 0;
     }
     
@@ -961,7 +961,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
     return [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 #else
-    return [UIFont boldSystemFontOfSize:16];
+    return [UIFont systemFontOfSize:16]; //boldSystemFontOfSize change by tinkl
 #endif
 }
 

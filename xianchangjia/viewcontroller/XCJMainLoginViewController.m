@@ -227,7 +227,8 @@
                                        [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                                        [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                                        [USER_DEFAULT synchronize];
-                                       
+                                       [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+                                       [USER_DEFAULT synchronize];
                                        [self.navigationController dismissViewControllerAnimated:YES completion:^{
                                            // connection of websocket server
                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];

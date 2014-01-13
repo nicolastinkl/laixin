@@ -123,11 +123,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    /* receive websocket message*/
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(webSocketDidReceivePushMessage:)
-                                                 name:MLNetworkingManagerDidReceivePushMessageNotification
-                                               object:nil];
+    /* receive websocket message
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(webSocketDidReceivePushMessage:)
+     name:MLNetworkingManagerDidReceivePushMessageNotification
+     object:nil];
+     */
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -188,7 +190,7 @@
                 conversation.lastMessage = content;
             }
             msg.imageUrl = imageurl;
-            
+            msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
             conversation.messageStutes = @(messageStutes_incoming);
@@ -441,13 +443,24 @@
         default:
             break;
     }
-    
+    UITabBar *tabBar =(UITabBar*) [cell.contentView viewWithTag:12];
+    for (UIView *viewTab in tabBar.subviews) {
+        for (UIView *subview in viewTab.subviews) {
+            NSString *strClassName = [NSString stringWithUTF8String:object_getClassName(subview)];
+            if (![strClassName isEqualToString:@"_UIBadgeView"]) {
+                [subview removeFromSuperview];
+            }
+        }
+    }
     if ([conver.badgeNumber intValue] > 0) {
-        [self showBadgeValue:[NSString stringWithFormat:@"%d",[conver.badgeNumber intValue]] inView:imageFrame];
+         [tabBar.items[0] setBadgeValue:[NSString stringWithFormat:@"%@",conver.badgeNumber]];
+        //[self showBadgeValue:[NSString stringWithFormat:@"%d",[conver.badgeNumber intValue]] inView:imageFrame];
     }else{
-        [self removeBadgeValueInView:imageFrame];
+         [tabBar.items[0] setBadgeValue:nil];
+        //[self removeBadgeValueInView:imageFrame];
     }
     ((UILabel *)[cell.contentView viewWithTag:11]).height = 0.5f;
+    
 }
 
 #pragma mark  - bragenumber
@@ -484,6 +497,7 @@
         if ([strClassName isEqualToString:@"UITabBarButtonBadge"] ||
             [strClassName isEqualToString:@"_UIBadgeView"]) {
             [subview removeFromSuperview];
+            SLog(@"            [subview removeFromSuperview];");
             break;
         }
     }

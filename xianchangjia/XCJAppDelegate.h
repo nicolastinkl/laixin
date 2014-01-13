@@ -18,5 +18,7 @@
 @property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;
 @property (nonatomic,strong) UITabBarController *tabBarController;
 -(void) initWeiboView;
+
++(BOOL) hasLogin;
 @end
 

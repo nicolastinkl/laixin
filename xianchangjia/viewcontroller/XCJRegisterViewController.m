@@ -121,6 +121,9 @@
 
 -(IBAction)CompleteClick:(id)sender
 {
+    if (self.yanzhengNumber.text.length < 4) {
+        [UIAlertView showAlertViewWithMessage:@"请填写正确验证码"];
+    }
     if ( self.yanzhengNumber.text &&  self.PhoneNumber.text) {
         [SVProgressHUD show];
         NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",self.PhoneNumber.text,self.yanzhengNumber.text];
@@ -139,20 +142,11 @@
                     [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                     [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                     [USER_DEFAULT synchronize];
-                    [SVProgressHUD dismiss];
-                    /*
-                     {
-                     "func":"function_name",
-                     "parm":{
-                     "parm1":value,
-                     }
-                     }
-                     */
-                    SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
-                    SLog(@"state : %d", [websocket readyState]);
-                    //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
+                    
+                    [[MLNetworkingManager sharedManager] webSocket];  // connection
                     NSDictionary * parames = @{@"sessionid":sessionID};
                     [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                        [SVProgressHUD dismiss];
                         NSDictionary * dict = responseObject[@"result"];
                         LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
                         [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
@@ -165,7 +159,6 @@
                     //setup next viewcontroller
                 }
             }else{
-                
                 [self loginError];
             }
         } withParems:paremsResult];
@@ -191,10 +184,10 @@
                     self.image_success.hidden = NO;
                     self.button_getYanzhengma.enabled = NO;
                 }else{
-                    [self loginError:@"获取验证码出错"];
+                    [self loginError:@"获取验证码失败"];
                 }
             }else{
-                [self loginError:@"获取验证码出错"];
+                [self loginError:@"获取验证码失败,请检查网络设置"];
             }
         } withParems:[NSString stringWithFormat:@"getcode?phone=%@",phone]];
     }];
@@ -204,13 +197,13 @@
 -(void) loginError
 {
     [SVProgressHUD dismiss];
-    [UIAlertView showAlertViewWithTitle:@"失败" message:@"用户或密码错误"];
+    [UIAlertView showAlertViewWithTitle:@"失败" message:@"验证码出错"];
 }
 
 -(void) loginError:(NSString * ) msg
 {
     [SVProgressHUD dismiss];
-    [UIAlertView showAlertViewWithTitle:msg message:@"错误"];
+    [UIAlertView showAlertViewWithTitle:@"错误" message:msg];
 }
 
 - (void)didReceiveMemoryWarning

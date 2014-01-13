@@ -272,10 +272,11 @@
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
     FCFriends * newfriends = [FCFriends MR_findFirstWithPredicate:pre];
     if (newfriends == nil) {
-         newfriends = [FCFriends MR_createInContext:localContext];
+        newfriends = [FCFriends MR_createInContext:localContext];
+        newfriends.friendID = fcuserdesp.uid;
+        newfriends.friendRelation = fcuserdesp;
+        [localContext MR_saveToPersistentStoreAndWait];
     }
-    newfriends.friendRelation = fcuserdesp;
-    [localContext MR_saveToPersistentStoreAndWait];
 }
 
 /**

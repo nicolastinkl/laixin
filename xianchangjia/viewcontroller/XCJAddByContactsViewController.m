@@ -67,7 +67,7 @@
         [self.tableContacts reloadData];
 
     } else{
-        [self reloadContacts];
+        //[self reloadContacts];
     }
 }
 

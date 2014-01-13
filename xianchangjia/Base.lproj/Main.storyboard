@@ -914,6 +914,17 @@
                                             <rect key="frame" x="12" y="8" width="44" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
+                                        <tabBar tag="12" contentMode="scaleToFill" backgroundImage="BG_mask" itemPositioning="fill" id="jFI-IZ-Dp4">
+                                            <rect key="frame" x="24" y="-1" width="44" height="49"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <items>
+                                                <tabBarItem image="BG_mask" badgeValue="1" id="vrA-0r-XYf"/>
+                                            </items>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <color key="selectedImageTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </tabBar>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -4028,6 +4039,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BG_mask" width="1" height="854"/>
         <image name="IMG_1811" width="640" height="960"/>
         <image name="Titlebar_settings" width="32" height="32"/>
         <image name="Titlebar_signout" width="32" height="32"/>

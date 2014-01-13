@@ -31,6 +31,8 @@
 #import "ConverReply.h"
 #import "CoreData+MagicalRecord.h"
 #import "FCContactsPhone.h"
+#import "FCUserDescription.h"
+#import "FCMessage.h"
 
 static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
@@ -50,7 +52,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 {
     //更新其未读消息总数
 //    NSUInteger totalCount = [[[ChatList shareInstance] valueForKeyPath:@"array.@sum.unreadCount"] integerValue];
-    if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]) {
+    if ([XCJAppDelegate hasLogin]) {
         
         __block int brage = 0;
         NSArray * array = [Conversation MR_findAll];
@@ -277,6 +279,146 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                     }];                    
                 }
             }];
+        }else if ([eventType isEqualToString:@"newmsg"])
+        {
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"message"];
+            
+            // update lastmessage id index
+            NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
+            
+            NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+            if (messageIndex < indexMsgID) {
+                [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                [USER_DEFAULT synchronize];
+            }
+            {
+//                FCMessage  find this infomation
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId = %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+                FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+                if (message) {
+                    return; // change by tinkl   ....MARK:  has this record
+                }
+            }
+            
+            NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
+            
+            //out view
+            NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+            
+            // Build the predicate to find the person sought
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+            if(conversation == nil)
+            {
+                conversation =  [Conversation MR_createInContext:localContext];
+            }
+            
+            FCMessage *msg = [FCMessage MR_createInContext:localContext];
+            if ([content isNilOrEmpty]) {
+                content = @"";
+            }
+            msg.text = content;
+            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+            msg.sentDate = date;
+            // message did come, this will be on left
+            msg.messageStatus = @(YES);
+            msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+            
+            if (imageurl.length > 5)
+            {
+                msg.messageType = @(messageType_image);
+                conversation.lastMessage = @"[图片]";
+            }
+            else
+            {
+                msg.messageType = @(messageType_text);
+                conversation.lastMessage = content;
+            }
+            msg.imageUrl = imageurl;
+            
+            conversation.lastMessageDate = date;
+            conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+            conversation.messageStutes = @(messageStutes_incoming);
+            conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+            conversation.facebookName = @"";
+            conversation.facebookId = facebookID;
+            // increase badge number.
+            int badgeNumber = [conversation.badgeNumber intValue];
+            badgeNumber ++;
+            conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+            
+            [conversation addMessagesObject:msg];
+            [localContext MR_saveToPersistentStoreAndWait];// MR_saveOnlySelfAndWait];
+            
+            SystemSoundID id = 1007; //声音
+            AudioServicesPlaySystemSound(id);
+        }else if([eventType isEqualToString:@"newpost"]){
+            
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * dicMessage = dicResult[@"post"];
+            NSString * gid = [tools getStringValue:dicMessage[@"group_id"] defaultValue:@""];
+            NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+            NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+            
+//            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId = %@",[NSString stringWithFormat:@"UID_%@", uid]]  //or postid
+//            FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+//            if (message) {
+//                return; // change by tinkl   ....MARK:  has this record
+//            }
+            
+            //out view
+            NSString * content = dicMessage[@"content"];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+            
+            // Build the predicate to find the person sought
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+            if(conversation == nil)
+            {
+                conversation =  [Conversation MR_createInContext:localContext];
+            }
+            FCMessage *msg = [FCMessage MR_createInContext:localContext];
+            msg.text = content;
+            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+            msg.sentDate = date;
+            if (imageurl.length > 5)
+            {
+                msg.messageType = @(messageType_image);
+                conversation.lastMessage = @"[图片]";
+            }
+            else
+            {
+                msg.messageType = @(messageType_text);
+                conversation.lastMessage = content;
+            }
+            // message did come, this will be on left
+            msg.messageStatus = @(YES);
+            msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                FCUserDescription * localdespObject = response;
+                conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+            } withuid:uid];
+            conversation.lastMessageDate = date;
+            conversation.messageStutes = @(messageStutes_incoming);
+            // increase badge number.
+            int badgeNumber = [conversation.badgeNumber intValue];
+            badgeNumber ++;
+            conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+            
+            [conversation addMessagesObject:msg];
+            [localContext MR_saveToPersistentStoreAndWait];
+            
+            SystemSoundID id = 1007; //声音
+            AudioServicesPlaySystemSound(id);
+            
         }
         
     }
@@ -326,7 +468,6 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     NSInteger index =  tabBarController.selectedIndex;
-    SLog(@"index: %d",index);
     if (index == 1) {
         [tabBarController.tabBar.items[1] setBadgeValue:nil];
     }
@@ -440,37 +581,129 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1){
-        // get  event.read(pos=0)
+    
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
-        NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-        NSDictionary * parames = @{@"sessionid":sessionid};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
-            [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
+        if([XCJAppDelegate hasLogin]){
+            // 读取事件
+            // get  event.read(pos=0)
+            NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+            NSDictionary * parames = @{@"sessionid":sessionid};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
+                [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        NSDictionary * dict = responseObject[@"result"];
+                        NSArray * array = dict[@"events"];
+                        __block NSInteger manEIDTwo = 0;
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            //                        NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
+                            NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
+                            if (manEIDTwo < curretnEid) {
+                                manEIDTwo = curretnEid;
+                                [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
+                                [USER_DEFAULT synchronize];
+                            }
+                            //[self initEventData:typeStr Data:obj];
+                        }];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+            //读取未读私信
+            //message.read(afterid=0) 读私信
+            __block NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+            //        [FCMessage MR_findFirstOrderedByAttribute:@"messageId" ascending:YES];
+            [[MLNetworkingManager sharedManager] sendWithAction:@"message.read" parameters:@{@"afterid":@(messageIndex)} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
-                    NSDictionary * dict = responseObject[@"result"];
-                    NSArray * array = dict[@"events"];
-                    __block NSInteger manEIDTwo = 0;
+                    NSDictionary * resultDict = responseObject[@"result"];
+                    NSArray * array = resultDict[@"message"];
+                    
                     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//                        NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
-                        NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
-                        if (manEIDTwo < curretnEid) {
-                            manEIDTwo = curretnEid;
-                            [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
+                        /*
+                         “msgid”:
+                         “uid”:
+                         “content”:
+                         “time”: */
+                        NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"msgid"] defaultValue:0];
+                        if (messageIndex < curretnEid) {
+                            messageIndex = curretnEid;
+                            [USER_DEFAULT setInteger:messageIndex forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                            [USER_DEFAULT synchronize];
                         }
-                        //[self initEventData:typeStr Data:obj];
+                        
+                        {
+                            //MARK THIS
+                            NSString *facebookID = [tools getStringValue:obj[@"fromid"] defaultValue:@""];
+                            
+                            //out view
+                            NSString * content = [tools getStringValue:obj[@"content"] defaultValue:@""];
+                            NSString * imageurl = [tools getStringValue:obj[@"picture"] defaultValue:@""];
+                            
+                            // Build the predicate to find the person sought
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+                            Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+                            if(conversation == nil)
+                            {
+                                conversation =  [Conversation MR_createInContext:localContext];
+                            }
+                            
+                            FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                            if ([content isNilOrEmpty]) {
+                                content = @"";
+                            }
+                            msg.text = content;
+                            NSTimeInterval receiveTime  = [obj[@"time"] doubleValue];
+                            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                            msg.sentDate = date;
+                            // message did come, this will be on left
+                            msg.messageStatus = @(YES);
+                            msg.messageId = [tools getStringValue:obj[@"msgid"] defaultValue:@"0"];
+                            
+                            if (imageurl.length > 5)
+                            {
+                                msg.messageType = @(messageType_image);
+                                conversation.lastMessage = @"[图片]";
+                            }
+                            else
+                            {
+                                msg.messageType = @(messageType_text);
+                                conversation.lastMessage = content;
+                            }
+                            msg.imageUrl = imageurl;
+                            
+                            conversation.lastMessageDate = date;
+                            conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+                            conversation.messageStutes = @(messageStutes_incoming);
+                            conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
+                            conversation.facebookName = @"";
+                            conversation.facebookId = facebookID;
+                            // increase badge number.
+                            int badgeNumber = [conversation.badgeNumber intValue];
+                            badgeNumber ++;
+                            conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                            
+                            [conversation addMessagesObject:msg];
+                            [localContext MR_saveToPersistentStoreAndWait];
+                            
+                        }
+                        
+                        // update tabbar item  badge
+                        [self updateMessageTabBarItemBadge];
+                        
                     }];
                     
                 }
             } failure:^(MLRequest *request, NSError *error) {
+                
             }];
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
-        
-        
-       
-    }
+        }
+    });
+    
 }
 
 -(void) initEventData:(NSString *) requestKey Data:(NSDictionary  *)dictEvent
@@ -569,6 +802,14 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 
 }
 
++(BOOL) hasLogin
+{
+    if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1 && [USER_DEFAULT boolForKey:KeyChain_Laixin_account_HasLogin]){
+        return YES;
+    }
+    return NO;
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSString* devtokenstring=[[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -576,18 +817,9 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     //devtokenstring:  d8009e6c8e074d1bbcb592f321367feaef5674a82fc4cf3b78b066b7c8ad59bd
     NSLog(@"devtokenstring : %@",devtokenstring);
-    if([USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid].length > 1){
-        double delayInSeconds = 3.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            //1 debug    ....   0 release
-            NSDictionary * parames = @{@"device_token":devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
-        });
-    }
     
+    [USER_DEFAULT setValue:devtokenstring forKey:KeyChain_Laixin_account_devtokenstring];
+    [USER_DEFAULT synchronize];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0)

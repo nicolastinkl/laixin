@@ -16,6 +16,8 @@
 #import "XCAlbumAdditions.h"
 #import "tools.h"
 #import "MLNetworkingManager.h"
+#import "UIAlertViewAddition.h"
+
 
 @interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate>
 {
@@ -41,11 +43,22 @@
 
 -(IBAction)completeOperationClick:(id)sender
 {
+    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+    [USER_DEFAULT synchronize];
+    NSString * strheadpic = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic];
+    if (strheadpic.length < 5) {
+        [UIAlertView showAlertViewWithMessage:@"请设置头像"];
+        return;
+    }
+    // connection of websocket server
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+    
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        
-        // connection of websocket server
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+  
     }];
+    
+    //  xx:十五号
+    //  xx: 发来一张图
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
@@ -199,6 +212,8 @@
             NSString * stringURL =  [tools getStringValue:[responseObject objectForKey:@"url"] defaultValue:@""];
             NSDictionary * parames = @{@"headpic":stringURL};
             
+            
+            [USER_DEFAULT setValue:stringURL forKey:KeyChain_Laixin_account_user_headpic];
             [UIView animateWithDuration:0.3 animations:^{
                 UIImageView * successImg = (UIImageView *) [self.view subviewWithTag:3];
                 [successImg setHidden:NO];

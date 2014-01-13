@@ -175,7 +175,7 @@
       [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
     
     tryCatchCount = 0;
-    if (![USER_DEFAULT objectForKey:KeyChain_Laixin_account_sessionid]) {
+    if (![XCJAppDelegate hasLogin]) {
         [self OpenLoginview:nil];
     }else{
         [self.tableView showIndicatorViewLargeBlue];
@@ -553,6 +553,16 @@
                 }
             } failure:^(MLRequest *request, NSError *error) {
             }];
+            
+            NSString * _devtokenstring =[USER_DEFAULT stringForKey:KeyChain_Laixin_account_devtokenstring];
+            //1 debug    ....   0 release
+            if (_devtokenstring) {
+                
+                NSDictionary * paramesss = @{@"device_token":_devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:paramesss success:^(MLRequest *request, id responseObject) {
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            }
         }
     });
 }
