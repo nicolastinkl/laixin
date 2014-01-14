@@ -20,7 +20,7 @@
  *
  *  @return <#return value description#>
  */
--(NSArray * ) fetchAlAccountsByArray:(NSArray * ) uids;
+-(void) fetchAlAccountsByArray:(NSArray * ) uids;
 
 /**
  *  获取单个user

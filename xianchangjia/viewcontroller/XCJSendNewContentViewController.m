@@ -11,7 +11,7 @@
 #import "AFHTTPSessionManager.h"
 #import "XCAlbumAdditions.h"
 
-@interface XCJSendNewContentViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface XCJSendNewContentViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 {
 	UIImagePickerController * picker;
 }

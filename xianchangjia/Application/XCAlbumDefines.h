@@ -27,6 +27,11 @@ typedef enum {
 //#warning Release
 #define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
+
+
+#define LaixinSetupDBMessageNotification    @"com.laixin.LaixinSetupDBMessageNotification"
+#define LaixinCloseDBMessageNotification    @"com.laixin.LaixinCloseDBMessageNotification"
+
 #define ipAddress							@"im.xianchangjia.com"
 #define systemUser							@"register@im.xianchangjia.com"
 #define systemPushUser						@"system_push@im.xianchangjia.com"

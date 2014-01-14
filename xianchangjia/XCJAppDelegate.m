@@ -70,6 +70,8 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     }
 }
 
+
+
 /**
  *  收到消息处理 全局请求
  *
@@ -432,6 +434,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
     }
 //    [self updateMessageTabBarItemBadge];
 }
+
 -(void)applicationDidFinishLaunching:(UIApplication *)application
 {
     NSArray *colors = [NSArray arrayWithObjects:(id)UIColorFromRGB(0xf16149).CGColor, (id)UIColorFromRGB(0xf14959).CGColor, nil];
@@ -452,23 +455,37 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                                          UIRemoteNotificationTypeSound |
                                          UIRemoteNotificationTypeAlert |
                                          UIRemoteNotificationTypeNewsstandContentAvailability)];
-     
-    [self copyDefaultStoreIfNecessary];
-    [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
     
+    [self laixinStepupNotification:nil];
     /* receive websocket message*/
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(webSocketDidReceivePushMessage:)
                                                  name:MLNetworkingManagerDidReceivePushMessageNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(laixinCloseNotification:)
+                                                 name:LaixinCloseDBMessageNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(laixinStepupNotification:)
+                                                 name:LaixinSetupDBMessageNotification
+                                               object:nil];
+    
+    
+    if ([XCJAppDelegate hasLogin ]) {
+        [self updateMessageTabBarItemBadge];
+    }else{
+          [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    }
+    
     //[[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(updateMessageTabBarItemBadge)
 //                                                 name:@"updateMessageTabBarItemBadge"
 //                                               object:nil];
 
    
-
-    [self updateMessageTabBarItemBadge];
     // Override point for customization after application launch.
     return YES;
 }
@@ -484,6 +501,36 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
         [tabBarController.tabBar.items[1] setBadgeValue:nil];
     }
 }
+
+- (void)laixinCloseNotification:(NSNotification *)notification
+{
+    if (notification.object) {
+        NSString * userID = [DataHelper getStringValue:notification.object defaultValue:@""];
+        if (userID.length > 0) {
+            NSString * strDBName = [NSString stringWithFormat:@"%@_%@",kLaixinStoreName,userID];
+            [self copyDefaultStoreIfNecessary:strDBName];
+            [MagicalRecord cleanUp];
+        }
+    }else{
+         [MagicalRecord cleanUp];
+    }
+}
+
+- (void)laixinStepupNotification:(NSNotification *)notification
+{
+    if (notification.object) {
+        NSString * userID = [DataHelper getStringValue:notification.object defaultValue:@""];
+        if (userID.length > 0) {
+            NSString * strDBName = [NSString stringWithFormat:@"%@_%@",kLaixinStoreName,userID];
+            [self copyDefaultStoreIfNecessary:strDBName];
+            [MagicalRecord setupCoreDataStackWithStoreNamed:strDBName];
+        }
+    }else{
+        [self copyDefaultStoreIfNecessary:kLaixinStoreName];
+        [MagicalRecord setupCoreDataStackWithStoreNamed:kLaixinStoreName];
+    }
+}
+
 
 - (void) initAllControlos
 {
@@ -516,16 +563,16 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 }
 
 ///bak of the database
-- (void) copyDefaultStoreIfNecessary;
+- (void) copyDefaultStoreIfNecessary:(NSString * ) laixinDBname;
 {
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:kLaixinStoreName];
+    NSURL *storeURL = [NSPersistentStore MR_urlForStoreName:laixinDBname];
     
 	// If the expected store doesn't exist, copy the default store.
 	if (![fileManager fileExistsAtPath:[storeURL path]])
     {
-		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:[kLaixinStoreName stringByDeletingPathExtension] ofType:[kLaixinStoreName pathExtension]];
+		NSString *defaultStorePath = [[NSBundle mainBundle] pathForResource:[laixinDBname stringByDeletingPathExtension] ofType:[laixinDBname pathExtension]];
         
 		if (defaultStorePath)
         {
@@ -581,10 +628,12 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
  
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    SLog(@"applicationDidEnterBackground webSocket close");
     // tell websocket disconnect
-    [[[MLNetworkingManager sharedManager] webSocket] close];
-    
+    if([XCJAppDelegate hasLogin])
+    {
+        SLog(@"applicationDidEnterBackground webSocket close");
+        [[[MLNetworkingManager sharedManager] webSocket] close];
+    }
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }

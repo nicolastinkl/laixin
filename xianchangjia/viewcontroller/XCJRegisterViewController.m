@@ -78,11 +78,11 @@
     UIButton * buttonBack = (UIButton *) [self.view subviewWithTag:11];
     [buttonBack addTarget:self action:@selector(BackClick:) forControlEvents:UIControlEventTouchUpInside];
     self.Label_text.text = @"";
-    [self.button_Next setTitle:@"完成" forState:UIControlStateNormal];
-    [self.button_Next addTarget:self action:@selector(getPwdClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.button_Next setTitle:@"下一步" forState:UIControlStateNormal];
+    [self.button_Next addTarget:self action:@selector(CompleteClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-#warning get user infomation  with get pwd
+//#warning get user infomation  with get pwd
 -(IBAction)getPwdClick:(id)sender
 {
     //get user infomation

@@ -393,7 +393,7 @@
     
     UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
     UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
-    UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
+//    UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
     switch ([conver.messageType intValue]) {
         case XCMessageActivity_UserPrivateMessage:
         {// 私信

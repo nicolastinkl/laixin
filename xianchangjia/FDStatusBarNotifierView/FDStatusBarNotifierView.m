@@ -184,7 +184,7 @@ SINGLETON_GCD(FDStatusBarNotifierView)
 {
     //CGRect frame = navigationController.navigationBar.frame;
     UIViewController *lastViewController = [navigationController.viewControllers lastObject];
-    CGRect viewFrame = lastViewController.view.frame;
+//    CGRect viewFrame = lastViewController.view.frame;
     
     if (!lastViewController.view.window) {
         [self performSelector:@selector(showAboveNavigationController:) withObject:navigationController afterDelay:0.2];// the view has not appeared yet.

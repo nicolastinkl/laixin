@@ -15,6 +15,9 @@
 #import "UIAlertViewAddition.h"
 #import "MLNetworkingManager.h"
 #import "XCJRegisterViewController.h"
+#import "XCJAppDelegate.h"
+#import "FCAccount.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface XCJMainLoginViewController ()<UITextFieldDelegate>
 
@@ -97,7 +100,7 @@
     UITextField * phoneText = (UITextField *) [viewKey subviewWithTag:2];
     UITextField * pwdText = (UITextField *) [viewKey subviewWithTag:3];
     
-    if (phoneText.text.length == 11 && pwdText.text.length >= 6) {
+    if (phoneText.text.length == 11 && pwdText.text.length >= 4) {
         if ([phoneText.text isValidPhone])
         {
             
@@ -109,7 +112,7 @@
                 [pwdText resignFirstResponder];
             }
     
-            [self runSequncer:phoneText.text];
+            [self loginwithPhonePwd:phoneText.text pwd:pwdText.text];
         }
         else
         {
@@ -211,54 +214,7 @@
              if (!error) {
                  NSString * yanzhengCode =  [response objectForKey:@"code"];
                  if (yanzhengCode) {
-                     NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",phone,yanzhengCode];
-//                     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
-                           [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response2, NSError * error2) {
-                               if (!error2) {
-                                   /*{
-                                    "sessionid":"fxuTnPKqQOwH29a",
-                                    "ws":"ws://127.0.0.1:8000/ws",
-                                    "timeout":1388472185.910526
-                                    }*/
-                                   NSString * sessionID =  [response2 objectForKey:@"sessionid"];
-                                   NSString * serverURL = [response2 objectForKey:@"ws"];
-                                   if (sessionID) {
-                                       
-                                       [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
-                                       [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
-                                       [USER_DEFAULT synchronize];
-                                       [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
-                                       [USER_DEFAULT synchronize];
-                                       [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                                           // connection of websocket server
-                                           [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
-                                           /*
-                                            {
-                                            "func":"function_name",
-                                                "parm":{
-                                                "parm1":value,
-                                                }
-                                            }
-                                            */
-                                           
-                                           SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
-                                           SLog(@"state : %d", [websocket readyState]);
-                                           //        NSDictionary * parames = @{@"func":@"session.start",@"parm":@{@"sessionid":sessionid}};
-                                           NSDictionary * parames = @{@"sessionid":sessionID};
-                                            [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                                                NSDictionary * dict = responseObject[@"result"];
-                                                LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
-                                                 [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
-                                                [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-                                                
-                                           } failure:^(MLRequest *request, NSError *error) { 
-                                           }];
-                                       }];
-                                   }
-                               }else{
-                                   [self loginError];
-                               }
-                           } withParems:paremsResult];
+                     
                  }else{
                      [self loginError];
                  }
@@ -271,9 +227,49 @@
     [sequencer run];
 }
 
+-(void) loginwithPhonePwd:(NSString * ) phone pwd:(NSString * ) yanzhengCode
+{
+    [SVProgressHUD show];
+    NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",phone,yanzhengCode];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response2, NSError * error2) {
+        if (!error2) {
+            /*{
+             "sessionid":"fxuTnPKqQOwH29a",
+             "ws":"ws://127.0.0.1:8000/ws",
+             "timeout":1388472185.910526
+             }*/
+            NSString * sessionID = [DataHelper getStringValue:response2[@"sessionid"] defaultValue:@""];
+            NSString * serverURL = [DataHelper getStringValue:response2[@"ws"] defaultValue:@""];
+           // NSString * timeout = [DataHelper getStringValue:response2[@"timeout"] defaultValue:@""];
+            
+            if (sessionID.length > 1) {
+                
+                [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
+                [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
+                [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+                [USER_DEFAULT synchronize];
+                
+                SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
+                if ( [websocket readyState] > SR_OPEN ) {
+                    [websocket open];
+                }
+                SLog(@"state : %d", [websocket readyState]);
+                // connection of websocket server
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+                 
+                [SVProgressHUD dismiss];
+                [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                }];             }
+        }else{
+            [self loginError];
+        }
+    } withParems:paremsResult];
+}
+
 -(void) loginError
 {
-    [UIAlertView showAlertViewWithTitle:@"登陆失败" message:@"用户或密码错误"];
+    [SVProgressHUD dismiss];
+    [UIAlertView showAlertViewWithTitle:@"登陆失败" message:@"用户或验证码错误"];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -286,7 +282,7 @@
     {
         XCJRegisterViewController *vc = (XCJRegisterViewController *)[segue destinationViewController];
         UILabel * title  = (UILabel *) [vc.view subviewWithTag:5];
-        title.text = @"找回密码";  
+        title.text = @"找回用户";
         [vc initFindPwdControlls];
         
     }

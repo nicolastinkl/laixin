@@ -38,6 +38,7 @@
 #import "CoreData+MagicalRecord.h"
 #import "ConverReply.h"
 #import "XCJMessageReplylistController.h"
+#import "FCAccount.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -452,14 +453,25 @@
         LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
         [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
         
-        int userid =  [[tools getStringValue:userinfo[@"uid"] defaultValue:@""] intValue];
-        [USER_DEFAULT setInteger:userid forKey:KeyChain_Laixin_account_user_id];
-        
-        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
-        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
-        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
-        [USER_DEFAULT setObject:[tools getStringValue:userinfo[@"position"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_position];
+        [USER_DEFAULT setValue:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
+        [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
+        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
+        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_position];
         [USER_DEFAULT synchronize];
+        
+//        [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
+        
+        
+        NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId = %@",currentUser.uid];
+        FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
+        if (account == nil) {
+            account = [FCAccount MR_createEntity];
+            account.facebookId = currentUser.uid;
+        }
+        account.userJson = userinfo;
+        
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
         
         
         // Return the number of rows in the section.

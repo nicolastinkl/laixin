@@ -174,6 +174,7 @@
 		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
 		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
+		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
@@ -283,7 +284,6 @@
 		86D1832B1834B0E80005901D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D1832A1834B0E80005901D /* Security.framework */; };
 		86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */; };
 		86D9A886186D294600147631 /* LXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A885186D294600147631 /* LXUser.m */; };
-		86D9A8A1186D30C800147631 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A899186D30C700147631 /* FCAccount.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
 		86E57CD818794DF600978AFA /* XCJChangeNickNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */; };
@@ -668,6 +668,8 @@
 		86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUploadImgViewController.m; path = viewcontroller/XCJCompleteUploadImgViewController.m; sourceTree = "<group>"; };
 		86A306A71871A8B100C7168B /* XCJSuperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSuperViewController.h; path = viewcontroller/XCJSuperViewController.h; sourceTree = "<group>"; };
 		86A306A81871A8B100C7168B /* XCJSuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSuperViewController.m; path = viewcontroller/XCJSuperViewController.m; sourceTree = "<group>"; };
+		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
+		86C1A56A1885384600D78242 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
 		86C72DDC184330F9001B6CA0 /* XCModelAllEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCModelAllEntity.h; sourceTree = "<group>"; };
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
@@ -792,8 +794,6 @@
 		86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSysSettingsViewController.m; path = viewcontroller/XCJSysSettingsViewController.m; sourceTree = "<group>"; };
 		86D9A884186D294600147631 /* LXUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXUser.h; path = DAOModel/coredata/LXUser.h; sourceTree = "<group>"; };
 		86D9A885186D294600147631 /* LXUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXUser.m; path = DAOModel/coredata/LXUser.m; sourceTree = "<group>"; };
-		86D9A898186D30C700147631 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
-		86D9A899186D30C700147631 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
@@ -1936,13 +1936,13 @@
 		86D9A883186D276700147631 /* Coredata */ = {
 			isa = PBXGroup;
 			children = (
-				86D9A898186D30C700147631 /* FCAccount.h */,
-				86D9A899186D30C700147631 /* FCAccount.m */,
 				86D9A89A186D30C700147631 /* FCConversationModel.h */,
 				86D9A89B186D30C700147631 /* FCConversationModel.m */,
 				86494CC11881511800C22B14 /* FCReplyMessage.h */,
 				86494CC21881511800C22B14 /* FCReplyMessage.m */,
 				86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */,
+				86C1A5691885384600D78242 /* FCAccount.h */,
+				86C1A56A1885384600D78242 /* FCAccount.m */,
 				86494CC718838C3C00C22B14 /* FCContactsPhone.h */,
 				86494CC818838C3C00C22B14 /* FCContactsPhone.m */,
 				8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */,
@@ -2513,7 +2513,6 @@
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
 				869DDC621874422600560AFD /* Conversation.m in Sources */,
-				86D9A8A1186D30C800147631 /* FCAccount.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
 				86D182B41834AED30005901D /* NSObject+LKDBHelper.m in Sources */,
@@ -2636,6 +2635,7 @@
 				86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */,
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,
+				86C1A56B1885384600D78242 /* FCAccount.m in Sources */,
 				86E57CF118795CC900978AFA /* HZLocation.m in Sources */,
 				86EB76CE185AA6CC00836947 /* AFHTTPRequestOperation.m in Sources */,
 				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
@@ -2892,7 +2892,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				CODE_SIGN_IDENTITY = "Apple Production IOS Push Services: lifestyle.laixin.chengdu";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2950,7 +2950,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				CODE_SIGN_IDENTITY = "iPhone Developer: yao zhang (3NW254563D)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;

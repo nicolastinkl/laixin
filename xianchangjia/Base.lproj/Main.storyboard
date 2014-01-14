@@ -2966,12 +2966,12 @@
                                             <outlet property="delegate" destination="X5V-NU-KD0" id="t1o-mh-L7D"/>
                                         </connections>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="密码" minimumFontSize="15" clearButtonMode="whileEditing" id="8B6-4Y-kqd">
+                                    <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="验证码" minimumFontSize="15" clearButtonMode="whileEditing" id="8B6-4Y-kqd">
                                         <rect key="frame" x="71" y="169" width="202" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="go" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="X5V-NU-KD0" id="mzv-lh-mSE"/>
                                         </connections>
@@ -3023,7 +3023,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zds-dH-gy1">
                                         <rect key="frame" x="187" y="0.0" width="79" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="忘记密码?">
+                                        <state key="normal" title="忘记用户?">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -3357,10 +3357,6 @@
                             </button>
                             <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" image="checkmark-on-photo-view-ios7" id="7T6-f3-yK0">
                                 <rect key="frame" x="171" y="166" width="40" height="40"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                            </imageView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="photo_access_guide_camera_os7" id="EnS-Lp-gMz">
-                                <rect key="frame" x="28" y="321" width="268" height="161"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
                         </subviews>
@@ -4076,7 +4072,6 @@
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="nav_badge_6_6_6_6" width="13" height="13"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
-        <image name="photo_access_guide_camera_os7" width="268" height="161"/>
         <image name="profile-frame" width="90" height="90"/>
         <image name="register_star_avatar_bg" width="100" height="100"/>
         <image name="searchFieldIcon" width="13" height="13"/>

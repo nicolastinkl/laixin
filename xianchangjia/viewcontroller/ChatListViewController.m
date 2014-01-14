@@ -66,7 +66,7 @@
 	[self.chatList removeObserver:self forKeyPath:@"array"];
 }
 
-#warning 两个测试事件
+//#warning 两个测试事件
 - (IBAction)add:(id)sender {
     Chat *chat = [Chat turnObject:@{
                                     @"avatarURL":@"http://tp2.sinaimg.cn/3785688681/50/40034786628/0",

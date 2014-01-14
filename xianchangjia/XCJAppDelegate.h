@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+
 @class SinaWeibo,XCJLoginNaviController;
 @interface XCJAppDelegate : UIResponder <UIApplicationDelegate>
 {
@@ -17,8 +18,9 @@
 @property (nonatomic,strong) NSDictionary				*launchingWithAps;
 @property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;
 @property (nonatomic,strong) UITabBarController *tabBarController;
--(void) initWeiboView;
 
+-(void) initWeiboView;
 +(BOOL) hasLogin;
+
 @end
 
