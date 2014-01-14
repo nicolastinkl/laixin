@@ -14,7 +14,7 @@
 #import "FCReplyMessage.h"
 #import "XCJGroupPost_list.h"
 
-@interface XCJMessageReplylistController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
+@interface XCJMessageReplylistController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,UIActionSheetDelegate>
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, retain) NSManagedObjectContext     *managedObjectContext;
@@ -42,6 +42,24 @@
 //        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
 //    }
 //}
+
+
+-(IBAction) clearAllMessageReply:(id)sender
+{
+    UIActionSheet  *sheet = [[UIActionSheet alloc] initWithTitle:@"将清空本地数据" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"清空所有数据" otherButtonTitles: nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        NSPredicate  * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
+        BOOL bol = [FCReplyMessage MR_deleteAllMatchingPredicate:pre];
+        if (bol) {
+            // OK
+        }
+    }
+}
 
 - (void)viewDidLoad
 {

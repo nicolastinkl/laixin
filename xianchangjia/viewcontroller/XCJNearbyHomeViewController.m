@@ -202,37 +202,66 @@
     NSPredicate * pre = [NSPredicate predicateWithFormat:@" badgeNumber > %@",@"0"];
     
     ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-    if (contr) {
-        UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
-        UIImage *originalImage = [UIImage imageNamed:@"fbc_specialbutton_28_3_3_3_3_normal_ios7"];
-        UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
-        UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
-        [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
-        
-        
-        if ([contr.content containString:@"评论"]) {
-            [button setImage:[UIImage imageNamed:@"ufi-overlay-comment"] forState:UIControlStateNormal];
-        }else{
-            [button setImage:[UIImage imageNamed:@"ufi-overlay-liked"] forState:UIControlStateNormal];
+    
+    UITabBar *tabBar =(UITabBar*) [self.tableView.tableHeaderView viewWithTag:12];
+    for (UIView *viewTab in tabBar.subviews) {
+        for (UIView *subview in viewTab.subviews) {
+            NSString *strClassName = [NSString stringWithUTF8String:object_getClassName(subview)];
+            if (![strClassName isEqualToString:@"_UIBadgeView"]) {
+                [subview removeFromSuperview];
+            }
         }
-        
-        if ([contr.badgeNumber intValue ] > 0) {
-            [button setTitle: [NSString stringWithFormat:@"%@(%@)",contr.content,contr.badgeNumber] forState:UIControlStateNormal];
-        }else{
-            [button setTitle: contr.content forState:UIControlStateNormal];
-        }
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    }else{
-        
-        UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
-        UIImage *originalImage = [UIImage imageNamed:@"fbc_regularbutton_28_3_3_3_3_normal_ios7"];
-        UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
-        UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
-        [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
-        [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
-        [button setImage:nil forState:UIControlStateNormal];
-        [button setTitleColor:ios7BlueColor forState:UIControlStateNormal];
     }
+    UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+    if (contr) {
+        if ([contr.content containString:@"评论"]) {
+           [button setTitle:@"新评论" forState:UIControlStateNormal];
+        }else{
+           [button setTitle:@"新赞" forState:UIControlStateNormal];
+        }
+         if ([contr.badgeNumber intValue ] > 0) {
+              [tabBar.items[0] setBadgeValue:[NSString stringWithFormat:@"%@",contr.badgeNumber]];
+         }else{
+             [tabBar.items[0] setBadgeValue:nil];
+         }
+    }else{
+        [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
+         [tabBar.items[0] setBadgeValue:nil];
+    }
+    
+    /*
+     if (contr) {
+     UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+     UIImage *originalImage = [UIImage imageNamed:@"fbc_specialbutton_28_3_3_3_3_normal_ios7"];
+     UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
+     UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+     [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+     
+     
+     if ([contr.content containString:@"评论"]) {
+     [button setImage:[UIImage imageNamed:@"ufi-overlay-comment"] forState:UIControlStateNormal];
+     }else{
+     [button setImage:[UIImage imageNamed:@"ufi-overlay-liked"] forState:UIControlStateNormal];
+     }
+     
+     if ([contr.badgeNumber intValue ] > 0) {
+     [button setTitle: [NSString stringWithFormat:@"%@(%@)",contr.content,contr.badgeNumber] forState:UIControlStateNormal];
+     }else{
+     [button setTitle: contr.content forState:UIControlStateNormal];
+     }
+     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+     }else{
+     
+     UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+     UIImage *originalImage = [UIImage imageNamed:@"fbc_regularbutton_28_3_3_3_3_normal_ios7"];
+     UIEdgeInsets insets = UIEdgeInsetsMake(3,3,3,3);
+     UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+     [button setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+     [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
+     [button setImage:nil forState:UIControlStateNormal];
+     [button setTitleColor:ios7BlueColor forState:UIControlStateNormal];
+     }
+     */
 }
 
 -(void)viewDidAppear:(BOOL)animated

@@ -262,7 +262,11 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             
             [localContext MR_saveToPersistentStoreAndWait];
             
+            [self.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+            
+            
         }else if ([eventType isEqualToString:@"fromphonebook"])
         {
             NSDictionary * dicResult = MsgContent[@"data"];
@@ -357,7 +361,11 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             
             SystemSoundID id = 1007; //声音
             AudioServicesPlaySystemSound(id);
-        }else if([eventType isEqualToString:@"newpost"]){
+            
+            // update tabbar item  badge
+            [self updateMessageTabBarItemBadge];
+            
+        }else if([eventType isEqualToString:@"newpost_error"]){
             
             NSDictionary * dicResult = MsgContent[@"data"];
             
@@ -468,6 +476,10 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     NSInteger index =  tabBarController.selectedIndex;
+    if (index == 0) {
+        [tabBarController.tabBar.items[0] setBadgeValue:nil];
+    }
+    
     if (index == 1) {
         [tabBarController.tabBar.items[1] setBadgeValue:nil];
     }
@@ -482,9 +494,9 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
 //    [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabBarBackground"]];
     //     [self.tabBarController.tabBar.items[0] setBadgeValue:@"New"];
     
-    UIImage * tabBG =  [UIImage imageNamed:@"tabBarBackground"];
+//    UIImage * tabBG =  [UIImage imageNamed:@"tabBarBackground"];
 //    tabBG =  [tabBG imageWithAlignmentRectInsets:UIEdgeInsetsMake(1,1,1,1)];
-    [self.tabBarController.tabBar setBackgroundImage:tabBG];
+//    [self.tabBarController.tabBar setBackgroundImage:tabBG];
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[0];
         item.selectedImage = [UIImage imageNamed:@"tabBarRecentsIconSelected"];
@@ -569,6 +581,10 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
  
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    SLog(@"applicationDidEnterBackground webSocket close");
+    // tell websocket disconnect
+    [[[MLNetworkingManager sharedManager] webSocket] close];
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -689,7 +705,8 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             
                             [conversation addMessagesObject:msg];
                             [localContext MR_saveToPersistentStoreAndWait];
-                            
+                            SystemSoundID id = 1007; //声音
+                            AudioServicesPlaySystemSound(id);
                         }
                         
                         // update tabbar item  badge

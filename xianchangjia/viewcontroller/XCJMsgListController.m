@@ -210,7 +210,7 @@
             SystemSoundID id = 1007; //声音
             AudioServicesPlaySystemSound(id);
             
-        } else if([requestKey isEqualToString:@"newpost"]){
+        } else if([requestKey isEqualToString:@"newpost_error"]){
             
             NSDictionary * dicResult = MsgContent[@"data"];
             

@@ -300,7 +300,7 @@
                 [self.conversation addMessagesObject:msg];
                 [localContext MR_saveToPersistentStoreAndWait];
             }
-        }else if ([requestKey isEqualToString:@"newpost"]){
+        }else if ([requestKey isEqualToString:@"newpost_error"]){
             // group new msg
             /*
              “data”:{
