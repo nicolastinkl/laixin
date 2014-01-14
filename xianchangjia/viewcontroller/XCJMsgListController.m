@@ -161,7 +161,7 @@
 
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
@@ -224,7 +224,7 @@
             
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {

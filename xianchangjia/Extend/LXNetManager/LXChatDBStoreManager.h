@@ -22,25 +22,38 @@ typedef void (^CompletionBlockTinkl)(id, NSError *);
 - (void)differenceOfFriendsIdWithNewConversation:(NSArray *)friendsArray
                                   withCompletion:(CompletionBlockTinkl) completion ;
 - (void)saveContext;
+
 - (NSMutableArray *)fetchAllMessagesInConversation:(Conversation *)conversation;
+
 - (FCUserDescription *)fetchFCUserDescriptionByUID:(NSString * ) UserID;
-- (void)setFCUserDescriptionObject:(FCUserDescription *) fcuserdesp
-                    withCompletion:(CompletionBlockTinkl) completion ;
+
+/**
+ *  用户信息
+ *
+ *  @param fcuserdesp <#fcuserdesp description#>
+ *  @param completion <#completion description#>
+ */
 - (void)setFCUserObject:(LXUser *) fcuserdesp
                     withCompletion:(CompletionBlockTinkl) completion ;
+
+/**
+ *  设置我的好友
+ */
 - (void)setFriendsObject:(LXUser *) fcuserdesp;
 
 /**
- *  <#Description#>
- *
- *  @param fcuserdesp <#fcuserdesp description#>
+ *  设置我的好友
  */
 - (void)setFriendsUserDescription:(FCUserDescription *) fcuserdesp;
 /**
  *  获取所有好友数据
- *
- *  @return <#return value description#>
  */
--(NSArray * ) fetchAlAccounts;
+-(NSArray * ) fetchAllFCFriends;
+
+
+/**
+ *      // 查找是否是我的好友
+ */
+-(BOOL) fetchFCFriendsWithUid:(NSString *) userid;
 
 @end

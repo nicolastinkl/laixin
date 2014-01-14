@@ -264,7 +264,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
+            landmarkName = "-_addContactToAddressBook:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "324"
@@ -280,27 +296,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
-            landmarkName = "-_addContactToAddressBook:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
             landmarkName = "-_addContactToAddressBook:"
             landmarkType = "5">
             <Locations>
@@ -468,11 +468,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "380"
-            endingLineNumber = "380"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "-reload:"
             landmarkType = "5">
          </BreakpointContent>
@@ -500,12 +500,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXChatDBStoreManager.m"
-            timestampString = "411297794.234856"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
-            landmarkName = "-fetchAlAccounts"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "-fetchAllFCFriends"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1570,11 +1570,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXChatDBStoreManager.m"
-            timestampString = "410759791.7762"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "-setFCUserObject:withCompletion:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1632,11 +1632,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXChatDBStoreManager.m"
-            timestampString = "410760205.989631"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "-setFCUserObject:withCompletion:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1776,11 +1776,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "453"
-            endingLineNumber = "453"
+            startingLineNumber = "452"
+            endingLineNumber = "452"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1792,11 +1792,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "435"
-            endingLineNumber = "435"
+            startingLineNumber = "434"
+            endingLineNumber = "434"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1808,11 +1808,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1824,11 +1824,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "411118288.493753"
+            timestampString = "411389424.983936"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-fetchedResultsController"
             landmarkType = "5">
          </BreakpointContent>

@@ -104,7 +104,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                     FCUserDescription * newFcObj = response;
                     // Build the predicate to find the person sought
                     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", uid];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
                     FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
                     if(conversation == nil)
                     {
@@ -141,7 +141,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             XCJGroup_list * list = [XCJGroup_list turnObject:obj];
                             // Build the predicate to find the person sought
                             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", gid];
+                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
                             FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
                             if(conversation == nil)
                             {
@@ -158,7 +158,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
 #pragma mark // 处理加入请求
                             {
-                                NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid = %@", gid];
+                                NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
                                 FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
                                 if(msg == nil)
                                 {
@@ -275,7 +275,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             NSArray * array = dicResult[@"users"];
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 LXUser * lxuser = [[LXUser alloc] initWithDict:obj];
-                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"phoneNumber = %@",lxuser.phone];
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"phoneNumber == %@",lxuser.phone];
                 FCContactsPhone  * phoneObj = [FCContactsPhone MR_findFirstWithPredicate:preCMD];
                 if (phoneObj) {
                     phoneObj.hasLaixin = @YES;
@@ -301,7 +301,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             }
             {
 //                FCMessage  find this infomation
-                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId = %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
                 FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
                 if (message) {
                     return; // change by tinkl   ....MARK:  has this record
@@ -316,7 +316,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
@@ -376,7 +376,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
             NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
             
-//            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId = %@",[NSString stringWithFormat:@"UID_%@", uid]]  //or postid
+//            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[NSString stringWithFormat:@"UID_%@", uid]]  //or postid
 //            FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
 //            if (message) {
 //                return; // change by tinkl   ....MARK:  has this record
@@ -388,7 +388,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
@@ -710,7 +710,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                             
                             // Build the predicate to find the person sought
                             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", facebookID];
+                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
                             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
                             if(conversation == nil)
                             {
@@ -782,7 +782,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
             FCUserDescription * newFcObj = response;
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID = %@", uid];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
             FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
@@ -819,7 +819,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                     XCJGroup_list * list = [XCJGroup_list turnObject:obj];
                     // Build the predicate to find the person sought
                     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID = %@", gid];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
                     FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
                     if(conversation == nil)
                     {
@@ -836,7 +836,7 @@ static NSString * const kLaixinStoreName = @"Laixins.sqlite";
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
 #pragma mark // 处理加入请求
                     {
-                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid = %@", gid];
+                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
                         FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
                         if(msg == nil)
                         {

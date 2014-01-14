@@ -126,38 +126,6 @@
 }
 
 /**
- *  设置新用户信息
- *
- *  @param fcuserdesp object
- *  @param completion block
- */
-- (void)setFCUserDescriptionObject:(FCUserDescription *) fcuserdesp withCompletion:(CompletionBlockTinkl) completion
-{
-    NSManagedObjectContext *localContext    = [NSManagedObjectContext MR_contextForCurrentThread];
-    FCUserDescription * newFcObj = [FCUserDescription MR_createInContext:localContext];
-    newFcObj.uid  = fcuserdesp.uid;
-    newFcObj.nick = fcuserdesp.nick;
-    newFcObj.headpic = fcuserdesp.headpic;
-    newFcObj.background_image = fcuserdesp.background_image;
-    newFcObj.sex = fcuserdesp.sex;
-    newFcObj.create_time = fcuserdesp.create_time;
-    newFcObj.marriage = fcuserdesp.marriage;
-    newFcObj.signature = fcuserdesp.signature;
-    newFcObj.birthday = fcuserdesp.birthday;
-    newFcObj.height = fcuserdesp.height;
-    [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL sucess, NSError *error){
-        if (sucess) {
-            NSLog(@"GOOD");
-            if (completion)
-                completion(newFcObj, nil);
-        }else {
-            if (completion)
-                completion(newFcObj, error);
-        }
-    }];
-}
-
-/**
  *  by json to store db
  *
  *  @param fcuserdesp <#fcuserdesp description#>
@@ -211,6 +179,19 @@
     NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
     //查看friend是否存在
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",fcuserdesp.uid];
+    
+    FCFriends *newfriends = [FCFriends MR_findFirstWithPredicate:pre];
+    if (newfriends == nil) {
+        newfriends = [FCFriends MR_createInContext:localContext];
+        newfriends.friendID = fcuserdesp.uid;
+    }
+    
+    [self setFCUserObject:fcuserdesp withCompletion:^(id response, NSError *error) {
+        newfriends.friendRelation = response;
+        [localContext MR_saveToPersistentStoreAndWait];
+    }];
+    
+    /*
     NSArray * result = [FCFriends MR_findAllWithPredicate:pre];
     if (result && result.count > 0) {
         FCFriends *newfriends = result[0];
@@ -257,7 +238,7 @@
         newFcObj.active_level = @(fcuserdesp.active_level);
         newfriends.friendRelation = newFcObj;
         [localContext MR_saveToPersistentStoreAndWait];
-    }
+    }*/
 }
 
 /**
@@ -274,15 +255,26 @@
     if (newfriends == nil) {
         newfriends = [FCFriends MR_createInContext:localContext];
         newfriends.friendID = fcuserdesp.uid;
-        newfriends.friendRelation = fcuserdesp;
-        [localContext MR_saveToPersistentStoreAndWait];
     }
+    newfriends.friendRelation = fcuserdesp;
+    [localContext MR_saveToPersistentStoreAndWait];
+}
+
+
+-(BOOL) fetchFCFriendsWithUid:(NSString *) userid
+{
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",userid];
+    FCFriends * newfriends = [FCFriends MR_findFirstWithPredicate:pre];
+    if (newfriends) {
+        return  YES;
+    }
+    return NO;
 }
 
 /**
  *  fetch All User by uids
  */
--(NSArray * ) fetchAlAccounts
+-(NSArray * ) fetchAllFCFriends
 {
     return  [FCFriends MR_findAll];
 //    

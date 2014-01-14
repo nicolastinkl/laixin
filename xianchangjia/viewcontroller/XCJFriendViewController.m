@@ -137,7 +137,7 @@
 }
 - (void) add_friend_Notify:(NSNotification * ) notiy
 {
-    NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd = %@",@NO];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd == %@",@NO];
     NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
     if (cont > 0) {
         ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = NO;
@@ -166,7 +166,6 @@
 - (NSFetchedResultsController *)fetchedResultsController {
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
-//        [[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts]
         self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:nil groupBy:nil delegate:self] ;
     }
 	return _fetchedResultsController;
@@ -377,7 +376,7 @@
     [self.tableView reloadData];
     self.navigationItem.rightBarButtonItem.enabled = NO;
     //_dataSource
-    [_dataSource addObjectsFromArray:[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts]];
+    [_dataSource addObjectsFromArray:[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAllFCFriends]];
     [self.tableView reloadData];
      
 //    NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];

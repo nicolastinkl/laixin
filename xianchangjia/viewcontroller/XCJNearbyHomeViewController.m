@@ -286,7 +286,7 @@
      MARK:     [NSPredicate predicateWithFormat:@" gType = 1"];  get error
          
          */
-        NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType = %@ ",@"1"];
+        NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType == %@ ",@"1"];
         self.fetchedResultsController = [FCHomeGroupMsg MR_fetchAllSortedBy:@"gbadgeNumber" ascending:NO withPredicate:parCMD groupBy:nil delegate:self]; //@"gbadgeNumber"
     }
 	return _fetchedResultsController;
@@ -463,7 +463,7 @@
 //        [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
         
         
-        NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId = %@",currentUser.uid];
+        NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
         FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
         if (account == nil) {
             account = [FCAccount MR_createEntity];

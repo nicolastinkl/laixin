@@ -47,14 +47,14 @@
 //        conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
         self.label_textContent.text = @"扫一扫上面二维码,加入群组";
        
-        NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"facebookId = %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid]];
+        NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid]];
         Conversation * fchomeg = [Conversation MR_findFirstWithPredicate:preCMD];
         if (fchomeg) {
             self.Image_erwei.image = [QRCodeGenerator qrImageForString:fchomeg.facebookName imageSize:216.0f];
             self.label_nick.text = fchomeg.facebookName;
            
         }else{
-            NSPredicate * preCMDTwo = [NSPredicate predicateWithFormat:@"gid = %@", self.gid];
+            NSPredicate * preCMDTwo = [NSPredicate predicateWithFormat:@"gid == %@", self.gid];
            FCHomeGroupMsg * mesage = [FCHomeGroupMsg MR_findFirstWithPredicate:preCMDTwo];
             self.Image_erwei.image = [QRCodeGenerator qrImageForString:mesage.gName imageSize:216.0f];
             self.label_nick.text = mesage.gName;

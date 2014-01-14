@@ -100,17 +100,12 @@
     }
     
     // 查找是否是我的好友
-    
     {
-        NSArray * arr =   [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchAlAccounts];
-        [arr enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            FCFriends * friends = obj;
-            if ([friends.friendID isEqualToString:self.UserInfo.uid]) {
-                
-                self.Image_btnBG.hidden = YES;
-                self.Button_Sendmsg.hidden = YES;
-            }
-        }];
+        BOOL bol =   [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCFriendsWithUid:self.UserInfo.uid];
+        if (bol) {
+            self.Image_btnBG.hidden = YES;
+            self.Button_Sendmsg.hidden = YES;
+        }
     }
     ((UILabel *) [self.tableView.tableFooterView subviewWithTag:1]).height = 0.3f;
     ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3f;

@@ -291,7 +291,7 @@
             }
             
             NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate * qcmd = [NSPredicate predicateWithFormat:@"phoneNumber = %@ ",addressbook.tel];
+            NSPredicate * qcmd = [NSPredicate predicateWithFormat:@"phoneNumber == %@ ",addressbook.tel];
             
             FCContactsPhone * phone = [FCContactsPhone MR_findFirstWithPredicate:qcmd];
             if (phone == nil) {
