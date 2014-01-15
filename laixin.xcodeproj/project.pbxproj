@@ -23,6 +23,7 @@
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */; };
+		8646FDDC18868425007CE6F4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDDB18868425007CE6F4 /* MapKit.framework */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		86494CBC188139A100C22B14 /* ConverReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBB188139A100C22B14 /* ConverReply.m */; };
 		86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */; };
@@ -192,7 +193,6 @@
 		86D181FA1834822D0005901D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86D181F81834822D0005901D /* InfoPlist.strings */; };
 		86D181FC1834822D0005901D /* xianchangjiaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D181FB1834822D0005901D /* xianchangjiaTests.m */; };
 		86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1820818349B150005901D /* CRGradientNavigationBar.m */; };
-		86D182101834ACBA0005901D /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D1820F1834ACBA0005901D /* MapKit.framework */; };
 		86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182181834AED30005901D /* BTSAnchorPointLayer.m */; };
 		86D182791834AED30005901D /* BTSAnchorPointLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D182181834AED30005901D /* BTSAnchorPointLayer.m */; };
 		86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1821A1834AED30005901D /* BTSCoreGraphics.m */; };
@@ -400,6 +400,7 @@
 		8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStatusBarNotifierView.m; sourceTree = "<group>"; };
 		8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		8646FDD418863CD2007CE6F4 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		8646FDDB18868425007CE6F4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		86494CBA188139A100C22B14 /* ConverReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConverReply.h; path = DAOModel/coredata/ConverReply.h; sourceTree = "<group>"; };
@@ -696,7 +697,6 @@
 		86D181FB1834822D0005901D /* xianchangjiaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = xianchangjiaTests.m; sourceTree = "<group>"; };
 		86D1820718349B150005901D /* CRGradientNavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRGradientNavigationBar.h; sourceTree = "<group>"; };
 		86D1820818349B150005901D /* CRGradientNavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRGradientNavigationBar.m; sourceTree = "<group>"; };
-		86D1820F1834ACBA0005901D /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		86D182171834AED30005901D /* BTSAnchorPointLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSAnchorPointLayer.h; sourceTree = "<group>"; };
 		86D182181834AED30005901D /* BTSAnchorPointLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSAnchorPointLayer.m; sourceTree = "<group>"; };
 		86D182191834AED30005901D /* BTSCoreGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSCoreGraphics.h; sourceTree = "<group>"; };
@@ -974,12 +974,12 @@
 				86D181D01834822C0005901D /* CoreGraphics.framework in Frameworks */,
 				86D183281834B0E00005901D /* AddressBook.framework in Frameworks */,
 				86D183291834B0E00005901D /* AddressBookUI.framework in Frameworks */,
+				8646FDDC18868425007CE6F4 /* MapKit.framework in Frameworks */,
 				86D183251834B0D40005901D /* SystemConfiguration.framework in Frameworks */,
 				86D183211834B0C30005901D /* AVFoundation.framework in Frameworks */,
 				86D183151834B0590005901D /* CoreAudio.framework in Frameworks */,
 				86D183131834B0520005901D /* QuartzCore.framework in Frameworks */,
 				86D181D21834822C0005901D /* UIKit.framework in Frameworks */,
-				86D182101834ACBA0005901D /* MapKit.framework in Frameworks */,
 				86D181CE1834822C0005901D /* Foundation.framework in Frameworks */,
 				86EB76DE185AA6CC00836947 /* libSDWebImage+WebP.a in Frameworks */,
 			);
@@ -1640,6 +1640,7 @@
 		86D181CC1834822C0005901D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8646FDDB18868425007CE6F4 /* MapKit.framework */,
 				8622C892187D866300776A38 /* MessageUI.framework */,
 				8669982418792BF700233C47 /* CoreVideo.framework */,
 				8669982218792BEF00233C47 /* CoreMedia.framework */,
@@ -1666,7 +1667,6 @@
 				86D183161834B0950005901D /* libiconv.dylib */,
 				86D183141834B0590005901D /* CoreAudio.framework */,
 				86D183121834B0520005901D /* QuartzCore.framework */,
-				86D1820F1834ACBA0005901D /* MapKit.framework */,
 				86D181CD1834822C0005901D /* Foundation.framework */,
 				86D181CF1834822C0005901D /* CoreGraphics.framework */,
 				86D181D11834822C0005901D /* UIKit.framework */,
@@ -2865,8 +2865,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2884,7 +2884,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "87449695-4398-4E99-95C2-91CFED4ED7E7";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2906,8 +2906,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Apple Production IOS Push Services: lifestyle.laixin.chengdu";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2918,7 +2918,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "87449695-4398-4E99-95C2-91CFED4ED7E7";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2927,9 +2927,9 @@
 		86D182001834822D0005901D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: lifestyle.laixin.chengdu";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2953,7 +2953,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
-				PROVISIONING_PROFILE = "BF2423F2-8203-49EF-B523-DDC7521DDE94";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -2963,10 +2963,10 @@
 		86D182011834822D0005901D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				CODE_SIGN_ENTITLEMENTS = laixin.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: yao zhang (3NW254563D)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2989,7 +2989,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
-				PROVISIONING_PROFILE = "BF2423F2-8203-49EF-B523-DDC7521DDE94";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
