@@ -8,6 +8,7 @@
 
 #import "LXUser.h"
 #import "tools.h"
+#import "DataHelper.h"
 
 @implementation LXUser
 
@@ -31,7 +32,7 @@
         _nick = [tools getStringValue:dic[@"nick"] defaultValue:@""];
         _background_image = [tools getStringValue:dic[@"background_image"] defaultValue:@""];
         _birthday = [tools getStringValue:dic[@"birthday"] defaultValue:@""];
-        _create_time = [[tools getStringValue:dic[@"create_time"] defaultValue:@""] intValue];
+        _create_time = [DataHelper getDoubleValue:dic[@"create_time"] defaultValue:0.0];
         _headpic = [tools getStringValue:dic[@"headpic"] defaultValue:@""];
         _height = [[tools getStringValue:dic[@"height"] defaultValue:@""] intValue];
         _marriage = [tools getStringValue:dic[@"marriage"] defaultValue:@""];

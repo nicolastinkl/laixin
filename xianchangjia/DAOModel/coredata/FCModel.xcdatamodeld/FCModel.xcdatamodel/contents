@@ -95,7 +95,7 @@
         <attribute name="actor_level" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="background_image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="birthday" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="create_time" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="create_time" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
         <attribute name="headpic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="marriage" optional="YES" attributeType="String" syncable="YES"/>

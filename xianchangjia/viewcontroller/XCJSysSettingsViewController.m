@@ -38,25 +38,36 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
-        [USER_DEFAULT removeObjectForKey:KeyChain_Laixin_account_sessionid];
-        [USER_DEFAULT synchronize];
-        
-        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-        delegate.tabBarController.selectedIndex = 0;
-        UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
-        [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
+        [SVProgressHUD show];
+        double delayInSeconds = .5;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            //ios.unreg()   logout
+            [[MLNetworkingManager sharedManager] sendWithAction:@"ios.unreg" parameters:@{} success:^(MLRequest *request, id responseObject) {
+                [[[MLNetworkingManager sharedManager] webSocket] close];
+                // clear You can remove the application's persistent domain like this:
+                NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+                [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:LaixinCloseDBMessageNotification object:nil];
+                
+                XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+                delegate.tabBarController.selectedIndex = 0;
+                [SVProgressHUD dismiss];
+                UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
+                [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
+
+            } failure:^(MLRequest *request, NSError *error) {
+                [SVProgressHUD showErrorWithStatus:@"注销失败"];
+            }];
+        });
     }
 }
-
-
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
 }
-
-
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

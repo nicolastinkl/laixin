@@ -157,9 +157,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-   self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
-    
+
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HomeReloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
@@ -444,7 +442,9 @@
 //    [self.refreshControl beginRefreshing];
     [self setupLocationManager];
     
+    self.managedObjectContext = [NSManagedObjectContext MR_defaultContext]; //init DB context
     [self HomeReloadFetchedResults:nil];
+    
     NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
     NSDictionary * parames = @{@"sessionid":sessionid};
     [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -460,18 +460,24 @@
         [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_position];
         [USER_DEFAULT synchronize];
         
-//        [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
-        
+        {
+//            [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
+            
+        }
         
         NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
         FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
+        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
         if (account == nil) {
-            account = [FCAccount MR_createEntity];
+            account = [FCAccount MR_createInContext:localContext];
             account.facebookId = currentUser.uid;
         }
+        account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+        account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
+        account.time = @"";
         account.userJson = userinfo;
-        
-        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+        [localContext MR_saveToPersistentStoreAndWait];
+//        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
         
         
         // Return the number of rows in the section.

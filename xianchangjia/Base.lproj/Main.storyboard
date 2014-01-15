@@ -2967,7 +2967,7 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="验证码" minimumFontSize="15" clearButtonMode="whileEditing" id="8B6-4Y-kqd">
-                                        <rect key="frame" x="71" y="169" width="202" height="30"/>
+                                        <rect key="frame" x="71" y="169" width="99" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -3002,6 +3002,16 @@
                                         <rect key="frame" x="129" y="18" width="62" height="61"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="pXU-6d-gBw">
+                                        <rect key="frame" x="208" y="169" width="76" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="获取验证码">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="getyanzhengCode:" destination="X5V-NU-KD0" eventType="touchUpInside" id="rf9-bJ-g3v"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -3049,6 +3059,9 @@
                         <barButtonItem key="backBarButtonItem" title="返回" id="Mdb-rV-drh"/>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <connections>
+                        <outlet property="button_yanzhengCode" destination="pXU-6d-gBw" id="1qt-rr-usu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qF-jQ-0iC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

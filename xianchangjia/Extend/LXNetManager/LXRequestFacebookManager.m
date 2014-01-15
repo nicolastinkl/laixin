@@ -35,12 +35,12 @@
                                               }];*/
     
     [[IQSocialRequestBaseClient sharedClient] GET:parems parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        NSLog(@"%@",responseObject);
+        NSLog(@"responseObject : %@",responseObject);
         if (completion) {
             completion(responseObject, nil);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"%@",error);
+        NSLog(@" error : %@",error);
         if (completion) {
             completion(nil, error);
         }

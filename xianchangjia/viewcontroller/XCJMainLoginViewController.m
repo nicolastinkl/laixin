@@ -20,6 +20,7 @@
 #import "CoreData+MagicalRecord.h"
 
 @interface XCJMainLoginViewController ()<UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UIButton *button_yanzhengCode;
 
 @end
 
@@ -92,6 +93,23 @@
         
         [loginButton addTarget:self action:@selector(loginClick:) forControlEvents:UIControlEventTouchUpInside];
         //266 30
+    }
+}
+
+-(IBAction)getyanzhengCode:(id)sender
+{
+ 
+    UIView * viewKey = (UIView *) [self.view subviewWithTag:1];
+    UITextField * phoneText = (UITextField *) [viewKey subviewWithTag:2];
+    if ([phoneText.text isValidPhone])
+    {
+        [SVProgressHUD show];
+        [self runSequncer:phoneText.text];
+    }
+    else
+    { 
+        [UIAlertView showAlertViewWithMessage:@"手机号码格式错误"];
+        //提示输入正确手机号码
     }
 }
 -(IBAction) loginClick:(id)sender
@@ -205,7 +223,6 @@
     return NO;
 }
 
-
 - (void)runSequncer :(NSString * )phone
 {
     Sequencer *sequencer = [[Sequencer alloc] init];
@@ -213,13 +230,16 @@
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError * error) {
              if (!error) {
                  NSString * yanzhengCode =  [response objectForKey:@"code"];
-                 if (yanzhengCode) {
-                     
+                 if (yanzhengCode.length > 0) {
+                     [SVProgressHUD dismiss];
+                     self.button_yanzhengCode.enabled = NO;
                  }else{
-                     [self loginError];
+                     self.button_yanzhengCode.enabled = YES;
+                     [SVProgressHUD showErrorWithStatus:@"获取验证码失败"];
                  }
              }else{
-                 [self loginError];
+                     self.button_yanzhengCode.enabled = YES;
+                 [SVProgressHUD showErrorWithStatus:@"获取验证码失败"];
              }
         } withParems:[NSString stringWithFormat:@"getcode?phone=%@",phone]];
     }];
@@ -232,7 +252,7 @@
     [SVProgressHUD show];
     NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",phone,yanzhengCode];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response2, NSError * error2) {
-        if (!error2) {
+        if (response2) {
             /*{
              "sessionid":"fxuTnPKqQOwH29a",
              "ws":"ws://127.0.0.1:8000/ws",
@@ -259,7 +279,10 @@
                  
                 [SVProgressHUD dismiss];
                 [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                }];             }
+                }];
+            }else{
+                [self loginError];   
+            }
         }else{
             [self loginError];
         }

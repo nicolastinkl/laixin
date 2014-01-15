@@ -104,7 +104,7 @@
             }
             [self.NickText resignFirstResponder];
             [SVProgressHUD show];
-            NSDictionary * parames = @{@"nick":self.NickText.text,@"sex":@(sex)};
+            NSDictionary * parames = @{@"nick":self.NickText.text,@"sex":@(sex),@"position":@"四川 成都"};
             //nick, signature,sex, birthday, marriage, height
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
                 [SVProgressHUD dismiss];
