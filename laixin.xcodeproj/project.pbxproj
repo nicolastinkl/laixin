@@ -22,6 +22,7 @@
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
+		8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		86494CBC188139A100C22B14 /* ConverReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBB188139A100C22B14 /* ConverReply.m */; };
 		86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */; };
@@ -397,6 +398,8 @@
 		8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSettingGroupViewController.m; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.m; sourceTree = SOURCE_ROOT; };
 		8646F8C2187AA00D004A8696 /* FDStatusBarNotifierView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStatusBarNotifierView.h; sourceTree = "<group>"; };
 		8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDStatusBarNotifierView.m; sourceTree = "<group>"; };
+		8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		8646FDD418863CD2007CE6F4 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		86494CBA188139A100C22B14 /* ConverReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConverReply.h; path = DAOModel/coredata/ConverReply.h; sourceTree = "<group>"; };
@@ -958,6 +961,7 @@
 				86D183231834B0CE0005901D /* MobileCoreServices.framework in Frameworks */,
 				86D1832B1834B0E80005901D /* Security.framework in Frameworks */,
 				869CE54E186BEE820004C1EC /* libxml2.dylib in Frameworks */,
+				8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */,
 				869CE54D186BEC1A0004C1EC /* CoreData.framework in Frameworks */,
 				869CE549186BEBAF0004C1EC /* libresolv.dylib in Frameworks */,
 				86EB7711185AB1D800836947 /* ImageIO.framework in Frameworks */,
@@ -1076,6 +1080,15 @@
 				8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */,
 			);
 			path = FDStatusBarNotifierView;
+			sourceTree = "<group>";
+		};
+		8646FDD118863CD2007CE6F4 /* UMAnalytics_Sdk_2.2.1.OpenUDID */ = {
+			isa = PBXGroup;
+			children = (
+				8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */,
+				8646FDD418863CD2007CE6F4 /* MobClick.h */,
+			);
+			path = UMAnalytics_Sdk_2.2.1.OpenUDID;
 			sourceTree = "<group>";
 		};
 		86489EF4187586BE001AB9BA /* PostPhoto */ = {
@@ -1858,6 +1871,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				8646FDD118863CD2007CE6F4 /* UMAnalytics_Sdk_2.2.1.OpenUDID */,
 				8668E4511875403D00D20C9E /* HomeUtils */,
 				86EB96BF18726A25002834EE /* QiniuPhotoTools */,
 				866F0617185724EE007A57CF /* SinaWeibo */,
@@ -2935,6 +2949,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
@@ -2970,6 +2985,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;

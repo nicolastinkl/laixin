@@ -43,7 +43,7 @@ typedef enum {
 #define FromOtherUser						@0
 #define FromMe								@1
 #define KBMapAPIKEY							@"4EFD73542AA0452489B5297EF4420994DCEF8CA4"
-#define kAppkeyForYoumeng					@"526a4d8f56240b8ecf035ab7"
+#define kAppkeyForYoumeng					@"52d604b156240b23f2081557"
 #define kAPpkeyForWeiChat					@"wx3c91c9881ed7d8ef"
 #define kAppKey								@"2824743419"
 #define kAppSecret							@"9c152c876ec980df305d54196539773f"

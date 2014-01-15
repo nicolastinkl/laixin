@@ -141,6 +141,8 @@
     NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
     if (cont > 0) {
         ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = NO;
+    }else{
+        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = YES;
     }
 }
 
@@ -150,6 +152,8 @@
     NSUInteger cont = [FCBeInviteGroup MR_countOfEntitiesWithPredicate:pre];
     if (cont > 0) {
         ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = NO;
+    }else{
+        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = YES;
     }
 }
 

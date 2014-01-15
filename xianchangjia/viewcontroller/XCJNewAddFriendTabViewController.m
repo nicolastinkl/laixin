@@ -11,6 +11,7 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCAlbumAdditions.h"
 #import "FCUserDescription.h"
+#import "XCJAddUserTableViewController.h"
 
 @interface XCJNewAddFriendTabViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -178,7 +179,9 @@
 
 - (void)showRecipe:(FCBeAddFriend *) info animated:(BOOL)animated
 {
-    
+    XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+    addUser.UserInfo = info.beAddFriendShips;
+    [self.navigationController pushViewController:addUser animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -202,6 +205,9 @@
         imgViewbuttonBG.hidden = YES;
         labelSign.text = @"已添加";
     }else{
+        button.hidden = NO;
+        imgViewbuttonBG.hidden = NO;
+        labelSign.text = @"";
         [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -209,6 +215,20 @@
 
 -(IBAction)addFriendClick:(id)sender
 {
+    UIButton * button = (UIButton*)sender;
+    UIView * superView = button.superview.superview.superview;
+    
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:superView];
+//    NSIndexPath * indexPath = [[NSIndexPath alloc] initWithIndex:0];
+    FCBeAddFriend *userinfo = (FCBeAddFriend *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    if (userinfo) {
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:userinfo.beAddFriendShips];
+        userinfo.hasAdd = @YES;
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    }
+    
+    // reload this cell
+    [self configureCell:superView atIndexPath:indexPath];
     
 }
 
