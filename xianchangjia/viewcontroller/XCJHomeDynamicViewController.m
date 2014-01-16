@@ -110,25 +110,28 @@
 {
     
     [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        ALAsset *asset  = obj;
-        UIImage * image  =  [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
-        NSData * imagedata = UIImageJPEGRepresentation(image, 0.5f);
-        SLog(@"imagedata.length :%d",imagedata.length);
+        if(idx == 0)
+        {
+            
+            ALAsset *asset  = obj;
+            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
+            //[UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
+            
+           NSURL * url = [asset.defaultRepresentation url];
+//            NSURL * url = [self uploadContent:theInfo];
+            PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
+            postVC.gID = _Currentgid;
+            postVC.filePath = [url copy];
+            postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
+            postVC.postImage =image;// [theInfo objectForKey:UIImagePickerControllerOriginalImage];
+            
+            postVC.needRefreshViewController = self;
+            [self.navigationController pushViewController:postVC animated:YES];
+
+        }
     }];
     
     
-//    NSURL * url = [self uploadContent:theInfo];
-//    PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
-//    if (_Currentgid == nil) {
-//        _Currentgid = @"2";
-//    }
-//    postVC.gID = _Currentgid;
-//    postVC.filePath = [url copy];
-//    postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
-//    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
-//    
-//    postVC.needRefreshViewController = self;
-//    [self.navigationController pushViewController:postVC animated:YES];
     
 //    [self.tableView beginUpdates];
 //    [self.tableView insertRowsAtIndexPaths:[self indexPathOfNewlyAddedAssets:assets]
@@ -615,7 +618,6 @@
                 default:
                     break;
             }
-            
         }
             break;
             
@@ -634,7 +636,7 @@
     
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
     picker.navigationBar.barStyle = UIBarStyleBlack;
-    picker.navigationBar.barTintColor  = [UIColor colorWithRed:2.0/255.0 green:187.0/255.0 blue:255.0/255.0 alpha:1.0];
+    picker.navigationBar.barTintColor  = [UIColor colorWithRed:48.0/255.0 green:167.0/255.0 blue:255.0/255.0 alpha:1.0];
     picker.navigationBar.translucent = YES;
     picker.navigationBar.tintColor  = [UIColor whiteColor];
     //[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];    //
@@ -642,7 +644,7 @@
     //    picker.navigationBar.backgroundColor = [UIColor whiteColor];
     
     
-    picker.maximumNumberOfSelection = 10;
+    picker.maximumNumberOfSelection = 1;
     picker.assetsFilter = [ALAssetsFilter allAssets];
     
     
