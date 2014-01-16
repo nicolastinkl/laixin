@@ -170,7 +170,8 @@
 - (NSFetchedResultsController *)fetchedResultsController {
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
-        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:nil groupBy:nil delegate:self] ;
+        NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID != %@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
+        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:pre groupBy:nil delegate:self] ;
     }
 	return _fetchedResultsController;
 }

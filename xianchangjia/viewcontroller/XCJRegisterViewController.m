@@ -169,7 +169,6 @@
     return UIStatusBarStyleLightContent;
 }
 
-
 - (void)runSequncer :(NSString * )phone
 {
     Sequencer *sequencer = [[Sequencer alloc] init];
@@ -180,7 +179,13 @@
                 NSString * yanzhengCode =  [response objectForKey:@"code"];
                 if (yanzhengCode) {
                     [SVProgressHUD dismiss];
-                    self.yanzhengNumber.text = yanzhengCode;
+                    
+                    NSString * string = [MobClick getConfigParams:@"AutoFillYanzhengma"];
+                    if ([string isEqualToString:@"1"]) {
+
+                        self.yanzhengNumber.text = yanzhengCode;
+                    }
+                    
                     self.image_success.hidden = NO;
                     self.button_getYanzhengma.enabled = NO;
                 }else{

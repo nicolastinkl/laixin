@@ -294,7 +294,7 @@
             
             [USER_DEFAULT setObject:stringURL forKey:KeyChain_Laixin_account_user_headpic];
             [USER_DEFAULT synchronize];
-            NSDictionary * parames = @{@"headpic":stringURL};
+          
             
             [UIView animateWithDuration:0.3 animations:^{
                 UIImageView * successImg = (UIImageView *) [self.view subviewWithTag:3];
@@ -303,10 +303,11 @@
             [SVProgressHUD dismiss];
             [self.Image_userIcon hideIndicatorViewBlueOrGary];
             //nick, signature,sex, birthday, marriage, height
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
+//            NSDictionary * parames = @{@"headpic":stringURL};
+//            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+//                
+//            } failure:^(MLRequest *request, NSError *error) {
+//            }];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.Image_userIcon hideIndicatorViewBlueOrGary];

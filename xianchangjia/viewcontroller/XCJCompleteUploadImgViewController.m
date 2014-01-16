@@ -210,7 +210,7 @@
         SLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSString * stringURL =  [tools getStringValue:[responseObject objectForKey:@"url"] defaultValue:@""];
-            NSDictionary * parames = @{@"headpic":stringURL};
+            
             
             
             [USER_DEFAULT setValue:stringURL forKey:KeyChain_Laixin_account_user_headpic];
@@ -221,10 +221,11 @@
             [img hideIndicatorViewBlueOrGary];
             [self.takeButton setBackgroundImage:nil forState:UIControlStateNormal];
             [SVProgressHUD dismiss];
+            NSDictionary * parames = @{@"headpic":stringURL};
             //nick, signature,sex, birthday, marriage, height
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
+//            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+//            } failure:^(MLRequest *request, NSError *error) {
+//            }];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [img hideIndicatorViewBlueOrGary];

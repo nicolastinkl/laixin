@@ -233,6 +233,16 @@
                  if (yanzhengCode.length > 0) {
                      [SVProgressHUD dismiss];
                      self.button_yanzhengCode.enabled = NO;
+                     
+                     NSString * string = [MobClick getConfigParams:@"AutoFillYanzhengma"];
+                     if ([string isEqualToString:@"1"]) {
+                         
+                         UIView * viewKey = (UIView *) [self.view subviewWithTag:1];
+                         UITextField * pwdText = (UITextField *) [viewKey subviewWithTag:3];
+                         pwdText.text = yanzhengCode;
+                         
+                     }
+                     
                  }else{
                      self.button_yanzhengCode.enabled = YES;
                      [SVProgressHUD showErrorWithStatus:@"获取验证码失败"];
