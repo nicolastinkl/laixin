@@ -72,7 +72,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
     NSLog(@"online config has fininshed and note = %@", note.userInfo);
 }
 
-
 #pragma mark ChatListNeedUpdateToalUnreadCountNotification
 
 - (void)updateMessageTabBarItemBadge

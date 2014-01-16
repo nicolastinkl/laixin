@@ -107,7 +107,11 @@
                         [uidArray addObject:[DataHelper getStringValue:obj[@"uid"] defaultValue:@""]];
                         
                     }];
-                    
+                    if(uidArray.count < 1){
+                        [self showErrorText:@"没有找到附近用户"];
+                        return ;
+                    }
+                        
                     NSDictionary * parames = @{@"uid":uidArray};
                     [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
                         // "users":[....]

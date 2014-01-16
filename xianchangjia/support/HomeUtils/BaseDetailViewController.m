@@ -540,7 +540,7 @@
     if (row>=_activities.count||row<0) {
         return;
     }
-    
+    _noDataHintLabel.hidden = YES;
     [_cellHeights replaceObjectAtIndex:row withObject:@0];
     [_tableView reloadData];
     

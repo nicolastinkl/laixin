@@ -174,6 +174,9 @@
       [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
     
     tryCatchCount = 0;
+    
+    ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:21]).height = 0.3f;
+    
     if (![XCJAppDelegate hasLogin]) {
         [self OpenLoginview:nil];
     }else{
@@ -722,17 +725,10 @@
 }
 
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    if([[self.fetchedResultsController sections] count] > 1)
-//    {
-//        if (section == 0) {
-//            return  @"新动态";
-//        }
-//    }
-//    
-//    return  @"我加入的群组";
-//}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return  @"我加入的群组";
+}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
