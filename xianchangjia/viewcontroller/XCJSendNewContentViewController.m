@@ -70,6 +70,7 @@
             NSLog(@"error : %@" ,[error userInfo]);
         }];
     }
+    
     /*
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString * newURL = @"http://api.xianchangjia.com/";
@@ -87,6 +88,7 @@
     UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册", nil];
     actionsheet.actionSheetStyle = UIActionSheetStyleAutomatic;
     [actionsheet showInView:self.view];
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -96,7 +98,6 @@
 	picker.allowsEditing=YES;
     switch (buttonIndex) {
         case 0://Take picture
-            
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
                 

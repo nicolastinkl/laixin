@@ -177,6 +177,9 @@
 		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
 		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
+		86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C6422E1887A3D200E0CDDB /* CTAssetsPickerController.m */; };
+		86C642331887A3D200E0CDDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86C6422F1887A3D200E0CDDB /* Images.xcassets */; };
+		86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C642311887A3D200E0CDDB /* NSDate+TimeInterval.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
@@ -674,6 +677,11 @@
 		86A306A81871A8B100C7168B /* XCJSuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSuperViewController.m; path = viewcontroller/XCJSuperViewController.m; sourceTree = "<group>"; };
 		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
 		86C1A56A1885384600D78242 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
+		86C6422D1887A3D200E0CDDB /* CTAssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPickerController.h; sourceTree = "<group>"; };
+		86C6422E1887A3D200E0CDDB /* CTAssetsPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAssetsPickerController.m; sourceTree = "<group>"; };
+		86C6422F1887A3D200E0CDDB /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		86C642301887A3D200E0CDDB /* NSDate+TimeInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeInterval.h"; sourceTree = "<group>"; };
+		86C642311887A3D200E0CDDB /* NSDate+TimeInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TimeInterval.m"; sourceTree = "<group>"; };
 		86C72DDC184330F9001B6CA0 /* XCModelAllEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCModelAllEntity.h; sourceTree = "<group>"; };
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
@@ -1618,6 +1626,19 @@
 			name = PostView;
 			sourceTree = "<group>";
 		};
+		86C6422C1887A3D200E0CDDB /* CTAssetsPickerController */ = {
+			isa = PBXGroup;
+			children = (
+				86C6422D1887A3D200E0CDDB /* CTAssetsPickerController.h */,
+				86C6422E1887A3D200E0CDDB /* CTAssetsPickerController.m */,
+				86C6422F1887A3D200E0CDDB /* Images.xcassets */,
+				86C642301887A3D200E0CDDB /* NSDate+TimeInterval.h */,
+				86C642311887A3D200E0CDDB /* NSDate+TimeInterval.m */,
+			);
+			name = CTAssetsPickerController;
+			path = support/CTAssetsPickerController;
+			sourceTree = "<group>";
+		};
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
@@ -1736,6 +1757,7 @@
 		86D1820518349B0A0005901D /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				86C6422C1887A3D200E0CDDB /* CTAssetsPickerController */,
 				8622C87D187D2BD300776A38 /* ErrorInfoView */,
 				8622C875187D192100776A38 /* POHorizontalList */,
 				8665168F187BF276001F05F6 /* libqrencode */,
@@ -2486,6 +2508,7 @@
 				867014A9185185F100518B6D /* JsonImageurls.json in Resources */,
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
 				86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */,
+				86C642331887A3D200E0CDDB /* Images.xcassets in Resources */,
 				8668E481187540DB00D20C9E /* MLScrollRefreshHeader.bundle in Resources */,
 				866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */,
 				8668E477187540DB00D20C9E /* btn_comment@2x.png in Resources */,
@@ -2546,6 +2569,7 @@
 				86EB76CB185AA6CC00836947 /* UIImage+Addition.m in Sources */,
 				869CE536186BE38D0004C1EC /* MagicalRecord.m in Sources */,
 				869CE4C2186A73880004C1EC /* RegexKitLite.m in Sources */,
+				86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */,
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
@@ -2701,6 +2725,7 @@
 				865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */,
 				8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
+				86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				8622C87C187D192100776A38 /* POHorizontalList.m in Sources */,
 				866516A5187BF276001F05F6 /* qrspec.c in Sources */,

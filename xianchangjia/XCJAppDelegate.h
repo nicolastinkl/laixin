@@ -23,4 +23,3 @@
 +(BOOL) hasLogin;
 
 @end
-

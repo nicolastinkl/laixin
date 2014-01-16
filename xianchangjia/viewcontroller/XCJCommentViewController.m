@@ -52,7 +52,6 @@
     viewcon.touserid = self.touserid;
     UINavigationController * navi = [[UINavigationController alloc] initWithRootViewController:viewcon];
     [self presentViewController:navi animated:YES completion:nil];
-
 }
 
 -(void) initCommentData
@@ -146,7 +145,6 @@
 #pragma clang diagnostic pop
     return  fmaxf(20.0f, sizeToFit.height + 10.0f );
 }
-
 
 /*
 // Override to support conditional editing of the table view.

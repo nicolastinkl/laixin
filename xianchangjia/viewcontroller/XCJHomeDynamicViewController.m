@@ -44,16 +44,20 @@
 #import "XCJPostTextNaviController.h"
 #import "XCJPostTextViewController.h"
 #import "XCJCreateChatNaviController.h"
-
+#import "CTAssetsPickerController.h"
 #import "XCJErWeiCodeViewController.h"
 
-@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate>
+@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,CTAssetsPickerControllerDelegate>
 {
 
     XCJGroupMenuView  * menuView;
     NSArray * JsonArray;
 }
 
+
+
+@property (nonatomic, strong) NSMutableArray *assets;
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation XCJHomeDynamicViewController
@@ -99,9 +103,58 @@
     
 }
 
+
+#pragma mark - Assets Picker Delegate
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
+{
+    
+    [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ALAsset *asset  = obj;
+        UIImage * image  =  [UIImage imageWithCGImage:asset.aspectRatioThumbnail];
+        NSData * imagedata = UIImageJPEGRepresentation(image, 0.5f);
+        SLog(@"imagedata.length :%d",imagedata.length);
+    }];
+    
+    
+//    NSURL * url = [self uploadContent:theInfo];
+//    PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
+//    if (_Currentgid == nil) {
+//        _Currentgid = @"2";
+//    }
+//    postVC.gID = _Currentgid;
+//    postVC.filePath = [url copy];
+//    postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
+//    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
+//    
+//    postVC.needRefreshViewController = self;
+//    [self.navigationController pushViewController:postVC animated:YES];
+    
+//    [self.tableView beginUpdates];
+//    [self.tableView insertRowsAtIndexPaths:[self indexPathOfNewlyAddedAssets:assets]
+//                          withRowAnimation:UITableViewRowAnimationBottom];
+//    
+//    [self.assets addObjectsFromArray:assets];
+//    [self.tableView endUpdates];
+}
+
+- (NSArray *)indexPathOfNewlyAddedAssets:(NSArray *)assets
+{
+//    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+//    
+//    for (NSUInteger i = self.assets.count; i < self.assets.count + assets.count ; i++)
+//        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+//    
+//    return indexPaths;
+    return  nil;
+}
+
+
+#pragma mark  sendpost
+
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照",@"相册", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"相册", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
@@ -540,12 +593,14 @@
                 }
                     break;
                 case 1:{   //拍照
-                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                        UIImagePickerController *camera = [[UIImagePickerController alloc] init];
-                        camera.delegate = self;
-                        camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-                        [self presentViewController:camera animated:YES completion:nil];
-                    }
+//                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+//                        UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+//                        camera.delegate = self;
+//                        camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+//                        [self presentViewController:camera animated:YES completion:nil];
+//                    }
+                    
+                    [self pickAssets:nil];
                 }
                     break;
                 case 2:{
@@ -568,6 +623,42 @@
             break;
     }
     
+}
+
+
+
+- (void)pickAssets:(id)sender
+{
+    if (!self.assets)
+        self.assets = [[NSMutableArray alloc] init];
+    
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
+    picker.navigationBar.barStyle = UIBarStyleBlack;
+    picker.navigationBar.barTintColor  = [UIColor colorWithRed:2.0/255.0 green:187.0/255.0 blue:255.0/255.0 alpha:1.0];
+    picker.navigationBar.translucent = YES;
+    picker.navigationBar.tintColor  = [UIColor whiteColor];
+    //[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];    //
+    picker.navigationBarHidden = NO;
+    //    picker.navigationBar.backgroundColor = [UIColor whiteColor];
+    
+    
+    picker.maximumNumberOfSelection = 10;
+    picker.assetsFilter = [ALAssetsFilter allAssets];
+    
+    
+    // only allow video clips if they are at least 5s
+    picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
+        if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+            NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+            return duration >= 5;
+        } else {
+            return YES;
+        }
+    }];
+    
+    picker.delegate = self;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
 }
 
 
