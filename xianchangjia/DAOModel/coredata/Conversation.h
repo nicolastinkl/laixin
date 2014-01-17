@@ -16,7 +16,6 @@ enum messageStutes_type {
     messageStutes_error = 3,
 };
 
-
 @class FCAccount, FCMessage;
 
 @interface Conversation : NSManagedObject

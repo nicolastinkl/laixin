@@ -46,15 +46,33 @@
     NSMutableArray  * array = [[NSMutableArray alloc] init];
     _datasource = array;
     
-     [SVProgressHUD showWithStatus:@"正在查找附近的人..."];
+    [SVProgressHUD showWithStatus:@"正在查找附近的人..."];
+    double delayInSeconds = .5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        [self setupLocationManager];
+    });
     
-    [self setupLocationManager];
- 
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }else if (buttonIndex == 1) {
+        [self hiddeErrorText];
+        [_datasource removeAllObjects];
+        [self.tableView reloadData];
+        [SVProgressHUD showWithStatus:@"正在查找附近的人..."];        
+        [self setupLocationManager];
+    }
 }
 
 -(IBAction)MoreClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"清除位置信息并退出"  otherButtonTitles:@"只看帅哥",@"只看美女",@"查看全部", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"清除位置信息并退出"  otherButtonTitles: @"查看全部",nil];
+    //@"只看帅哥",@"只看美女",@"查看全部",
     [action showInView:self.view];
 }
 
@@ -104,7 +122,10 @@
                     NSArray * array = resultDict[@"users"];
                     NSMutableArray * uidArray = [[NSMutableArray alloc] init];
                     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        [uidArray addObject:[DataHelper getStringValue:obj[@"uid"] defaultValue:@""]];
+                        if(![[DataHelper getStringValue:obj[@"uid"] defaultValue:@""] isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                        {
+                            [uidArray addObject:[DataHelper getStringValue:obj[@"uid"] defaultValue:@""]];
+                        }//  自己除外
                         
                     }];
                     if(uidArray.count < 1){
@@ -179,9 +200,22 @@
     UIImageView * image = (UIImageView *) [cell.contentView subviewWithTag:1];
     UILabel * labelNick = (UILabel *) [cell.contentView subviewWithTag:2];
     UILabel * labelLocation = (UILabel *) [cell.contentView subviewWithTag:3];
+    UIImageView * Image_sex = (UIImageView *) [cell.contentView subviewWithTag:4];
+    if (user.sex == 1) {
+        Image_sex.image = [UIImage imageNamed:@"md_boy"];
+    }else if (user.sex == 2) {
+        Image_sex.image = [UIImage imageNamed:@"md_girl"];
+    }
+    
+    ((UILabel *) [cell.contentView subviewWithTag:21]).height = 0.5;
     [image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:160]]];
     labelNick.text = user.nick;
-    labelLocation.text = @"1000米以内";
+    if (user.signature.length < 1) {
+        labelLocation.text = @"Ta正在构建一个伟大签名";
+    }else{
+        labelLocation.text = user.signature;
+    }
+
     return cell;
 }
 

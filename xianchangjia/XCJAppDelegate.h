@@ -23,3 +23,6 @@
 +(BOOL) hasLogin;
 
 @end
+
+
+

@@ -68,7 +68,20 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            // check out update sdk
+            [MobClick checkUpdate];
+            [UIAlertView showAlertViewWithMessage:@"已经是最新版本"];
+        }
+        
+        if (indexPath.row == 1) {
+            // check out update sdk
+            [SVProgressHUD showSuccessWithStatus:@"清理完成"];
+        }
+        
+        
+    }
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

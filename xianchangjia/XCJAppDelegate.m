@@ -246,7 +246,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
             unreadNumber ++;
             ConverRe.badgeNumber = @(unreadNumber);
             [localContext MR_saveToPersistentStoreAndWait];
-            
+
+            [self.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
         }else if ([eventType isEqualToString:@"newreply"])
         {

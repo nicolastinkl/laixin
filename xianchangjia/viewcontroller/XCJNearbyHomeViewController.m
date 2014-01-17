@@ -92,7 +92,7 @@
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 0;
             menuView.top = -600;
-            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
+            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
         } completion:^(BOOL finished) {
         }];
     }else{
@@ -103,7 +103,8 @@
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 1;
             menuView.top = 70;
-            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
+            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
+
         } completion:^(BOOL finished) {
         }];
         
@@ -229,6 +230,11 @@
     }else{
         [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
          [tabBar.items[0] setBadgeValue:nil];
+    }
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    {
+        [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
     }
     
     /*

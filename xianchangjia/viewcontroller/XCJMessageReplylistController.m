@@ -13,6 +13,7 @@
 #import "ConverReply.h"
 #import "FCReplyMessage.h"
 #import "XCJGroupPost_list.h"
+#import "XCJMessageReplyInfoViewController.h"
 
 @interface XCJMessageReplylistController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,UIActionSheetDelegate>
 
@@ -248,6 +249,9 @@
 
 - (void)showRecipe:(FCReplyMessage *) info animated:(BOOL)animated
 {
+    XCJMessageReplyInfoViewController * msgReplyInfoViewCr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplyInfoViewController"];
+    msgReplyInfoViewCr.message = info;
+    [self.navigationController pushViewController:msgReplyInfoViewCr animated:YES];
     
 }
 

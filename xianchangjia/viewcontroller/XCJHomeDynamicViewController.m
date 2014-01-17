@@ -607,12 +607,12 @@
                 }
                     break;
                 case 2:{
-                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-                        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
-                        photoLibrary.delegate = self;
-                        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                        [self presentViewController:photoLibrary animated:YES completion:nil];
-                    }
+//                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+//                        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+//                        photoLibrary.delegate = self;
+//                        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+//                        [self presentViewController:photoLibrary animated:YES completion:nil];
+//                    }
                 }
                     break;
                 default:

@@ -176,6 +176,8 @@
 		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
 		86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */; };
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
+		86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */; };
+		86AC094018893AC100C3BE30 /* XCJMessageReplyInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */; };
 		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
 		86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C6422E1887A3D200E0CDDB /* CTAssetsPickerController.m */; };
 		86C642331887A3D200E0CDDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86C6422F1887A3D200E0CDDB /* Images.xcassets */; };
@@ -675,6 +677,10 @@
 		86A306A41871A82A00C7168B /* XCJCompleteUploadImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCompleteUploadImgViewController.m; path = viewcontroller/XCJCompleteUploadImgViewController.m; sourceTree = "<group>"; };
 		86A306A71871A8B100C7168B /* XCJSuperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSuperViewController.h; path = viewcontroller/XCJSuperViewController.h; sourceTree = "<group>"; };
 		86A306A81871A8B100C7168B /* XCJSuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSuperViewController.m; path = viewcontroller/XCJSuperViewController.m; sourceTree = "<group>"; };
+		86AC093B1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJADDFriendLaixinBecomeViewController.h; path = viewcontroller/XCJADDFriendLaixinBecomeViewController.h; sourceTree = "<group>"; };
+		86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJADDFriendLaixinBecomeViewController.m; path = viewcontroller/XCJADDFriendLaixinBecomeViewController.m; sourceTree = "<group>"; };
+		86AC093E18893AC100C3BE30 /* XCJMessageReplyInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMessageReplyInfoViewController.h; path = viewcontroller/XCJMessageReplyInfoViewController.h; sourceTree = "<group>"; };
+		86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMessageReplyInfoViewController.m; path = viewcontroller/XCJMessageReplyInfoViewController.m; sourceTree = "<group>"; };
 		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
 		86C1A56A1885384600D78242 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
 		86C6422D1887A3D200E0CDDB /* CTAssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPickerController.h; sourceTree = "<group>"; };
@@ -1113,6 +1119,8 @@
 			children = (
 				86494CBE1881437600C22B14 /* XCJMessageReplylistController.h */,
 				86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */,
+				86AC093E18893AC100C3BE30 /* XCJMessageReplyInfoViewController.h */,
+				86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */,
 			);
 			name = messagereplyList;
 			sourceTree = "<group>";
@@ -1188,6 +1196,8 @@
 				866995E21878F56F00233C47 /* XCJAddByContactsViewController.m */,
 				86494CC418815E9B00C22B14 /* XCJAddNearByUsersViewController.h */,
 				86494CC518815E9B00C22B14 /* XCJAddNearByUsersViewController.m */,
+				86AC093B1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.h */,
+				86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */,
 			);
 			name = AddFriend;
 			sourceTree = "<group>";
@@ -2628,6 +2638,7 @@
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
 				86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */,
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
+				86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */,
 				86494CC618815E9B00C22B14 /* XCJAddNearByUsersViewController.m in Sources */,
 				86D1827E1834AED30005901D /* NSDataAddition.m in Sources */,
 				866F0621185724EE007A57CF /* SinaWeibo.m in Sources */,
@@ -2680,6 +2691,7 @@
 				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
 				86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */,
+				86AC094018893AC100C3BE30 /* XCJMessageReplyInfoViewController.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
 				8681BDC41834B53C00521D36 /* DAImageResizedImageView.m in Sources */,
