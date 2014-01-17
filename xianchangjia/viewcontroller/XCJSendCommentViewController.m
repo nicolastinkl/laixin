@@ -63,7 +63,7 @@
     [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"post_comment" Action:@"add_comment" success:^(id obj) {
         [self dismissViewControllerAnimated:YES completion:^{}];
     } error:^(NSInteger index) {
-        NSLog(@" comment error ");
+        SLLog(@" comment error ");
     } failure:^(NSError *error) {
     }];
 }

@@ -158,7 +158,7 @@
     NSString * namefile =  [self getMd5_32Bit_String:timeDesc];
     NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
     NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-    NSLog(@"Upload Path: %@", filePath);
+    SLLog(@"Upload Path: %@", filePath);
     NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
     [webData writeToFile:filePath atomically:YES];
     [self uploadFile:filePath  key:key];
@@ -207,7 +207,7 @@
 //        [formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
-        SLog(@"responseObject %@",responseObject);
+        SLLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSString * stringURL =  [tools getStringValue:[responseObject objectForKey:@"url"] defaultValue:@""];
             
@@ -221,7 +221,7 @@
             [img hideIndicatorViewBlueOrGary];
             [self.takeButton setBackgroundImage:nil forState:UIControlStateNormal];
             [SVProgressHUD dismiss];
-            NSDictionary * parames = @{@"headpic":stringURL};
+//            NSDictionary * parames = @{@"headpic":stringURL};
             //nick, signature,sex, birthday, marriage, height
 //            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
 //            } failure:^(MLRequest *request, NSError *error) {

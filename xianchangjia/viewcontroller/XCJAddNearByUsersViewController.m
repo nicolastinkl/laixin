@@ -61,13 +61,13 @@
 - (void) setupLocationManager {
     self.locationManager = [[CLLocationManager alloc] init];
     if ([CLLocationManager locationServicesEnabled]) {
-        NSLog( @"Starting CLLocationManager" );
+        SLLog( @"Starting CLLocationManager" );
         self.locationManager.delegate = self;
         self.locationManager.distanceFilter = 200;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         [self.locationManager startUpdatingLocation];
     } else {
-        NSLog( @"Cannot Starting CLLocationManager" );
+        SLLog( @"Cannot Starting CLLocationManager" );
         /*self.locationManager.delegate = self;
          self.locationManager.distanceFilter = 200;
          locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -83,7 +83,7 @@
            fromLocation:(CLLocation *)oldLocation {
     self.checkinLocation = newLocation;
     //do something else
-    NSLog(@"%f",MAX(newLocation.horizontalAccuracy,self.checkinLocation.horizontalAccuracy));
+    SLLog(@"%f",MAX(newLocation.horizontalAccuracy,self.checkinLocation.horizontalAccuracy));
     if(MAX(newLocation.horizontalAccuracy,self.checkinLocation.horizontalAccuracy) >= 20)
     {
         //

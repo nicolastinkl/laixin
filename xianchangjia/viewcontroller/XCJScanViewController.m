@@ -130,7 +130,7 @@
     }
     
     if (![stringValue isNilOrEmpty] && stringValue.length > 0) {
-        NSLog(@"%@",stringValue);
+        SLLog(@"%@",stringValue);
         if(stringValueNew && stringValueNew.length > 0){
             return;
         }

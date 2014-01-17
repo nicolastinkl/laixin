@@ -21,7 +21,7 @@
 + (void)drawImage:(OHAttributedLabel *)label
 {
     for (NSArray *info in label.imageInfoArr) {
-        NSLog(@"%@",info);
+        
         NSString *filePath = [[NSBundle mainBundle] pathForResource:[info objectAtIndex:0] ofType:nil];
         NSData *data = [[NSData alloc] initWithContentsOfFile:filePath];
         SCGIFImageView *imageView = [[SCGIFImageView alloc] initWithGIFData:data];

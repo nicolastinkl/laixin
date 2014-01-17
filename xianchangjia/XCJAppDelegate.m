@@ -69,7 +69,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 
 - (void)onlineConfigCallBack:(NSNotification *)note {
     
-    NSLog(@"online config has fininshed and note = %@", note.userInfo);
+    SLLog(@"online config has fininshed and note = %@", note.userInfo);
 }
 
 #pragma mark ChatListNeedUpdateToalUnreadCountNotification
@@ -624,7 +624,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 			BOOL success = [fileManager copyItemAtPath:defaultStorePath toPath:[storeURL path] error:&error];
             if (!success)
             {
-                NSLog(@"Failed to install default recipe store");
+                SLLog(@"Failed to install default recipe store");
             }
 		}
 	}
@@ -675,7 +675,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // tell websocket disconnect
     if([XCJAppDelegate hasLogin])
     {
-        SLog(@"applicationDidEnterBackground webSocket close");
+        SLLog(@"applicationDidEnterBackground webSocket close");
         [[[MLNetworkingManager sharedManager] webSocket] close];
     }
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -930,7 +930,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\n" withString:@""];
 	devtokenstring=[devtokenstring stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     //devtokenstring:  d8009e6c8e074d1bbcb592f321367feaef5674a82fc4cf3b78b066b7c8ad59bd
-    NSLog(@"devtokenstring : %@",devtokenstring);
+    SLLog(@"devtokenstring : %@",devtokenstring);
     
     [USER_DEFAULT setValue:devtokenstring forKey:KeyChain_Laixin_account_devtokenstring];
     [USER_DEFAULT synchronize];
@@ -938,7 +938,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error NS_AVAILABLE_IOS(3_0)
 {
-    NSLog(@"error : %@",[error.userInfo objectForKey:NSLocalizedDescriptionKey]);
+    SLLog(@"error : %@",[error.userInfo objectForKey:NSLocalizedDescriptionKey]);
 }
 
 //接受到苹果推送的回调
@@ -951,7 +951,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
      sound = default;
      };
      }*/
-    NSLog(@"Receive Notify: %@", userInfo);
     NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     
     //    NSLog(@"Receive Notify: %@", userInfo);

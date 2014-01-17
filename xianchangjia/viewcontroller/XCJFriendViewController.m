@@ -67,7 +67,7 @@
 		 
 		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
 		 */
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		SLLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
     
@@ -205,7 +205,7 @@
                 // First time access has been granted, add the contact
                 [self _addContactToAddressBook:addressBookRef];
             } else {
-                SLog(@"User denied access 1");
+                SLLog(@"User denied access 1");
                 // User denied access
                 // Display an alert telling user the contact could not be added
             }
@@ -216,7 +216,7 @@
         [self _addContactToAddressBook:addressBookRef];
     }
     else {
-         SLog(@"User denied access 2");
+         SLLog(@"User denied access 2");
         // The user has previously denied access
         // Send an alert telling user to change privacy setting in settings app
     }
@@ -371,7 +371,7 @@
 
     }
     
-    SLog(@"json : %@",[arrays JSONString]);
+    SLLog(@"json : %@",[arrays JSONString]);
     
 }
 

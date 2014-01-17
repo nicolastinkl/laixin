@@ -283,7 +283,7 @@
                 if ( [websocket readyState] > SR_OPEN ) {
                     [websocket open];
                 }
-                SLog(@"state : %d", [websocket readyState]);
+                SLLog(@"state : %d", [websocket readyState]);
                 // connection of websocket server
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
                  

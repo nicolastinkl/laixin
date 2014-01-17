@@ -194,7 +194,7 @@
 {
     //获取了webSocket的推过来的消息
     NSDictionary * MsgContent  = notification.userInfo;
-    SLog(@"MsgContent :%@",MsgContent);
+    SLLog(@"MsgContent :%@",MsgContent);
     if ([MsgContent[@"push"] intValue] == 1) {
         NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
         if ([requestKey isEqualToString:@"newmsg"]) {
@@ -630,7 +630,7 @@
         NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,self.conversation.facebookId]];
         NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
         NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-        NSLog(@"Upload Path: %@", filePath);
+        SLLog(@"Upload Path: %@", filePath);
         NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
         [webData writeToFile:filePath atomically:YES];
         [self uploadFile:filePath  key:key];
@@ -715,7 +715,7 @@
         //[formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
-        SLog(@"responseObject %@",responseObject);
+        SLLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {
@@ -739,7 +739,7 @@
             
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        SLog(@"error :%@",error.userInfo);
+        SLLog(@"error :%@",error.userInfo);
           [SVProgressHUD dismiss];
 //        [img hideIndicatorViewBlueOrGary];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];

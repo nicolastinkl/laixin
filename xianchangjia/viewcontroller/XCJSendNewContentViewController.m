@@ -46,7 +46,7 @@
     NSNumber * lat = [USER_DEFAULT valueForKey:GlobalData_lat];
     [returnDict setObject:lat forKey:@"latitude"];
     [returnDict setObject:lng forKey:@"longitude"];
-    SLog(@"%@",returnDict);
+    SLLog(@"%@",returnDict);
     
     if (self.imageview.image) {
         
@@ -59,15 +59,15 @@
         } success:^(NSURLSessionDataTask *task, id responseObject) {
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            NSLog(@"error : %@" ,[error userInfo]);
+            SLLog(@"error : %@" ,[error userInfo]);
         }];
     }else{
         [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:returnDict controller:@"post" Action:@"add_post" success:^(id obj) {
             [self.navigationController popViewControllerAnimated:YES];
         } error:^(NSInteger index) {
-            NSLog(@"error : %d" ,index);
+            SLLog(@"error : %d" ,index);
         } failure:^(NSError *error) {
-            NSLog(@"error : %@" ,[error userInfo]);
+            SLLog(@"error : %@" ,[error userInfo]);
         }];
     }
     

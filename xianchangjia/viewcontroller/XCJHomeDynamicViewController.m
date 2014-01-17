@@ -806,7 +806,7 @@
         NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,_Currentgid]];
         NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
         NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-        NSLog(@"Upload Path: %@", filePath);
+        SLLog(@"Upload Path: %@", filePath);
         NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
         [webData writeToFile:filePath atomically:YES];
         return [NSURL URLWithString:filePath];

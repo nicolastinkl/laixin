@@ -56,14 +56,13 @@
 
 -(void) initCommentData
 {
-    SLog(@"self.talk_id: %lld",self.talk_id);
+    SLLog(@"self.talk_id: %lld",self.talk_id);
     NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
 	[postdata setObject:[NSNumber numberWithLongLong:self.talk_id] forKey:@"post_id"];
 	[postdata setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
 	[postdata setObject:[NSNumber numberWithInt:100] forKey:@"length"];
 	[[GlobalData sharedGlobalData] addCommentCommandInfo:postdata];
 	[[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"post_comment" Action:@"get_comments" success:^(id obj) {
-        SLog(@"%@",obj);
         [self performSelector:@selector(getListFin:) withObject:obj];
 	} error:^(NSInteger index) {
 	} failure:^(NSError *error) {
@@ -104,7 +103,6 @@
     CommitInfo *info= commetArray[indexPath.row];
     NSString * string =[NSString stringWithFormat:@"%@",info.words];
     return  [self heightForCellWithPost:string]+34.0f;
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

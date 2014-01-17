@@ -653,20 +653,20 @@
 
 - (void)refreshTableView:(id)sender {
     //UIRefreshControl *refreshControl = (UIRefreshControl *)sender;
-    SLog(@"Refreshing");
+    SLLog(@"Refreshing");
     [self setupLocationManager];
 }
 
 - (void) setupLocationManager {
     self.locationManager = [[CLLocationManager alloc] init];
     if ([CLLocationManager locationServicesEnabled]) {
-        NSLog( @"Starting CLLocationManager" );
+        SLLog( @"Starting CLLocationManager" );
         self.locationManager.delegate = self;
         self.locationManager.distanceFilter = 200;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         [self.locationManager startUpdatingLocation];
     } else {
-        NSLog( @"Cannot Starting CLLocationManager" );
+        SLLog( @"Cannot Starting CLLocationManager" );
         /*self.locationManager.delegate = self;
          self.locationManager.distanceFilter = 200;
          locationManager.desiredAccuracy = kCLLocationAccuracyBest;

@@ -67,7 +67,7 @@
 		 
 		 abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
 		 */
-		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		SLLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
 	}
     
@@ -141,7 +141,7 @@
 {
     //获取了webSocket的推过来的消息
     NSDictionary * MsgContent  = notification.userInfo;
-    SLog(@"MsgContent :%@",MsgContent);
+    SLLog(@"MsgContent :%@",MsgContent);
     if ([MsgContent[@"push"] intValue] == 1) {
         NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
         if ([requestKey isEqualToString:@"newmsg"]) {
@@ -328,7 +328,7 @@
             Conversation * con = obj;
             badgeNumber += [con.badgeNumber intValue];
         }];
-        SLog(@"badgeNumber %d   ",badgeNumber);
+        SLLog(@"badgeNumber %d   ",badgeNumber);
         XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
         if (badgeNumber > 0) {
             [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",badgeNumber]];
@@ -405,7 +405,7 @@
                 } withuid:conver.facebookId];
             }
             @catch (NSException *exception) {
-                SLog(@"icon %@",exception.userInfo);
+                SLLog(@"icon %@",exception.userInfo);
             }
             @finally {
                 
@@ -497,7 +497,7 @@
         if ([strClassName isEqualToString:@"UITabBarButtonBadge"] ||
             [strClassName isEqualToString:@"_UIBadgeView"]) {
             [subview removeFromSuperview];
-            SLog(@"            [subview removeFromSuperview];");
+            SLLog(@"            [subview removeFromSuperview];");
             break;
         }
     }
