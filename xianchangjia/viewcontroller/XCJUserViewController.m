@@ -46,6 +46,7 @@
         [self LoadUserPhotosData];
     }
 }
+
 -(void) LoadUserPhotosData
 {
     NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
@@ -57,9 +58,7 @@
         SLLog(@"%@",obj);
         [self getUserPicLogListFin:obj];
     } error:^(NSInteger index) {
-        
     } failure:^(NSError *error) {
-        
     }];
 }
 

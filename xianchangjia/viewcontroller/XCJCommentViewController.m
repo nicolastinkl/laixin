@@ -69,7 +69,6 @@
 	}];
 }
 
-
 -(void)getListFin:(NSDictionary*)result
 {
 	if(result)

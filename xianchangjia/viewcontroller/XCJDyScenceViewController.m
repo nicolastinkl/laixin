@@ -24,6 +24,7 @@
 {
     NSMutableArray *tempdata;
 }
+
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
 
 @end
@@ -42,7 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  

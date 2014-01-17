@@ -51,8 +51,8 @@
     self.tableContacts.delegate = self;
     NSMutableArray * array  = [[NSMutableArray alloc] init];
     _datasource = array;
-    NSMutableDictionary * dict  = [[NSMutableDictionary alloc] init];
-    dictPhones = dict;
+//    NSMutableDictionary * dict  = [[NSMutableDictionary alloc] init];
+//    dictPhones = dict;
     
     FCContactsPhone* phone = [FCContactsPhone MR_findFirst];
     if (phone) {
@@ -271,9 +271,14 @@
             }
             CFRelease(valuesRef);
         }
+        if(addressBook.tel && addressBook.tel.length > 10)
+        {
+            [addarray addObject:addressBook];
+        }
+
         //将个人信息添加到数组中，循环完成后addressBookTemp中包含所有联系人的信息
-        [addarray addObject:addressBook];
-        [dictPhones setValue:addressBook forKey:addressBook.tel];
+        
+//        [dictPhones setValue:addressBook forKey:addressBook.tel];
         if (abName) CFRelease(abName);
         if (abLastName) CFRelease(abLastName);
         if (abFullName) CFRelease(abFullName);
@@ -342,8 +347,7 @@
              return NSOrderedDescending;
              }];
              }}
-             */
-        
+             */ 
     }
 }
 
