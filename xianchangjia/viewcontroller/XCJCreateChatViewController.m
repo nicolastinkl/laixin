@@ -244,7 +244,7 @@
         if(self.selectedContacts.count > 1){
             // 群聊必须至少2人
             [SVProgressHUD showWithStatus:@"正在创建..."];
-            NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@2};
+            NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@"2"};
             [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
                 //Result={“gid”:1}
                 if (responseObject) {

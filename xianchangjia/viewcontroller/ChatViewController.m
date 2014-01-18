@@ -32,6 +32,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "XCJSettingGroupViewController.h"
 #import "XCJAddUserTableViewController.h"
+#import "FCHomeGroupMsg.h"
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate>
 {
@@ -300,7 +301,7 @@
                 [self.conversation addMessagesObject:msg];
                 [localContext MR_saveToPersistentStoreAndWait];
             }
-        }else if ([requestKey isEqualToString:@"newpost_error"]){
+        }else if ([requestKey isEqualToString:@"newpost"]){
             // group new msg
             /*
              “data”:{
@@ -314,81 +315,91 @@
             
             NSDictionary * dicMessage = dicResult[@"post"];
             NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
-            NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
-            NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-            if ([self.conversation.facebookId isEqualToString:facebookID]) {
-                // int view
-                NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
-                NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                msg.text = content;
-                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                msg.sentDate = date;
-                // message did come, this will be on left
-                msg.messageStatus = @(YES);
-                if (imageurl.length > 5)
-                {
-                    msg.messageType = @(messageType_image);
-                    self.conversation.lastMessage = @"[图片]";
+            
+            //获取群组消息类型 然后做相关写入操作
+            NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"gid == %@ ",gid];
+            FCHomeGroupMsg * groupMessage = [FCHomeGroupMsg MR_findFirstWithPredicate:parCMDss];
+            if ([groupMessage.gType isEqualToString: @"2"]) {
+                 
+                NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+                NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+                if ([self.conversation.facebookId isEqualToString:facebookID]) {
+                    // int view
+                    NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
+                    NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = content;
+                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                    msg.sentDate = date;
+                    // message did come, this will be on left
+                    msg.messageStatus = @(YES);
+                    if (imageurl.length > 5)
+                    {
+                        msg.messageType = @(messageType_image);
+                        self.conversation.lastMessage = @"[图片]";
+                    }
+                    
+                    else
+                    {
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                    
+                    msg.imageUrl = imageurl;
+                    msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                    
+                    self.conversation.lastMessageDate = date;
+                    self.conversation.badgeNumber = @0;
+                    self.conversation.messageStutes = @(messageStutes_incoming);
+                    [self.conversation addMessagesObject:msg];
+                    [self.messageList addObject:msg]; //table reload
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    [self insertTableRow];
+                    
+                }else if(![self.conversation.facebookId isEqualToString:facebookID]){
+                    //out view
+                    NSString * content = dicMessage[@"content"];
+                    NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = content;
+                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                    msg.sentDate = date;
+                    if (imageurl.length > 5)
+                    {
+                        msg.messageType = @(messageType_image);
+                        self.conversation.lastMessage = @"[图片]";
+                    }
+                    else
+                    {
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
+                    // message did come, this will be on left
+                    msg.messageStatus = @(YES);
+                    msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                        FCUserDescription * localdespObject = response;
+                        self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    } withuid:uid];
+                    self.conversation.lastMessageDate = date;
+                    self.conversation.messageStutes = @(messageStutes_incoming);
+                    // increase badge number.
+                    int badgeNumber = [self.conversation.badgeNumber intValue];
+                    badgeNumber ++;
+                    self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                    
+                    [self.conversation addMessagesObject:msg];
+                    [localContext MR_saveToPersistentStoreAndWait];
                 }
-                
-                else
-                {
-                    msg.messageType = @(messageType_text);
-                    self.conversation.lastMessage = content;
-                }
-                
-                msg.imageUrl = imageurl;
-                msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                
-                self.conversation.lastMessageDate = date;
-                self.conversation.badgeNumber = @0;
-                self.conversation.messageStutes = @(messageStutes_incoming);
-                [self.conversation addMessagesObject:msg];
-                [self.messageList addObject:msg]; //table reload
-                [localContext MR_saveToPersistentStoreAndWait];
-                [self insertTableRow];
-                
-            }else if(![self.conversation.facebookId isEqualToString:facebookID]){
-                //out view
-                NSString * content = dicMessage[@"content"];
-                NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                msg.text = content;
-                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                msg.sentDate = date;
-                if (imageurl.length > 5)
-                {
-                    msg.messageType = @(messageType_image);
-                    self.conversation.lastMessage = @"[图片]";
-                }
-                else
-                {
-                    msg.messageType = @(messageType_text);
-                    self.conversation.lastMessage = content;
-                }
-                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
-                // message did come, this will be on left
-                msg.messageStatus = @(YES);
-                msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                    FCUserDescription * localdespObject = response;
-                     self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
-                } withuid:uid];
-                self.conversation.lastMessageDate = date;
-                self.conversation.messageStutes = @(messageStutes_incoming);
-                // increase badge number.
-                int badgeNumber = [self.conversation.badgeNumber intValue];
-                badgeNumber ++;
-                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                
-                [self.conversation addMessagesObject:msg];
-                [localContext MR_saveToPersistentStoreAndWait];
             }
+            
+            
+            
         }
     }
     

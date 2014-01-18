@@ -32,6 +32,7 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCJAppDelegate.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "FCHomeGroupMsg.h"
 
 @interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -210,58 +211,65 @@
             SystemSoundID id = 1007; //声音
             AudioServicesPlaySystemSound(id);
             
-        } else if([requestKey isEqualToString:@"newpost_error"]){
+        } else if([requestKey isEqualToString:@"newpost"]){
             
             NSDictionary * dicResult = MsgContent[@"data"];
             
             NSDictionary * dicMessage = dicResult[@"post"];
-            NSString * gid = [tools getStringValue:dicMessage[@"group_id"] defaultValue:@""];
+            NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
             NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
             NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-            //out view
-            NSString * content = dicMessage[@"content"];
-            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
             
-            // Build the predicate to find the person sought
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
-            Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
-            if(conversation == nil)
-            {
-                conversation =  [Conversation MR_createInContext:localContext];
+            //获取群组消息类型 然后做相关写入操作
+            NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"gid == %@ ",gid];
+            FCHomeGroupMsg * groupMessage = [FCHomeGroupMsg MR_findFirstWithPredicate:parCMDss];
+            if ([groupMessage.gType isEqualToString: @"2"]) {
+                //out view
+                NSString * content = dicMessage[@"content"];
+                NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                
+                // Build the predicate to find the person sought
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
+                Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+                if(conversation == nil)
+                {
+                    conversation =  [Conversation MR_createInContext:localContext];
+                }
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                if (imageurl.length > 5)
+                {
+                    msg.messageType = @(messageType_image);
+                    conversation.lastMessage = @"[图片]";
+                }
+                else
+                {
+                    msg.messageType = @(messageType_text);
+                    conversation.lastMessage = content;
+                }
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                    FCUserDescription * localdespObject = response;
+                    conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                } withuid:uid];
+                conversation.lastMessageDate = date;
+                conversation.messageStutes = @(messageStutes_incoming);
+                // increase badge number.
+                int badgeNumber = [conversation.badgeNumber intValue];
+                badgeNumber ++;
+                conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                
+                [conversation addMessagesObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
+                [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
             }
-            FCMessage *msg = [FCMessage MR_createInContext:localContext];
-            msg.text = content;
-            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-            msg.sentDate = date;
-            if (imageurl.length > 5)
-            {
-                msg.messageType = @(messageType_image);
-                conversation.lastMessage = @"[图片]";
-            }
-            else
-            {
-                msg.messageType = @(messageType_text);
-                conversation.lastMessage = content;
-            }
-            // message did come, this will be on left
-            msg.messageStatus = @(YES);
-            msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                FCUserDescription * localdespObject = response;
-                conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
-            } withuid:uid];
-            conversation.lastMessageDate = date;
-            conversation.messageStutes = @(messageStutes_incoming);
-            // increase badge number.
-            int badgeNumber = [conversation.badgeNumber intValue];
-            badgeNumber ++;
-            conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-            
-            [conversation addMessagesObject:msg];
-            [localContext MR_saveToPersistentStoreAndWait];
-            [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
+           
         }
     }
     
