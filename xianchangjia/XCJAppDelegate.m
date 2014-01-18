@@ -960,16 +960,17 @@ static NSString * const kLaixinStoreName = @"Laixins";
     
     if (application.applicationState == UIApplicationStateActive) {
         // Nothing to do if applicationState is Inactive, the iOS already displayed an alert view.
-        SystemSoundID id = 1007; //声音
-        AudioServicesPlaySystemSound(id);
-        //下面是发送一个本地消息，暂时不知道是为何
-        UILocalNotification* _localNotification = [[UILocalNotification alloc] init];
-        _localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-        _localNotification.alertBody = [NSString stringWithFormat:@"%@",alert];
-        _localNotification.alertAction = [NSString stringWithFormat:@"%@",alert];
-        [[UIApplication sharedApplication] presentLocalNotificationNow:_localNotification];
-        //显示这个推送消息
-        [UIAlertView showAlertViewWithTitle:@"来信" message:[NSString stringWithFormat:@"%@",alert]];
+//        SystemSoundID id = 1007; //声音
+//        AudioServicesPlaySystemSound(id);
+//        //下面是发送一个本地消息，暂时不知道是为何
+//        UILocalNotification* _localNotification = [[UILocalNotification alloc] init];
+//        _localNotification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
+//        _localNotification.alertBody = [NSString stringWithFormat:@"%@",alert];
+//        _localNotification.alertAction = [NSString stringWithFormat:@"%@",alert];
+//        [[UIApplication sharedApplication] presentLocalNotificationNow:_localNotification];
+//        //显示这个推送消息
+//        [UIAlertView showAlertViewWithTitle:@"来信" message:[NSString stringWithFormat:@"%@",alert]];
+        SLLog(@"push : %@",[NSString stringWithFormat:@"%@",alert]);
     }
     
     // [BPush handleNotification:userInfo];

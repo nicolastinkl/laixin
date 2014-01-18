@@ -54,7 +54,7 @@
         if (nicktext.text.length > 10000) {
             return;
         }
-        
+        [nicktext resignFirstResponder];
         [SVProgressHUD show];
         
         //if ([nicktext.text isEqualToString:[USER_DEFAULT stringForKey:<#(NSString *)#>]]) {}
