@@ -224,6 +224,12 @@
             NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"gid == %@ ",gid];
             FCHomeGroupMsg * groupMessage = [FCHomeGroupMsg MR_findFirstWithPredicate:parCMDss];
             if ([groupMessage.gType isEqualToString: @"2"]) {
+                
+                if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                {
+                    return;
+                }
+                
                 //out view
                 NSString * content = dicMessage[@"content"];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
@@ -423,7 +429,7 @@
             break;
         case XCMessageActivity_UserGroupMessage:
         {
-            [imageIcon setImage:[UIImage imageNamed:@"tabBarContactsIcon-iOS6"]];
+            [imageIcon setImage:[UIImage imageNamed:@"tabbar_compose_envelope"]];
             ((UILabel *)[cell.contentView viewWithTag:1]).text  = conver.facebookName;
         }
             break;

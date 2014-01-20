@@ -243,8 +243,21 @@
         
         if(self.selectedContacts.count > 1){
             // 群聊必须至少2人
+            
+            NSMutableArray * arrayUIDs = [[NSMutableArray alloc] init];
+            __block NSString * strNames;
+            [self.selectedContacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                FCFriends *userss = obj;
+                [arrayUIDs addObject:userss.friendID];
+                if (!strNames) {
+                    strNames = userss.friendRelation.nick;
+                }else{
+                    strNames = [NSString stringWithFormat:@"%@,%@",strNames,userss.friendRelation.nick];
+                }
+            }];
+            
             [SVProgressHUD showWithStatus:@"正在创建..."];
-            NSDictionary * parames = @{@"name":@"群聊",@"board":@"",@"type":@"2"};
+            NSDictionary * parames = @{@"name":strNames,@"board":@"",@"type":@"2"};
             [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
                 //Result={“gid”:1}
                 if (responseObject) {
@@ -266,17 +279,6 @@
                     }
                     
                     {
-                        NSMutableArray * arrayUIDs = [[NSMutableArray alloc] init];
-                        __block NSString * strNames;
-                        [self.selectedContacts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            FCFriends *userss = obj;
-                            [arrayUIDs addObject:userss.friendID];
-                            if (!strNames) {
-                                strNames = userss.friendRelation.nick;
-                            }else{
-                                strNames = [NSString stringWithFormat:@"%@,%@",strNames,userss.friendRelation.nick];
-                            }
-                        }];
                         [arrayUIDs addObject:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
                         [[MLNetworkingManager sharedManager] sendWithAction:@"group.invite" parameters:@{@"gid":gid,@"uid":arrayUIDs} success:^(MLRequest *request, id responseObject) {
                             

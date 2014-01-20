@@ -15,12 +15,20 @@
 #import "XCJGroupPost_list.h"
 #import "Comment.h"
 #import "UIAlertViewAddition.h"
+#import "InterceptTouchView.h"
 
-
-@interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate>
+@interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate>
 {
     XCJGroupPost_list * currentGroup;
 }
+
+@property (nonatomic,strong) UIView *inputView;
+@property (nonatomic,strong) UITextView *inputTextView;
+@property (nonatomic,strong) UIImageView *inputTextBackView;
+
+@property (nonatomic,assign) CGFloat tableBaseYOffsetForInput;
+
+
 @property (nonatomic,strong) NSMutableArray *cellHeights;
 @end
 
@@ -35,10 +43,51 @@
     return self;
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    UIView *origView = self.view;
+//    self.view = [[InterceptTouchView alloc]initWithFrame:origView.frame];
+//    
+//    ((InterceptTouchView*)self.view).interceptTouchViewDelegate = self;
+    
+//    origView.backgroundColor = [UIColor whiteColor];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
 
+    //评论输入框
+    self.inputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frameBottom,self.view.frameWidth, 47)];
+    _inputView.backgroundColor = [UIColor whiteColor];
+    _inputView.layer.borderColor = [UIColor grayColor].CGColor;
+    _inputView.layer.borderWidth = .5f;
+    [self.view addSubview:_inputView];
+    
+    UIImageView *textBackView = [[UIImageView alloc]initWithFrame:CGRectMake(8, 6, _inputView.frameWidth-8*2, _inputView.frameHeight-6*2)];
+    textBackView.image = [[UIImage imageNamed:@"edit_text_bg.png"]stretchableImageWithLeftCapWidth:5.0f topCapHeight:5.0f];
+    [_inputView addSubview:self.inputTextBackView = textBackView];
+    
+    self.inputTextView = [[UITextView alloc] initWithFrame:CGRectMake(textBackView.frameX+5, textBackView.frameY+1, textBackView.frameWidth-5*2, textBackView.frameHeight-1*2)];
+    _inputTextView.clipsToBounds = YES;
+    self.inputTextView.delegate = self;
+    _inputTextView.returnKeyType = UIReturnKeySend;
+    _inputTextView.font = [UIFont systemFontOfSize:14];
+    _inputTextView.scrollsToTop = NO;
+    [_inputView addSubview:_inputTextView];
+    
+    //监视输入内容大小，在KVO里自动调整
+//    [_inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
+    
+    
     if (self.message.jsonStr) {
         // fromat
         NSDictionary * obj =  self.message.jsonStr;
@@ -252,20 +301,193 @@
     } withuid:activity.uid];
 }
 
+#pragma mark - InterceptTouchViewDelegate
+- (BOOL)interceptTouchWithView:(UIView *)view
+{
+    if (![view isEqual:_inputTextView]&&[_inputTextView isFirstResponder]) {
+        [_inputTextView resignFirstResponder];
+        return YES;
+    }
+    return NO;
+}
+
 //点击评论按钮
 - (void)clickCommentButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity
 {
+    //滚动到指定activity的底部-10像素
+//    NSInteger index = [_activities indexOfObject:activity];
+//    CGRect rectOfCellInTableView = [_tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+//    
+//    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+rectOfCellInTableView.size.height-10;
+//    
+//    self.currentOperateActivity = activity;
+//    self.currentCommentToUserIndex = -1;
+    [_inputTextView becomeFirstResponder];
     
 }
 
+
+
 - (void)clickLikeButton:(UIButton *)likeButton onActivity:(XCJGroupPost_list *)activity
 {
-
+    likeButton.enabled = NO;
+    //赞
+    if (!activity.ilike) {
+        
+        NSDictionary * parames = @{@"postid":activity.postid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
+            activity.ilike = YES;
+            activity.like ++;
+            likeButton.enabled = YES;
+        } failure:^(MLRequest *request, NSError *error) {
+            likeButton.enabled = YES;
+            [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
+        }];
+    }else{
+        NSDictionary * parames = @{@"postid":activity.postid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //如果有则删除，没有则不动啊
+            for (LXUser *aUser in activity.likeUsers) {
+                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
+                    [activity.likeUsers removeObject:aUser];
+                    break;
+                }
+            }
+            activity.like -- ;
+            activity.ilike = NO;
+            likeButton.enabled = YES;
+        } failure:^(MLRequest *request, NSError *error) {
+            likeButton.enabled = YES;
+            [UIAlertView showAlertViewWithMessage:@"取消赞失败 请重试!"];
+        }];
+    }
+    
+    //执行赞图标放大的动画
+    likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+    [UIView animateWithDuration:.50f
+                     animations:^{
+                         likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+                     }
+                     completion:^(BOOL finished) {
+                         //刷新对应行
+                         [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
+                     }];
 }
+
 //点击评论View中的某行(当前如果点击的是其中的某用户是会忽略的)
 - (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(XCJGroupPost_list *)activity
 {
+    //滚动到指定activity的底部-5像素
+    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    
+    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+commentsView.frameY+bottomY;
+//    
+//    self.currentOperateActivity = activity;
+//    self.currentCommentToUserIndex = index;
+    [_inputTextView becomeFirstResponder];
+}
 
+#pragma mark - TextView delegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"]) {
+        if (![_inputTextView.text isNilOrEmpty]) {
+            
+            [self sendCommentContent:_inputTextView.text ToActivity:currentGroup atCommentIndex:0];
+            
+//            self.currentOperateActivity = nil;
+//            self.currentCommentToUserIndex = -1;
+            
+            _inputTextView.text = @"";
+            [_inputTextView resignFirstResponder];
+        }
+        return NO;
+    };
+    return YES;
+}
+
+#pragma mark - KVO
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"contentSize"]){
+        //高度最大为80
+        static CGFloat maxHeight = 80;
+        
+        CGFloat origHeight = _inputTextView.frameHeight;
+        _inputTextView.frameHeight = (_inputTextView.contentSize.height<=maxHeight)?_inputTextView.contentSize.height:maxHeight;
+        
+        CGFloat offset = _inputTextView.frameHeight - origHeight;
+        
+        _inputTextBackView.frameHeight +=offset;
+        _inputView.frameHeight +=offset;
+        _inputView.frameY -=offset;
+        
+        //tableView的位置也修正下
+        self.tableView.contentOffset = CGPointMake(0, self.tableView.contentOffset.y+offset);
+    }
+    
+    if ([keyPath isEqualToString:@"changeTitle"]) {
+//        self.titleString = [NSString stringWithFormat:@"%@",object];
+        //        self.titleview.titleView.text = self.titleString;
+        //        [self.titleview.titleView sizeToFit];
+    }
+    // [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    
+    CGFloat newY = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].origin.y - _inputView.frameHeight;//-64
+    
+    self.tableView.userInteractionEnabled = NO;
+    
+    //调整tableView的位置
+    CGFloat newYOffset = self.tableView.contentOffset.y;
+    if (_tableBaseYOffsetForInput) {
+        newYOffset = _tableBaseYOffsetForInput-(newY-self.tableView.frameY);
+        if (newYOffset<0) { //最顶部
+            newYOffset = 0;
+        }
+    }
+    
+    [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                     animations:^{
+                         CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                         _inputView.frameY =  self.view.height - keyboardFrame.size.height - 44;// newY;
+                         self.tableView.contentOffset = CGPointMake(0, newYOffset + 70);
+                     }
+                     completion:^(BOOL finished) {
+                         self.tableView.userInteractionEnabled = YES;
+                     }];
+    
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    
+    self.tableView.userInteractionEnabled = NO;
+    
+    //调整tableView位置
+//    if (_tableView.contentOffset.y > _tableView.contentSize.height-_tableView.frameHeight) {//最底部
+//        if (_activities.count > 0) {
+//            
+//            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//            
+//        }
+//    }
+    
+    [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                     animations:^{
+                         _inputView.frameY = self.view.frameBottom + 100;
+                     }
+                     completion:^(BOOL finished) {
+                         self.tableView.userInteractionEnabled = YES;
+                     }];
 }
 
 

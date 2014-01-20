@@ -322,6 +322,12 @@
             if ([groupMessage.gType isEqualToString: @"2"]) {
                  
                 NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+                if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                {
+                    return;
+                }
+                
+                
                 NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
                 if ([self.conversation.facebookId isEqualToString:facebookID]) {
                     // int view
@@ -666,11 +672,18 @@
     msg.text = @"";
     msg.sentDate = [NSDate date];
     msg.messageType = @(messageType_image);
-    msg.messageId = msgid;
+    
     msg.imageUrl = url;
     // message did not come, this will be on rigth
     msg.messageStatus = @(NO);
-    self.conversation.lastMessage = @"[图片]";
+    msg.messageId = msgid;
+    if (self.gid.length > 0) {
+        self.conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
+    }else{
+
+        self.conversation.lastMessage = @"[图片]";
+    }
+    
     self.conversation.lastMessageDate = [NSDate date];
     self.conversation.badgeNumber = @0;
     self.conversation.messageStutes = @(messageStutes_outcoming);    
@@ -697,6 +710,13 @@
 - (void)uploadFile:(NSString *)filePath  key:(NSString *)key {
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/Message?sessionid=YtcS7pKQSydYPnJ
+    NSString * postType;
+    if (self.gid.length > 0) {
+        postType = @"Post";
+    }else{
+        postType = @"Message";
+        
+    }
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
         if (response) {
             NSString * token =  [response objectForKey:@"token"];
@@ -704,7 +724,7 @@
             ImageFile = filePath;
             [self uploadImage:filePath token:token];
         }
-    } withParems:[NSString stringWithFormat:@"upload/Message?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+    } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
 -(void) uploadImage:(NSString *)filePath  token:(NSString *)token
@@ -720,7 +740,12 @@
     [parameters setValue:@"1" forKey:@"x:filetype"];
     [parameters setValue:@"" forKey:@"x:content"];
     [parameters setValue:@"" forKey:@"x:length"];
-    [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
+    if (self.gid.length > 0) {
+        [parameters setValue:self.gid forKey:@"x:gid"];
+    }else{
+        [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
+    }
+
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         //[formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
@@ -732,18 +757,25 @@
             if (result) {
                 
                 
-                // update lastmessage id index
-                NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
                 
-                NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                if (messageIndex < indexMsgID) {
-                    [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                    [USER_DEFAULT synchronize];
+                if (self.gid.length > 0) {
+                    
+                    NSString *msgID = [tools getStringValue:result[@"postid"] defaultValue:@""];
+                    NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+                    [self SendImageWithMeImageurl:url withMsgID:msgID];
+                }else{
+                    // update lastmessage id index
+                    NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
+                    
+                    NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                    if (messageIndex < indexMsgID) {
+                        [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                        [USER_DEFAULT synchronize];
+                    }
+                    NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
+                    NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+                    [self SendImageWithMeImageurl:url withMsgID:msgID];
                 }
-                
-                NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
-                NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
-                [self SendImageWithMeImageurl:url withMsgID:msgID];
             }
                [SVProgressHUD dismiss];
           //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}

@@ -195,7 +195,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
     SLog(@"Websocket Connected");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketDidOpen" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
     //检查如果有准备发送的请求，现在发送
     for (MLRequest *request in self.preparedRequests) {
        [self sendRequest:request];

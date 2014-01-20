@@ -34,4 +34,5 @@
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
 #import "MobClick.h"
+#import "UIView+Convenience.h"
 #endif

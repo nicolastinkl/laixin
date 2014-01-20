@@ -40,8 +40,8 @@
     [super viewDidLoad];
     NSMutableArray * ar  = [[NSMutableArray alloc] init];
     freeList = ar;
-     ListItem *item = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] nick:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] uid:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
-    [freeList addObject:item];
+//     ListItem *item = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] nick:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] uid:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
+//    [freeList addObject:item];
     if (self.uidArray) {
         NSDictionary * parames = @{@"uid":self.uidArray};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {

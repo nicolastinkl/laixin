@@ -180,9 +180,32 @@ static NSString * const kLaixinStoreName = @"Laixins";
                             conversation.fcBeinviteGroupShips = newFcObj;
                             conversation.beaddTime = [NSDate date];
                             [localContext MR_saveToPersistentStoreAndWait];
-                            [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                            
+                            
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
-#pragma mark // 处理加入请求
+                            if (list.type == 1) {
+                                //首页群组
+                                [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                            }else if (list.type == 2) {
+                                //聊天群组
+                                
+                                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid]];
+                               Conversation * conversation  = [Conversation MR_findFirstWithPredicate:pre];
+                                if (conversation == nil) {
+                                    // create new
+                                    conversation =  [Conversation MR_createInContext:localContext];
+                                    conversation.lastMessage = @"你被邀请加入群聊";
+                                    conversation.lastMessageDate = [NSDate date];
+                                    conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                    conversation.messageStutes = @(messageStutes_incoming);
+                                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                    conversation.facebookName = list.group_name;
+                                    conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+                                    conversation.badgeNumber = @0;
+                                    [localContext MR_saveOnlySelfAndWait];
+                                } 
+                            }
+#pragma mark                处理加入请求
                             {
                                 NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
                                 FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
@@ -421,7 +444,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
                 
             }else if ([groupMessage.gType isEqualToString:@"2"]) {
-                
+                if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                {
+                    return;
+                }
+                    
                 //out view
                 NSString * content = dicMessage[@"content"];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
@@ -705,12 +732,13 @@ static NSString * const kLaixinStoreName = @"Laixins";
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    double delayInSeconds = 1.0;
+    double delayInSeconds = 0.5;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
         if([XCJAppDelegate hasLogin]){
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
             NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
             NSDictionary * parames = @{@"sessionid":sessionid};
             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObjectsss) {
@@ -743,6 +771,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 //        [FCMessage MR_findFirstOrderedByAttribute:@"messageId" ascending:YES];
                 [[MLNetworkingManager sharedManager] sendWithAction:@"message.read" parameters:@{@"afterid":@(messageIndex)} success:^(MLRequest *request, id responseObject) {
                     if (responseObject) {
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketDidOpen" object:nil];
+                        
                         NSDictionary * resultDict = responseObject[@"result"];
                         NSArray * array = resultDict[@"message"];
                         
@@ -798,8 +829,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                     msg.messageType = @(messageType_text);
                                     conversation.lastMessage = content;
                                 }
-                                msg.imageUrl = imageurl;
-                                
+                                msg.imageUrl = imageurl;                                
                                 conversation.lastMessageDate = date;
                                 conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
                                 conversation.messageStutes = @(messageStutes_incoming);
@@ -810,7 +840,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 int badgeNumber = [conversation.badgeNumber intValue];
                                 badgeNumber ++;
                                 conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                                
                                 [conversation addMessagesObject:msg];
                                 [localContext MR_saveToPersistentStoreAndWait];
                                 SystemSoundID id = 1007; //声音
@@ -820,9 +849,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
                             // update tabbar item  badge
                             [self updateMessageTabBarItemBadge];                        
                         }];
-                        
                     }
                 } failure:^(MLRequest *request, NSError *error) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
                     
                 }];
             } failure:^(MLRequest *request, NSError *error) {

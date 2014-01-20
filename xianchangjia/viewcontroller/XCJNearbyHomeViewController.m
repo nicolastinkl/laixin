@@ -166,13 +166,22 @@
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
+   
     
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition object:nil];
+    /**
+     *  title消息 切换
+     *
+     *  @param webSocketdidFailWithError: <#webSocketdidFailWithError: description#>
+     *
+     *  @return <#return value description#>
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
     
     
-      [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
     
-      [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
     
     tryCatchCount = 0;
     
@@ -194,10 +203,17 @@
     [self.navigationItem.titleView sizeToFit];
     [self.tableView hideIndicatorViewBlueOrGary];
 }
+
 -(void) webSocketdidFailWithError:(NSNotification * ) noty
 {
     self.title = @"来信(未连接)";
     [self.navigationItem.titleView sizeToFit];    
+}
+
+-(void) webSocketdidreceingWithMsg:(NSNotification * ) noty
+{
+    self.title = @"来信(收取中...)";
+    [self.navigationItem.titleView sizeToFit];
 }
 
 -(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
@@ -293,6 +309,7 @@
      MARK:     [NSPredicate predicateWithFormat:@" gType = 1"];  get error
          
          */
+        
         NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType == %@ ",@"1"];
         self.fetchedResultsController = [FCHomeGroupMsg MR_fetchAllSortedBy:@"gbadgeNumber" ascending:NO withPredicate:parCMD groupBy:nil delegate:self]; //@"gbadgeNumber"
     }
@@ -438,8 +455,18 @@
     [self reLoadData];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:showErrorInfoWithRetryNotifition object:nil];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition object:nil];
+    
     if ([self.tableView isIndicatorViewLargeBlueRunning]) {
         [self.tableView showIndicatorViewLargeBlue];
     }
@@ -487,7 +514,6 @@
         account.userJson = userinfo;
         [localContext MR_saveToPersistentStoreAndWait];
 //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-        
         
         // Return the number of rows in the section.
         if ([[self.fetchedResultsController fetchedObjects] count] > 0) {
