@@ -17,10 +17,11 @@
 #import "UIAlertViewAddition.h"
 #import "InterceptTouchView.h"
 
-@interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate>
+@interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
     XCJGroupPost_list * currentGroup;
 }
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic,strong) UIView *inputView;
 @property (nonatomic,strong) UITextView *inputTextView;
@@ -34,9 +35,10 @@
 
 @implementation XCJMessageReplyInfoViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithStyle:style];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
     }
@@ -44,10 +46,11 @@
 }
 
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.title = @"详细";
 //    UIView *origView = self.view;
 //    self.view = [[InterceptTouchView alloc]initWithFrame:origView.frame];
 //    
@@ -70,7 +73,7 @@
     _inputView.backgroundColor = [UIColor whiteColor];
     _inputView.layer.borderColor = [UIColor grayColor].CGColor;
     _inputView.layer.borderWidth = .5f;
-    [self.view addSubview:_inputView];
+   
     
     UIImageView *textBackView = [[UIImageView alloc]initWithFrame:CGRectMake(8, 6, _inputView.frameWidth-8*2, _inputView.frameHeight-6*2)];
     textBackView.image = [[UIImage imageNamed:@"edit_text_bg.png"]stretchableImageWithLeftCapWidth:5.0f topCapHeight:5.0f];
@@ -83,7 +86,7 @@
     _inputTextView.font = [UIFont systemFontOfSize:14];
     _inputTextView.scrollsToTop = NO;
     [_inputView addSubview:_inputTextView];
-    
+    [self.view addSubview:_inputView];
     //监视输入内容大小，在KVO里自动调整
 //    [_inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
     
@@ -166,6 +169,15 @@
     return 46+10*2;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (_inputTextView.isFirstResponder) {
+        [_inputTextView resignFirstResponder];
+    }
+
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
@@ -239,9 +251,11 @@
 
 - (void)reloadSingleActivityRowOfTableView:(NSInteger)row withAnimation:(BOOL)animation
 {
- 
     [_cellHeights replaceObjectAtIndex:row withObject:@0];
     [self.tableView reloadData];
+    
+     [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
 }
 
 - (void)sendCommentContent:(NSString*)content ToActivity:(XCJGroupPost_list*)currentOperateActivity atCommentIndex:(NSInteger)commentIndex
@@ -316,10 +330,10 @@
 {
     //滚动到指定activity的底部-10像素
 //    NSInteger index = [_activities indexOfObject:activity];
-//    CGRect rectOfCellInTableView = [_tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-//    
-//    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+rectOfCellInTableView.size.height-10;
-//    
+    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    
+    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+rectOfCellInTableView.size.height-10;
+//
 //    self.currentOperateActivity = activity;
 //    self.currentCommentToUserIndex = -1;
     [_inputTextView becomeFirstResponder];
@@ -379,13 +393,13 @@
 - (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(XCJGroupPost_list *)activity
 {
     //滚动到指定activity的底部-5像素
-    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    
-    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+commentsView.frameY+bottomY;
+//    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
 //    
-//    self.currentOperateActivity = activity;
-//    self.currentCommentToUserIndex = index;
-    [_inputTextView becomeFirstResponder];
+//    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+commentsView.frameY+bottomY;
+////    
+////    self.currentOperateActivity = activity;
+////    self.currentCommentToUserIndex = index;
+//    [_inputTextView becomeFirstResponder];
 }
 
 #pragma mark - TextView delegate
@@ -458,7 +472,7 @@
                      animations:^{
                          CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
                          _inputView.frameY =  self.view.height - keyboardFrame.size.height - 44;// newY;
-                         self.tableView.contentOffset = CGPointMake(0, newYOffset + 70);
+                         self.tableView.contentOffset = CGPointMake(0, newYOffset );
                      }
                      completion:^(BOOL finished) {
                          self.tableView.userInteractionEnabled = YES;
@@ -473,13 +487,9 @@
     self.tableView.userInteractionEnabled = NO;
     
     //调整tableView位置
-//    if (_tableView.contentOffset.y > _tableView.contentSize.height-_tableView.frameHeight) {//最底部
-//        if (_activities.count > 0) {
-//            
-//            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//            
-//        }
-//    }
+    if (_tableView.contentOffset.y > _tableView.contentSize.height-_tableView.frameHeight) {//最底部
+           [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
     
     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
                      animations:^{

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class FCReplyMessage;
-@interface XCJMessageReplyInfoViewController : UITableViewController
+@interface XCJMessageReplyInfoViewController : UIViewController
 
 @property (nonatomic,weak) FCReplyMessage * message;
 

@@ -1413,34 +1413,33 @@
             </objects>
             <point key="canvasLocation" x="839" y="81"/>
         </scene>
-        <!--Message Reply Info View Controller - 详情-->
-        <scene sceneID="Z9d-Qt-ai0">
+        <!--Message Reply Info View Controller-->
+        <scene sceneID="sEL-3H-TXN">
             <objects>
-                <tableViewController restorationIdentifier="XCJMessageReplyInfoViewController" storyboardIdentifier="XCJMessageReplyInfoViewController" id="NxI-Gx-xdp" customClass="XCJMessageReplyInfoViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="l9j-BY-XAa">
+                <viewController restorationIdentifier="XCJMessageReplyInfoViewController" storyboardIdentifier="XCJMessageReplyInfoViewController" id="2G3-40-ovz" customClass="XCJMessageReplyInfoViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PiL-Qp-pLH">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1MD-hB-GdH">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1MD-hB-GdH" id="TNI-ow-0UL">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="NxI-Gx-xdp" id="NF1-7Q-cYh"/>
-                            <outlet property="delegate" destination="NxI-Gx-xdp" id="oJE-3j-gT9"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="详情" id="OC8-ZW-FSW"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="evA-f4-x3S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="d6U-Ho-AYf">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="2G3-40-ovz" id="vuD-4e-meg"/>
+                                    <outlet property="delegate" destination="2G3-40-ovz" id="pXW-e1-lit"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="d6U-Ho-AYf" id="pZh-eK-CF3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TSn-ii-GoR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1823" y="1477"/>
+            <point key="canvasLocation" x="1803" y="1459"/>
         </scene>
         <!--Home Dynamic View Controller-->
         <scene sceneID="JdB-WF-wYG">
