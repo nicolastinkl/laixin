@@ -33,8 +33,9 @@
 #import "XCJSettingGroupViewController.h"
 #import "XCJAddUserTableViewController.h"
 #import "FCHomeGroupMsg.h"
+#import "XCJChatSendImgViewController.h"
 
-@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate>
+@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
@@ -301,7 +302,7 @@
                 [self.conversation addMessagesObject:msg];
                 [localContext MR_saveToPersistentStoreAndWait];
             }
-        }else if ([requestKey isEqualToString:@"newpost"]){
+        }else if ([requestKey isEqualToString:@"newpost_error"]){
             // group new msg
             /*
              “data”:{
@@ -622,15 +623,21 @@
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
 {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:NO completion:nil];
     
 //    UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     
-    [SVProgressHUD showWithStatus:@"正在发送..."];
+   
+//
     //upload image
     [self performSelector:@selector(uploadContent:) withObject:theInfo];
     
-    
+}
+
+- (void) SendImageURL:(NSString * ) url  withKey:(NSString *) key
+{
+    [SVProgressHUD showWithStatus:@"正在发送..."];
+    [self uploadFile:url  key:key];
 }
 
 - (void)uploadContent:(NSDictionary *)theInfo {
@@ -650,7 +657,17 @@
         SLLog(@"Upload Path: %@", filePath);
         NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
         [webData writeToFile:filePath atomically:YES];
-        [self uploadFile:filePath  key:key];
+//        [self uploadFile:filePath  key:key];
+        
+        XCJChatSendImgViewController * chatImgView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJChatSendImgViewController"];
+        //    chatImgView.imageview.image = [postImage copy];
+        chatImgView.imageviewURL = filePath;
+        chatImgView.key = key;
+        chatImgView.delegate = self;
+        [self presentViewController:chatImgView animated:YES completion:^{
+            
+        }];
+        
     }
 }
 
@@ -1014,7 +1031,7 @@
     if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
         [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
-        imageview_Img.fullScreenImageURL = [NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:640]];
+        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];

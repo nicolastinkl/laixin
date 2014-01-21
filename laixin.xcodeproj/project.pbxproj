@@ -19,6 +19,7 @@
 		8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */; };
 		8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
+		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
@@ -398,6 +399,8 @@
 		8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCHomeGroupMsg.m; path = DAOModel/coredata/FCHomeGroupMsg.m; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
+		862EC4CB188E0FE5006F4D43 /* XCJChatSendImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendImgViewController.h; path = viewcontroller/XCJChatSendImgViewController.h; sourceTree = "<group>"; };
+		862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChatSendImgViewController.m; path = viewcontroller/XCJChatSendImgViewController.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8646F8BE187A90EA004A8696 /* XCJSettingGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSettingGroupViewController.h; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.h; sourceTree = SOURCE_ROOT; };
 		8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSettingGroupViewController.m; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.m; sourceTree = SOURCE_ROOT; };
@@ -2402,6 +2405,8 @@
 				865632CB185FFDDA00E9903C /* ChatViewController.m */,
 				869DDC5D1872BB9300560AFD /* XCJMsgListController.h */,
 				869DDC5E1872BB9300560AFD /* XCJMsgListController.m */,
+				862EC4CB188E0FE5006F4D43 /* XCJChatSendImgViewController.h */,
+				862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -2618,6 +2623,7 @@
 				869CE524186BE38D0004C1EC /* NSManagedObject+MagicalAggregation.m in Sources */,
 				8681BE411839AACD00521D36 /* InviteInfo.m in Sources */,
 				86D182BA1834AED30005901D /* UIHyperlinksButton.m in Sources */,
+				862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */,
 				86EB76C8185AA6CC00836947 /* DataHelper.m in Sources */,
 				86F9B9B218728AFE00ED768B /* XCJUserInfoController.m in Sources */,
 				86EB76DC185AA6CC00836947 /* UIProgressView+AFNetworking.m in Sources */,

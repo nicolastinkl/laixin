@@ -114,8 +114,8 @@
         {
             
             ALAsset *asset  = obj;
-            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
-            //[UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
+            //            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
+            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
             
            NSURL * url = [asset.defaultRepresentation url];
 //            NSURL * url = [self uploadContent:theInfo];
@@ -123,7 +123,8 @@
             postVC.gID = _Currentgid;
             postVC.filePath = [url copy];
             postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
-            postVC.postImage =image;// [theInfo objectForKey:UIImagePickerControllerOriginalImage];
+            postVC.postImage = image;
+            // [theInfo objectForKey:UIImagePickerControllerOriginalImage];
             
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];

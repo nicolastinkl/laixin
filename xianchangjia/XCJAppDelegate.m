@@ -425,7 +425,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
             NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
             NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
             NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-            
+            if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+            {
+                return;
+            }
+                
 //            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[NSString stringWithFormat:@"UID_%@", gid]];  //or postid
 //            FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
 //            if (message) {

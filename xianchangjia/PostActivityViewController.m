@@ -189,7 +189,6 @@
     return result;
 }
 
-
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
 {
@@ -265,7 +264,9 @@
     [parameters setValue:self.gID forKey:@"x:gid"];
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-        NSData * imageData = UIImageJPEGRepresentation(self.postImage, 1);
+        
+//        UIImage * imageHere = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@",self.filePath]];
+        NSData * imageData = UIImageJPEGRepresentation(self.postImage, 0.5);
           [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3" }

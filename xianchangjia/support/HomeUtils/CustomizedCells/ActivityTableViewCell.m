@@ -246,7 +246,7 @@
 //        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
         
         [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:160]] placeholderImage:nil displayProgress:YES];
-        _activityImageView.fullScreenImageURL = [NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:640]];
+        _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
     }
     
     if (_activity.ilike) {
