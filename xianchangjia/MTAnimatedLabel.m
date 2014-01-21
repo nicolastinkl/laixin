@@ -23,11 +23,12 @@
  */
 
 #import "MTAnimatedLabel.h"
+#import "XCAlbumDefines.h"
 #import <objc/runtime.h>
 
 #define kGradientSize       0.45f
-#define kAnimationDuration  2.25f
-#define kGradientTint       [UIColor whiteColor]
+#define kAnimationDuration  4.25f
+#define kGradientTint       [UIColor whiteColor] //ios7BlueColor
 
 #define kAnimationKey       @"gradientAnimation"
 

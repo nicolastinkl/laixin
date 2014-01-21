@@ -181,7 +181,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                             conversation.beaddTime = [NSDate date];
                             [localContext MR_saveToPersistentStoreAndWait];
                             
-                            
+                            [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
+                            [USER_DEFAULT synchronize];
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
                             if (list.type == 1) {
                                 //首页群组
@@ -928,7 +929,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     conversation.beaddTime = [NSDate date];
                     [localContext MR_saveToPersistentStoreAndWait];
                     [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
+                    [USER_DEFAULT synchronize];
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
+                    
+                    
 #pragma mark // 处理加入请求
                     {
                         NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];

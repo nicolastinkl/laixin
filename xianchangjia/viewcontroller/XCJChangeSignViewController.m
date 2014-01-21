@@ -49,7 +49,7 @@
 {
     UITextView * nicktext = (UITextView *)  [self.view subviewWithTag:1];
     if (![nicktext.text isNilOrEmpty]) {
-        if (nicktext.text.length > 1000) {
+        if (nicktext.text.length > 100) {
             return;
         }
         [SVProgressHUD show];
@@ -68,20 +68,25 @@
     }
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  // return NO to not change text
+- (void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length > 1115) {
-        return NO;
-    }
     UILabel * label_num = (UILabel *)  [self.view subviewWithTag:2];
     
-    if (textView.text.length > 1000) {
+    if (textView.text.length > 100) {
         label_num.textColor = [UIColor redColor];
-        label_num.text = [NSString stringWithFormat:@"-%d",textView.text.length - 1000];
+        label_num.text = [NSString stringWithFormat:@"-%d",textView.text.length - 100];
     }else{
         label_num.textColor = [UIColor lightGrayColor];
         label_num.text = [NSString stringWithFormat:@"%d",textView.text.length];
     }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  // return NO to not change text
+{
+    if (textView.text.length > 101) {
+        return NO;
+    }
+   
     return YES;
 }
 

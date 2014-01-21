@@ -33,15 +33,23 @@
 #import "XCJSettingGroupViewController.h"
 #import "XCJAddUserTableViewController.h"
 #import "FCHomeGroupMsg.h"
+#import "FacialView.h"
 #import "XCJChatSendImgViewController.h"
 
-@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate>
+#define  keyboardHeight 216
+#define  facialViewWidth 300
+#define facialViewHeight 180
+
+@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
     NSString * ImageFile;
     NSString * PasteboardStr;
     NSArray * userArray;
+    UIScrollView *scrollView;
+    UIPageControl *pageControl;
+    UIView  * EmjView;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
@@ -78,10 +86,39 @@
 //    self.inputContainerView.layer.borderWidth = 0.5f;
     self.inputContainerView.top = self.view.height - self.inputContainerView.height;
     self.inputTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    //监视输入内容大小，在KVO里自动调整
+//    [self.inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
     
-//    [self.tableView reloadData];
-    //KVO监控chatList单例数组
-//    [self.messageList addObserver:self forKeyPath:@"array" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld|NSKeyValueObservingOptionPrior context:nil];
+    //创建表情键盘
+    if (scrollView==nil) {
+        scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, keyboardHeight)];
+        [scrollView setBackgroundColor:[UIColor whiteColor]];
+        for (int i=0; i<4; i++) {
+            FacialView *fview=[[FacialView alloc] initWithFrame:CGRectMake(10+320*i, 18, facialViewWidth, facialViewHeight)];
+            [fview setBackgroundColor:[UIColor clearColor]];
+            [fview loadFacialView:i size:CGSizeMake(74, 74)];
+            fview.delegate=self;
+            [scrollView addSubview:fview];
+        }
+    }
+    [scrollView setShowsVerticalScrollIndicator:NO];
+    [scrollView setShowsHorizontalScrollIndicator:NO];
+    scrollView.contentSize=CGSizeMake(320*4, keyboardHeight);
+    scrollView.pagingEnabled=YES;
+    scrollView.delegate=self;
+
+    pageControl=[[UIPageControl alloc]initWithFrame:CGRectMake(98, keyboardHeight-40, 150, 30)];
+    [pageControl setCurrentPage:0];
+    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];//RGBACOLOR(195, 179, 163, 1);
+    pageControl.currentPageIndicatorTintColor = ios7BlueColor;//RGBACOLOR(132, 104, 77, 1);
+    pageControl.numberOfPages = 4;//指定页面个数
+    [pageControl setBackgroundColor:[UIColor clearColor]];
+    [pageControl addTarget:self action:@selector(changePage:)forControlEvents:UIControlEventValueChanged];
+    
+    EmjView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, keyboardHeight)];
+    [EmjView addSubview:scrollView];
+    [EmjView addSubview:pageControl];
+    [self.view addSubview:EmjView];
     
     [self setUpSequencer];
     if (self.gid) {
@@ -112,6 +149,16 @@
             } withuid:self.conversation.facebookId];
         }
     }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    int page = scrollView.contentOffset.x / 320;//通过滚动的偏移量来判断目前页面所对应的小白点
+    pageControl.currentPage = page;//pagecontroll响应值的变化
+}
+
+- (IBAction)changePage:(id)sender {
+    int page = pageControl.currentPage;//获取当前pagecontroll的值
+    [scrollView setContentOffset:CGPointMake(320 * page, 0)];//根据pagecontroll的值来改变scrollview的滚动位置，以此切换到指定的页面
 }
 
 -(IBAction)SeeUserInfoClick:(id)sender
@@ -432,6 +479,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+#pragma mark -
+#pragma mark facialView delegate 点击表情键盘上的文字
+-(void)selectedFacialView:(NSString*)str
+{
+    
+}
+
 - (IBAction)SendTextMsgClick:(id)sender {
 // 群聊
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
@@ -440,6 +495,15 @@
     if (self.gid) {
         NSString * text = self.inputTextView.text;
         if ([text trimWhitespace].length > 0) {
+            
+//            self.inputContainerView.height  = 44.0f;
+//            ((UIImageView *) [self.inputContainerView subviewWithTag:2]).height = 33.0f;
+//            UIImageView * imageBg = (UIImageView *) [self.inputContainerView subviewWithTag:6];
+//            imageBg.height = 44.0f;
+//            self.inputTextView.height = 33.0f;
+//            self.inputContainerView.top = self.view.height - self.inputContainerView.height;
+//            self.tableView.height  = self.view.height - self.inputContainerView.height;
+            
             NSDictionary * parames = @{@"gid":self.gid,@"content":text};
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.add" parameters:parames success:^(MLRequest *request, id responseObject) {
                 NSDictionary * dic = [responseObject objectForKey:@"result"];
@@ -851,52 +915,75 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-	NSNumber *kind = [change objectForKey:NSKeyValueChangeKindKey];
-
-	//元素位置的改变
-	BOOL isPrior = [((NSNumber *)[change objectForKey:NSKeyValueChangeNotificationIsPriorKey]) boolValue];//是否是改变之前进来的
-	if (isPrior&&[kind integerValue] != NSKeyValueChangeRemoval) {
-		return; //改变之前进来却不是Removal操作就忽略
-	}
-	
-	//获取变化值
-    NSIndexSet *indices = [change objectForKey:NSKeyValueChangeIndexesKey];
-    if (indices == nil){
-        return;
-    }
-    
-    NSUInteger indexCount = [indices count];
-    NSUInteger buffer[indexCount];
-    [indices getIndexes:buffer maxCount:indexCount inIndexRange:nil];
-    
-    NSMutableArray *indexPathArray = [NSMutableArray array];
-    for (int i = 0; i < indexCount; i++) {
-        NSUInteger indexPathIndices[2];
-        indexPathIndices[0] = 0;
-        indexPathIndices[1] = buffer[i];
-        NSIndexPath *newPath = [NSIndexPath indexPathWithIndexes:indexPathIndices length:2];
-        [indexPathArray addObject:newPath];
-    }
-	//判断值变化是insert、delete、(replace被忽略不需要)。
-    if ([kind integerValue] == NSKeyValueChangeInsertion){
-//		//添加对应的Observer
-//		for (NSIndexPath *path in indexPathArray) {
-//			[self addObserverOfChat:self.messageList[path.row]];
-//		}
-        [self.tableView insertRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
-        [self scrollToBottonWithAnimation:YES];
-	}
-    else if ([kind integerValue] == NSKeyValueChangeRemoval){
-		//改变之前清除Observer，改变之后剔除TableView里数据，其实用old去获取也可以，但是总觉得没这种方法好
-		if (isPrior) {
-			//删除对应的Observer
-//			for (NSIndexPath *path in indexPathArray) {
-//				[self removeObserverOfChat:self.chatList[path.row]];
-//			}
-		}else{
-			[self.tableView deleteRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
+    if ([keyPath isEqualToString:@"contentSize"]){
+        //高度最大为80
+        static CGFloat maxHeight = 80;
+        
+        CGFloat origHeight = _inputTextView.frameHeight;
+        _inputTextView.frameHeight = (_inputTextView.contentSize.height<=maxHeight)?_inputTextView.contentSize.height:maxHeight;
+        
+        CGFloat offset = _inputTextView.frameHeight - origHeight;
+//        UIImageView * image = (UIImageView *) [self.inputContainerView subviewWithTag:2];
+//        image.frameHeight +=offset;
+        
+        UIImageView * imageBg = (UIImageView *) [self.inputContainerView subviewWithTag:6];
+        imageBg.frameHeight += offset;
+        
+        self.inputContainerView.frameHeight += offset;
+        self.inputContainerView.frameY -= (offset);
+        
+        //tableView的位置也修正下
+        _tableView.contentOffset = CGPointMake(0, _tableView.contentOffset.y+offset);
+    }else{
+        NSNumber *kind = [change objectForKey:NSKeyValueChangeKindKey];
+        
+        //元素位置的改变
+        BOOL isPrior = [((NSNumber *)[change objectForKey:NSKeyValueChangeNotificationIsPriorKey]) boolValue];//是否是改变之前进来的
+        if (isPrior&&[kind integerValue] != NSKeyValueChangeRemoval) {
+            return; //改变之前进来却不是Removal操作就忽略
         }
-	}
+        
+        //获取变化值
+        NSIndexSet *indices = [change objectForKey:NSKeyValueChangeIndexesKey];
+        if (indices == nil){
+            return;
+        }
+        
+        NSUInteger indexCount = [indices count];
+        NSUInteger buffer[indexCount];
+        [indices getIndexes:buffer maxCount:indexCount inIndexRange:nil];
+        
+        NSMutableArray *indexPathArray = [NSMutableArray array];
+        for (int i = 0; i < indexCount; i++) {
+            NSUInteger indexPathIndices[2];
+            indexPathIndices[0] = 0;
+            indexPathIndices[1] = buffer[i];
+            NSIndexPath *newPath = [NSIndexPath indexPathWithIndexes:indexPathIndices length:2];
+            [indexPathArray addObject:newPath];
+        }
+        //判断值变化是insert、delete、(replace被忽略不需要)。
+        if ([kind integerValue] == NSKeyValueChangeInsertion){
+            //		//添加对应的Observer
+            //		for (NSIndexPath *path in indexPathArray) {
+            //			[self addObserverOfChat:self.messageList[path.row]];
+            //		}
+            [self.tableView insertRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
+            [self scrollToBottonWithAnimation:YES];
+        }
+        else if ([kind integerValue] == NSKeyValueChangeRemoval){
+            //改变之前清除Observer，改变之后剔除TableView里数据，其实用old去获取也可以，但是总觉得没这种方法好
+            if (isPrior) {
+                //删除对应的Observer
+                //			for (NSIndexPath *path in indexPathArray) {
+                //				[self removeObserverOfChat:self.chatList[path.row]];
+                //			}
+            }else{
+                [self.tableView deleteRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
+            }
+        }
+    
+    }
+	
 }
 
 
@@ -1107,16 +1194,21 @@
 #pragma mark - Keyboard
 - (void)keyboardWillShow:(NSNotification *)notification
 {
+    
     NSDictionary *info = [notification userInfo];
     CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
     [UIView animateWithDuration:0.3 animations:^{
         
-        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
         self.tableView.height = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+        
+        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
     }];
+    
+    
     //tableView滚动到底部
     [self scrollToBottonWithAnimation:YES];
+    
     
     //    if (self.keyboardView&&self.keyboardView.frameY<self.keyboardView.window.frameHeight) {
     //        //到这里说明其不是第一次推出来的，而且中间变化，无需动画直接变
@@ -1135,7 +1227,17 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
+    
+    ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = NO;
+    ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = YES;
+    
      [UIView animateWithDuration:0.3 animations:^{
+         
+//         self.inputContainerView.height  = 44.0f;
+//         UIImageView * imageBg = (UIImageView *) [self.inputContainerView subviewWithTag:6];
+//         imageBg.height = 44.0f;
+//        ((UIImageView *) [self.inputContainerView subviewWithTag:2]).height = 33.0f;
+//         self.inputTextView.height = 33;
          
          self.inputContainerView.top = self.view.height - self.inputContainerView.height;
          self.tableView.height  = self.view.height - self.inputContainerView.height;
@@ -1301,7 +1403,35 @@
         return;
     }
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animation];
-    
-
 }
+
+- (IBAction)EmjViewShow:(id)sender {
+    
+    ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = YES;
+    ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = NO;
+    if(!self.inputTextView.isFirstResponder)
+    {
+        [self.inputTextView becomeFirstResponder];
+    }
+        
+    self.inputTextView.inputView = nil;
+    self.inputTextView.inputView = EmjView;
+    EmjView.top = self.view.height - keyboardHeight;
+    [self.inputTextView reloadInputViews];
+    
+}
+
+- (IBAction)KeyBoradViewShow:(id)sender {
+    
+    ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = NO;
+    ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = YES;
+    self.inputTextView.inputView = nil;
+    EmjView.top = self.view.height;
+    [self.inputTextView becomeFirstResponder];
+    [self.inputTextView reloadInputViews];
+    
+}
+
+
+
 @end

@@ -75,7 +75,7 @@
                 glist.like = 0;
                 glist.replycount = 0;
                 glist.group_id = self.gID;
-                glist.time = [[NSDate date] timeIntervalSinceNow];
+                glist.time = [NSDate timeIntervalSinceReferenceDate];// [[NSDate date] timeIntervalSinceNow];
                 
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
                 [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
@@ -89,11 +89,9 @@
     }
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  // return NO to not change text
+- (void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length > 10000) {
-        return NO;
-    }
+    SLog(@"Length : %d",textView.text.length);
     UILabel * label_num = (UILabel *)  [self.view subviewWithTag:2];
     
     if (textView.text.length > 10000) {
@@ -103,6 +101,15 @@
         label_num.textColor = [UIColor lightGrayColor];
         label_num.text = [NSString stringWithFormat:@"%d",textView.text.length];
     }
+    
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  // return NO to not change text
+{
+    if (textView.text.length > 10000) {
+        return NO;
+    }
+  
     return YES;
 }
 

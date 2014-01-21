@@ -39,6 +39,7 @@
 #import "ConverReply.h"
 #import "XCJMessageReplylistController.h"
 #import "FCAccount.h"
+#import "MTAnimatedLabel.h"
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -231,6 +232,7 @@
             }
         }
     }
+    
     UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
     if (contr) {
         if ([contr.content containString:@"评论"]) {
@@ -430,22 +432,21 @@
 {
     FCHomeGroupMsg *info = (FCHomeGroupMsg *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:3];
-    UILabel *label = (UILabel *)[cell.contentView viewWithTag:2];
+    MTAnimatedLabel *label = (MTAnimatedLabel *)[cell.contentView viewWithTag:2];
     label.text = info.gName;
+    [label stopAnimating];
+    [label startAnimating];
     if ([info.gbadgeNumber intValue] > 0)
-    {
         imgView.hidden = NO;
-    }
     else
         imgView.hidden = YES;
+    
     UIImageView *imgViewMute = (UIImageView *)[cell.contentView viewWithTag:4];
     if ([info.isMute boolValue])
         imgViewMute.hidden = NO;
     else
         imgViewMute.hidden = YES;
 }
-
-
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
 {

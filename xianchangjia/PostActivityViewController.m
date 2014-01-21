@@ -135,7 +135,13 @@
         _postImageView.image = self.postImage;
     }
     
-    [_inputTextView becomeFirstResponder];
+    double delayInSeconds = 0.5;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+         [_inputTextView becomeFirstResponder];
+    });
+    
+   
     
 }
 
@@ -291,7 +297,8 @@
                 glist.like = 0;
                 glist.replycount = 0;
                 glist.group_id = self.gID;
-                glist.time = [[NSDate date] timeIntervalSinceNow];
+                glist.time = [NSDate timeIntervalSinceReferenceDate];
+                //[[NSDate date] timeIntervalSinceNow];
                 
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
                 [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];

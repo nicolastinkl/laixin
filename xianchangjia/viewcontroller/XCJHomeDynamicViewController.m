@@ -295,7 +295,14 @@
                 break;
             case Enum_MoreData:
             {
-                NSDictionary* parames = @{@"gid":_Currentgid,@"pos":@(self.activities.count),@"count":@"20"};
+                NSString * postid ;
+                if (self.activities.count >= 20) {
+                    XCJGroupPost_list * post =[self.activities lastObject];
+                    postid = post.postid;
+                }else{
+                    postid = [NSString stringWithFormat:@"%d",self.activities.count];
+                }
+                NSDictionary* parames = @{@"gid":_Currentgid,@"pos":postid,@"count":@"20"};
                 
                 [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
                     //    postid = 12;

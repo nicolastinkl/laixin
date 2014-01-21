@@ -148,13 +148,15 @@
 
 - (void) group_invite_Notify:(NSNotification * ) notiy
 {
-    NSPredicate * pre = [NSPredicate predicateWithFormat:@"groupID > %@",@"1"];
-    NSUInteger cont = [FCBeInviteGroup MR_countOfEntitiesWithPredicate:pre];
-    if (cont > 0) {
-        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = NO;
+    if ([USER_DEFAULT boolForKey:KeyChain_Laixin_message_GroupBeinvite]) {
+         ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = NO;
     }else{
-        ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = YES;
+         ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = YES;
     }
+    
+//    NSPredicate * pre = [NSPredicate predicateWithFormat:@"groupID > %@",@"1"];
+//    NSUInteger cont = [FCBeInviteGroup MR_countOfEntitiesWithPredicate:pre];
+    
 }
 
 -(IBAction) AddFriendClick:(id)sender

@@ -176,7 +176,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    
+    SLog(@"_activities.count : %d",_activities.count);
      return _activities.count;
     
     if (_isDontNeedLazyLoad) {
@@ -573,7 +573,7 @@
 - (void)postLoadMoreActivitiesRequest
 {
     NSInteger lastID = 0;
-    if (_activities.count>0 && _activities.count > 20) {
+    if (_activities.count >= 20) {
         lastID = [((XCJGroupPost_list*)_activities[_activities.count-1]).postid integerValue];
         self.isLoading = YES;
         _noDataHintLabel.hidden = YES;
@@ -600,9 +600,9 @@
         }
     });
     
-//    if ((!activities || activities.count<=0)&&!_isDontNeedLazyLoad) {
-//        //如果没有新的，那就不需要懒加载了。
-//        self.isDontNeedLazyLoad = YES;
+    if ((!activities || activities.count<=0)&&!_isDontNeedLazyLoad) {
+        //如果没有新的，那就不需要懒加载了。
+        self.isDontNeedLazyLoad = YES;
 //        NSArray *arr = @[[NSIndexPath indexPathForRow:_activities.count inSection:0]];
 //        //删除最后一行
 //        dispatch_async(dispatch_get_main_queue(), ^{
@@ -610,7 +610,7 @@
 //        });
 //        
 //        return;
-//    }
+    }
     
 //    if (lastID<=0) {
 //        //开启懒加载

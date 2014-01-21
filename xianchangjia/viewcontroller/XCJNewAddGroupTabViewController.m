@@ -11,6 +11,9 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCAlbumAdditions.h"
 #import "FCUserDescription.h"
+#import "tools.h"
+#import "MTAnimatedLabel.h"
+#import "XCJHomeDynamicViewController.h"
 
 @interface XCJNewAddGroupTabViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -54,6 +57,9 @@
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
         numberOfRows = [sectionInfo numberOfObjects];
     }
+    
+    [USER_DEFAULT setBool:NO forKey:KeyChain_Laixin_message_GroupBeinvite];
+    [USER_DEFAULT synchronize];
     
     if (numberOfRows <= 0) {
         // show info
@@ -129,6 +135,8 @@
     //        [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
     //    }
     
+    [USER_DEFAULT setBool:NO forKey:KeyChain_Laixin_message_GroupBeinvite];
+    [USER_DEFAULT synchronize];
     
 	UITableView *tableView = self.tableView;
 	
@@ -177,23 +185,28 @@
 
 - (void)showRecipe:(FCBeInviteGroup *) info animated:(BOOL)animated
 {
-    
+    XCJHomeDynamicViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJHomeDynamicViewController"];
+    vc.Currentgid = info.groupID;
+    vc.title = info.groupName;
+    vc.groupInfo = info.fcBeinviteGroupInfo;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     FCBeInviteGroup *info = (FCBeInviteGroup *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-//    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
-    UILabel *labelnick = (UILabel *)[cell.contentView viewWithTag:2];
+    UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
+    MTAnimatedLabel *labelnick = (MTAnimatedLabel *)[cell.contentView viewWithTag:2];
     UILabel *labelLiyou = (UILabel *)[cell.contentView viewWithTag:3];
     UIImageView *imgViewbuttonBG = (UIImageView *)[cell.contentView viewWithTag:4];
     UIButton *button = (UIButton *)[cell.contentView viewWithTag:5];
     UILabel *labelSign = (UILabel *)[cell.contentView viewWithTag:6];
-    
+    [imgView setImage:[UIImage imageNamed:@"o_weiguan"]];
     {
 //        [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:info.beAddFriendShips.headpic Size:160]]];
         labelnick.text = info.groupName;
-        labelLiyou.text = @"被邀请";
+        
+        labelLiyou.text = [NSString stringWithFormat:@"%@ 被邀请加入",[tools FormatStringForDate:info.beaddTime]];
     }
     if (YES) {
         button.hidden = YES;
@@ -202,7 +215,8 @@
     }else{
         [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-    
+    [labelnick stopAnimating];
+    [labelnick startAnimating];
 }
 
 -(IBAction)addFriendClick:(id)sender
