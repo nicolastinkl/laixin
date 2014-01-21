@@ -4287,7 +4287,7 @@
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="nav_badge_6_6_6_6" width="13" height="13"/>
-        <image name="paperclipButtonDisabled" width="60" height="60"/>
+        <image name="paperclipButtonDisabled" width="20" height="18"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
         <image name="profile-frame" width="90" height="90"/>
         <image name="register_star_avatar_bg" width="100" height="100"/>

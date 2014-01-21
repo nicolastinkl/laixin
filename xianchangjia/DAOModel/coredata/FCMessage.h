@@ -15,6 +15,7 @@ enum messageTypeEnum {
     messageType_text = 1,
     messageType_image = 2,
     messageType_map = 3,
+    messageType_emj = 4,
     };
 
 @interface FCMessage : NSManagedObject

@@ -393,8 +393,13 @@ static NSString * const kLaixinStoreName = @"Laixins";
             }
             else
             {
-                msg.messageType = @(messageType_text);
-                conversation.lastMessage = content;
+                if ([content containString:@"sticker_"]) {
+                    msg.messageType = @(messageType_emj);
+                    conversation.lastMessage = @"[表情]";
+                }else{
+                    msg.messageType = @(messageType_text);
+                    conversation.lastMessage = content;
+                }
             }
             msg.imageUrl = imageurl;
             
@@ -831,8 +836,15 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 }
                                 else
                                 {
-                                    msg.messageType = @(messageType_text);
-                                    conversation.lastMessage = content;
+                                    
+                                    if ([content containString:@"sticker_"]) {
+                                        msg.messageType = @(messageType_emj);
+                                        conversation.lastMessage = @"[表情]";
+                                    }else{
+                                        msg.messageType = @(messageType_text);
+                                        conversation.lastMessage = content;
+                                    }
+                                    
                                 }
                                 msg.imageUrl = imageurl;                                
                                 conversation.lastMessageDate = date;

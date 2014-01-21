@@ -287,8 +287,14 @@
                 
                 else
                 {
-                    msg.messageType = @(messageType_text);
-                    self.conversation.lastMessage = content;
+
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
                 }
                 
                 msg.imageUrl = imageurl;
@@ -484,7 +490,53 @@
 #pragma mark facialView delegate 点击表情键盘上的文字
 -(void)selectedFacialView:(NSString*)str
 {
-    
+    SLog(@"str:%@",str);
+    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+    [button showIndicatorView];
+    button.userInteractionEnabled = NO;
+    //send to websocket message.send(uid,content) 私信 Result={“msgid”:}
+    NSDictionary * parames = @{@"uid":self.conversation.facebookId,@"content":str};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
+        NSDictionary * dic = [responseObject objectForKey:@"result"];
+        if (dic) {
+            
+            // update lastmessage id index
+            NSInteger indexMsgID = [DataHelper getIntegerValue:dic[@"msgid"] defaultValue:0];
+            
+            NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+            if (messageIndex < indexMsgID) {
+                [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                [USER_DEFAULT synchronize];
+            }
+            
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            FCMessage *msg = [FCMessage MR_createInContext:localContext];
+            msg.text = str;
+            msg.sentDate = [NSDate date];
+            msg.messageType = @(messageType_emj);
+            // message did not come, this will be on rigth
+            msg.messageStatus = @(NO);
+            msg.messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@"0"];
+            self.conversation.lastMessage = @"[表情]";
+            self.conversation.lastMessageDate = [NSDate date];
+            self.conversation.badgeNumber = @0;
+            self.conversation.messageStutes = @(messageStutes_outcoming);
+            [self.conversation addMessagesObject:msg];
+            [self.messageList addObject:msg];
+            [localContext MR_saveToPersistentStoreAndWait];
+            UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+            [button defaultStyle];
+            [self insertTableRow];
+        }
+        
+        [button hideIndicatorView];
+        button.userInteractionEnabled = YES;
+    } failure:^(MLRequest *request, NSError *error) {
+        
+        [button hideIndicatorView];
+        button.userInteractionEnabled = YES;
+    }];
 }
 
 - (IBAction)SendTextMsgClick:(id)sender {
@@ -915,7 +967,7 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if ([keyPath isEqualToString:@"contentSize"]){
+   /* if ([keyPath isEqualToString:@"contentSize"]){
         //高度最大为80
         static CGFloat maxHeight = 80;
         
@@ -934,54 +986,53 @@
         
         //tableView的位置也修正下
         _tableView.contentOffset = CGPointMake(0, _tableView.contentOffset.y+offset);
-    }else{
-        NSNumber *kind = [change objectForKey:NSKeyValueChangeKindKey];
-        
-        //元素位置的改变
-        BOOL isPrior = [((NSNumber *)[change objectForKey:NSKeyValueChangeNotificationIsPriorKey]) boolValue];//是否是改变之前进来的
-        if (isPrior&&[kind integerValue] != NSKeyValueChangeRemoval) {
-            return; //改变之前进来却不是Removal操作就忽略
-        }
-        
-        //获取变化值
-        NSIndexSet *indices = [change objectForKey:NSKeyValueChangeIndexesKey];
-        if (indices == nil){
-            return;
-        }
-        
-        NSUInteger indexCount = [indices count];
-        NSUInteger buffer[indexCount];
-        [indices getIndexes:buffer maxCount:indexCount inIndexRange:nil];
-        
-        NSMutableArray *indexPathArray = [NSMutableArray array];
-        for (int i = 0; i < indexCount; i++) {
-            NSUInteger indexPathIndices[2];
-            indexPathIndices[0] = 0;
-            indexPathIndices[1] = buffer[i];
-            NSIndexPath *newPath = [NSIndexPath indexPathWithIndexes:indexPathIndices length:2];
-            [indexPathArray addObject:newPath];
-        }
-        //判断值变化是insert、delete、(replace被忽略不需要)。
-        if ([kind integerValue] == NSKeyValueChangeInsertion){
-            //		//添加对应的Observer
-            //		for (NSIndexPath *path in indexPathArray) {
-            //			[self addObserverOfChat:self.messageList[path.row]];
-            //		}
-            [self.tableView insertRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
-            [self scrollToBottonWithAnimation:YES];
-        }
-        else if ([kind integerValue] == NSKeyValueChangeRemoval){
-            //改变之前清除Observer，改变之后剔除TableView里数据，其实用old去获取也可以，但是总觉得没这种方法好
-            if (isPrior) {
-                //删除对应的Observer
-                //			for (NSIndexPath *path in indexPathArray) {
-                //				[self removeObserverOfChat:self.chatList[path.row]];
-                //			}
-            }else{
-                [self.tableView deleteRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
-            }
-        }
+    }
+    */
+    NSNumber *kind = [change objectForKey:NSKeyValueChangeKindKey];
     
+    //元素位置的改变
+    BOOL isPrior = [((NSNumber *)[change objectForKey:NSKeyValueChangeNotificationIsPriorKey]) boolValue];//是否是改变之前进来的
+    if (isPrior&&[kind integerValue] != NSKeyValueChangeRemoval) {
+        return; //改变之前进来却不是Removal操作就忽略
+    }
+    
+    //获取变化值
+    NSIndexSet *indices = [change objectForKey:NSKeyValueChangeIndexesKey];
+    if (indices == nil){
+        return;
+    }
+    
+    NSUInteger indexCount = [indices count];
+    NSUInteger buffer[indexCount];
+    [indices getIndexes:buffer maxCount:indexCount inIndexRange:nil];
+    
+    NSMutableArray *indexPathArray = [NSMutableArray array];
+    for (int i = 0; i < indexCount; i++) {
+        NSUInteger indexPathIndices[2];
+        indexPathIndices[0] = 0;
+        indexPathIndices[1] = buffer[i];
+        NSIndexPath *newPath = [NSIndexPath indexPathWithIndexes:indexPathIndices length:2];
+        [indexPathArray addObject:newPath];
+    }
+    //判断值变化是insert、delete、(replace被忽略不需要)。
+    if ([kind integerValue] == NSKeyValueChangeInsertion){
+        //		//添加对应的Observer
+        //		for (NSIndexPath *path in indexPathArray) {
+        //			[self addObserverOfChat:self.messageList[path.row]];
+        //		}
+        [self.tableView insertRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
+        [self scrollToBottonWithAnimation:YES];
+    }
+    else if ([kind integerValue] == NSKeyValueChangeRemoval){
+        //改变之前清除Observer，改变之后剔除TableView里数据，其实用old去获取也可以，但是总觉得没这种方法好
+        if (isPrior) {
+            //删除对应的Observer
+            //			for (NSIndexPath *path in indexPathArray) {
+            //				[self removeObserverOfChat:self.chatList[path.row]];
+            //			}
+        }else{
+            [self.tableView deleteRowsAtIndexPaths:indexPathArray withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
 	
 }
@@ -1111,18 +1162,22 @@
         labelContent.textColor = [UIColor whiteColor];
     }
     labelTime.text = [tools FormatStringForDate:message.sentDate];
-    labelContent.text = message.text;
-//    [self creatAttributedLabel:message.content Label:labelContent];
-    /*build test frame */
-    [labelContent sizeToFit];
+
     if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
+        labelContent.text  = @"";
         [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
         imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
+        imageview_BG.hidden = NO;
     }else if ([message.messageType intValue] == messageType_text) {
+        
+        labelContent.text = message.text;
+        //    [self creatAttributedLabel:message.content Label:labelContent];
+        /*build test frame */
+        [labelContent sizeToFit];
         imageview_Img.hidden = YES;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -1135,6 +1190,16 @@
         //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
         [imageview_BG setHeight:fmaxf(35.0f, sizeToFit.height + 18.0f )];
         [imageview_BG setWidth:fmaxf(35.0f, sizeToFit.width + 23.0f )];
+        imageview_BG.hidden = NO;
+    }else if([message.messageType intValue] == messageType_emj)
+    {
+        labelContent.text  = @"";
+        //display image  115 108
+        [imageview_Img setImage:[UIImage imageNamed:message.text]];
+        imageview_Img.hidden = NO;
+        [imageview_BG setHeight:108.0f];
+        [imageview_BG setWidth:115.0f];
+        imageview_BG.hidden = YES;
     }
     
     return cell;
@@ -1184,12 +1249,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FCMessage *message = self.messageList[indexPath.row];
-    if ([message.messageType intValue] == messageType_image) {
+    if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj) {
         return 148.0f;
     }
     return [self heightForCellWithPost:message.text]+20.0f;
 }
-
 
 #pragma mark - Keyboard
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -1227,9 +1291,7 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    
-    ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = NO;
-    ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = YES;
+        
     
      [UIView animateWithDuration:0.3 animations:^{
          
@@ -1242,6 +1304,13 @@
          self.inputContainerView.top = self.view.height - self.inputContainerView.height;
          self.tableView.height  = self.view.height - self.inputContainerView.height;
      }];
+    
+    if(self.inputContainerView)
+    {
+        ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = NO;
+        ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = YES;
+        
+    }
     
 //    [self animateChangeWithConstant:0. withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
 //    self.keyboardView = nil;
