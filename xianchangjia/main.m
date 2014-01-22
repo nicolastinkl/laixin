@@ -15,4 +15,6 @@ int main(int argc, char * argv[])
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([XCJAppDelegate class]));
     }
+    
+    // exc_bad_access addresss 0x8000000c
 }

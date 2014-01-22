@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h> 
 
-@protocol facialViewDelegate<NSObject>
+@protocol facialViewDelegate
 
 -(void)selectedFacialView:(NSString*)str;
 
@@ -16,9 +16,10 @@
 
 @interface FacialView : UIView {
  
-	NSArray *faces;
+//	NSArray *faces;
 }
-@property(nonatomic,assign) id<facialViewDelegate>delegate;
+
+@property(nonatomic,assign) id<facialViewDelegate> delegate;
 
 -(void)loadFacialView:(int)page size:(CGSize)size;
 

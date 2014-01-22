@@ -215,8 +215,8 @@
     }else{
         [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-    [labelnick stopAnimating];
-    [labelnick startAnimating];
+//    [labelnick stopAnimating];
+//    [labelnick startAnimating];
 }
 
 -(IBAction)addFriendClick:(id)sender

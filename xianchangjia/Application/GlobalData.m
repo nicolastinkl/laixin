@@ -523,4 +523,47 @@ SINGLETON_GCD(GlobalData);
         
     }];
 }
+-(NSString*) facImageNameWithIndex:(NSInteger) index
+{
+    if (self.FacArray == nil) {
+        self.FacArray = @[@"sticker_126361874215276",
+                          @"sticker_126361884215275",
+                          @"sticker_126361890881941",
+                          @"sticker_126361900881940",
+                          @"sticker_126361910881939",
+                          @"sticker_126361920881938",
+                          @"sticker_126361957548601",
+                          @"sticker_126361967548600",
+                          @"sticker_126361974215266",
+                          @"sticker_126361987548598",
+                          @"sticker_126361994215264",
+                          @"sticker_126362007548596",
+                          @"sticker_126362027548594",
+                          @"sticker_126362034215260",
+                          @"sticker_126362044215259",
+                          @"sticker_126362064215257",
+                          @"sticker_126362074215256",
+                          @"sticker_126362080881922",
+                          @"sticker_126362087548588",
+                          @"sticker_126362100881920",
+                          @"sticker_126362107548586",
+                          @"sticker_126362117548585",
+                          @"sticker_126362124215251",
+                          @"sticker_126362130881917",
+                          @"sticker_126362137548583",
+                          @"sticker_126362160881914",
+                          @"sticker_126362167548580",
+                          @"sticker_126362180881912",
+                          @"sticker_126362187548578",
+                          @"sticker_126362230881907",
+                          @"sticker_126362207548576",
+                          @"sticker_126362197548577"];
+    }
+    
+    if (index < self.FacArray.count) {
+        return self.FacArray[index];
+    }
+    return @"";
+}
+
 @end

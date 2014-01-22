@@ -245,4 +245,7 @@ extern NSString * const KEY_PASSWORD;
 - (void) initCurrentDeciviceDBDataBase;
 - (void) AddUserCredit;
 - (void) initCurrentScenseIPAdress;
+
+@property (nonatomic,strong) NSArray * FacArray;
+-(NSString*) facImageNameWithIndex:(NSInteger) index;
 @end

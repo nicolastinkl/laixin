@@ -88,7 +88,7 @@
     self.inputTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     //监视输入内容大小，在KVO里自动调整
 //    [self.inputTextView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:nil];
-    
+
     //创建表情键盘
     if (scrollView==nil) {
         scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, keyboardHeight)];
@@ -151,10 +151,13 @@
     }
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)sender {
-    int page = scrollView.contentOffset.x / 320;//通过滚动的偏移量来判断目前页面所对应的小白点
-    pageControl.currentPage = page;//pagecontroll响应值的变化
-}
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollViewss
+//{
+//    if (scrollViewss && scrollViewss == scrollView) {
+//        int page = scrollView.contentOffset.x / 320;//通过滚动的偏移量来判断目前页面所对应的小白点
+//        pageControl.currentPage = page;//pagecontroll响应值的变化
+//    }
+//}
 
 - (IBAction)changePage:(id)sender {
     int page = pageControl.currentPage;//获取当前pagecontroll的值
@@ -236,6 +239,7 @@
     if (operation && [operation isExecuting]) {
         [operation cancel];
     }
+//    scrollView.delegate=nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -1196,6 +1200,7 @@
         labelContent.text  = @"";
         //display image  115 108
         [imageview_Img setImage:[UIImage imageNamed:message.text]];
+        imageview_Img.fullScreenImageURL = nil;
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
