@@ -22,6 +22,7 @@
 		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
+		86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86467A97188F8763004AC59C /* XCJJIhuoViewController.m */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */; };
@@ -406,6 +407,8 @@
 		862EC4CF188E2A8B006F4D43 /* MTAnimatedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAnimatedLabel.h; sourceTree = "<group>"; };
 		862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAnimatedLabel.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		86467A96188F8763004AC59C /* XCJJIhuoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJJIhuoViewController.h; path = viewcontroller/XCJJIhuoViewController.h; sourceTree = "<group>"; };
+		86467A97188F8763004AC59C /* XCJJIhuoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJJIhuoViewController.m; path = viewcontroller/XCJJIhuoViewController.m; sourceTree = "<group>"; };
 		8646F8BE187A90EA004A8696 /* XCJSettingGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSettingGroupViewController.h; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.h; sourceTree = SOURCE_ROOT; };
 		8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSettingGroupViewController.m; path = xianchangjia/viewcontroller/XCJSettingGroupViewController.m; sourceTree = SOURCE_ROOT; };
 		8646F8C2187AA00D004A8696 /* FDStatusBarNotifierView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDStatusBarNotifierView.h; sourceTree = "<group>"; };
@@ -1632,6 +1635,8 @@
 				86F9B9AD1872865600ED768B /* XCJChangeUserInfoController.m */,
 				86D9A87C186C1A0500147631 /* XCJSysSettingsViewController.h */,
 				86D9A87D186C1A0500147631 /* XCJSysSettingsViewController.m */,
+				86467A96188F8763004AC59C /* XCJJIhuoViewController.h */,
+				86467A97188F8763004AC59C /* XCJJIhuoViewController.m */,
 			);
 			name = SystemSettings;
 			sourceTree = "<group>";
@@ -2663,6 +2668,7 @@
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
 				86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */,
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
+				86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */,
 				86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */,
 				86494CC618815E9B00C22B14 /* XCJAddNearByUsersViewController.m in Sources */,
 				86D1827E1834AED30005901D /* NSDataAddition.m in Sources */,

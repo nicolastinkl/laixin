@@ -14,6 +14,9 @@
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
 @property (weak, nonatomic) IBOutlet UILabel *UserName; 
+@property (weak, nonatomic) IBOutlet UILabel *label_level;
+@property (weak, nonatomic) IBOutlet UIImageView *image_level;
+@property (weak, nonatomic) IBOutlet UIImageView *image_levelBg;
 
 @end
 
@@ -42,7 +45,22 @@
     
     self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
     [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
-    [self LoadData];
+    
+    if ([LXAPIController sharedLXAPIController].currentUser) {
+        if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
+            self.image_levelBg.width = 80;
+            self.label_level.textColor = [UIColor lightGrayColor];
+            self.label_level.text = @"未激活";
+            self.image_level.image = [UIImage imageNamed:@"face_vip"];
+        }else{
+            self.image_level.image = [UIImage imageNamed:@"face_vip"];
+            self.label_level.textColor = [UIColor redColor];
+            self.image_levelBg.width = 50;
+            self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+        }
+    }else{
+        [self LoadData];
+    }
 }
 
 - (IBAction)updateInfoClick:(id)sender {
@@ -71,12 +89,27 @@
     NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
     NSDictionary * parames = @{@"uid":@[userid]};
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
-//        SLog(@"responseObject :%@",responseObject);
         // "users":[....]
         NSDictionary * userinfo = responseObject[@"result"];
         NSArray * userArray = userinfo[@"users"];
         if (userArray && userArray.count > 0) {
             NSDictionary * dic = userArray[0];
+            
+            LXUser * user = [[LXUser alloc] initWithDict:dic];
+            [LXAPIController sharedLXAPIController].currentUser = user;
+            
+            if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
+                self.image_levelBg.width = 80;
+                self.label_level.textColor = [UIColor lightGrayColor];
+                self.label_level.text = @"未激活";
+                self.image_level.image = [UIImage imageNamed:@"threadInfoButtonSelected"];
+            }else{
+                self.image_level.image = [UIImage imageNamed:@"face_vip"];
+                self.label_level.textColor = [UIColor redColor];
+                self.image_levelBg.width = 50;
+                self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+            }
+            
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];

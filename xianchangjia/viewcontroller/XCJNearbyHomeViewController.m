@@ -471,7 +471,6 @@
     if ([self.tableView isIndicatorViewLargeBlueRunning]) {
         [self.tableView showIndicatorViewLargeBlue];
     }
-
 }
 
 -(void)   initHomeData

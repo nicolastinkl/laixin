@@ -279,8 +279,9 @@
     labelTime.text = [tools timeLabelTextOfTime:[info.time doubleValue]];
     
     if ([info.typeReply isEqualToString:@"newlike"]) {
-        imageviewTag.hidden = NO;
+         imageviewTag.hidden = NO;
          labelContent.text = @"";
+        labelTime.top  = 50;
     }else if ([info.typeReply isEqualToString:@"newreply"])
     {
         labelContent.text = info.content;

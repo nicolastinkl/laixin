@@ -27,7 +27,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bcP-5j-pcS">
-                                                    <rect key="frame" x="94" y="28" width="173" height="21"/>
+                                                    <rect key="frame" x="82" y="43" width="195" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="highlightedColor"/>
@@ -36,6 +36,22 @@
                                                     <rect key="frame" x="8" y="8" width="60" height="60"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_primarybutton_28_3_3_3_3_normal_ios7" id="Fq9-Pl-E9t">
+                                                    <rect key="frame" x="82" y="10" width="50" height="25"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <rect key="contentStretch" x="0.29999999999999999" y="0.29999999999999999" width="0.19999999999999968" height="0.19999999999999968"/>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="face_vip" id="f6r-Dv-Hzx">
+                                                    <rect key="frame" x="90" y="13" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I7v-Ic-UVb">
+                                                    <rect key="frame" x="114" y="13" width="48" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -94,8 +110,29 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection id="YP8-sD-vRv">
-                                <cells/>
+                            <tableViewSection headerTitle="激活" id="YP8-sD-vRv">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="YTP-tT-8ed" style="IBUITableViewCellStyleDefault" id="0ii-KC-BEH">
+                                        <rect key="frame" x="0.0" y="330" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0ii-KC-BEH">
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="查看激活码" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YTP-tT-8ed">
+                                                    <rect key="frame" x="15" y="0.0" width="270" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="0ch-R5-uit" kind="push" id="ILI-RG-568"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </cells>
                             </tableViewSection>
                         </sections>
                     </tableView>
@@ -110,6 +147,9 @@
                     <connections>
                         <outlet property="UserImageicon" destination="P4u-vu-LQG" id="fkZ-cB-aye"/>
                         <outlet property="UserName" destination="bcP-5j-pcS" id="iLz-J1-knh"/>
+                        <outlet property="image_level" destination="f6r-Dv-Hzx" id="3HC-HH-IFc"/>
+                        <outlet property="image_levelBg" destination="Fq9-Pl-E9t" id="3HE-J5-bUl"/>
+                        <outlet property="label_level" destination="I7v-Ic-UVb" id="pJR-z1-Ruz"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZXa-kT-7nA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -273,6 +313,46 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CdR-dv-67b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1775" y="-732"/>
+        </scene>
+        <!--Ihuo View Controller - 激活码-->
+        <scene sceneID="v6c-ra-Gf7">
+            <objects>
+                <viewController restorationIdentifier="XCJJIhuoViewController" storyboardIdentifier="XCJJIhuoViewController" hidesBottomBarWhenPushed="YES" id="0ch-R5-uit" customClass="XCJJIhuoViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rmF-sU-m3S">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="kfG-Pr-QvX">
+                                <rect key="frame" x="0.0" y="124" width="320" height="320"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我的激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VqB-mj-tlJ">
+                                <rect key="frame" x="13" y="78" width="103" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zAf-17-MZW">
+                                <rect key="frame" x="114" y="78" width="193" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="激活码" id="FCt-9r-jDs">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="action" id="N9x-tC-LgK">
+                            <connections>
+                                <action selector="ShareCode:" destination="0ch-R5-uit" id="vcQ-SP-61f"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3oA-zW-itS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1671" y="-300"/>
         </scene>
         <!--Sys Settings View Controller - 系统设置-->
         <scene sceneID="Hjb-OO-lUV">
@@ -1894,7 +1974,7 @@
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zCx-sJ-obZ">
                                             <rect key="frame" x="62" y="33" width="180" height="15"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -4256,6 +4336,7 @@
         <image name="crop_corner_left_top" width="26" height="26"/>
         <image name="crop_corner_right_bottom" width="26" height="26"/>
         <image name="crop_corner_right_top" width="26" height="26"/>
+        <image name="face_vip" width="20" height="20"/>
         <image name="facebookOnlyUserMaskMedium" width="42" height="42"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
@@ -4311,8 +4392,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="o8z-dt-4y9"/>
         <segue reference="Wou-0M-BBA"/>
         <segue reference="zRY-k4-2Qe"/>
-        <segue reference="sXO-to-Y9E"/>
     </inferredMetricsTieBreakers>
 </document>
