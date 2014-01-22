@@ -50,15 +50,17 @@
         NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid]];
         Conversation * fchomeg = [Conversation MR_findFirstWithPredicate:preCMD];
         if (fchomeg) {
-            self.Image_erwei.image = [QRCodeGenerator qrImageForString:fchomeg.facebookName imageSize:216.0f];
+//            NSString * newCode = [NSString stringWithFormat:@"[group]-%@",fchomeg.facebookName];
+//            self.Image_erwei.image = [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
             self.label_nick.text = fchomeg.facebookName;
-           
         }else{
             NSPredicate * preCMDTwo = [NSPredicate predicateWithFormat:@"gid == %@", self.gid];
-           FCHomeGroupMsg * mesage = [FCHomeGroupMsg MR_findFirstWithPredicate:preCMDTwo];
-            self.Image_erwei.image = [QRCodeGenerator qrImageForString:mesage.gName imageSize:216.0f];
+            FCHomeGroupMsg * mesage = [FCHomeGroupMsg MR_findFirstWithPredicate:preCMDTwo];
+
             self.label_nick.text = mesage.gName;
         }
+        NSString * newCode = [NSString stringWithFormat:@"[group]-%@",self.gid];
+        self.Image_erwei.image = [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
          [self.Image_user setImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
     }else{
         //user info
@@ -67,9 +69,9 @@
         if ([nick isNilOrEmpty]) {
             nick = [LXAPIController sharedLXAPIController].currentUser.nick;
         }
-        //    NSString * md5str = [MyMD5 md5:nick];
-        self.Image_erwei.image = [QRCodeGenerator qrImageForString:nick imageSize:216.0f];
-        
+       
+        NSString * newCode = [NSString stringWithFormat:@"[user]-%@",nick];
+        self.Image_erwei.image = [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
         //    [self.Image_erwei setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://qr.liantu.com/api.php?text=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]]]];
         self.label_nick.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
         [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]]];

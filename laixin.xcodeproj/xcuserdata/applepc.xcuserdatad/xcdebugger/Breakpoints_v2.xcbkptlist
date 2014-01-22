@@ -1664,12 +1664,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJScanViewController.m"
-            timestampString = "411284804.862961"
+            timestampString = "412075831.150472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
-            landmarkName = "-findUser"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "-findUser:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1680,12 +1680,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJScanViewController.m"
-            timestampString = "411284804.862961"
+            timestampString = "412075831.150472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
-            landmarkName = "-findUser"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
+            landmarkName = "-findUser:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1696,12 +1696,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJScanViewController.m"
-            timestampString = "411284804.862961"
+            timestampString = "412075831.150472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "-findUser"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
+            landmarkName = "-findUser:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2490,12 +2490,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJScanViewController.m"
-            timestampString = "411285029.517417"
+            timestampString = "412075831.150472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "-findUser"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "-findUser:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

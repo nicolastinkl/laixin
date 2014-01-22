@@ -47,6 +47,8 @@
 		865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632E1185FFDDA00E9903C /* XCJUserViewController.m */; };
 		865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632F1186000D300E9903C /* XCJSendCommentViewController.m */; };
 		86581E04187E95E500FCDC85 /* FCBeAddFriend.m in Sources */ = {isa = PBXBuildFile; fileRef = 86581E03187E95E500FCDC85 /* FCBeAddFriend.m */; };
+		86608403188FB20100F4870B /* XCJAddGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86608402188FB20100F4870B /* XCJAddGroupInfoViewController.m */; };
+		86608407188FBBF300F4870B /* XCJActiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86608406188FBBF300F4870B /* XCJActiveViewController.m */; };
 		86651683187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */; };
 		8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8665168A187BEF75001F05F6 /* SVProgressHUD.bundle */; };
 		8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8665168C187BEF75001F05F6 /* SVProgressHUD.m */; };
@@ -457,6 +459,10 @@
 		865632F1186000D300E9903C /* XCJSendCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendCommentViewController.m; path = viewcontroller/XCJSendCommentViewController.m; sourceTree = "<group>"; };
 		86581E02187E95E500FCDC85 /* FCBeAddFriend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeAddFriend.h; path = DAOModel/coredata/FCBeAddFriend.h; sourceTree = "<group>"; };
 		86581E03187E95E500FCDC85 /* FCBeAddFriend.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeAddFriend.m; path = DAOModel/coredata/FCBeAddFriend.m; sourceTree = "<group>"; };
+		86608401188FB20100F4870B /* XCJAddGroupInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddGroupInfoViewController.h; path = viewcontroller/XCJAddGroupInfoViewController.h; sourceTree = "<group>"; };
+		86608402188FB20100F4870B /* XCJAddGroupInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddGroupInfoViewController.m; path = viewcontroller/XCJAddGroupInfoViewController.m; sourceTree = "<group>"; };
+		86608405188FBBF300F4870B /* XCJActiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJActiveViewController.h; path = viewcontroller/XCJActiveViewController.h; sourceTree = "<group>"; };
+		86608406188FBBF300F4870B /* XCJActiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJActiveViewController.m; path = viewcontroller/XCJActiveViewController.m; sourceTree = "<group>"; };
 		86651681187BD19E001F05F6 /* XCJSelectCroupTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectCroupTypeViewController.h; path = viewcontroller/XCJSelectCroupTypeViewController.h; sourceTree = "<group>"; };
 		86651682187BD19E001F05F6 /* XCJSelectCroupTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectCroupTypeViewController.m; path = viewcontroller/XCJSelectCroupTypeViewController.m; sourceTree = "<group>"; };
 		86651689187BEF75001F05F6 /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -1146,6 +1152,15 @@
 			name = messagereplyList;
 			sourceTree = "<group>";
 		};
+		86608404188FBBDF00F4870B /* ActiveView */ = {
+			isa = PBXGroup;
+			children = (
+				86608405188FBBF300F4870B /* XCJActiveViewController.h */,
+				86608406188FBBF300F4870B /* XCJActiveViewController.m */,
+			);
+			name = ActiveView;
+			sourceTree = "<group>";
+		};
 		86651688187BEF75001F05F6 /* SVProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -1321,6 +1336,8 @@
 			children = (
 				866995EA1879130400233C47 /* XCJScanViewController.h */,
 				866995EB1879130400233C47 /* XCJScanViewController.m */,
+				86608401188FB20100F4870B /* XCJAddGroupInfoViewController.h */,
+				86608402188FB20100F4870B /* XCJAddGroupInfoViewController.m */,
 			);
 			name = ScanView;
 			sourceTree = "<group>";
@@ -1814,6 +1831,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86608404188FBBDF00F4870B /* ActiveView */,
 				8622C894187D8F2400776A38 /* Friends */,
 				866995E9187912EC00233C47 /* ScanView */,
 				86660DCD18780A2E007477C0 /* AddFriend */,
@@ -2772,8 +2790,10 @@
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				8622C87C187D192100776A38 /* POHorizontalList.m in Sources */,
 				866516A5187BF276001F05F6 /* qrspec.c in Sources */,
+				86608407188FBBF300F4870B /* XCJActiveViewController.m in Sources */,
 				869CE4C6186A75B30004C1EC /* XCJChatMessageCell.m in Sources */,
 				865632E5185FFDDA00E9903C /* XCJDomainsViewController.m in Sources */,
+				86608403188FB20100F4870B /* XCJAddGroupInfoViewController.m in Sources */,
 				8681BE3D1839AABA00521D36 /* UserInfo.m in Sources */,
 				866516A2187BF276001F05F6 /* QRCodeGenerator.m in Sources */,
 				8665168E187BEF75001F05F6 /* SVProgressHUD.m in Sources */,

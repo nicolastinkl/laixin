@@ -13,6 +13,7 @@
 {
     SinaWeibo *sinaweiboMain;
 }
+
 @property (strong, nonatomic) UIWindow                  *window;
 @property (readonly, nonatomic) SinaWeibo				*sinaweiboMain;
 @property (nonatomic,strong) NSDictionary				*launchingWithAps;

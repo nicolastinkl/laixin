@@ -15,6 +15,9 @@
 #import "LXChatDBStoreManager.h"
 #import "LXRequestFacebookManager.h"
 #import "XCJAppDelegate.h"
+#import "XCJAddGroupInfoViewController.h"
+#import "XCJActiveViewController.h"
+
 
 @interface XCJScanViewController ()<UIAlertViewDelegate>
 {
@@ -40,11 +43,18 @@
 {
     [super viewDidLoad];
     upOrdown = NO;
-    num =0;
+    num = 0;
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
-     [self setupCamera];
-	// Do any additional setup after loading the view.
+    double delayInSeconds = .1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        [self setupCamera];
+        _line.hidden = NO;
+        // Do any additional setup after loading the view.
+    });
+    
 }
 
 -(void)animation1
@@ -68,9 +78,14 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_session && !_session.isRunning) {
-        [_session startRunning];
-    }
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        if (_session && !_session.isRunning) {
+            [_session startRunning];
+        }
+    });
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -134,7 +149,6 @@
         if(stringValueNew && stringValueNew.length > 0){
             return;
         }
-            
         stringValueNew  = [NSString stringWithFormat:@"%@",stringValue];
         stringValue = @"";
         [_session stopRunning];
@@ -144,26 +158,50 @@
                 [self.navigationController popViewControllerAnimated:NO];
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringValueNew]];
             }else{
-                [self findUser];
-//                switch (self.scanTypeIndex) {
-//                    case findUser:
-//                    {
-//                        [self findUser];
-//                    }
-//                        break;
-//                    case findGroup:
-//                    {
-//                        
-//                    }
-//                        break;
-//                    case findAll:
-//                    {
-//                        [self findUser];
-//                    }
-//                        break;
-//                    default:
-//                        break;
-//                }
+                //[user]-
+                //[group]-
+                //[activecode]-
+                if ([stringValueNew containString:@"[user]-"])
+                {
+                    stringValueNew = [stringValueNew stringByReplacingOccurrencesOfString:@"[user]-" withString:@""];
+                    [self findUser:stringValueNew];
+                }else if ([stringValueNew containString:@"[group]-"])
+                {
+                    stringValueNew = [stringValueNew stringByReplacingOccurrencesOfString:@"[group]-" withString:@""];
+                    //stringValueNew is  gid
+                    
+                    
+                    NSArray * array =self.navigationController.viewControllers ;
+                    UIViewController * viewCon =  [array firstObject];
+                    [self.navigationController popViewControllerAnimated:NO];
+                    
+                    XCJAddGroupInfoViewController * con = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddGroupInfoViewController"];
+                    con.gid = stringValueNew;
+                    
+                    if (self.preController) {
+                        [self.preController.navigationController pushViewController:con animated:YES];
+                    }else{
+                        [viewCon.navigationController pushViewController:con animated:YES];
+                    }
+                    
+                }else if([stringValueNew containString:@"[activecode]-"])
+                {
+                    stringValueNew = [stringValueNew stringByReplacingOccurrencesOfString:@"[activecode]-" withString:@""];
+                    
+                    NSArray * array =self.navigationController.viewControllers ;
+                    UIViewController * viewCon =  [array firstObject];
+                    [self.navigationController popViewControllerAnimated:NO];
+                    XCJActiveViewController  *con = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJActiveViewController"];
+                    con.code = stringValueNew;
+                    if (self.preController) {
+                        [self.preController.navigationController pushViewController:con animated:YES];
+                    }else{
+                        [viewCon.navigationController pushViewController:con animated:YES];
+                    }
+                    
+                    
+                }
+                
             }
             
         }
@@ -173,16 +211,17 @@
     }
 }
 
-- (void) findUser
+- (void) findUser:(NSString * ) userNick
 {
+    
+    
     [SVProgressHUD showWithStatus:@"正在查找"];
-    NSDictionary * paramess = @{@"nick":stringValueNew};
+    NSDictionary * paramess = @{@"nick":userNick};
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
         NSDictionary * groupsss = responseObjects[@"result"];
         NSArray * array = groupsss[@"users"];
         if(array.count  <= 0)
         {
-            //                            [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
             [SVProgressHUD showErrorWithStatus:@"无法找到该用户,请检查您填写的昵称是否正常"];
             [_session startRunning];
             return ;

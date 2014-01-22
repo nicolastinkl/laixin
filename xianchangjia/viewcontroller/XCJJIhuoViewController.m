@@ -46,8 +46,8 @@
                 NSDictionary * dict = responseObject[@"result"];
                 NSString * stringCode = [DataHelper getStringValue:dict[@"active_code"] defaultValue:@""];
                 ((UILabel *)[self.view subviewWithTag:1]).text = stringCode;
-
-                ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:stringCode imageSize:216.0f];
+                NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",stringCode];
+                ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
             }
             [SVProgressHUD dismiss];
         } failure:^(MLRequest *request, NSError *error) {
@@ -58,7 +58,7 @@
 
 -(IBAction)ShareCode:(id)sender
 {
-    UIActionSheet * actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享激活码" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"复制激活码" otherButtonTitles:@"短信",@"微信好友", nil];
+    UIActionSheet * actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享激活码" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"复制激活码" otherButtonTitles:@"短信", nil];
     [actionSheet showInView:self.view];
 }
 
@@ -72,8 +72,6 @@
         
     } else if (buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"SMS:%@",((UILabel *)[self.view subviewWithTag:1]).text]]];
-    } else if (buttonIndex == 2) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"MAIL:%@",((UILabel *)[self.view subviewWithTag:1]).text]]];
     }
 }
 - (void)didReceiveMemoryWarning
