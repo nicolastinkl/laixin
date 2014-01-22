@@ -545,7 +545,7 @@
     [_tableView reloadData];
     
     if (row == _activities.count-1) {
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_activities.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }
     
 //    NSArray *arr = @[[NSIndexPath indexPathForRow:row inSection:0]];

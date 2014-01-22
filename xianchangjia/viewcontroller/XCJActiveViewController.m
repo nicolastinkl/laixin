@@ -73,7 +73,6 @@
                 }else{
                     [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
                 }
-               
             }
             
         } failure:^(MLRequest *request, NSError *error) {

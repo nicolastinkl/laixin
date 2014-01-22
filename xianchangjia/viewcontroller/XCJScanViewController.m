@@ -42,6 +42,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //[SVProgressHUD show];
     upOrdown = NO;
     num = 0;
     
@@ -52,6 +54,7 @@
         
         [self setupCamera];
         _line.hidden = NO;
+        
         // Do any additional setup after loading the view.
     });
     
@@ -134,6 +137,8 @@
     [childview.layer insertSublayer:self.preview atIndex:0];
     // Start
     [_session startRunning];
+
+   // [SVProgressHUD dismiss];
 }
 #pragma mark AVCaptureMetadataOutputObjectsDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
