@@ -296,6 +296,8 @@
                 glist.ilike = NO;
                 glist.like = 0;
                 glist.replycount = 0;
+                glist.width = [self.postImage size].width;
+                glist.height = [self.postImage size].height;
                 glist.group_id = self.gID;
                 glist.time = [NSDate timeIntervalSinceReferenceDate];
                 //[[NSDate date] timeIntervalSinceNow];

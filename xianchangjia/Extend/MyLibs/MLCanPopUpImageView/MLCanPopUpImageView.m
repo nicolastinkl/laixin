@@ -221,39 +221,37 @@
     maskView.backgroundColor = [UIColor clearColor];
     maskView.clipsToBounds = YES;
     [topView addSubview:self.imageMaskView_FullScreen = maskView]; // change by tinkl
-    
-    self.scrollview=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, 460)];//申明一个scrollview
+  
+    self.scrollview=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, topView.height)];//申明一个scrollview
     self.scrollview.delegate=self;//需要在.h中引用scrollview的delegate
     self.scrollview.backgroundColor=[UIColor clearColor];
     self.scrollview.alpha=1.0;
     self.scrollview.scrollEnabled = YES;
-    self.scrollview.scrollsToTop = YES;
+//    self.scrollview.scrollsToTop = YES;
     self.scrollview.bouncesZoom = YES;
     self.scrollview.clipsToBounds = YES;
     self.scrollview.showsHorizontalScrollIndicator = YES;
-    self.scrollview.showsVerticalScrollIndicator = YES;
+    self.scrollview.showsVerticalScrollIndicator = YES;    
+//    self.scrollview.decelerationRate = UIScrollViewDecelerationRateFast;
+//    self.scrollview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
     [self.imageMaskView_FullScreen addSubview:self.scrollview];
+    
     //图片放大，设置大图片的网址
     CGRect imageframe = [self aspectFitFrameForAspectFillBounds:self.bounds andImageSize:self.image.size];
     UIImageView *fullScreenImageView = [[UIImageView alloc] initWithFrame:imageframe];
-    fullScreenImageView.contentMode = UIViewContentModeScaleAspectFit;
+    fullScreenImageView.contentMode = UIViewContentModeScaleAspectFill;
     //UIViewContentModeScaleAspectFill;
     // UIViewContentModeScaleAspectFit;
 //    [maskView addSubview:self.imageView_FullScreen = fullScreenImageView];
-    
     [self.scrollview addSubview:self.imageView_FullScreen = fullScreenImageView];
-    
-    
-    
-    //设置全屏图片，并且设置此图片点击后的selector
-    UITapGestureRecognizer *fullScreenImageSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullScreenImageEvent:)];
-    [fullScreenImageView addGestureRecognizer:fullScreenImageSingleTap];
+
  
     //TODO:Molon 下面俩手势未完成，不好使
 //    //双指放大
 //    UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scale:)];
 //    [fullScreenImageView addGestureRecognizer:pinchRecognizer];
-//
+
 //    //移动
 //    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(move:)];
 //    [panRecognizer setMinimumNumberOfTouches:1];
@@ -285,6 +283,7 @@
             fullScreenImageView.image = cacheImage;
         }
         
+        [self adjustFrame];
 //        float minimumScale = fullScreenImageView.height / fullScreenImageView.width;//设置缩放比例
 //        [self.scrollview setMinimumZoomScale:minimumScale];//设置最小的缩放大小
 //        [self.scrollview setZoomScale:minimumScale];//设置scrollview的缩放
@@ -294,13 +293,19 @@
         toFrame = topView.bounds;
     }
     
+    
+    //设置全屏图片，并且设置此图片点击后的selector
+    UITapGestureRecognizer *fullScreenImageSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullScreenImageEvent:)];
+    [fullScreenImageView addGestureRecognizer:fullScreenImageSingleTap];
+    
 //    CGRect newImageViewFrame = [self realFrameForAspectFitFrame:toFrame andImageSize:self.image.size];
-
+//self.imageMaskView_FullScreen.frame = CGRectMake(0, 0, 320, topView.height);
     _imageView_FullScreen.userInteractionEnabled = NO;
     [UIView animateWithDuration:self.fullScreenAnimationDuration
                      animations:^{
                          _imageBackgroundView_FullScreen.backgroundColor = [UIColor blackColor];
-                         _imageMaskView_FullScreen.frame = toFrame;
+                         
+                         self.imageMaskView_FullScreen.frame = CGRectMake(0, 0, 320, topView.height);
 //                         _imageView_FullScreen.frame = newImageViewFrame;
                      }
                      completion:^(BOOL finished) {
@@ -311,16 +316,63 @@
                              
                              __weak MLCanPopUpImageView *weak_self = self;
                              [_imageView_FullScreen setImageWithURL:_fullScreenImageURL placeholderImage:self.image displayProgress:YES completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                                   [weak_self adjustFrame];
                                  
                                  [UIView animateWithDuration:weak_self.fullScreenAnimationDuration
                                                   animations:^{
-                                                      weak_self.imageMaskView_FullScreen.frame = topView.bounds;
-//                                                      weak_self.imageView_FullScreen.frame = finallyImageViewFrame;
+//                                                      weak_self.imageMaskView_FullScreen.frame = topView.bounds;
+                                                      
+                                                    
+                                                      //  weak_self.imageView_FullScreen.frame = finallyImageViewFrame;
                                                   }];
+
                              }];
 
                          }
+                         
                     }];
+}
+
+#pragma mark 调整frame
+- (void)adjustFrame
+{
+
+    if (self.imageView_FullScreen.image == nil) return;
+    
+    // 基本尺寸参数
+    CGSize boundsSize = self.scrollview.bounds.size;
+    CGFloat boundsWidth = boundsSize.width;
+    CGFloat boundsHeight = boundsSize.height;
+    
+    CGSize imageSize = self.imageView_FullScreen.image.size;
+    CGFloat imageWidth = imageSize.width;
+    CGFloat imageHeight = imageSize.height;
+	
+	// 设置伸缩比例
+    CGFloat minScale = boundsWidth / imageWidth;
+	if (minScale > 1) {
+		minScale = 1.0;
+	}
+	CGFloat maxScale = 2.0;
+	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
+		maxScale = maxScale / [[UIScreen mainScreen] scale];
+	}
+	self.scrollview.maximumZoomScale = maxScale;
+	self.scrollview.minimumZoomScale = minScale;
+	self.scrollview.zoomScale = minScale;
+    
+    CGRect imageFrame = CGRectMake(0, 0, boundsWidth, imageHeight * boundsWidth / imageWidth);
+    // 内容尺寸
+    self.scrollview.contentSize = CGSizeMake(0, imageFrame.size.height);
+    
+    // y值
+    if (imageFrame.size.height < boundsHeight) {
+        imageFrame.origin.y = floorf((boundsHeight - imageFrame.size.height) / 2.0);
+	} else {
+        imageFrame.origin.y = 0;
+	}
+    self.imageView_FullScreen.frame = imageFrame;
+
 }
 
 -(UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView//scrollview的delegate事件。需要设置缩放才会执行。
@@ -357,15 +409,17 @@
     _imageView_FullScreen.image = self.image;
     [UIView animateWithDuration:self.fullScreenAnimationDuration
                      animations:^{
-                         _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+//                         _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
                          
-                         _imageMaskView_FullScreen.frame = maskFrame;
+                         self.imageMaskView_FullScreen.frame = maskFrame;
 //                         _imageView_FullScreen.frame = imageframe;
                          _imageBackgroundView_FullScreen.backgroundColor = [UIColor clearColor];
                          
                      }
                      completion:^(BOOL finished) {
-                         [_imageMaskView_FullScreen removeFromSuperview];
+                         [self.scrollview removeFromSuperview];
+                         [self.imageMaskView_FullScreen removeFromSuperview];
+                         
                          [_imageBackgroundView_FullScreen removeFromSuperview];
                          [_imageView_FullScreen removeFromSuperview];
                      }];
