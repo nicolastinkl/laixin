@@ -141,9 +141,12 @@
         _selectionFilter            = [NSPredicate predicateWithValue:YES];
         
         if ([self respondsToSelector:@selector(setContentSizeForViewInPopover:)])
+        {
             [self setContentSizeForViewInPopover:kPopoverContentSize];
+//            [self setPreferredContentSize:preferredContentSize];
+        }
     }
-    
+    // UIViewController.preferredContentSize
     return self;
 }
 

@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AFNetworking.h"
 #import "blocktypedef.h"
-
-@interface DAHttpClient :    AFHTTPSessionManager
+@interface DAHttpClient :  AFHTTPSessionManager
 {
 	NSString        *_apiBaseUrlString;
 }

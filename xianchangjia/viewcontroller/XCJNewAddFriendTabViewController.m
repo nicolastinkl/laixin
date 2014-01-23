@@ -218,7 +218,7 @@
     UIButton * button = (UIButton*)sender;
     UIView * superView = button.superview.superview.superview;
     
-    NSIndexPath * indexPath = [self.tableView indexPathForCell:superView];
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:(UITableViewCell *)superView];
 //    NSIndexPath * indexPath = [[NSIndexPath alloc] initWithIndex:0];
     FCBeAddFriend *userinfo = (FCBeAddFriend *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     if (userinfo) {
@@ -228,7 +228,7 @@
     }
     
     // reload this cell
-    [self configureCell:superView atIndexPath:indexPath];
+    [self configureCell:(UITableViewCell *)superView atIndexPath:indexPath];
     
 }
 
