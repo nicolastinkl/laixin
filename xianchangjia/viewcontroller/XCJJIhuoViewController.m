@@ -11,7 +11,6 @@
 #import "MLNetworkingManager.h"
 #import "QRCodeGenerator.h"
 
-
 @interface XCJJIhuoViewController ()<UIActionSheetDelegate>
 
 @end
@@ -42,14 +41,26 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [[MLNetworkingManager sharedManager] sendWithAction:@"active.generate_code" parameters:@{@"level":@(activeCode)} success:^(MLRequest *request, id responseObject) {
             //Result={"active_code":"wD9IECBQRxUyFvo","level":1}
+              [SVProgressHUD dismiss];
             if (responseObject) {
                 NSDictionary * dict = responseObject[@"result"];
                 NSString * stringCode = [DataHelper getStringValue:dict[@"active_code"] defaultValue:@""];
-                ((UILabel *)[self.view subviewWithTag:1]).text = stringCode;
-                NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",stringCode];
-                ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
+                if (stringCode.length <= 0) {
+                    ((UILabel *)[self.view subviewWithTag:1]).textColor = [UIColor redColor];
+                    ((UILabel *)[self.view subviewWithTag:1]).text = @"等级不够,没有激活码";
+                     ((UILabel *)[self.view subviewWithTag:3]).text =@"";
+                    ((UIImageView *)[self.view subviewWithTag:2]).image = [UIImage imageNamed:@"common_image_loading_failure"];
+                    self.navigationItem.rightBarButtonItem.enabled = NO;
+                }else{
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    ((UILabel *)[self.view subviewWithTag:1]).text = stringCode;
+                    NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",stringCode];
+                    ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
+                    
+                }
+                
             }
-            [SVProgressHUD dismiss];
+          
         } failure:^(MLRequest *request, NSError *error) {
             [SVProgressHUD dismiss];            
         }];

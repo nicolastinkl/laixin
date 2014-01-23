@@ -42,12 +42,25 @@
     [button infoStyle];
     [button addTarget:self action:@selector(activeClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    ((UITextField *) [self.view subviewWithTag:1]).text = self.code;
+    UITextField * text = ((UITextField *) [self.view subviewWithTag:1]) ;
+    
+    text.text = self.code;
+    
+    if (!self.code) {
+        double delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+             [text becomeFirstResponder];
+        }); 
+       
+    }
+    
 }
 
 -(IBAction)activeClick:(id)sender
 {
     UITextField * text =     ((UITextField *) [self.view subviewWithTag:1]);
+    [text resignFirstResponder];
     NSString * CurrentCode = text.text;
     if (CurrentCode && CurrentCode.length > 0) {
         [SVProgressHUD show];

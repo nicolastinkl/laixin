@@ -163,6 +163,7 @@
     [action showInView:self.view];
 }
 
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if ([self.groupInfo.gbadgeNumber intValue] > 0) {
@@ -722,6 +723,41 @@
     
 }
 
+- (void)clickDeleteButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity
+{
+    if (activity) {
+        [SVProgressHUD show];
+        
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.delete" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                // delete ok
+                 [SVProgressHUD dismiss];
+                @try {
+                    int index = [self.activities indexOfObject:activity];
+                    [self.cellHeights removeObjectAtIndex:index];
+                    [self.activities removeObject:activity];
+                    NSIndexPath  * indexpath = [NSIndexPath indexPathForRow:index inSection:0];
+                    [self.tableView deleteRowsAtIndexPaths:@[indexpath] withRowAnimation:UITableViewRowAnimationTop];
+                }
+                @catch (NSException *exception) {
+                    [UIAlertView showAlertViewWithMessage:@"删除失败"];
+                }
+                @finally {
+                    
+                }
+               
+            }
+           
+            
+        } failure:^(MLRequest *request, NSError *error) {
+            [UIAlertView showAlertViewWithMessage:@"删除失败"];
+            [SVProgressHUD dismiss];
+        }];
+    }
+}
+
+
+
 - (void)sendCommentContent:(NSString*)content ToActivity:(XCJGroupPost_list*)currentOperateActivity atCommentIndex:(NSInteger)commentIndex
 {
     if ([content isNilOrEmpty]||commentIndex>=(NSInteger)currentOperateActivity.comments.count) {
@@ -779,6 +815,8 @@
     } withuid:activity.uid];
     
 }
+
+
 
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo

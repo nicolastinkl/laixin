@@ -24,7 +24,7 @@
 #import "UIView+Additon.h"
 
 
-@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate>
+@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
 
 //用户头像View
 @property (nonatomic, strong) UIButton *avatarButton;
@@ -199,6 +199,13 @@
 {
     UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"提示" message:@"删除该动态" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除", nil];
     [alertview show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [_delegate clickDeleteButton:self.ReportButton onActivity:_activity];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

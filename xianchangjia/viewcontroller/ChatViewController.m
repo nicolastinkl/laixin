@@ -117,7 +117,7 @@
     
     EmjView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, keyboardHeight)];
     [EmjView addSubview:scrollView];
-    [EmjView addSubview:pageControl];
+//    [EmjView addSubview:pageControl];
     [self.view addSubview:EmjView];
     
     [self setUpSequencer];
@@ -1234,7 +1234,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     if ([self.inputTextView isFirstResponder]) {
+        self.inputTextView.inputView = nil;
         [self.inputTextView resignFirstResponder];
+        [self.inputTextView reloadInputViews];
     }else
     {
         UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"复制", nil];

@@ -22,6 +22,13 @@
 - (void)clickLikeButton:(UIButton *)likeButton onActivity:(XCJGroupPost_list *)activity;
 //点击评论View中的某行(当前如果点击的是其中的某用户是会忽略的)
 - (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(XCJGroupPost_list *)activity;
+/**
+ *  删除该条动态
+ *
+ *  @param commentButton <#commentButton description#>
+ *  @param activity      <#activity description#>
+ */
+- (void)clickDeleteButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity;
 
 @end
 

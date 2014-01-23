@@ -11,6 +11,7 @@
 #import "SDWebImageManager.h"
 #import "XCAlbumDefines.h"
 #import "UIView+Additon.h"
+#import "UIAlertViewAddition.h"
 
 #define kFullScreenImageAnimationDuration .35f
 
@@ -90,7 +91,7 @@
  *  显示图片view
  */
 
-@interface MLCanPopUpImageView()<UIScrollViewDelegate>
+@interface MLCanPopUpImageView()<UIScrollViewDelegate,UIActionSheetDelegate>
 
 @property (nonatomic, strong) UIView *imageBackgroundView_FullScreen;
 @property (nonatomic, strong) UIView *imageMaskView_FullScreen;
@@ -298,6 +299,9 @@
     UITapGestureRecognizer *fullScreenImageSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullScreenImageEvent:)];
     [fullScreenImageView addGestureRecognizer:fullScreenImageSingleTap];
     
+    UILongPressGestureRecognizer  *longGesTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongClick:)];
+    
+    [fullScreenImageView addGestureRecognizer:longGesTap];
 //    CGRect newImageViewFrame = [self realFrameForAspectFitFrame:toFrame andImageSize:self.image.size];
 //self.imageMaskView_FullScreen.frame = CGRectMake(0, 0, 320, topView.height);
     _imageView_FullScreen.userInteractionEnabled = NO;
@@ -391,6 +395,32 @@
 //     self.imageView_FullScreen.center = CGPointMake(self.scrollview.contentSize.width * 0.5 + offsetX,  self.scrollview.contentSize.height * 0.5 + offsetY);
 //}
 
+- (void) LongClick:(UIGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        
+        UIActionSheet *  sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存照片" otherButtonTitles:@"投诉", nil];
+        [sheet showInView:self.imageMaskView_FullScreen];
+    }
+    
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        //投诉
+        [UIAlertView showAlertViewWithMessage:@"投诉成功"];
+    }else if (buttonIndex == 0)
+    {
+        if (self.imageView_FullScreen.image) {
+            // save to carmera
+            UIImageWriteToSavedPhotosAlbum(self.imageView_FullScreen.image, nil, nil, nil);
+            [UIAlertView showAlertViewWithMessage:@"保存成功"];            
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"保存失败"];
+        }
+
+    }
+}
 
 - (void)fullScreenImageEvent:(id)sender
 {
