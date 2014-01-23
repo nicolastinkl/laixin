@@ -17,3 +17,4 @@
 @property (nonatomic,assign,getter = getFullScreenAnimationDuration) CGFloat fullScreenAnimationDuration;
 
 @end
+

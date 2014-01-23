@@ -462,4 +462,14 @@
     return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,value,value];
 }
 
++ (NSString *) getUrlByImageUrl:(NSString * ) url width:(NSInteger) width height:(NSInteger) height
+{
+    if ([url isNilOrEmpty]) {
+        return @"";
+    }
+    url = [DataHelper getStringValue:url defaultValue:@""];
+    return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,width,height];
+}
+
+
 @end

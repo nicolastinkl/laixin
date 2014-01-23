@@ -75,8 +75,8 @@
         UIColor *commonColor = [UIColor colorWithString:@"{116,126,170}"];
         //头像
         self.avatarButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _avatarButton.layer.borderColor = [UIColor grayColor].CGColor;
-        _avatarButton.layer.borderWidth = 0.5f;
+//        _avatarButton.layer.borderColor = [UIColor grayColor].CGColor;
+//        _avatarButton.layer.borderWidth = 0.5f;
         _avatarButton.clipsToBounds = YES;
         [_avatarButton addTarget:self action:@selector(avatarButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:_avatarButton];
@@ -245,7 +245,9 @@
 //        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
 //        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
         
-        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:160]] placeholderImage:nil displayProgress:YES];
+//        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:160]] placeholderImage:nil displayProgress:YES];
+        
+        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL width:_activity.width/10 height:_activity.height/10]] placeholderImage:nil displayProgress:YES];
         _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
     }
     
@@ -316,10 +318,22 @@
     
     if (_activity.imageURL && _activity.imageURL.length > 5) {
         _activityImageView.hidden = NO;
-        _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
-        yOffset += _activityImageView.frameHeight+10;
+        
+        if (_activity.width > 2000) {
+            _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
+            yOffset += _activityImageView.frameHeight+10;  // 正方形
+        }else{
+            NSInteger width = _activity.width/10;
+            NSInteger height = _activity.height/10;
+            if (height > 200) {
+                height = 200;
+            }
+            _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
+            yOffset += _activityImageView.frameHeight+10;   //不规则形状
+        }
     }else{
         _activityImageView.hidden = YES;
+        _activityImageView.frame = CGRectMake(0, 0, 0, 0);
     }
     
     _likeButton.frame = CGRectMake(self.frameWidth-120, yOffset, 50, 20);
@@ -394,8 +408,19 @@
     
     if (_activity_new.imageURL) {
         _activityImageView.hidden = NO;
-        _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, self.frameWidth-xOffset-10);
-        yOffset += _activityImageView.frameHeight+10;
+        if (_activity.width > 2000) {
+            _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
+            yOffset += _activityImageView.frameHeight+10;  // 正方形
+        }else{
+            NSInteger width = _activity.width/10;
+            NSInteger height = _activity.height/10;
+            if (height > 200) {
+                height = 200;
+            }
+            _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
+            yOffset += _activityImageView.frameHeight+10;   //不规则形状
+        }
+        
     }else{
         _activityImageView.hidden = YES;
     }

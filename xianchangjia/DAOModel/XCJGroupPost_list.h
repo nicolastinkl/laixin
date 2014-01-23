@@ -24,6 +24,8 @@
 @property (assign, nonatomic) NSTimeInterval time;
 @property (strong, nonatomic) NSString * timeText;
 
+@property (assign, nonatomic) NSInteger height;
+@property (assign, nonatomic) NSInteger width;
 @property (nonatomic,strong) NSMutableArray *comments;
 @property (nonatomic,strong) NSMutableArray * likeUsers;
 

@@ -55,6 +55,6 @@
 
 + (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value;
 
-
++ (NSString *) getUrlByImageUrl:(NSString * ) url width:(NSInteger) width height:(NSInteger) height;
 
 @end

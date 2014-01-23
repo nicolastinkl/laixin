@@ -42,6 +42,8 @@
     result.ilike = [DataHelper getBoolValue:dict[@"ilike"] defaultValue:NO];
     result.replycount = [DataHelper getIntegerValue:dict[@"replycount"] defaultValue:0];
     result.like = [DataHelper getIntegerValue:dict[@"like"] defaultValue:0];
+    result.width = [DataHelper getIntegerValue:dict[@"width"] defaultValue:0];
+    result.height = [DataHelper getIntegerValue:dict[@"height"] defaultValue:0];
     NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
     result.time = timeinter;
     result.timeText = [tools timeLabelTextOfTime:timeinter];
