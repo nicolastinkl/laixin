@@ -138,7 +138,6 @@
                 NSString * sessionID =  [response2 objectForKey:@"sessionid"];
                 NSString * serverURL =  [response2 objectForKey:@"ws"];
                 if (sessionID) {
-                    
                     [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                     [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                     [USER_DEFAULT synchronize];

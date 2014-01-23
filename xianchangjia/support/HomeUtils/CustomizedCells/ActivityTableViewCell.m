@@ -223,8 +223,11 @@
     
     if([activity.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
     {
-         [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+         [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
          [_userNameButton setTitle:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] forState:UIControlStateNormal];
+        
+        [_userNameButton setTitleColor:[tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level] forState:UIControlStateNormal];
+        
         _ReportButton.hidden = NO;
     }else{
          _ReportButton.hidden = YES;
@@ -232,11 +235,12 @@
             FCUserDescription * user = response;
             //内容
             if (user.headpic) {
-                [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+                [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
             }else{
-                [_avatarButton setImage:[UIImage imageNamed:@"avatar_fault"] forState:UIControlStateNormal];
+                [_avatarButton setImage:[UIImage imageNamed:@"avatar_default"] forState:UIControlStateNormal];
             }
             [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
+            [_userNameButton setTitleColor:[tools colorWithIndex:[user.actor_level intValue]] forState:UIControlStateNormal];
         } withuid:activity.uid];
     }
     

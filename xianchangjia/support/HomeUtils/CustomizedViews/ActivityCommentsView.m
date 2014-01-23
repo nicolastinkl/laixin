@@ -14,7 +14,8 @@
 #import "LXAPIController.h"
 #import "LXRequestFacebookManager.h"
 #import "XCAlbumDefines.h"
-
+#import "tools.h"
+#import "FCUserDescription.h"
 
 @interface ActivityCommentsView()<TTTAttributedLabelDelegate,UIGestureRecognizerDelegate>
 @end
@@ -58,19 +59,22 @@
         label.numberOfLines = 0;
         //超链接样式
         [label.linkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-        [label.linkAttributes setValue:[UIColor colorWithString:@"{116,126,170}"] forKey:(NSString *)kCTForegroundColorAttributeName];
+//        [label.linkAttributes setValue:[UIColor colorWithString:@"{116,126,170}"] forKey:(NSString *)kCTForegroundColorAttributeName];
         [label.activeLinkAttributes setValue:[UIColor lightGrayColor] forKey:(NSString *)kCTForegroundColorAttributeName];
         label.delegate = self;
         
         if([comment.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
         {
+            [label.linkAttributes setValue:  [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level] forKey:(NSString *)kCTForegroundColorAttributeName];
+            
             label.text = [NSString stringWithFormat:@"%@: %@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick],comment.content];
             [label addLinkToCommand:comment.uid withRange: NSMakeRange (0,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick].length)];
             [label sizeToFit];
         }else
         {
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                LXUser * user = response;
+                FCUserDescription * user = response;
+                 [label.linkAttributes setValue: [tools colorWithIndex:[user.actor_level intValue] ]forKey:(NSString *)kCTForegroundColorAttributeName];
                 label.text = [NSString stringWithFormat:@"%@: %@",user.nick,comment.content];
                 [label addLinkToCommand:user.uid withRange: NSMakeRange (0,user.nick.length)];
                 [label sizeToFit];

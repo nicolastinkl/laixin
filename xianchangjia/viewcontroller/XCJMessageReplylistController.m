@@ -275,6 +275,7 @@
             [imgView setImage:[UIImage imageNamed:@"avatar_fault"]];
         }
         labelnick.text = user.nick;
+        labelnick.textColor = [tools colorWithIndex:[user.actor_level intValue]];
     } withuid:info.uid];
     labelTime.text = [tools timeLabelTextOfTime:[info.time doubleValue]];
     

@@ -59,7 +59,12 @@
     
     self.Label_nick.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
     self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
-    self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
+    if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position]) {
+        
+        self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
+    }else{
+        self.Label_address.text = @"四川 成都";
+    }
     [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
 }
 

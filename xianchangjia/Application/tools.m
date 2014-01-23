@@ -470,6 +470,13 @@
     url = [DataHelper getStringValue:url defaultValue:@""];
     return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,width,height];
 }
-
++(UIColor *) colorWithIndex:( int ) strIndex
+{
+    if (strIndex >= 7) {
+      return [UIColor colorWithPatternImage:[UIImage imageNamed:@"med-name-bg-0"]];
+    }
+    
+    return  [UIColor colorWithPatternImage:[UIImage imageNamed:[NSString stringWithFormat:@"med-name-bg-%d",strIndex]]];
+}
 
 @end

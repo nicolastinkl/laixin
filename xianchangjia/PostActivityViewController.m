@@ -19,7 +19,7 @@
 #import "XCJGroupPost_list.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import "UIImage+Addition.h"
 
 @interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -79,7 +79,7 @@
     postIndicator.frameSize = CGSizeMake(20, 20);
     postIndicator.center = postBtn.center;
     [rightView addSubview: self.postIndicator = postIndicator];
-//    
+    
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamedTwo:@"header_bg_opaque"] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStyleDone target:self action:@selector(CompletionPostImage:)];
@@ -132,6 +132,13 @@
     [_postImageView addGestureRecognizer:tapGes];
     
     if (_postImage) {
+        
+        
+        if(self.postImage.imageOrientation!=UIImageOrientationUp)
+        {
+            self.postImage = [self.postImage fixOrientation] ;//[tools rotateImage:self.postImage];
+        }
+        
         _postImageView.image = self.postImage;
     }
     

@@ -159,6 +159,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
 
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HomeReloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
@@ -188,6 +189,9 @@
     
     ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:21]).height = 0.3f;
     
+    ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).textColor = [tools colorWithIndex:0];
+    ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).text = @"查看消息列表";
+    
     if (![XCJAppDelegate hasLogin]) {
         [self OpenLoginview:nil];
     }else{
@@ -203,19 +207,77 @@
     self.title = @"来信";
     [self.navigationItem.titleView sizeToFit];
     [self.tableView hideIndicatorViewBlueOrGary];
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    //    item.title = @"";
+    UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self stopAnimation:obj];
+        }
+    }];
+    
 }
 
 -(void) webSocketdidFailWithError:(NSNotification * ) noty
 {
     self.title = @"来信(未连接)";
-    [self.navigationItem.titleView sizeToFit];    
+    [self.navigationItem.titleView sizeToFit];
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    //    item.title = @"";
+    UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self stopAnimation:obj];
+        }
+    }];
 }
 
 -(void) webSocketdidreceingWithMsg:(NSNotification * ) noty
 {
     self.title = @"来信(收取中...)";
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+//    item.title = @"";
+     UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self startAnimation:obj];
+        }
+    }];
+
+    
     [self.navigationItem.titleView sizeToFit];
 }
+
+- (void)startAnimation:(UIView *)button{
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];///* full rotation*/ * rotations * duration ];
+    rotationAnimation.duration = 1.0;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = CGFLOAT_MAX;
+    
+    [button.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
+- (void)stopAnimation:(UIView *) indicator{
+    
+    if (indicator) {
+        [indicator.layer removeAllAnimations];
+//        indicator.hidden = YES;
+//        [indicator removeFromSuperview];
+//        indicator = nil;
+    }
+}
+
+
 
 -(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
 {
@@ -233,12 +295,14 @@
         }
     }
     
-    UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
+//    UIButton * button = (UIButton *) [self.tableView.tableHeaderView subviewWithTag:1];
     if (contr) {
         if ([contr.content containString:@"评论"]) {
-           [button setTitle:@"新评论" forState:UIControlStateNormal];
+//           [button setTitle:@"新评论" forState:UIControlStateNormal];
+            ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).text = @"查看新评论";
         }else{
-           [button setTitle:@"新赞" forState:UIControlStateNormal];
+//           [button setTitle:@"新赞" forState:UIControlStateNormal];
+            ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).text = @"查看新赞";
         }
          if ([contr.badgeNumber intValue ] > 0) {
               [tabBar.items[0] setBadgeValue:[NSString stringWithFormat:@"%@",contr.badgeNumber]];
@@ -246,8 +310,9 @@
              [tabBar.items[0] setBadgeValue:nil];
          }
     }else{
-        [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
-         [tabBar.items[0] setBadgeValue:nil];
+//        [button setTitle:@"查看消息列表" forState:UIControlStateNormal];
+        ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).text = @"查看消息列表";
+        [tabBar.items[0] setBadgeValue:nil];
     }
     
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -432,10 +497,12 @@
 {
     FCHomeGroupMsg *info = (FCHomeGroupMsg *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:3];
-    MTAnimatedLabel *label = (MTAnimatedLabel *)[cell.contentView viewWithTag:2];
+    UILabel *label = (UILabel *)[cell.contentView viewWithTag:2];
     label.text = info.gName;
-    [label stopAnimating];
-    [label startAnimating];
+    
+    label.textColor =  [UIColor colorWithPatternImage:[UIImage imageNamed:@"med-name-bg-0"]];
+//    [label stopAnimating]; //MTAnimatedLabel
+//    [label startAnimating];
     if ([info.gbadgeNumber intValue] > 0)
         imgView.hidden = NO;
     else
@@ -493,7 +560,7 @@
         [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
         [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
         [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
-        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_position];
+        [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
         [USER_DEFAULT synchronize];
         
         {
@@ -756,10 +823,19 @@
     return count;
 }
 
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return  @"我加入的群组";
+    NSInteger numberOfRows = 0;
+    // Return the number of rows in the section.
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        numberOfRows = [sectionInfo numberOfObjects];
+    }
+    if (numberOfRows > 0) {
+        return  @"我加入的群组";
+    }
+    return @"";
+
 }
 
 

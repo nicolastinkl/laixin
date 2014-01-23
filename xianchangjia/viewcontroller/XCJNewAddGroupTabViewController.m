@@ -196,7 +196,7 @@
 {
     FCBeInviteGroup *info = (FCBeInviteGroup *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     UIImageView *imgView = (UIImageView *)[cell.contentView viewWithTag:1];
-    MTAnimatedLabel *labelnick = (MTAnimatedLabel *)[cell.contentView viewWithTag:2];
+    UILabel *labelnick = (UILabel *)[cell.contentView viewWithTag:2];
     UILabel *labelLiyou = (UILabel *)[cell.contentView viewWithTag:3];
     UIImageView *imgViewbuttonBG = (UIImageView *)[cell.contentView viewWithTag:4];
     UIButton *button = (UIButton *)[cell.contentView viewWithTag:5];

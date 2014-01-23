@@ -1176,6 +1176,7 @@
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
         imageview_BG.hidden = NO;
+        imageview_Img.userInteractionEnabled = YES;
     }else if ([message.messageType intValue] == messageType_text) {
         
         labelContent.text = message.text;
@@ -1202,6 +1203,7 @@
         [imageview_Img setImage:[UIImage imageNamed:message.text]];
         imageview_Img.fullScreenImageURL = nil;
         imageview_Img.hidden = NO;
+        imageview_Img.userInteractionEnabled = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
         imageview_BG.hidden = YES;
@@ -1239,16 +1241,14 @@
         [self.inputTextView reloadInputViews];
     }else
     {
-        UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"复制", nil];
-        action.tag = 1;
         FCMessage *message = self.messageList[indexPath.row];
-        if ([message.messageType intValue] == messageType_image) {
-            PasteboardStr = message.imageUrl;
-        }else{
-            PasteboardStr = message.text;
+        if ([message.messageType intValue] == messageType_text) {
+            
+            UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:message.text delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"复制", nil];
+             action.tag = 1;
+              PasteboardStr = message.text;
+              [action showInView:self.view];
         }
-        
-        [action showInView:self.view];
     }
 }
 

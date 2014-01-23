@@ -679,11 +679,9 @@
     likeButton.enabled = NO;
     //赞
     if (!activity.ilike) {
-      
-        
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
+//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
@@ -697,7 +695,7 @@
             //如果有则删除，没有则不动啊
             for (LXUser *aUser in activity.likeUsers) {
                 if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
-                    [activity.likeUsers removeObject:aUser];
+//                    [activity.likeUsers removeObject:aUser];
                     break;
                 }
             }
@@ -815,8 +813,6 @@
     } withuid:activity.uid];
     
 }
-
-
 
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
