@@ -5,6 +5,8 @@
 //  Created by JIJIA &&&&& ljh on 12-12-9.
 //  Copyright (c) 2012年 SlowsLab. All rights reserved.
 //
+
+
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 #ifndef DoubanAlbum_DoubanAlbumDefines_h
@@ -25,7 +27,7 @@ typedef enum {
 } KMessage_private_user_Msg_type;
 
 //#warning Release
-#define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
+#define NEED_OUTPUT_LOG                     0   // 0 relese  1 debug
 
 
 

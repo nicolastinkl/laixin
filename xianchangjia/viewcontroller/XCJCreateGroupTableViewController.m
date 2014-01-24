@@ -74,9 +74,8 @@
         return;
     }
     [self.GroupName resignFirstResponder];
-    // self.textType.text
     [SVProgressHUD show];
-    NSDictionary * parames = @{@"name":self.GroupName.text ,@"board":self.Label_address.text,@"type":@1};
+    NSDictionary * parames = @{@"name":self.GroupName.text ,@"position":self.Label_address.text,@"board":self.textType.text,@"type":@1};
     [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //Result={“gid”:1}
         if (responseObject) {

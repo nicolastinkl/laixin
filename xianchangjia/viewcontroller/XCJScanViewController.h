@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import <AVFoundation/AVFoundation.h>
+
 enum ScanTypeEnum {
     findUser = 1,
     findGroup = 2,

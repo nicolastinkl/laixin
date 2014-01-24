@@ -42,7 +42,7 @@
     if (jihuoCode.length > 0) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         ((UILabel *)[self.view subviewWithTag:1]).text = jihuoCode;
-        NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",jihuoCode];
+         NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",jihuoCode];
         ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
     }else{
         [SVProgressHUD showWithStatus:@"正在获取激活码..."];

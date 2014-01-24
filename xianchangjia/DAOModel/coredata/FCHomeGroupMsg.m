@@ -19,4 +19,5 @@
 @dynamic gDate;
 @dynamic gbadgeNumber;
 @dynamic isMute;
+@dynamic gPosition;
 @end

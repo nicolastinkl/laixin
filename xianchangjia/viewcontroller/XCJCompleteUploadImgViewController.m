@@ -17,14 +17,22 @@
 #import "tools.h"
 #import "MLNetworkingManager.h"
 #import "UIAlertViewAddition.h"
+#import <AVFoundation/AVFoundation.h>
 
 
-@interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate>
+@interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate, AVCaptureMetadataOutputObjectsDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
     NSString * ImageFile;
 }
+
+
+@property (strong,nonatomic)AVCaptureDevice * device;
+@property (strong,nonatomic)AVCaptureDeviceInput * input;
+@property (strong,nonatomic)AVCaptureMetadataOutput * output;
+@property (strong,nonatomic)AVCaptureSession * session;
+@property (strong,nonatomic)AVCaptureVideoPreviewLayer * preview;
 
 @property (weak, nonatomic) IBOutlet UIButton * takeButton;
 
@@ -41,11 +49,105 @@
     return self;
 }
 
+-(IBAction)FindAndFindClick:(id)sender
+{
+    
+    UITextView * text = (UITextView *) [self.view subviewWithTag:10];
+    [text resignFirstResponder];
+    
+    UIButton * button =  (UIButton * )sender;
+    button.enabled = NO;
+    // start find
+    ((UIView *) [self.view subviewWithTag:9]).hidden = NO;
+    [self setupCamera];
+}
+
+-(IBAction)HiddenKeyboardClick:(id)sender
+{
+
+    UITextView * text = (UITextView *) [self.view subviewWithTag:10];
+    [text resignFirstResponder];
+}
+
+
+- (void)setupCamera
+{
+    // Device
+    _device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    // Input
+    _input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
+    
+    // Output
+    _output = [[AVCaptureMetadataOutput alloc]init];
+    [_output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+    
+    // Session
+    _session = [[AVCaptureSession alloc]init];
+    [_session setSessionPreset:AVCaptureSessionPresetHigh];
+    if ([_session canAddInput:self.input])
+    {
+        [_session addInput:self.input];
+    }
+    
+    if ([_session canAddOutput:self.output])
+    {
+        [_session addOutput:self.output];
+    }
+    
+    // 条码类型 AVMetadataObjectTypeQRCode
+    _output.metadataObjectTypes =@[AVMetadataObjectTypeQRCode];
+    
+    // Preview
+    _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
+    _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    //_preview.frame =CGRectMake(48,114,225,225);
+    _preview.frame =CGRectMake(0,0,320,320);//self.view.height);
+    UIView * childview =  [self.view subviewWithTag:9];
+    [childview.layer insertSublayer:self.preview atIndex:0];
+    // Start
+    [_session startRunning];
+    
+}
+#pragma mark AVCaptureMetadataOutputObjectsDelegate
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection
+{
+    if ([metadataObjects count] >0)
+    {
+        AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
+        if (metadataObject.stringValue.length > 0) {
+           
+            NSString * stringValueNew = metadataObject.stringValue;
+            if([stringValueNew containString:@"[activecode]-"])
+            {
+                stringValueNew = [stringValueNew stringByReplacingOccurrencesOfString:@"[activecode]-" withString:@""];
+                [_session stopRunning];
+                [self.preview removeFromSuperlayer];
+                _preview = nil;
+                _session = nil;
+                 
+                UITextView * text = (UITextView *) [self.view subviewWithTag:10];
+                text.text = stringValueNew;
+                ((UIView *) [self.view subviewWithTag:9]).hidden = YES;
+                ((UIButton *) [self.view subviewWithTag:8]).enabled = YES;
+            }
+        };
+    }
+}
+
+
 -(IBAction)completeOperationClick:(id)sender
 {
-    UITextView * text = (UITextView *) [self.view subviewWithTag:11];
+    UITextView * text = (UITextView *) [self.view subviewWithTag:10];
     if (text.text.length > 0) {
-     
+        if (_session) {            
+            [_session stopRunning];
+            [self.preview removeFromSuperlayer];
+            _preview = nil;
+            _session = nil;
+        }
+        
+        
         //先激活
         [SVProgressHUD show];
         [[MLNetworkingManager sharedManager] sendWithAction:@"active.do" parameters:@{@"active_code":text.text} success:^(MLRequest *request, id responseObject) {

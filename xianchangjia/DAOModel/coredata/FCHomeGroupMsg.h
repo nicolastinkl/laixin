@@ -20,5 +20,6 @@
 @property (nonatomic, retain) NSDate * gDate;
 @property (nonatomic, retain) NSNumber * gbadgeNumber;
 @property (nonatomic, retain) NSNumber * isMute;
+@property (nonatomic, retain) NSString * gPosition;
 
 @end

@@ -137,9 +137,8 @@
             [UIAlertView showAlertViewWithMessage:@"手机号码格式错误"];
         }
     }else{
-        [UIAlertView showAlertViewWithMessage:@"请输入正确手机号或密码"];
+        [UIAlertView showAlertViewWithMessage:@"请输入正确手机号或验证码"];
     }
-    
 }
 
 -(void)hideKeyboard
