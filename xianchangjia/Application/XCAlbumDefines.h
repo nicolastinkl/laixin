@@ -94,6 +94,9 @@ typedef enum {
 #define KeyChain_Laixin_account_devtokenstring @"KeyChain_Laixin_account_devtokenstring"
 #define KeyChain_Laixin_message_PrivateUnreadIndex @"KeyChain_Laixin_message_PrivateUnreadIndex"
 #define KeyChain_Laixin_message_GroupBeinvite @"KeyChain_Laixin_message_GroupBeinvite"
+
+#define KeyChain_Laixin_Code_Jihuo @"KeyChain_Laixin_Code_Jihuo"
+
 /*-----------------------------
  1. 类型1----新的好友动态
  2. 类型2----新的被人评论

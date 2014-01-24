@@ -43,22 +43,57 @@
 
 -(IBAction)completeOperationClick:(id)sender
 {
-    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
-    [USER_DEFAULT synchronize];
-    NSString * strheadpic = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic];
-    if (strheadpic.length < 5) {
-        [UIAlertView showAlertViewWithMessage:@"请设置头像"];
-        return;
+    UITextView * text = (UITextView *) [self.view subviewWithTag:11];
+    if (text.text.length > 0) {
+     
+        //先激活
+        [SVProgressHUD show];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"active.do" parameters:@{@"active_code":text.text} success:^(MLRequest *request, id responseObject) {
+            //	Result={"active_level":1,"active_by":1}
+            if (responseObject) {
+                NSDictionary * result = responseObject[@"result"];
+                //返回激活等级和激活者的id
+                NSInteger level = [DataHelper getIntegerValue:result[@"active_level"] defaultValue:0];
+                if (level > 0) {
+                    
+                }
+                
+                [SVProgressHUD dismiss];
+                NSString * activeByUID =  [DataHelper getStringValue:result[@"active_by"]  defaultValue:@""];
+                if (activeByUID.length > 0) {
+                    // check this uid is my friends???
+                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
+                        [[[LXAPIController sharedLXAPIController]  chatDataStoreManager] setFriendsUserDescription:response];
+                    } withuid:activeByUID];
+                    
+                    [UIAlertView showAlertViewWithMessage:@"激活成功"];
+                    
+                    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+                    [USER_DEFAULT synchronize];
+                    NSString * strheadpic = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic];
+                    if (strheadpic.length < 5) {
+                        [UIAlertView showAlertViewWithMessage:@"请设置头像"];
+                        return;
+                    }
+                    // connection of websocket server
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+                    
+                    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                        
+                    }];
+
+                }else{
+                    [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
+                }
+            }
+            
+        } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD dismiss];
+            [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
+        }];
+        
+        
     }
-    // connection of websocket server
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
-    
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-  
-    }];
-    
-    //  xx:十五号
-    //  xx: 发来一张图
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{
@@ -73,9 +108,9 @@
     [self setNeedsStatusBarAppearanceUpdate];
 	// Do any additional setup after loading the view.
     
-    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
-    img.layer.cornerRadius = img.width/2;
-    [img.layer setMasksToBounds:YES];
+//    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
+//    img.layer.cornerRadius = img.width/2;
+//    [img.layer setMasksToBounds:YES];
     
     double delayInSeconds = .3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));

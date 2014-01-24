@@ -524,7 +524,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="zGV-AP-zdb" kind="push" identifier="ShowAboutLaixin" id="Wou-0M-BBA"/>
+                                            <segue destination="u3z-yj-Dh1" kind="push" id="bJz-Td-cgX"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -542,6 +542,13 @@
                                                     <rect key="frame" x="20" y="11" width="112" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="V.1.1.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="T8x-5f-XTL">
+                                                    <rect key="frame" x="161" y="11" width="126" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.18779067520000001" green="0.65503207760000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -3575,8 +3582,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="上传真实的头像,拉近真实的距离" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mxL-xh-pws">
-                                <rect key="frame" x="37" y="229" width="246" height="21"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="sync-sort-tip" id="l2k-hv-2hT">
+                                <rect key="frame" x="20" y="82" width="280" height="144"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="上传真实的头像 拉近真实的距离" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mxL-xh-pws">
+                                <rect key="frame" x="104" y="82" width="119" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -3612,13 +3623,13 @@
                                     <action selector="completeOperationClick:" destination="VPs-Cc-gML" eventType="touchUpInside" id="EsV-cE-SLS"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="story-userphoto-dummy" id="3u2-K5-g2T">
-                                <rect key="frame" x="110" y="103" width="100" height="100"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="3u2-K5-g2T">
+                                <rect key="frame" x="20" y="83" width="77" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Sd4-AM-Zk3">
-                                <rect key="frame" x="130" y="124" width="60" height="60"/>
+                                <rect key="frame" x="28" y="91" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3627,8 +3638,25 @@
                                     <action selector="openGallery:" destination="VPs-Cc-gML" eventType="touchUpInside" id="iJQ-qU-Ec0"/>
                                 </connections>
                             </button>
-                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" image="checkmark-on-photo-view-ios7" id="7T6-f3-yK0">
-                                <rect key="frame" x="171" y="166" width="40" height="40"/>
+                            <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="center" image="mission-step-done" id="7T6-f3-yK0">
+                                <rect key="frame" x="14" y="77" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="输入激活码" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KtL-BH-c3O">
+                                <rect key="frame" x="116" y="154" width="163" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="激活码" minimumFontSize="17" clearButtonMode="whileEditing" id="vYv-5n-a41">
+                                <rect key="frame" x="80" y="186" width="207" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="eventDownIcon" id="D7O-oA-6UZ">
+                                <rect key="frame" x="100" y="157" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
                         </subviews>
@@ -4371,6 +4399,56 @@
             </objects>
             <point key="canvasLocation" x="3789" y="172"/>
         </scene>
+        <!--View Controller - 关于来信-->
+        <scene sceneID="lWD-XX-zc5">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="u3z-yj-Dh1" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="czo-n4-o61">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="feedbackReplyBackground" id="mRE-KH-ADG">
+                                <rect key="frame" x="33" y="154" width="254" height="306"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="laichat_logo100x100" id="y4w-ck-Cyc">
+                                <rect key="frame" x="110" y="64" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="来信 1.1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1ZI-mh-40B">
+                                <rect key="frame" x="0.0" y="234" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="free-sms-invite" id="ssa-AF-Qyy">
+                                <rect key="frame" x="35" y="286" width="250" height="69"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="成都莱福思科技有限公司" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="aDs-go-vf0">
+                                <rect key="frame" x="76" y="383" width="169" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright @ 2011-2013 Lifestyle.All Rights Reserved." textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="orc-9f-c4h">
+                                <rect key="frame" x="54" y="388" width="213" height="72"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="关于来信" id="OCY-dL-IoJ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RVa-7f-cNf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3609" y="-696"/>
+        </scene>
         <!--About View Controller-->
         <scene sceneID="6FD-7R-5od">
             <objects>
@@ -4533,7 +4611,6 @@
         <image name="cell_bottom_back" width="309" height="25"/>
         <image name="cell_monlog_background" width="303" height="69"/>
         <image name="chat_btn" width="40" height="40"/>
-        <image name="checkmark-on-photo-view-ios7" width="50" height="50"/>
         <image name="chevron-light-grey" width="7" height="11"/>
         <image name="commercialize_payment_icon_success_os7" width="28" height="28"/>
         <image name="composeIcon" width="18" height="18"/>
@@ -4545,12 +4622,15 @@
         <image name="crop_corner_right_bottom" width="26" height="26"/>
         <image name="crop_corner_right_top" width="26" height="26"/>
         <image name="dialog-full-button" width="40" height="40"/>
+        <image name="eventDownIcon" width="16" height="16"/>
         <image name="face_vip" width="20" height="20"/>
         <image name="facebookOnlyUserMaskMedium" width="42" height="42"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="fbc_promobutton_28_2_5_2_5_normal" width="11" height="32"/>
         <image name="fbc_promobutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
+        <image name="feedbackReplyBackground" width="254" height="306"/>
+        <image name="free-sms-invite" width="280" height="80"/>
         <image name="groupMask" width="60" height="60"/>
         <image name="groupMaskPressed" width="60" height="60"/>
         <image name="header_icon_newchat" width="22" height="22"/>
@@ -4572,6 +4652,7 @@
         <image name="menu_icon_bulb_pressed" width="28" height="28"/>
         <image name="messages_textview_background_os7" width="17" height="34"/>
         <image name="messengerUserMask" width="60" height="60"/>
+        <image name="mission-step-done" width="27" height="27"/>
         <image name="mobile" width="10" height="18"/>
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
@@ -4589,7 +4670,7 @@
         <image name="searchIcon" width="18" height="18"/>
         <image name="sendButtonNormal" width="20" height="29"/>
         <image name="square_heart" width="55" height="50"/>
-        <image name="story-userphoto-dummy" width="78" height="78"/>
+        <image name="sync-sort-tip" width="280" height="144"/>
         <image name="tabBarBackground" width="1" height="50"/>
         <image name="tabBarContactsIcon" width="25" height="25"/>
         <image name="tabBarRecentsIcon" width="25" height="25"/>
@@ -4607,7 +4688,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="o8z-dt-4y9"/>
-        <segue reference="Wou-0M-BBA"/>
+        <segue reference="FpW-Pc-1ro"/>
         <segue reference="zRY-k4-2Qe"/>
     </inferredMetricsTieBreakers>
 </document>

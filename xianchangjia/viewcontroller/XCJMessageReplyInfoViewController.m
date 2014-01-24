@@ -16,6 +16,8 @@
 #import "Comment.h"
 #import "UIAlertViewAddition.h"
 #import "InterceptTouchView.h"
+#import "FCUserDescription.h"
+
 
 @interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -386,7 +388,7 @@
         
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
+//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
@@ -425,17 +427,28 @@
                      }];
 }
 
+
 //点击评论View中的某行(当前如果点击的是其中的某用户是会忽略的)
 - (void)clickCommentsView:(UIView *)commentsView atIndex:(NSInteger)index atBottomY:(CGFloat)bottomY onActivity:(XCJGroupPost_list *)activity
 {
     //滚动到指定activity的底部-5像素
-//    CGRect rectOfCellInTableView = [self.tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-//    
-//    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+commentsView.frameY+bottomY;
-////    
-////    self.currentOperateActivity = activity;
-////    self.currentCommentToUserIndex = index;
-//    [_inputTextView becomeFirstResponder];
+    CGRect rectOfCellInTableView = [_tableView rectForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    
+    self.tableBaseYOffsetForInput = rectOfCellInTableView.origin.y+commentsView.frameY+bottomY;
+    
+    Comment * comment = currentGroup.comments[index];
+    if(![comment.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+    {
+        // if is me...
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            FCUserDescription * user = response;
+            _inputTextView.text = [NSString stringWithFormat:@"@%@:",user.nick];
+            [_inputTextView becomeFirstResponder];
+        } withuid:comment.uid];
+    }else{
+        _inputTextView.text = @"";
+        [_inputTextView becomeFirstResponder];
+    }
 }
 
 #pragma mark - TextView delegate

@@ -16,6 +16,8 @@
 #import "UIView+Additon.h"
 #import "UIView+Indicator.h"
 #import "XCAlbumAdditions.h"
+#import "FCUserDescription.h"
+
 
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
@@ -398,7 +400,21 @@
     
     self.currentOperateActivity = activity;
     self.currentCommentToUserIndex = index;
-    [_inputTextView becomeFirstResponder];
+    Comment * comment = self.currentOperateActivity.comments[self.currentCommentToUserIndex];
+    if(![comment.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+    {
+        // if is me...
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            FCUserDescription * user = response;
+            _inputTextView.text = [NSString stringWithFormat:@"@%@:",user.nick];
+            [_inputTextView becomeFirstResponder];
+        } withuid:comment.uid];
+    }else{
+        _inputTextView.text = @"";
+        [_inputTextView becomeFirstResponder];
+    }
+    
+    
 }
 
 #pragma mark - TextView delegate

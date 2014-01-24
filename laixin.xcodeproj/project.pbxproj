@@ -122,6 +122,7 @@
 		86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */; };
 		86893DB3187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */; };
 		86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */; };
+		868B5D3918922FE4004D1743 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3818922FE4004D1743 /* EGOCache.m */; };
 		8692E3BE18642DB700F9E1DD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
@@ -579,6 +580,8 @@
 		86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJGroupUsersTableViewController.m; path = viewcontroller/XCJGroupUsersTableViewController.m; sourceTree = "<group>"; };
 		86893DB4187FCCC500DC0CB8 /* XCJCreateChatNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateChatNaviController.h; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.h; sourceTree = SOURCE_ROOT; };
 		86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateChatNaviController.m; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.m; sourceTree = SOURCE_ROOT; };
+		868B5D3718922FE4004D1743 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
+		868B5D3818922FE4004D1743 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
 		8692E3BB18642DB700F9E1DD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "defaultPng/Default-568h@2x.png"; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
@@ -1978,6 +1981,8 @@
 				86D1830C1834AFFE0005901D /* AFAppAPIClient.h */,
 				86D1830D1834AFFE0005901D /* AFAppAPIClient.m */,
 				865632EF185FFF1300E9903C /* XCJExtendClass.h */,
+				868B5D3718922FE4004D1743 /* EGOCache.h */,
+				868B5D3818922FE4004D1743 /* EGOCache.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -2766,6 +2771,7 @@
 				866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */,
 				865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */,
 				86D183021834AF9F0005901D /* tools.m in Sources */,
+				868B5D3918922FE4004D1743 /* EGOCache.m in Sources */,
 				869CE529186BE38D0004C1EC /* NSManagedObjectContext+MagicalObserving.m in Sources */,
 				869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */,
 				86EB76DA185AA6CC00836947 /* UIButton+AFNetworking.m in Sources */,
