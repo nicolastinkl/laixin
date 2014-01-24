@@ -85,6 +85,10 @@
         menuView.alpha = 0;
         menuView.top = -600;
         menuView.delegate =  self;
+        float blurred = .5f;
+        menuView.Image_bg.alpha = .95f;
+        UIImage *blurredImage = [menuView.Image_bg.image blurredImage:blurred];
+        menuView.Image_bg.image = blurredImage;
     }
     
     if (menuView.top == 0) {

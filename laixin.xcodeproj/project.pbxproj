@@ -124,6 +124,9 @@
 		86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */; };
 		868B5D3918922FE4004D1743 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3818922FE4004D1743 /* EGOCache.m */; };
 		868B5D3B18924E53004D1743 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D3A18924E53004D1743 /* Default-568h@2x.png */; };
+		868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3E189284C6004D1743 /* UIImage+Blur.m */; };
+		868B5D45189284C6004D1743 /* UIImage+ImageWithColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D40189284C6004D1743 /* UIImage+ImageWithColor.m */; };
+		868B5D46189284C6004D1743 /* UIImage+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D42189284C6004D1743 /* UIImage+Screenshot.m */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
@@ -583,6 +586,13 @@
 		868B5D3718922FE4004D1743 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		868B5D3818922FE4004D1743 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
 		868B5D3A18924E53004D1743 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		868B5D3D189284C6004D1743 /* UIImage+Blur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Blur.h"; sourceTree = "<group>"; };
+		868B5D3E189284C6004D1743 /* UIImage+Blur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Blur.m"; sourceTree = "<group>"; };
+		868B5D3F189284C6004D1743 /* UIImage+ImageWithColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageWithColor.h"; sourceTree = "<group>"; };
+		868B5D40189284C6004D1743 /* UIImage+ImageWithColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageWithColor.m"; sourceTree = "<group>"; };
+		868B5D41189284C6004D1743 /* UIImage+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Screenshot.h"; sourceTree = "<group>"; };
+		868B5D42189284C6004D1743 /* UIImage+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Screenshot.m"; sourceTree = "<group>"; };
+		868B5D43189284C6004D1743 /* UIImage-Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage-Helpers.h"; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
@@ -1419,6 +1429,20 @@
 			name = groupInfo;
 			sourceTree = "<group>";
 		};
+		868B5D3C189284C6004D1743 /* UIImage-Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				868B5D3D189284C6004D1743 /* UIImage+Blur.h */,
+				868B5D3E189284C6004D1743 /* UIImage+Blur.m */,
+				868B5D3F189284C6004D1743 /* UIImage+ImageWithColor.h */,
+				868B5D40189284C6004D1743 /* UIImage+ImageWithColor.m */,
+				868B5D41189284C6004D1743 /* UIImage+Screenshot.h */,
+				868B5D42189284C6004D1743 /* UIImage+Screenshot.m */,
+				868B5D43189284C6004D1743 /* UIImage-Helpers.h */,
+			);
+			path = "UIImage-Helpers";
+			sourceTree = "<group>";
+		};
 		869CE4A7186957C30004C1EC /* iPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -1872,6 +1896,7 @@
 		86D182161834AED30005901D /* Additions */ = {
 			isa = PBXGroup;
 			children = (
+				868B5D3C189284C6004D1743 /* UIImage-Helpers */,
 				86740A921839FA1F0041B603 /* UIViewContr */,
 				86D182171834AED30005901D /* BTSAnchorPointLayer.h */,
 				86D182181834AED30005901D /* BTSAnchorPointLayer.m */,
@@ -2602,6 +2627,7 @@
 				8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */,
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
+				868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */,
 				86D181DE1834822C0005901D /* XCJAppDelegate.m in Sources */,
@@ -2633,6 +2659,7 @@
 				86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */,
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
+				868B5D45189284C6004D1743 /* UIImage+ImageWithColor.m in Sources */,
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
@@ -2712,6 +2739,7 @@
 				86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */,
 				86E57CF018795CC900978AFA /* HZAreaPickerView.m in Sources */,
 				86EB76D5185AA6CC00836947 /* AFURLResponseSerialization.m in Sources */,
+				868B5D46189284C6004D1743 /* UIImage+Screenshot.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,

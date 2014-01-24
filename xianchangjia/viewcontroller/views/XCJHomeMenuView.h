@@ -23,5 +23,6 @@
 
 
 @interface XCJHomeMenuView : UIView
+@property (weak, nonatomic) IBOutlet UIImageView *Image_bg;
 @property (nonatomic, weak) id<XCJHomeMenuViewDelegate> delegate;
 @end
