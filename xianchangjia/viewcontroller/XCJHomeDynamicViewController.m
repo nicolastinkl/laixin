@@ -119,7 +119,8 @@
             
            NSURL * url = [asset.defaultRepresentation url];
 //            NSURL * url = [self uploadContent:theInfo];
-            PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
+            PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];
+            // [[PostActivityViewController alloc]init];
             postVC.gID = _Currentgid;
             postVC.filePath = [url copy];
             postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
@@ -128,7 +129,9 @@
             
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];
-
+//            [self presentViewController:postVC animated:YES completion:^{
+//                
+//            }];
         }
     }];
     

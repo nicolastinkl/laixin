@@ -259,8 +259,8 @@
 
     if (activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
-         cell.HasLoad = YES;
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+        cell.HasLoad = YES;
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //    postid = 12;
             /*
@@ -287,7 +287,7 @@
             }
             cell.HasLoad = YES;
         } failure:^(MLRequest *request, NSError *error) {
-                cell.HasLoad = NO;
+            cell.HasLoad = NO;
         }];
     }
 //    cell.indexofActivitys =  [self.activities indexOfObject:activity];

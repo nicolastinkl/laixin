@@ -75,7 +75,10 @@
                 glist.like = 0;
                 glist.replycount = 0;
                 glist.group_id = self.gID;
-                glist.time = [NSDate timeIntervalSinceReferenceDate];// [[NSDate date] timeIntervalSinceNow];
+                glist.time = [NSDate timeIntervalSinceReferenceDate];
+                // [[NSDate date] timeIntervalSinceNow];
+                NSMutableArray * array = [[NSMutableArray alloc] init];
+                glist.comments = array;
                 
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
                 [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
@@ -91,7 +94,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    SLog(@"Length : %d",textView.text.length);
+    //SLog(@"Length : %d",textView.text.length);
     UILabel * label_num = (UILabel *)  [self.view subviewWithTag:2];
     
     if (textView.text.length > 10000) {

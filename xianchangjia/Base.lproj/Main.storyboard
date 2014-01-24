@@ -1641,6 +1641,42 @@
             </objects>
             <point key="canvasLocation" x="2158" y="1490"/>
         </scene>
+        <!--Post Activity View Controller-->
+        <scene sceneID="axN-50-aFJ">
+            <objects>
+                <viewController restorationIdentifier="PostActivityViewController" storyboardIdentifier="PostActivityViewController" hidesBottomBarWhenPushed="YES" id="IQF-97-IF1" customClass="PostActivityViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bJg-tz-sev">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Fyj-Sw-hY8">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image_processor_mask_corner_small" id="4ex-FI-8y4">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photoTopShadow" id="m0J-wi-wQw">
+                                <rect key="frame" x="0.0" y="64" width="320" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" id="0nw-2y-uEU">
+                                <rect key="frame" x="20" y="64" width="280" height="121"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y5D-sX-AYo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2680" y="1542"/>
+        </scene>
         <!--Dy Scence View Controller - 现场详情-->
         <scene sceneID="qBS-eM-GQ6">
             <objects>
@@ -4520,6 +4556,7 @@
         <image name="header_icon_newchat" width="22" height="22"/>
         <image name="icon_feed" width="25" height="25"/>
         <image name="icon_qrcode" width="21" height="21"/>
+        <image name="image_processor_mask_corner_small" width="640" height="640"/>
         <image name="img_add_phone_friends" width="320" height="320"/>
         <image name="img_player_bg" width="750" height="473"/>
         <image name="inboxMutedIcon" width="15" height="15"/>
@@ -4541,6 +4578,7 @@
         <image name="nav_badge_6_6_6_6" width="13" height="13"/>
         <image name="paperclipButtonDisabled" width="20" height="18"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
+        <image name="photoTopShadow" width="320" height="16"/>
         <image name="pictureHeartLike_1" width="23" height="21"/>
         <image name="places-icon" width="40" height="40"/>
         <image name="popover_icon_qrcode_os7" width="24" height="24"/>
