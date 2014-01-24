@@ -87,13 +87,13 @@
         menuView.delegate =  self;
     }
     
-    if (menuView.top == 70) {
+    if (menuView.top == 0) {
         // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
         
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 0;
             menuView.top = -600;
-            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
+//            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
         } completion:^(BOOL finished) {
         }];
     }else{
@@ -103,12 +103,10 @@
         menuView.top = -600;
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 1;
-            menuView.top = 70;
-            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
-
+            menuView.top = 0;
+//            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
         } completion:^(BOOL finished) {
         }];
-        
     }
 }
 

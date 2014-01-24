@@ -160,8 +160,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         UIView * viewKey = (UIView *) [self.view subviewWithTag:1];
         viewKey.top = 0;
-    }];
-    
+    }];    
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -173,6 +172,11 @@
     }];
 }
 
+
+//- (void)textViewDidChange:(UITextView *)textView
+//{
+//    
+//}
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {

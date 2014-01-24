@@ -58,6 +58,7 @@
             self.image_levelBg.width = 50;
             self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
         }
+        self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
     }else{
         [self LoadData];
     }
@@ -97,7 +98,7 @@
             
             LXUser * user = [[LXUser alloc] initWithDict:dic];
             [LXAPIController sharedLXAPIController].currentUser = user;
-            
+            self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
             if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
                 self.image_levelBg.width = 80;
                 self.label_level.textColor = [UIColor lightGrayColor];

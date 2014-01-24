@@ -19,6 +19,13 @@
     return self;
 }
 
+- (IBAction)MoreClick:(id)sender {
+     [self.delegate hiddenSelfViewClick];
+}
+- (IBAction)HideThisViewClick:(id)sender {
+     [self.delegate hiddenSelfViewClick];
+}
+
 - (IBAction)HideSelfViewClick:(id)sender {
     [self.delegate hiddenSelfViewClick];
 }

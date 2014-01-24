@@ -46,6 +46,7 @@
     UserDict = array;
     if (self.UserInfo) {
         self.Label_nick.text  = self.UserInfo.nick;
+        self.Label_nick.textColor = [tools colorWithIndex:[self.UserInfo.actor_level intValue]];
         if ([self.UserInfo.sex intValue] == 1) {
             self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
         }else if ([self.UserInfo.sex intValue] == 2) {

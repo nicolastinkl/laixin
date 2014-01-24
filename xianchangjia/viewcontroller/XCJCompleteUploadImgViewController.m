@@ -64,11 +64,24 @@
 
 -(IBAction)HiddenKeyboardClick:(id)sender
 {
-
     UITextView * text = (UITextView *) [self.view subviewWithTag:10];
     [text resignFirstResponder];
 }
 
+
+-(IBAction)closeCamera:(id)sender
+{
+    if (_session) {
+        [_session stopRunning];
+        [self.preview removeFromSuperlayer];
+        _preview = nil;
+        _session = nil;
+    }
+    [UIView animateWithDuration:0.3 animations:^{
+        ((UIView *) [self.view subviewWithTag:9]).hidden = YES;
+        ((UIButton *) [self.view subviewWithTag:8]).enabled = YES;
+    }];
+}
 
 - (void)setupCamera
 {
@@ -102,7 +115,7 @@
     _preview =[AVCaptureVideoPreviewLayer layerWithSession:self.session];
     _preview.videoGravity = AVLayerVideoGravityResizeAspectFill;
     //_preview.frame =CGRectMake(48,114,225,225);
-    _preview.frame =CGRectMake(0,0,320,320);//self.view.height);
+    _preview.frame =CGRectMake(0,0,320,self.view.height);
     UIView * childview =  [self.view subviewWithTag:9];
     [childview.layer insertSublayer:self.preview atIndex:0];
     // Start
@@ -146,8 +159,6 @@
             _preview = nil;
             _session = nil;
         }
-        
-        
         //先激活
         [SVProgressHUD show];
         [[MLNetworkingManager sharedManager] sendWithAction:@"active.do" parameters:@{@"active_code":text.text} success:^(MLRequest *request, id responseObject) {
@@ -168,22 +179,8 @@
                         [[[LXAPIController sharedLXAPIController]  chatDataStoreManager] setFriendsUserDescription:response];
                     } withuid:activeByUID];
                     
-                    [UIAlertView showAlertViewWithMessage:@"激活成功"];
-                    
-                    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
-                    [USER_DEFAULT synchronize];
-                    NSString * strheadpic = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic];
-                    if (strheadpic.length < 5) {
-                        [UIAlertView showAlertViewWithMessage:@"请设置头像"];
-                        return;
-                    }
-                    // connection of websocket server
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
-                    
-                    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-                        
-                    }];
-
+                    //                    [UIAlertView showAlertViewWithMessage:@"激活成功"];
+                    [self closethisView];
                 }else{
                     [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
                 }
@@ -193,9 +190,28 @@
             [SVProgressHUD dismiss];
             [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
         }];
-        
-        
+    }else{
+        [self closethisView];
     }
+    
+}
+-(void) closethisView
+{
+    
+    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+    [USER_DEFAULT synchronize];
+    NSString * strheadpic = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic];
+    if (strheadpic.length < 5) {
+        [UIAlertView showAlertViewWithMessage:@"请设置头像"];
+        return;
+    }
+    // connection of websocket server
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+    
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle{

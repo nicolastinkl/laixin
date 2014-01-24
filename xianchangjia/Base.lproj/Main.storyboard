@@ -1055,12 +1055,12 @@
                             <rect key="frame" x="0.0" y="64" width="320" height="96"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="contact_add" id="agS-KD-dje">
-                                    <rect key="frame" x="20" y="5" width="37" height="37"/>
+                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="notifications-tag" id="agS-KD-dje">
+                                    <rect key="frame" x="20" y="4" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
-                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="contact_group" id="oFZ-lw-Q8r">
-                                    <rect key="frame" x="20" y="53" width="37" height="37"/>
+                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="notifications-popular" id="oFZ-lw-Q8r">
+                                    <rect key="frame" x="20" y="52" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1k0-vN-naT">
@@ -1091,11 +1091,11 @@
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="chevron-light-grey" id="UFU-e9-c2f">
+                                <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="chevron-light-grey" id="UFU-e9-c2f">
                                     <rect key="frame" x="292" y="18" width="7" height="11"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
-                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="chevron-light-grey" id="jKM-jN-pBo">
+                                <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="chevron-light-grey" id="jKM-jN-pBo">
                                     <rect key="frame" x="292" y="66" width="7" height="11"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
@@ -1919,8 +1919,8 @@
                             <rect key="frame" x="0.0" y="64" width="320" height="51"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="icon_feed" id="EP9-DO-J1l">
-                                    <rect key="frame" x="20" y="19" width="25" height="25"/>
+                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="notifications-heart" id="EP9-DO-J1l">
+                                    <rect key="frame" x="16" y="12" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
                                 <tabBar tag="12" contentMode="scaleToFill" backgroundImage="BG_mask" itemPositioning="fill" id="0Yq-Ad-c2E">
@@ -2015,23 +2015,13 @@
                         <barButtonItem key="backBarButtonItem" title="返回" id="zVJ-BB-YZI">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="Vw9-DF-pWJ">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ulz-cQ-gyf">
-                                <rect key="frame" x="286" y="13" width="18" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" image="addIcon">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="ShowMenuClick:" destination="vSU-rK-d0f" eventType="touchUpInside" id="upH-gZ-1m0"/>
-                                </connections>
-                            </button>
+                        <barButtonItem key="rightBarButtonItem" image="toolbar-action-button" style="plain" id="Vw9-DF-pWJ">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="ShowMenuClick:" destination="vSU-rK-d0f" id="1SY-2S-aYm"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="ShowMenubutton" destination="ulz-cQ-gyf" id="ueb-bR-o8f"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FdG-SH-qfn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3007,11 +2997,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="nearcell" rowHeight="60" id="xef-01-Sye">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="nearcell" rowHeight="60" id="xef-01-Sye">
                                 <rect key="frame" x="0.0" y="86" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xef-01-Sye" id="AYO-fE-UT4">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="chy-Vk-7zh">
@@ -3019,7 +3009,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AIm-Sa-ghA">
-                                            <rect key="frame" x="68" y="8" width="185" height="21"/>
+                                            <rect key="frame" x="76" y="8" width="185" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.18779067520000001" green="0.65503207760000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3045,8 +3035,12 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" tag="4" contentMode="center" image="md_girl" id="heB-a3-7oV">
-                                            <rect key="frame" x="52" y="15" width="15" height="10"/>
+                                            <rect key="frame" x="57" y="15" width="15" height="10"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" tag="5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="explore-friends-icon-active" id="MwT-pi-j3h">
+                                            <rect key="frame" x="295" y="20" width="20" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -3676,15 +3670,26 @@
                                 </connections>
                             </button>
                             <view hidden="YES" tag="9" contentMode="scaleToFill" id="4fi-lA-Uh8">
-                                <rect key="frame" x="0.0" y="248" width="320" height="320"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" image="cameraBigFocus" id="ikb-89-qUC">
-                                        <rect key="frame" x="102" y="54" width="116" height="116"/>
+                                        <rect key="frame" x="102" y="181" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TLa-9M-rdY">
+                                        <rect key="frame" x="244" y="26" width="76" height="54"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="eventMinusIcon">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeCamera:" destination="VPs-Cc-gML" eventType="touchUpInside" id="QZq-HO-dix"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.65000000000000002" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -4579,7 +4584,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wPF-ho-Oak">
-                                <rect key="frame" x="20" y="92" width="67" height="21"/>
+                                <rect key="frame" x="20" y="89" width="67" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
@@ -4631,7 +4636,6 @@
         <image name="IMG_1811" width="640" height="960"/>
         <image name="Titlebar_settings" width="32" height="32"/>
         <image name="Titlebar_signout" width="32" height="32"/>
-        <image name="addIcon" width="18" height="18"/>
         <image name="attachmentCameraLargeHighlighted" width="48" height="38"/>
         <image name="avatar_default" width="560" height="560"/>
         <image name="backChevron" width="13" height="21"/>
@@ -4644,14 +4648,14 @@
         <image name="commercialize_payment_icon_success_os7" width="28" height="28"/>
         <image name="composeIcon" width="18" height="18"/>
         <image name="composerTextFieldBackground" width="21" height="30"/>
-        <image name="contact_add" width="37" height="37"/>
-        <image name="contact_group" width="37" height="37"/>
         <image name="crop_corner_left_bottom" width="26" height="26"/>
         <image name="crop_corner_left_top" width="26" height="26"/>
         <image name="crop_corner_right_bottom" width="26" height="26"/>
         <image name="crop_corner_right_top" width="26" height="26"/>
         <image name="dialog-full-button" width="40" height="40"/>
         <image name="eventDownIcon" width="16" height="16"/>
+        <image name="eventMinusIcon" width="16" height="16"/>
+        <image name="explore-friends-icon-active" width="20" height="19"/>
         <image name="face_vip" width="20" height="20"/>
         <image name="facebookOnlyUserMaskMedium" width="42" height="42"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
@@ -4663,7 +4667,6 @@
         <image name="groupMask" width="60" height="60"/>
         <image name="groupMaskPressed" width="60" height="60"/>
         <image name="header_icon_newchat" width="22" height="22"/>
-        <image name="icon_feed" width="25" height="25"/>
         <image name="icon_qrcode" width="21" height="21"/>
         <image name="image_processor_mask_corner_small" width="640" height="640"/>
         <image name="img_add_phone_friends" width="320" height="320"/>
@@ -4687,6 +4690,9 @@
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="nav_badge_6_6_6_6" width="13" height="13"/>
+        <image name="notifications-heart" width="47" height="47"/>
+        <image name="notifications-popular" width="47" height="47"/>
+        <image name="notifications-tag" width="47" height="47"/>
         <image name="paperclipButtonDisabled" width="20" height="18"/>
         <image name="paperclipButtonNormal" width="20" height="18"/>
         <image name="photoTopShadow" width="320" height="16"/>
@@ -4707,6 +4713,7 @@
         <image name="tabBarRecentsIcon" width="25" height="25"/>
         <image name="thread-edit-delete-button" width="13" height="30"/>
         <image name="threadInfoAddPeople" width="25" height="25"/>
+        <image name="toolbar-action-button" width="20" height="20"/>
         <image name="userinfo_gender_female_checkbox" width="17" height="18"/>
         <image name="userinfo_gender_male_checkbox" width="17" height="18"/>
         <image name="userinfo_icon_female_os7" width="18" height="18"/>

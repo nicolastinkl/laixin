@@ -169,6 +169,18 @@
     
 }
 
+
+- (BOOL)isMyFriends:(NSString *) UID
+{
+    //查看friend是否存在
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID ==  %@",UID];
+    
+    FCFriends *newfriends = [FCFriends MR_findFirstWithPredicate:pre];
+    if (newfriends == nil) {
+        return NO;
+    }
+    return YES;
+}
 /**
  *  设置好友
  *

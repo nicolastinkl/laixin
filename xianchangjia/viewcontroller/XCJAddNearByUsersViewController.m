@@ -201,15 +201,24 @@
     UILabel * labelNick = (UILabel *) [cell.contentView subviewWithTag:2];
     UILabel * labelLocation = (UILabel *) [cell.contentView subviewWithTag:3];
     UIImageView * Image_sex = (UIImageView *) [cell.contentView subviewWithTag:4];
+    UIImageView * Image_friend = (UIImageView *) [cell.contentView subviewWithTag:5];
     if (user.sex == 1) {
         Image_sex.image = [UIImage imageNamed:@"md_boy"];
     }else if (user.sex == 2) {
         Image_sex.image = [UIImage imageNamed:@"md_girl"];
     }
-    
+    if ([[[LXAPIController sharedLXAPIController ] chatDataStoreManager] isMyFriends:user.uid]) {
+        Image_friend.hidden = NO;
+    }else{
+        Image_friend.hidden = YES;
+    }
     ((UILabel *) [cell.contentView subviewWithTag:21]).height = 0.5;
     [image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:160]]];
     labelNick.text = user.nick;
+    if (labelNick.text.length <= 0) {
+        labelNick.text = @"未命名";
+    }
+    labelNick.textColor = [tools colorWithIndex:user.actor_level];
     if (user.signature.length < 1) {
         labelLocation.text = @"Ta正在构建一个伟大签名";
     }else{

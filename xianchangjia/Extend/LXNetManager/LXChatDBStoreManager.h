@@ -41,6 +41,8 @@ typedef void (^CompletionBlockTinkl)(id, NSError *);
  */
 - (void)setFriendsObject:(LXUser *) fcuserdesp;
 
+- (BOOL)isMyFriends:(NSString *) UID;
+
 /**
  *  设置我的好友
  */

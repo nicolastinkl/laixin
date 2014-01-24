@@ -58,6 +58,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     self.Label_nick.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+//    self.Label_nick.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
     self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
     if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position]) {
         

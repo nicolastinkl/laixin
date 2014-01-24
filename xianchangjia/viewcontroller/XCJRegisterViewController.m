@@ -123,8 +123,9 @@
 {
     if (self.yanzhengNumber.text.length < 4) {
         [UIAlertView showAlertViewWithMessage:@"请填写正确验证码"];
+        return;
     }
-    if ( self.yanzhengNumber.text &&  self.PhoneNumber.text) {
+    if ( self.yanzhengNumber.text.length &&  self.PhoneNumber.text) {
         [SVProgressHUD show];
         NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",self.PhoneNumber.text,self.yanzhengNumber.text];
         //                     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
