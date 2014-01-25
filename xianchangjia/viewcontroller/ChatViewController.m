@@ -85,6 +85,8 @@
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button defaultStyle];
     
+    
+    
 //    self.inputContainerView.layer.borderColor = [UIColor grayColor].CGColor;
 //    self.inputContainerView.layer.borderWidth = 0.5f;
     self.inputContainerView.top = self.view.height - self.inputContainerView.height;
@@ -235,6 +237,8 @@
                                              selector:@selector(webSocketDidReceivePushMessage:)
                                                  name:MLNetworkingManagerDidReceivePushMessageNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -788,6 +792,7 @@
                                 [self.conversation addMessagesObject:msg];
                                 [self.messageList addObject:msg];
                                 [localContext MR_saveToPersistentStoreAndWait];
+                                [self insertTableRow];
                             }
                         }
                         [SVProgressHUD dismiss];
@@ -806,7 +811,7 @@
 
 - (void)choseLocationClick
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
+
     XCJWholeNaviController * navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWholeNaviController"];
     
     [self presentViewController:navi animated:YES completion:^{
@@ -1262,24 +1267,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   /* static NSString *CellIdentifier = @"MessageCell";
-    XCJChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if (indexPath.row>0&&[((Message*)self.messageList[indexPath.row-1]).name isEqualToString:((Message*)self.messageList[indexPath.row]).name]) {
-        cell.isDisplayOnlyContent = YES;
-    }else{
-        cell.isDisplayOnlyContent = NO;
-    }
-    
-    cell.message = self.messageList[indexPath.row];
-#warning 现在是根据名字来判断是否本人，实际情况需要根据uid来判断
-    if (![cell.message.name isEqualToString:self.chat.name]) {
-        cell.backgroundColor = [UIColor colorWithWhite:0.883 alpha:1.000];
-    }else{
-        cell.backgroundColor = [UIColor colorWithWhite:0.970 alpha:1.000];
-    }
-    */
     static NSString *CellIdentifier = @"XCJChatMessageCell";
     XCJChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     FCMessage *message = self.messageList[indexPath.row];
@@ -1333,8 +1320,14 @@
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
+        
+        [imageview_Img setHeight:100.0f];
+        [imageview_Img setWidth:100.0f];
+        
         imageview_BG.hidden = NO;
         imageview_Img.userInteractionEnabled = YES;
+        address.text = @"";
+        address.hidden = YES;
     }else if ([message.messageType intValue] == messageType_text) {
         
         labelContent.text = message.text;
@@ -1354,6 +1347,8 @@
         [imageview_BG setHeight:fmaxf(35.0f, sizeToFit.height + 18.0f )];
         [imageview_BG setWidth:fmaxf(35.0f, sizeToFit.width + 23.0f )];
         imageview_BG.hidden = NO;
+        address.text = @"";
+        address.hidden = YES;
     }else if([message.messageType intValue] == messageType_emj)
     {
         labelContent.text  = @"";
@@ -1364,19 +1359,31 @@
         imageview_Img.userInteractionEnabled = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
+        
+        
+        [imageview_Img setHeight:100.0f];
+        [imageview_Img setWidth:100.0f];
+        
         imageview_BG.hidden = YES;
+        address.text = @"";
+        address.hidden = YES;
     }else if([message.messageType intValue] == messageType_map)
     {
         //display image  115 108
         labelContent.text  = @"";
-        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
+        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:320]] placeholderImage:[UIImage imageNamed:@"messages_map_image_default"]];
         imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
         imageview_Img.hidden = NO;
-        [imageview_BG setHeight:108.0f];
-        [imageview_BG setWidth:115.0f];
+        [imageview_BG setWidth:174.0f];
+        [imageview_BG setHeight:168.0f];
+        
+        [imageview_Img setHeight:160.0f];
+        [imageview_Img setWidth:160.0f];
+        
         imageview_BG.hidden = NO;
         imageview_Img.userInteractionEnabled = YES;
         address.text = message.text;
+        address.hidden = NO;
     }
     
     return cell;
@@ -1384,7 +1391,6 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     XCJChatMessageCell * msgcell =(XCJChatMessageCell*) cell;
     UILabel * labelContent = (UILabel *) [msgcell.contentView subviewWithTag:4];
     [labelContent sizeToFit];
@@ -1426,8 +1432,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FCMessage *message = self.messageList[indexPath.row];
-    if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj || [message.messageType intValue] == messageType_map) {
+    if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj ) {
         return 148.0f;
+    }
+    if ([message.messageType intValue] == messageType_map) {
+        return 206.0f;
     }
     return [self heightForCellWithPost:message.text]+20.0f;
 }

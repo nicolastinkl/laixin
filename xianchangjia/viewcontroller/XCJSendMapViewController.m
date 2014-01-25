@@ -56,7 +56,8 @@
             [mapview setCenterCoordinate:locationCorrrdinate zoomLevel:30 animated:YES];
             mapview.zoomEnabled  = YES;
         } withAddress:^(NSString *addressString) {
-            strAddresss = [NSString stringWithFormat:@"%@\n%@",string,addressString];
+            strAddresss = addressString;
+            //[NSString stringWithFormat:@"%@\n%@",string,addressString];
             
             SLog(@"string :%@",string);
             
@@ -88,8 +89,6 @@
     return image;
 }
 
-
- 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate
                   zoomLevel:(NSUInteger)zoomLevel
                    animated:(BOOL)animated
@@ -106,16 +105,15 @@
 
 -(IBAction)SureClick:(id)sender
 {
-    
-   
     MKMapView * mapview = (MKMapView *)[self.view subviewWithTag:1];
     UIImage * image = [self viewToImage:mapview];
+    
+//    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    [self cancelClick:sender];
     
     NSDictionary *dict = @{@"image":image,@"strAddresss":strAddresss,@"lat":@(lat),@"log":@(log)};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PostChatLoacation" object:nil userInfo:dict];
     
-//    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-    [self cancelClick:sender];
     //UIViewma [self.view subviewWithTag:1];
 }
 
