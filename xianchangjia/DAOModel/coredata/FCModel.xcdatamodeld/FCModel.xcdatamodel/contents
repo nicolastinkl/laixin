@@ -101,6 +101,8 @@
         <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="marriage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick_frist_pinyin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick_pinyin" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>

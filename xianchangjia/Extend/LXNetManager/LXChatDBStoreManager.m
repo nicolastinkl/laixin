@@ -14,6 +14,8 @@
 #import "LXUser.h"
 #import "FCFriends.h"
 #import "FCAccount.h"
+#import "HanyuPinyinOutputFormat.h"
+#import "PinyinHelper.h"
 
 @implementation LXChatDBStoreManager
 
@@ -155,6 +157,18 @@
         newFcObj.actor = @(fcuserdesp.actor);
         newFcObj.active_by = @(fcuserdesp.active_by);
         newFcObj.active_level = @(fcuserdesp.active_level);
+        HanyuPinyinOutputFormat *outputFormat=[[HanyuPinyinOutputFormat alloc] init];
+        [outputFormat setToneType:ToneTypeWithoutTone];
+        [outputFormat setVCharType:VCharTypeWithV];
+        [outputFormat setCaseType:CaseTypeLowercase];
+        NSString *outputPinyin=[PinyinHelper toHanyuPinyinStringWithNSString:fcuserdesp.nick withHanyuPinyinOutputFormat:outputFormat withNSString:@""];
+        newFcObj.nick_pinyin = outputPinyin;
+        if(outputPinyin.length > 0)
+        {
+            NSString * strFrist = [[outputPinyin substringToIndex:1] uppercaseString];
+            newFcObj.nick_frist_pinyin = strFrist;
+        }
+            
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL sucess, NSError *error){
             if (sucess) {
                 NSLog(@"GOOD");

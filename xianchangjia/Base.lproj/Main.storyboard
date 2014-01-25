@@ -993,7 +993,7 @@
                                             <rect key="frame" x="299" y="36" width="13" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
-                                        <imageView userInteractionEnabled="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebookOnlyUserMaskMedium" id="Fin-HB-blK">
+                                        <imageView userInteractionEnabled="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="Fin-HB-blK">
                                             <rect key="frame" x="12" y="8" width="44" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -1046,7 +1046,7 @@
         <scene sceneID="kVL-jO-Uy7">
             <objects>
                 <tableViewController restorationIdentifier="XCJFriendViewController" storyboardIdentifier="XCJFriendViewController" id="fwg-X3-bd4" customClass="XCJFriendViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="dnf-FS-Euc">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dnf-FS-Euc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1132,7 +1132,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="XCJFriendCell" rowHeight="55" id="Z4V-eO-4lc">
-                                <rect key="frame" x="0.0" y="215" width="320" height="55"/>
+                                <rect key="frame" x="0.0" y="182" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Z4V-eO-4lc" id="7ra-XM-xun">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
@@ -1158,7 +1158,7 @@
                                             <color key="textColor" red="0.90714684311224492" green="0.90714684311224492" blue="0.90714684311224492" alpha="0.28000000000000003" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messengerUserMask" id="fEc-wq-BWg">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="fEc-wq-BWg">
                                             <rect key="frame" x="20" y="8" width="40" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
@@ -1389,7 +1389,7 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messengerUserMask" id="wjB-4v-sPx">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="wjB-4v-sPx">
                                                     <rect key="frame" x="20" y="10" width="40" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -1496,11 +1496,11 @@
             </objects>
             <point key="canvasLocation" x="2985" y="872"/>
         </scene>
-        <!--Navigation Controller - 好友-->
+        <!--Navigation Controller - 通讯录-->
         <scene sceneID="WbA-yy-c0w">
             <objects>
                 <navigationController definesPresentationContext="YES" id="Nc8-3p-yJM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="好友" image="index_friends" id="duZ-Rb-2fm"/>
+                    <tabBarItem key="tabBarItem" title="通讯录" image="index_friends" id="duZ-Rb-2fm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="Ndl-W6-Xmj">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1988,21 +1988,21 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav_badge_6_6_6_6" id="PMh-NL-W4u">
-                                            <rect key="frame" x="274" y="23" width="13" height="13"/>
+                                            <rect key="frame" x="257" y="23" width="13" height="13"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <imageView userInteractionEnabled="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="inboxMutedIcon" id="pHc-Mt-wd3">
-                                            <rect key="frame" x="257" y="22" width="15" height="15"/>
+                                            <rect key="frame" x="240" y="22" width="13" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ttv-Gx-vax">
-                                            <rect key="frame" x="60" y="15" width="180" height="30"/>
+                                            <rect key="frame" x="60" y="15" width="172" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sale-lenta" id="EVA-4s-VaC">
-                                            <rect key="frame" x="278" y="0.0" width="42" height="42"/>
+                                        <imageView userInteractionEnabled="NO" tag="5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sale-lenta" id="EVA-4s-VaC">
+                                            <rect key="frame" x="260" y="0.0" width="60" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -4075,7 +4075,7 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebookOnlyUserMaskMedium" id="qYA-ox-1bT">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMask" id="qYA-ox-1bT">
                                                     <rect key="frame" x="8" y="22" width="42" height="42"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -4364,24 +4364,24 @@
                                 <rect key="frame" x="0.0" y="418" width="320" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.79999999999999982" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3mh-fF-ecX">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.89999999999999991" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3mh-fF-ecX">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.27738360969387754" green="0.27738360969387754" blue="0.27738360969387754" alpha="0.37" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wEf-dp-dHY">
+                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wEf-dp-dHY">
                                         <rect key="frame" x="255" y="6" width="65" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="使用">
+                                        <state key="normal" title="发送">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="sureClick:" destination="1ih-7y-ABA" eventType="touchUpInside" id="6wE-rP-kTt"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SXI-ZX-xg0">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="SXI-ZX-xg0">
                                         <rect key="frame" x="0.0" y="6" width="65" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="取消">
@@ -4657,7 +4657,6 @@
         <image name="eventMinusIcon" width="16" height="16"/>
         <image name="explore-friends-icon-active" width="20" height="19"/>
         <image name="face_vip" width="20" height="20"/>
-        <image name="facebookOnlyUserMaskMedium" width="42" height="42"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="fbc_promobutton_28_2_5_2_5_normal" width="11" height="32"/>
@@ -4684,7 +4683,6 @@
         <image name="md_girl" width="10" height="10"/>
         <image name="menu_icon_bulb_pressed" width="28" height="28"/>
         <image name="messages_textview_background_os7" width="17" height="34"/>
-        <image name="messengerUserMask" width="60" height="60"/>
         <image name="mission-step-done" width="27" height="27"/>
         <image name="mobile" width="10" height="18"/>
         <image name="more" width="19" height="6"/>

@@ -8,6 +8,7 @@
 
 #import "XCJChatSendImgViewController.h"
 #import "XCAlbumAdditions.h"
+#import "UIButton+Bootstrap.h"
 
 @interface XCJChatSendImgViewController ()
 
@@ -44,6 +45,11 @@
     
     UIView * view =   [self.view subviewWithTag:1];
     view.top = self.view.height - view.height;
+    
+    UIButton * cancelButton = (UIButton * )[view subviewWithTag:1];
+    UIButton * Sendbutton = (UIButton * )[view subviewWithTag:2];
+    [cancelButton bootstrapStyle];
+    [Sendbutton infoStyle];
 }
 
 - (void)didReceiveMemoryWarning

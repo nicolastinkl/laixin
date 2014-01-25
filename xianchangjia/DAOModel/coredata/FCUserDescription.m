@@ -24,5 +24,5 @@
 @dynamic uid;
 @dynamic userDesp;
 @dynamic userDespFriends;
-@dynamic active_by,active_level,actor,actor_level,position;
+@dynamic active_by,active_level,actor,actor_level,position,nick_pinyin,nick_frist_pinyin;
 @end

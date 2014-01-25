@@ -30,5 +30,7 @@
 @property (nonatomic, retain) NSString * position;
 @property (nonatomic, retain) FCAccount *userDesp;
 @property (nonatomic, retain) FCFriends *userDespFriends;
+@property (nonatomic, retain) NSString * nick_pinyin;
+@property (nonatomic, retain) NSString * nick_frist_pinyin;
 
 @end

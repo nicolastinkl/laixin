@@ -255,6 +255,11 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
                 [alert show];
             }else{
+                
+                
+                [self.inputTextView resignFirstResponder];
+                [SVProgressHUD showWithStatus:@"正在发送..."];
+                
                 TokenAPP = token;
                 [self uploadImagetoken:token];
             }
@@ -264,8 +269,7 @@
 
 -(void) uploadImagetoken:(NSString *)token
 {
-    [self.inputTextView resignFirstResponder];
-    [SVProgressHUD showWithStatus:@"正在发送..."];
+   
     //    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
     //    [img setImage:[UIImage imageWithContentsOfFile:filePath]];
     //    [img showIndicatorViewBlue];

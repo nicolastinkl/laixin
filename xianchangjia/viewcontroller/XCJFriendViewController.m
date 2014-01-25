@@ -173,7 +173,8 @@
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
         NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID != %@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
-        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendID" ascending:YES withPredicate:pre groupBy:nil delegate:self] ;
+        self.fetchedResultsController = [FCFriends MR_fetchAllSortedBy:@"friendRelation.nick_frist_pinyin" ascending:YES withPredicate:pre groupBy:@"friendRelation.nick_frist_pinyin" delegate:self] ;
+        //:
     }
 	return _fetchedResultsController;
 }
@@ -443,13 +444,26 @@
 	if (count == 0) {
 		count = 1;
 	}
-	
     return count;
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+{
+      return [self.fetchedResultsController sectionIndexTitles];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
+{
+    return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"";
+//    FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+    FCFriends *userdesp = [[sectionInfo objects] firstObject];
+    
+    return  [self.fetchedResultsController sectionIndexTitleForSectionName:userdesp.friendRelation.nick_pinyin];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

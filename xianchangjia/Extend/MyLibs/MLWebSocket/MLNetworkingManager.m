@@ -210,8 +210,8 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
     
     if (currentAlert == nil) {
-        currentAlert =  [[UIAlertView alloc] initWithTitle:@"提示" message:@"网络连接失败,请检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-        [currentAlert show];        
+//        currentAlert =  [[UIAlertView alloc] initWithTitle:@"提示" message:@"网络连接失败,请检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//        [currentAlert show];        
     }
     self.webSocket = nil;
     //这里的话需要执行全部保存的requests的失败和清理操作

@@ -58,6 +58,7 @@
         BOOL bol = [FCReplyMessage MR_deleteAllMatchingPredicate:pre];
         if (bol) {
             // OK
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
         }
     }
 }

@@ -785,7 +785,6 @@
         chatImgView.key = key;
         chatImgView.delegate = self;
         [self presentViewController:chatImgView animated:YES completion:^{
-            
         }];
         
     }
@@ -882,10 +881,13 @@
     }else{
         [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
     }
-
+    
+    UIImage *imageSend = [UIImage imageWithContentsOfFile:filePath];
+    NSData * imageDatasss = UIImageJPEGRepresentation(imageSend, 0.5);
+    
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-        //[formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
+//        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
+        [formData appendPartWithFileData:imageDatasss name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
         SLLog(@"responseObject %@",responseObject);

@@ -515,6 +515,14 @@
         imgViewMute.hidden = NO;
     else
         imgViewMute.hidden = YES;
+    
+    UIImageView *imgViewSign = (UIImageView *)[cell.contentView viewWithTag:5];
+    if ([info.gCreatorUid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
+        imgViewSign.image = [UIImage imageNamed:@""];
+    }else{
+        imgViewSign.image = [UIImage imageNamed:@"sale-lenta"];        
+    }
+    
 }
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
