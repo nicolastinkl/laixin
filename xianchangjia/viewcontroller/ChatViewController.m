@@ -35,12 +35,14 @@
 #import "FCHomeGroupMsg.h"
 #import "FacialView.h"
 #import "XCJChatSendImgViewController.h"
+#import "XCJChatSendInfoView.h"
+#import "XCJWholeNaviController.h"
 
 #define  keyboardHeight 216
 #define  facialViewWidth 300
 #define facialViewHeight 180
 
-@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate>
+@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
@@ -50,6 +52,7 @@
     UIScrollView *scrollView;
     UIPageControl *pageControl;
     UIView  * EmjView;
+    XCJChatSendInfoView *SendInfoView;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
@@ -662,13 +665,163 @@
 
 - (IBAction)addImage:(id)sender {
     //ActionSheet选择拍照还是相册
-    UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册",nil];
+    /*UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册",nil];
     actionSheet.tag = 2;
     [actionSheet showInView:self.view];
     //必须隐藏键盘否则会出问题。
     [self.inputTextView resignFirstResponder];
+    */
+    if (SendInfoView == nil) {
+        SendInfoView = [[[NSBundle mainBundle] loadNibNamed:@"XCJChatSendInfoView" owner:self options:nil] lastObject];
+        SendInfoView.delegate = self;
+    }
+    
+    if(!self.inputTextView.isFirstResponder)
+    {
+        [self.inputTextView becomeFirstResponder];
+    }
+    
+    self.inputTextView.inputView = nil;
+    self.inputTextView.inputView = SendInfoView;
+    [self.inputTextView reloadInputViews];
+    
+
+}
+- (void)takePhotoClick
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+        camera.delegate = self;
+        camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:camera animated:YES completion:nil];
+    }
+
 }
 
+- (void)choseFromGalleryClick
+{
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+        photoLibrary.delegate = self;
+        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:photoLibrary animated:YES completion:nil];
+    }
+}
+
+-(void) PostLoacationClick:(NSNotification * ) notity
+{
+    if (notity.userInfo) {
+        //   NSDictionary *dict = @{@"image":image,@"strAddresss",strAddresss,@"lat":@(lat),@"log":@(log)};
+        UIImage * image =  notity.userInfo[@"image"];
+        NSString * address =  notity.userInfo[@"strAddresss"];
+        NSNumber * lat =  notity.userInfo[@"lat"];
+        NSNumber * log =  notity.userInfo[@"log"];
+        NSString * postType;
+        if (self.gid.length > 0) {
+            postType = @"Post";
+        }else{
+            postType = @"Message";
+            
+        }
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id responsesssss, NSError *errorsssss) {
+            if (responsesssss) {
+                NSString * token =  [responsesssss objectForKey:@"token"];
+                
+                AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+                NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
+                [parameters setValue:token forKey:@"token"];
+                [parameters setValue:@"1" forKey:@"x:filetype"];
+                [parameters setValue:@"" forKey:@"x:content"];
+                [parameters setValue:@"" forKey:@"x:length"];
+                if (self.gid.length > 0) {
+                    [parameters setValue:self.gid forKey:@"x:gid"];
+                }else{
+                    [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
+                }
+                
+                NSData * imageDatasss = UIImageJPEGRepresentation(image, 0.5);
+                
+                operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                    //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
+                    [formData appendPartWithFileData:imageDatasss name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
+                } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
+                    SLLog(@"responseObject %@",responseObject);
+                    if (responseObject) {
+                        NSDictionary * result =  responseObject[@"result"];
+                        if (result) {
+                            if (self.gid.length > 0) {
+                                
+                                NSString *msgID = [tools getStringValue:result[@"postid"] defaultValue:@""];
+                                NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+                                [self SendImageWithMeImageurl:url withMsgID:msgID];
+                            }else{
+                                // update lastmessage id index
+                                NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
+                                
+                                NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                                if (messageIndex < indexMsgID) {
+                                    [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                                    [USER_DEFAULT synchronize];
+                                }
+                                NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
+                                NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+//                                [self SendImageWithMeImageurl:url withMsgID:msgID];
+                                
+                                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                                msg.sentDate = [NSDate date];
+                                msg.messageType = @(messageType_map);
+                                
+                                msg.imageUrl = url;
+                                // message did not come, this will be on rigth
+                                msg.messageStatus = @(NO);
+                                msg.messageId = msgID;
+                                msg.text = address;
+                                msg.longitude = log;
+                                msg.latitude = lat;
+                                
+                                self.conversation.lastMessage = @"[地图]";
+                                self.conversation.lastMessageDate = [NSDate date];
+                                self.conversation.badgeNumber = @0;
+                                self.conversation.messageStutes = @(messageStutes_outcoming);    
+                                [self.conversation addMessagesObject:msg];
+                                [self.messageList addObject:msg];
+                                [localContext MR_saveToPersistentStoreAndWait];
+                            }
+                        }
+                        [SVProgressHUD dismiss];
+                        //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
+                        
+                    }
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    SLLog(@"error :%@",error.userInfo);
+                    [SVProgressHUD dismiss];
+                    
+                }];
+            }
+        } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+    }
+}
+
+- (void)choseLocationClick
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
+    XCJWholeNaviController * navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWholeNaviController"];
+    
+    [self presentViewController:navi animated:YES completion:^{
+        
+    }];
+}
+
+- (void)sendMyfriendsClick
+{
+    
+}
+
+- (void)moreClick
+{
+}
 
 - (BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
 {
@@ -870,6 +1023,8 @@
 //    [img showIndicatorViewBlue];
     // setup 2: upload image
     //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
+    
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
@@ -1139,6 +1294,7 @@
     UILabel * labelName = (UILabel *) [cell.contentView subviewWithTag:2];
     UILabel * labelTime = (UILabel *) [cell.contentView subviewWithTag:3];
     UILabel * labelContent = (UILabel *) [cell.contentView subviewWithTag:4];
+    UILabel * address = (UILabel *) [cell.contentView subviewWithTag:8];
 //    labelContent.delegate = self;
     MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
@@ -1209,6 +1365,18 @@
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
         imageview_BG.hidden = YES;
+    }else if([message.messageType intValue] == messageType_map)
+    {
+        //display image  115 108
+        labelContent.text  = @"";
+        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
+        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
+        imageview_Img.hidden = NO;
+        [imageview_BG setHeight:108.0f];
+        [imageview_BG setWidth:115.0f];
+        imageview_BG.hidden = NO;
+        imageview_Img.userInteractionEnabled = YES;
+        address.text = message.text;
     }
     
     return cell;
@@ -1258,7 +1426,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FCMessage *message = self.messageList[indexPath.row];
-    if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj) {
+    if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj || [message.messageType intValue] == messageType_map) {
         return 148.0f;
     }
     return [self heightForCellWithPost:message.text]+20.0f;

@@ -133,6 +133,8 @@
 		868B5D591893B068004D1743 /* PinyinFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D511893B068004D1743 /* PinyinFormatter.m */; };
 		868B5D5A1893B068004D1743 /* PinyinHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D531893B068004D1743 /* PinyinHelper.m */; };
 		868B5D5B1893B068004D1743 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D551893B068004D1743 /* unicode_to_hanyu_pinyin.txt */; };
+		868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D5D1893D065004D1743 /* XCJChatSendInfoView.m */; };
+		868B5D601893D07C004D1743 /* XCJChatSendInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D5F1893D07C004D1743 /* XCJChatSendInfoView.xib */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
@@ -194,6 +196,10 @@
 		86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A306A81871A8B100C7168B /* XCJSuperViewController.m */; };
 		86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */; };
 		86AC094018893AC100C3BE30 /* XCJMessageReplyInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */; };
+		86ADDA261893D46A000A0C22 /* XCJSendMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA251893D46A000A0C22 /* XCJSendMapViewController.m */; };
+		86ADDA291893D761000A0C22 /* XCJWholeNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA281893D761000A0C22 /* XCJWholeNaviController.m */; };
+		86ADDA2C1893D8F5000A0C22 /* MMLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA2B1893D8F5000A0C22 /* MMLocationManager.m */; };
+		86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */; };
 		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
 		86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C6422E1887A3D200E0CDDB /* CTAssetsPickerController.m */; };
 		86C642331887A3D200E0CDDB /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86C6422F1887A3D200E0CDDB /* Images.xcassets */; };
@@ -611,6 +617,9 @@
 		868B5D521893B068004D1743 /* PinyinHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinyinHelper.h; sourceTree = "<group>"; };
 		868B5D531893B068004D1743 /* PinyinHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinyinHelper.m; sourceTree = "<group>"; };
 		868B5D551893B068004D1743 /* unicode_to_hanyu_pinyin.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unicode_to_hanyu_pinyin.txt; sourceTree = "<group>"; };
+		868B5D5C1893D065004D1743 /* XCJChatSendInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendInfoView.h; path = viewcontroller/views/XCJChatSendInfoView.h; sourceTree = "<group>"; };
+		868B5D5D1893D065004D1743 /* XCJChatSendInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChatSendInfoView.m; path = viewcontroller/views/XCJChatSendInfoView.m; sourceTree = "<group>"; };
+		868B5D5F1893D07C004D1743 /* XCJChatSendInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJChatSendInfoView.xib; path = viewcontroller/views/XCJChatSendInfoView.xib; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
@@ -730,6 +739,14 @@
 		86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJADDFriendLaixinBecomeViewController.m; path = viewcontroller/XCJADDFriendLaixinBecomeViewController.m; sourceTree = "<group>"; };
 		86AC093E18893AC100C3BE30 /* XCJMessageReplyInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMessageReplyInfoViewController.h; path = viewcontroller/XCJMessageReplyInfoViewController.h; sourceTree = "<group>"; };
 		86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMessageReplyInfoViewController.m; path = viewcontroller/XCJMessageReplyInfoViewController.m; sourceTree = "<group>"; };
+		86ADDA241893D46A000A0C22 /* XCJSendMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendMapViewController.h; path = viewcontroller/XCJSendMapViewController.h; sourceTree = "<group>"; };
+		86ADDA251893D46A000A0C22 /* XCJSendMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendMapViewController.m; path = viewcontroller/XCJSendMapViewController.m; sourceTree = "<group>"; };
+		86ADDA271893D761000A0C22 /* XCJWholeNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWholeNaviController.h; path = viewcontroller/XCJWholeNaviController.h; sourceTree = "<group>"; };
+		86ADDA281893D761000A0C22 /* XCJWholeNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWholeNaviController.m; path = viewcontroller/XCJWholeNaviController.m; sourceTree = "<group>"; };
+		86ADDA2A1893D8F5000A0C22 /* MMLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMLocationManager.h; sourceTree = "<group>"; };
+		86ADDA2B1893D8F5000A0C22 /* MMLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMLocationManager.m; sourceTree = "<group>"; };
+		86ADDA2D1893DAC7000A0C22 /* MKMapView+ZoomLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKMapView+ZoomLevel.h"; sourceTree = "<group>"; };
+		86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKMapView+ZoomLevel.m"; sourceTree = "<group>"; };
 		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
 		86C1A56A1885384600D78242 /* FCAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCAccount.m; path = DAOModel/coredata/FCAccount.m; sourceTree = "<group>"; };
 		86C6422D1887A3D200E0CDDB /* CTAssetsPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAssetsPickerController.h; sourceTree = "<group>"; };
@@ -1738,6 +1755,24 @@
 			name = SystemSettings;
 			sourceTree = "<group>";
 		};
+		86ADDA231893D452000A0C22 /* SendInfo */ = {
+			isa = PBXGroup;
+			children = (
+				86ADDA2A1893D8F5000A0C22 /* MMLocationManager.h */,
+				86ADDA2B1893D8F5000A0C22 /* MMLocationManager.m */,
+				868B5D5C1893D065004D1743 /* XCJChatSendInfoView.h */,
+				868B5D5D1893D065004D1743 /* XCJChatSendInfoView.m */,
+				868B5D5F1893D07C004D1743 /* XCJChatSendInfoView.xib */,
+				8688CCCA188E513F002CD2C8 /* FacialView.h */,
+				8688CCCB188E513F002CD2C8 /* FacialView.m */,
+				86ADDA241893D46A000A0C22 /* XCJSendMapViewController.h */,
+				86ADDA251893D46A000A0C22 /* XCJSendMapViewController.m */,
+				86ADDA271893D761000A0C22 /* XCJWholeNaviController.h */,
+				86ADDA281893D761000A0C22 /* XCJWholeNaviController.m */,
+			);
+			name = SendInfo;
+			sourceTree = "<group>";
+		};
 		86B73D93187E670400EF7391 /* PostView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1987,6 +2022,8 @@
 				86D1823A1834AED30005901D /* UIView+Shadow.m */,
 				862D31941855B52C00C2D252 /* UIViewController+Indicator.h */,
 				862D31951855B52C00C2D252 /* UIViewController+Indicator.m */,
+				86ADDA2D1893DAC7000A0C22 /* MKMapView+ZoomLevel.h */,
+				86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -2521,8 +2558,7 @@
 		86F9B9B318729C3900ED768B /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				8688CCCA188E513F002CD2C8 /* FacialView.h */,
-				8688CCCB188E513F002CD2C8 /* FacialView.m */,
+				86ADDA231893D452000A0C22 /* SendInfo */,
 				86E57CF418796D1100978AFA /* CreateTalk */,
 				865632C8185FFDDA00E9903C /* ChatListViewController.h */,
 				865632C9185FFDDA00E9903C /* ChatListViewController.m */,
@@ -2657,6 +2693,7 @@
 				8668E47C187540DB00D20C9E /* edit_text_bg@2x.png in Resources */,
 				8668E479187540DB00D20C9E /* btn_like@2x.png in Resources */,
 				8692E3BF18642DB700F9E1DD /* Default.png in Resources */,
+				868B5D601893D07C004D1743 /* XCJChatSendInfoView.xib in Resources */,
 				8668E47A187540DB00D20C9E /* btn_like_disable@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2693,6 +2730,7 @@
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
 				869DDC621874422600560AFD /* Conversation.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
+				86ADDA2C1893D8F5000A0C22 /* MMLocationManager.m in Sources */,
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
 				86D182B41834AED30005901D /* NSObject+LKDBHelper.m in Sources */,
 				8668E474187540DB00D20C9E /* ActivityTableViewCell.m in Sources */,
@@ -2769,6 +2807,7 @@
 				8668E489187541BB00D20C9E /* Comment.m in Sources */,
 				8681BDCC1836153000521D36 /* YLLabel.m in Sources */,
 				86EB76DD185AA6CC00836947 /* UIWebView+AFNetworking.m in Sources */,
+				86ADDA291893D761000A0C22 /* XCJWholeNaviController.m in Sources */,
 				86EB76BE185AA6CC00836947 /* MessageList.m in Sources */,
 				86494CC31881511800C22B14 /* FCReplyMessage.m in Sources */,
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
@@ -2852,6 +2891,7 @@
 				865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */,
 				86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */,
 				869CE52F186BE38D0004C1EC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
+				868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				869CE533186BE38D0004C1EC /* MagicalRecord+Options.m in Sources */,
 				86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */,
@@ -2901,6 +2941,7 @@
 				8668E483187540DB00D20C9E /* UItitleView.m in Sources */,
 				8681BDE118361A0800521D36 /* XCJReskitModel.m in Sources */,
 				86C72DE118433109001B6CA0 /* MessageManager.m in Sources */,
+				86ADDA261893D46A000A0C22 /* XCJSendMapViewController.m in Sources */,
 				869CE520186BE38D0004C1EC /* NSNumber+MagicalDataImport.m in Sources */,
 				86D182821834AED30005901D /* BundleHelper.m in Sources */,
 				862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */,
@@ -2927,6 +2968,7 @@
 				86D182AE1834AED30005901D /* LKDB+Mapping.m in Sources */,
 				8668E480187540DB00D20C9E /* MLJson.m in Sources */,
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
+				86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
 				8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */,

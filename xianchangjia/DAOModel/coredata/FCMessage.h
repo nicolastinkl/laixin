@@ -34,6 +34,10 @@ enum messageTypeEnum {
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) NSString * messageId;
+
+@property (nonatomic, retain) NSNumber * latitude;
+@property (nonatomic, retain) NSNumber * longitude;
+
 @property (nonatomic, retain) Conversation *conversation;
 @property (nonatomic, retain) FCUserDescription *messageUser;
 

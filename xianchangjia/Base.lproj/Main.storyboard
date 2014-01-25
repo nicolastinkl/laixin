@@ -4025,17 +4025,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="93" sectionHeaderHeight="22" sectionFooterHeight="22" id="Kap-vu-tTr">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="169" sectionHeaderHeight="22" sectionFooterHeight="22" id="Kap-vu-tTr">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="1" green="0.99755727360000002" blue="0.51407459749999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="XCJChatMessageCell" rowHeight="93" id="jUd-D1-juZ" customClass="XCJChatMessageCell">
-                                        <rect key="frame" x="0.0" y="86" width="320" height="93"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="XCJChatMessageCell" rowHeight="169" id="jUd-D1-juZ" customClass="XCJChatMessageCell">
+                                        <rect key="frame" x="0.0" y="86" width="320" height="169"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jUd-D1-juZ" id="WNr-Ae-LqV">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="169"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="f6h-ho-lqq" userLabel="Label - N">
@@ -4079,6 +4079,13 @@
                                                     <rect key="frame" x="8" y="22" width="42" height="42"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="8" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cvu-qN-uJ0">
+                                                    <rect key="frame" x="67" y="97" width="98" height="36"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
@@ -4104,18 +4111,17 @@
                                         <rect key="contentStretch" x="0.34999999999999998" y="0.14999999999999999" width="0.29999999999999999" height="0.55000000000000004"/>
                                     </imageView>
                                     <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CMQ-NG-epg">
-                                        <rect key="frame" x="-2" y="4" width="48" height="38"/>
+                                        <rect key="frame" x="281" y="4" width="38" height="38"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <rect key="contentStretch" x="1" y="1" width="0.90000000000000024" height="1"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="paperclipButtonDisabled"/>
-                                        <state key="highlighted" image="paperclipButtonNormal"/>
+                                        <state key="normal" image="message_add_background_os7"/>
                                         <connections>
                                             <action selector="addImage:" destination="PQ7-1p-COo" eventType="touchUpInside" id="9do-Jq-Dg4"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IM8-8X-TiC">
-                                        <rect key="frame" x="256" y="6" width="51" height="33"/>
+                                        <rect key="frame" x="327" y="6" width="51" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <rect key="contentStretch" x="0.64999999999999991" y="0.0" width="0.0" height="1"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -4129,19 +4135,19 @@
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="3" contentMode="scaleToFill" id="4gK-JB-FhP">
-                                        <rect key="frame" x="48" y="6" width="165" height="33"/>
+                                        <rect key="frame" x="48" y="6" width="190" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="PQ7-1p-COo" id="2rD-LN-dBd"/>
                                         </connections>
                                     </textView>
                                     <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="sSJ-Q4-u1z">
-                                        <rect key="frame" x="218" y="13" width="19" height="19"/>
+                                        <rect key="frame" x="246" y="4" width="38" height="38"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="ComposerSticker-flat">
+                                        <state key="normal" image="message_emotion_background_os7">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -4149,14 +4155,21 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CjN-NJ-ACR">
-                                        <rect key="frame" x="218" y="13" width="19" height="19"/>
+                                        <rect key="frame" x="246" y="4" width="38" height="38"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="ComposerStickerSelected-flat">
+                                        <state key="normal" image="message_emotion_background_highlighted_os7">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="KeyBoradViewShow:" destination="PQ7-1p-COo" eventType="touchUpInside" id="Z4V-xS-YEj"/>
                                         </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ik-ba-t3a">
+                                        <rect key="frame" x="3" y="4" width="38" height="38"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="message_voice_background_os7">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
                                     </button>
                                 </subviews>
                             </view>
@@ -4432,6 +4445,60 @@
             </objects>
             <point key="canvasLocation" x="3789" y="172"/>
         </scene>
+        <!--Send Map View Controller - 我的位置-->
+        <scene sceneID="ckd-vf-0ye">
+            <objects>
+                <viewController restorationIdentifier="XCJSendMapViewController" storyboardIdentifier="XCJSendMapViewController" id="cd9-3P-YVI" customClass="XCJSendMapViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oV1-HV-F8F">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" id="h55-pl-ZuO">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="cd9-3P-YVI" id="PgE-TV-pUZ"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="我的位置" id="vU7-53-aCf">
+                        <barButtonItem key="leftBarButtonItem" title="取消" id="QU8-2F-7Os">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="cancelClick:" destination="cd9-3P-YVI" id="oZc-0q-vSa"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="发送" style="done" id="KEa-iq-PUF">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="SureClick:" destination="cd9-3P-YVI" id="vjG-QT-IQz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eES-eF-gcQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4168" y="250"/>
+        </scene>
+        <!--Whole Navi Controller-->
+        <scene sceneID="doJ-cK-Rdy">
+            <objects>
+                <navigationController restorationIdentifier="XCJWholeNaviController" storyboardIdentifier="XCJWholeNaviController" definesPresentationContext="YES" id="mpA-Kj-djb" customClass="XCJWholeNaviController" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="cEu-vn-Z2X">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.18779067520000001" green="0.65503207760000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="cd9-3P-YVI" kind="relationship" relationship="rootViewController" id="jaW-en-mCs"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XZB-G3-Cje" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4577" y="250"/>
+        </scene>
         <!--View Controller - 关于来信-->
         <scene sceneID="lWD-XX-zc5">
             <objects>
@@ -4631,8 +4698,6 @@
     <resources>
         <image name="BG_mask" width="1" height="854"/>
         <image name="ComposerLocationOn-flat" width="19" height="19"/>
-        <image name="ComposerSticker-flat" width="19" height="19"/>
-        <image name="ComposerStickerSelected-flat" width="19" height="19"/>
         <image name="IMG_1811" width="640" height="960"/>
         <image name="Titlebar_settings" width="32" height="32"/>
         <image name="Titlebar_signout" width="32" height="32"/>
@@ -4682,6 +4747,10 @@
         <image name="login_user_os7" width="21" height="21"/>
         <image name="md_girl" width="10" height="10"/>
         <image name="menu_icon_bulb_pressed" width="28" height="28"/>
+        <image name="message_add_background_os7" width="24" height="24"/>
+        <image name="message_emotion_background_highlighted_os7" width="24" height="24"/>
+        <image name="message_emotion_background_os7" width="24" height="24"/>
+        <image name="message_voice_background_os7" width="32" height="32"/>
         <image name="messages_textview_background_os7" width="17" height="34"/>
         <image name="mission-step-done" width="27" height="27"/>
         <image name="mobile" width="10" height="18"/>
@@ -4691,8 +4760,6 @@
         <image name="notifications-heart" width="47" height="47"/>
         <image name="notifications-popular" width="47" height="47"/>
         <image name="notifications-tag" width="47" height="47"/>
-        <image name="paperclipButtonDisabled" width="20" height="18"/>
-        <image name="paperclipButtonNormal" width="20" height="18"/>
         <image name="photoTopShadow" width="320" height="16"/>
         <image name="pictureHeartLike_1" width="23" height="21"/>
         <image name="places-icon" width="40" height="40"/>
