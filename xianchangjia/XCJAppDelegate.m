@@ -203,9 +203,13 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 [localContext MR_saveOnlySelfAndWait];
                                 SystemSoundID id = 1007; //声音
                                 AudioServicesPlaySystemSound(id);
-                                
                                 // 处理加入请求
-                                [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:nil failure:nil];
+#warning why ??????
+//                                [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *requestsd, id responseObjectsd) {
+//                                    
+//                                } failure:^(MLRequest *requestsd, NSError *errorsd) {
+//                                    
+//                                }];
                                 
                             }else{
                                 //更新群信息
