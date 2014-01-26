@@ -4166,9 +4166,13 @@
                                     <button hidden="YES" opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xBq-Xq-t5p">
                                         <rect key="frame" x="44" y="6" width="200" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="speakClick:" destination="PQ7-1p-COo" eventType="touchDown" id="8RJ-D6-PKK"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </view>
@@ -4187,6 +4191,12 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8F7-8e-IJA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.29999999999999999" id="XxU-fB-DPk">
+                    <connections>
+                        <action selector="recordBtnLongPressedss:" destination="PQ7-1p-COo" id="fEv-ut-0HA"/>
+                        <outlet property="delegate" destination="PQ7-1p-COo" id="IlJ-x9-BGk"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2323" y="49"/>
         </scene>

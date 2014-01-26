@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomWindow.h"
 
 @class SinaWeibo,XCJLoginNaviController;
 @interface XCJAppDelegate : UIResponder <UIApplicationDelegate>
@@ -14,7 +15,7 @@
     SinaWeibo *sinaweiboMain;
 }
 
-@property (strong, nonatomic) UIWindow                  *window;
+@property (strong, nonatomic) CustomWindow                  *window;
 @property (readonly, nonatomic) SinaWeibo				*sinaweiboMain;
 @property (nonatomic,strong) NSDictionary				*launchingWithAps;
 @property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;

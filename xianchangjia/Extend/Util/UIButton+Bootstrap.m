@@ -17,7 +17,7 @@
     self.layer.masksToBounds = YES;
     [self setAdjustsImageWhenHighlighted:NO];
     self.layer.borderColor = [ios7BlueColor CGColor];
-    
+    self.backgroundColor = [UIColor whiteColor];
     [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
 
 }

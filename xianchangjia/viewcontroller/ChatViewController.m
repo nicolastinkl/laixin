@@ -47,7 +47,7 @@
 #define  facialViewWidth 300
 #define facialViewHeight 180
 
-@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate,VoiceRecorderBaseVCDelegate,UIGestureRecognizerDelegate>
+@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate,VoiceRecorderBaseVCDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
@@ -103,13 +103,17 @@
     UIButton * buttonChangeAudio = (UIButton *) [self.inputContainerView subviewWithTag:7];
     [buttonChangeAudio addTarget:self action:@selector(SHowAudioButtonClick:) forControlEvents:UIControlEventTouchUpInside ];
     
-    UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
-    [buttonAudio sendMessageStyle];
-    [buttonAudio setTitle:@"按住说话" forState:UIControlStateNormal];
-    //添加长按手势
-    UILongPressGestureRecognizer *longPrees = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(recordBtnLongPressed:)];
-    longPrees.delegate = self;
-    [buttonAudio addGestureRecognizer:longPrees];
+    {
+        UIButton * buttonAudioss = (UIButton *) [self.inputContainerView subviewWithTag:9];
+        [buttonAudioss sendMessageStyle];
+        [buttonAudioss setTitle:@"按住说话" forState:UIControlStateNormal];
+//        [buttonAudioss addTarget:self action:@selector(speakClick:) forControlEvents:UIControlStateNormal];
+        //添加长按手势
+//        UILongPressGestureRecognizer *longPrees = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(recordBtnLongPressed:)];
+//        longPrees.delegate = self;
+//        longPrees.minimumPressDuration = 0.3;
+//        [buttonAudioss addGestureRecognizer:longPrees];
+    }
     
     UIButton * buttonAudio8 = (UIButton *) [self.inputContainerView subviewWithTag:8];
     
@@ -214,9 +218,80 @@
         if (strAMRName.length > 0) {
             // send amr
             SLog(@"amr : %@",strAMRName);
+            UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
+            [buttonAudio setTitle:@"按住开始" forState:UIControlStateNormal];
+            [buttonAudio sendMessageStyle];
+            //2.audio   3.video
+            [self SendMediaSource:strAMRName withType:2];
         }
     }
 }
+
+-(void) SendMediaSource:(NSString *) filePath  withType:(NSInteger ) type
+{
+     //2.audio   3.video
+    NSString * postType;
+    if (self.gid.length > 0) {
+        postType = @"Post";
+    }else{
+        postType = @"Message";
+        
+    }
+    
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id responsessssss, NSError *error) {
+        if (responsessssss) {
+            NSString * token =  responsessssss[@"token"];
+            
+            AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+            NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
+            [parameters setValue:token forKey:@"token"];
+            [parameters setValue:[NSString stringWithFormat:@"%d",type] forKey:@"x:filetype"];
+            [parameters setValue:@"" forKey:@"x:content"];
+            [parameters setValue:@"" forKey:@"x:length"];
+            [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
+            __block NSData * PCMData;
+            operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+//                [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"audio/amr-wb" error:nil ];
+                PCMData = [NSData dataWithContentsOfFile:filePath];
+                if (PCMData) {
+                    [formData appendPartWithFileData:PCMData name:@"file" fileName:@"file" mimeType:@"audio/amr-wb"]; //录音
+                }
+                
+            } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
+                SLLog(@"responseObject %@",responseObject);
+                if (responseObject) {
+                    NSDictionary * result =  responseObject[@"result"];
+                    if (result) {
+                        
+                            // update lastmessage id index
+                            NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
+                            
+                            NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                            if (messageIndex < indexMsgID) {
+                                [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                                [USER_DEFAULT synchronize];
+                            }
+//                            NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
+//                            NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+                          //  [self SendImageWithMeImageurl:url withMsgID:msgID];
+                        
+                    }
+                    [SVProgressHUD dismiss];
+                    //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
+                    
+                }
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                SLLog(@"error :%@",error.userInfo);
+                [SVProgressHUD dismiss];
+            }];
+
+        }
+    } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+    
+    
+}
+
 
 #pragma mark - 获取文件大小
 - (NSInteger) getFileSize:(NSString*) path{
@@ -234,24 +309,34 @@
     }
 }
 
+-(IBAction)recordBtnLongPressedss:(id)sender
+{
+    
+}
+
+-(IBAction)speakClick:(id)sender
+{
+    if (!self.recorderVC) {
+        //初始化录音vc
+        self.recorderVC = [[ChatVoiceRecorderVC alloc]init];
+        recorderVC.vrbDelegate = self; 
+        
+    }
+    //设置文件名
+    self.originWav = [VoiceRecorderBaseVC getCurrentTimeString];
+    UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
+    [buttonAudio setTitle:@"松开结束" forState:UIControlStateNormal];
+    [buttonAudio infoStyle];
+    //开始录音
+    [recorderVC beginRecordByFileName:self.originWav];
+}
+
 -(void)recordBtnLongPressed:(UILongPressGestureRecognizer*) longPressedRecognizer
 {
      UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
     //长按开始
     if(longPressedRecognizer.state == UIGestureRecognizerStateBegan) {
-        //设置文件名
-        self.originWav = [VoiceRecorderBaseVC getCurrentTimeString];
         
-        if (!self.recorderVC) {
-            
-            //初始化录音vc
-            self.recorderVC = [[ChatVoiceRecorderVC alloc]init];
-            recorderVC.vrbDelegate = self;
-           
-            [buttonAudio infoStyle];
-        }
-        //开始录音
-        [recorderVC beginRecordByFileName:self.originWav];
         
     }//长按结束
     else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){
@@ -272,6 +357,14 @@
     int page = pageControl.currentPage;//获取当前pagecontroll的值
     [scrollView setContentOffset:CGPointMake(320 * page, 0)];//根据pagecontroll的值来改变scrollview的滚动位置，以此切换到指定的页面
 }
+
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    if (event.type == UIEventTypeTouches) {//发送一个名为‘nScreenTouch’（自定义）的事件
+//        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:event forKey:@"data"]]];
+//    }
+//}
+
 
 -(IBAction)SeeUserInfoClick:(id)sender
 {

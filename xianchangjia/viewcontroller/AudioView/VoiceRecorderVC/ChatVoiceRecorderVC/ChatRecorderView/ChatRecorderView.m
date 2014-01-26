@@ -51,7 +51,7 @@
                     [UIImage imageNamed:@"recordVolume2.png"],
                     [UIImage imageNamed:@"recordVolume3"], nil];
     trashImageAry = [[NSArray alloc]initWithObjects:kTrashImage1,kTrashImage2,kTrashImage1, nil];
-
+    
     self.imagebg.clipsToBounds = YES;
     self.imagebg.layer.cornerRadius = 10.0f; //按钮圆角
         
