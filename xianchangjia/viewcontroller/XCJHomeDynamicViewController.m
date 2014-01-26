@@ -82,6 +82,7 @@
         menuView.top = -600;
         menuView.delegate =  self;
     }
+    
     if ([self.groupInfo.isMute boolValue]) {
         //如果是已经静音  那么就设置接收
         // update imageview

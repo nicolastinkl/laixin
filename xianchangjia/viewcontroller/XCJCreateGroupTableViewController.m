@@ -16,6 +16,7 @@
 #import "HZAreaPickerView.h"
 #import "CoreData+MagicalRecord.h"
 #import "FCHomeGroupMsg.h"
+#import "Conversation.h"
 
 
 @interface XCJCreateGroupTableViewController ()<HZAreaPickerDelegate>
@@ -84,12 +85,12 @@
             XCJGroup_list * list = [[XCJGroup_list alloc] init];
             list.gid = gid;
             list.group_name = self.GroupName.text;
-            list.group_board = @"";
+            list.group_board = self.textType.text;
             list.type  = 0;
             [SVProgressHUD dismiss];
             
             // Build the predicate to find the person sought
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+           /* NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             FCHomeGroupMsg * msg = [FCHomeGroupMsg MR_createInContext:localContext];
             msg.gid = list.gid;
             msg.gCreatorUid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
@@ -99,8 +100,27 @@
             msg.gbadgeNumber = @1;
             msg.gType = @"1";
             [localContext MR_saveToPersistentStoreAndWait];
+            */
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:msg];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:msg];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            // target to chat view
+            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+            if (!array) {
+                // create new
+                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                conversation.lastMessage = list.group_board;
+                conversation.lastMessageDate = [NSDate date];
+                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                conversation.messageStutes = @(messageStutes_incoming);
+                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                conversation.facebookName = list.group_name;
+                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                conversation.badgeNumber = @0;
+                [localContext MR_saveOnlySelfAndWait];
+            }
+            
             [self cancelClick:nil];
         }
     } failure:^(MLRequest *request, NSError *error) {

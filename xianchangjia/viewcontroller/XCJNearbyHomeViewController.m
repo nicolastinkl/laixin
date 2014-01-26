@@ -40,6 +40,8 @@
 #import "XCJMessageReplylistController.h"
 #import "FCAccount.h"
 #import "MTAnimatedLabel.h"
+#import "Conversation.h"
+
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
@@ -159,32 +161,27 @@
     
     // Uncomment the following line to preserve selection between presentations.
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+//    self.tableView.delegate = self;
+//    self.tableView.dataSource = self;
+    
 //    self.automaticallyAdjustsScrollViewInsets = NO;
 
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HomeReloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(HomeReloadFetchedResults:) name:@"RefetchAllDatabaseData" object:[[UIApplication sharedApplication] delegate]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeDomainID:) name:@"Notify_changeDomainID" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
    
     
-    /**
-     *  title消息 切换
-     *
-     *  @param webSocketdidFailWithError: <#webSocketdidFailWithError: description#>
-     *
-     *  @return <#return value description#>
-     */
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
+ // title消息 切换
+//    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
+//    
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
     
     
     tryCatchCount = 0;
@@ -193,14 +190,17 @@
     
     ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).textColor = [tools colorWithIndex:0];
     ((UILabel *)[self.tableView.tableHeaderView subviewWithTag:5]).text = @"查看消息列表";
+   
+    self.managedObjectContext = [NSManagedObjectContext MR_defaultContext]; //init DB context
+//    [self HomeReloadFetchedResults:nil];
     
-    if (![XCJAppDelegate hasLogin]) {
-        [self OpenLoginview:nil];
-    }else{
-        [self.tableView showIndicatorViewLargeBlue];
-        
-        [self initHomeData];
-    }
+//    if (![XCJAppDelegate hasLogin]) {
+//        [self OpenLoginview:nil];
+//    }else{
+//        [self.tableView showIndicatorViewLargeBlue];
+//        
+//        [self initHomeData];
+//    }
     
 }
 
@@ -212,7 +212,7 @@
     
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[2] ;
     //    item.title = @"";
     UIView * view = [item valueForKey:@"view"];
     [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -229,7 +229,7 @@
     [self.navigationItem.titleView sizeToFit];
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[2] ;
     //    item.title = @"";
     UIView * view = [item valueForKey:@"view"];
     [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -245,7 +245,7 @@
     
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     
-    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[2] ;
 //    item.title = @"";
      UIView * view = [item valueForKey:@"view"];
     [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -319,7 +319,7 @@
     
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     {
-        [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
+        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
     }
     
     /*
@@ -379,8 +379,8 @@
          
          */
         
-        NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType == %@ ",@"1"];
-        self.fetchedResultsController = [FCHomeGroupMsg MR_fetchAllSortedBy:@"gbadgeNumber" ascending:NO withPredicate:parCMD groupBy:nil delegate:self]; //@"gbadgeNumber"
+//        NSPredicate * parCMD = [NSPredicate predicateWithFormat:@" gType == %@ ",@"1"];
+//        self.fetchedResultsController = [FCHomeGroupMsg MR_fetchAllSortedBy:@"gbadgeNumber" ascending:NO withPredicate:parCMD groupBy:nil delegate:self]; //@"gbadgeNumber"
     }
 	return _fetchedResultsController;
 }
@@ -434,9 +434,9 @@
     
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
     if (inter > 0) {
-        [delegate.tabBarController.tabBar.items[0] setBadgeValue:@"新"];
+        [delegate.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
     }else{
-        [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
+        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
     }
     
     
@@ -654,6 +654,23 @@
                             msg.gbadgeNumber = @0;
                             msg.gType = [NSString stringWithFormat:@"%d",list.type];
                             [localContext MR_saveToPersistentStoreAndWait];
+                            
+                            // target to chat view
+                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+                            if (!array) {
+                                // create new
+                                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                conversation.lastMessage = list.group_board;
+                                conversation.lastMessageDate = [NSDate date];
+                                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                conversation.messageStutes = @(messageStutes_incoming);
+                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                conversation.facebookName = list.group_name;
+                                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                                conversation.badgeNumber = @0;
+                                [localContext MR_saveOnlySelfAndWait];
+                            }
                         }];
 //                        [self HomeReloadFetchedResults:nil];
 //                        [self.tableView reloadData];
@@ -917,11 +934,6 @@
 -(IBAction)OpenLoginview:(id)sender
 {
     UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
-    //XCJMainLoginViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMainLoginViewController"];
-   // XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-
-//    [delegate.mainNavigateController pushViewController:viewContr animated:NO];
-//    [self presentViewController:delegate.mainNavigateController animated:NO completion:^{}];
     [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
 }
 

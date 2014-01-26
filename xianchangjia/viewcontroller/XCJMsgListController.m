@@ -33,8 +33,18 @@
 #import "XCJAppDelegate.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "FCHomeGroupMsg.h"
+#import "XCJHomeDynamicViewController.h"
+#import "XCJGroupPost_list.h"
+#import "XCJHomeMenuView.h"
+#import "XCJCreateNaviController.h"
+#import "XCJAddFriendNaviController.h"
+#import "XCJScanViewController.h"
 
-@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
+@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate>
+{
+ int tryCatchCount;
+        XCJHomeMenuView * menuView;
+}
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated;
@@ -90,10 +100,12 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
-    self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
-    [self reloadFetchedResults:nil];
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseDataConver" object:[[UIApplication sharedApplication] delegate]];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
+    
     
     NSInteger numberOfRows = 0;
     // Return the number of rows in the section.
@@ -109,7 +121,363 @@
         [self hiddeErrorText];
     }
     
+    
+    // title消息 切换
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
+    
+    
+    if (![XCJAppDelegate hasLogin]) {
+        [self OpenLoginview:nil];
+    }else{
+//        [self.tableView showIndicatorViewLargeBlue];
+        
+        [self initHomeData];
+    }
 }
+
+
+
+-(void) uploadDataWithLogin:(NSNotification *) notify
+{
+    [self initHomeData];  // get all data 
+}
+
+
+- (IBAction)ShowMenuClick:(id)sender {
+    
+    if (!menuView) {
+        menuView = [[NSBundle mainBundle] loadNibNamed:@"XCJHomeMenuView" owner:self options:nil][0];
+        [self.view.window addSubview:menuView];
+        menuView.alpha = 0;
+        menuView.top = -600;
+        menuView.delegate =  self;
+        float blurred = .5f;
+        menuView.Image_bg.alpha = .95f;
+        UIImage *blurredImage = [menuView.Image_bg.image blurredImage:blurred];
+        menuView.Image_bg.image = blurredImage;
+    }
+    
+    if (menuView.top == 0) {
+        // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
+        
+        [UIView animateWithDuration:.3f animations:^{
+            menuView.alpha = 0;
+            menuView.top = -600;
+            //            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
+        } completion:^(BOOL finished) {
+        }];
+    }else{
+        // show
+        [self.tableView scrollsToTop];
+        menuView.alpha = 0;
+        menuView.top = -600;
+        [UIView animateWithDuration:.3f animations:^{
+            menuView.alpha = 1;
+            menuView.top = 0;
+            //            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(M_PI/2);
+        } completion:^(BOOL finished) {
+        }];
+    }
+}
+
+- (void) hiddenSelfViewClick;
+{
+    [self ShowMenuClick:nil];
+}
+
+- (void) createGroupClick
+{
+    [self ShowMenuClick:nil];
+    XCJCreateNaviController * navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCreateNaviController"];
+    [self presentViewController:navi animated:YES completion:^{
+        
+    }];
+    
+}
+
+- (void) addFriendClick
+{
+    [self ShowMenuClick:nil];
+    XCJAddFriendNaviController *navi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddFriendNaviController"];
+    [self presentViewController:navi animated:YES completion:^{
+        
+    }];
+}
+
+- (void) findandfindCodeClick
+{
+    [self ShowMenuClick:nil];
+    // go to erwei code
+    XCJScanViewController * view = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJScanViewController"];
+    view.scanTypeIndex = findAll;
+    [self.navigationController pushViewController:view
+                                         animated:YES];
+    
+}
+
+
+-(void)   initHomeData
+{
+    //    [self.refreshControl beginRefreshing];
+//    [self setupLocationManager];
+    
+    self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
+    [self reloadFetchedResults:nil];
+    
+    NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+    NSDictionary * parames = @{@"sessionid":sessionid};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        //首次登陆返回的用户信息
+        NSDictionary * userinfo = responseObject[@"result"];
+        LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
+        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+        
+        [USER_DEFAULT setValue:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+        [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
+        [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
+        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
+        [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
+        [USER_DEFAULT synchronize];
+        
+        {
+            //            [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
+            
+        }
+        
+        NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
+        FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
+        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+        if (account == nil) {
+            account = [FCAccount MR_createInContext:localContext];
+            account.facebookId = currentUser.uid;
+        }
+        account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+        account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
+        account.time = @"";
+        account.userJson = userinfo;
+        [localContext MR_saveToPersistentStoreAndWait];
+        //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+        
+        // Return the number of rows in the section.
+        [self  reLoadData]; // 更新群组信息
+        [self  runSequucer];  //更新好友信息
+        tryCatchCount = 4;
+    } failure:^(MLRequest *request, NSError *error) {
+        //         re request login
+        tryCatchCount ++ ;
+        [self.tableView hideIndicatorViewBlueOrGary];
+        if (tryCatchCount <= 2) {
+            [self initHomeData];
+        }
+        
+    }];
+}
+
+
+- (void ) reLoadData
+{
+    double delayInSeconds = 0.3;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        /**
+         *  gid,content
+         */
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * groupsDict =  groups[@"groups"];
+                NSMutableArray * array = [[NSMutableArray alloc] init];
+                [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    /*  add group */
+                    NSString * str = [tools getStringValue:obj[@"gid"] defaultValue:@""];
+                    [array addObject:str];
+                }];
+                if (array.count > 0) {
+                    //group.info (gid<群id或者id数组>)
+                    NSDictionary * paramess = @{@"gid":array};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                        NSDictionary * groupsss = responseObjects[@"result"];
+                        NSArray * groupsDicts =  groupsss[@"groups"];
+                        [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                            // Build the predicate to find the person sought
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            // target to chat view
+                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+                            if (!array) {
+                                // create new
+                                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                conversation.lastMessage = list.group_board;
+                                conversation.lastMessageDate = [NSDate date];
+                                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                conversation.messageStutes = @(messageStutes_incoming);
+                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                conversation.facebookName = list.group_name;
+                                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                                conversation.badgeNumber = @0;
+                                [localContext MR_saveOnlySelfAndWait];
+                            }else{
+                                //更新群信息
+                                if (![array.facebookName isEqualToString:list.group_name]) {
+                                    array.facebookName = list.group_name;
+                                    [localContext MR_saveOnlySelfAndWait];
+                                }
+                            }
+                            
+                        }];
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                }
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            
+            [self showErrorInfoWithRetry];
+        }];
+    });
+}
+
+
+-(void) runSequucer
+{
+    //    Sequencer *sequencer = [[Sequencer alloc] init];
+    //    [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
+    ////        NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    //
+    //    }];
+    //
+    //    [sequencer run];
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
+            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@100};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                NSArray * friends = responseObject[@"result"][@"friend_id"];
+                NSMutableArray * arrayIDS = [[NSMutableArray alloc] init];
+                [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
+                }];
+                if (arrayIDS.count > 0) {
+                    NSDictionary * parameIDS = @{@"uid":arrayIDS};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {
+                        // "users":[....]
+                        NSDictionary * userinfo = responseObject[@"result"];
+                        NSArray * userArray = userinfo[@"users"];
+                        [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            LXUser * luser = [[LXUser alloc] initWithDict:obj];
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
+                        }];
+                        
+                        // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+            
+            NSString * _devtokenstring =[USER_DEFAULT stringForKey:KeyChain_Laixin_account_devtokenstring];
+            //1 debug    ....   0 release
+            if (_devtokenstring) {
+                
+                NSDictionary * paramesss = @{@"device_token":_devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:paramesss success:^(MLRequest *request, id responseObject) {
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            }
+        }
+    });
+}
+
+
+-(IBAction)OpenLoginview:(id)sender
+{
+    UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
+    [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
+}
+
+-(void) webSocketDidOpen:(NSNotification * ) noty
+{
+    self.title = @"来信";
+    [self.navigationItem.titleView sizeToFit];
+    [self.tableView hideIndicatorViewBlueOrGary];
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    //    item.title = @"";
+    UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self stopAnimation:obj];
+        }
+    }];
+    
+}
+
+-(void) webSocketdidFailWithError:(NSNotification * ) noty
+{
+    self.title = @"来信(未连接)";
+    [self.navigationItem.titleView sizeToFit];
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    //    item.title = @"";
+    UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self stopAnimation:obj];
+        }
+    }];
+}
+
+- (void)startAnimation:(UIView *)button{
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 ];///* full rotation*/ * rotations * duration ];
+    rotationAnimation.duration = 1.0;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = CGFLOAT_MAX;
+    
+    [button.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+}
+
+- (void)stopAnimation:(UIView *) indicator{
+    
+    if (indicator) {
+        [indicator.layer removeAllAnimations];
+        //        indicator.hidden = YES;
+        //        [indicator removeFromSuperview];
+        //        indicator = nil;
+    }
+}
+
+-(void) webSocketdidreceingWithMsg:(NSNotification * ) noty
+{
+    self.title = @"来信(收取中...)";
+    
+    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    UITabBarItem  *item = delegate.tabBarController.tabBar.items[0] ;
+    //    item.title = @"";
+    UIView * view = [item valueForKey:@"view"];
+    [view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            [self startAnimation:obj];
+        }
+    }];
+    
+    
+    [self.navigationItem.titleView sizeToFit];
+}
+
+
 
 #pragma mark -
 #pragma mark Fetched results controller
@@ -135,7 +503,8 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:showErrorInfoWithRetryNotifition object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
@@ -345,10 +714,10 @@
         SLLog(@"badgeNumber %d   ",badgeNumber);
         XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
         if (badgeNumber > 0) {
-            [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",badgeNumber]];
+            [delegate.tabBarController.tabBar.items[0] setBadgeValue:[NSString stringWithFormat:@"%d",badgeNumber]];
             [UIApplication sharedApplication].applicationIconBadgeNumber = badgeNumber;
         }else{
-            [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+            [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
             [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         }
     }
@@ -375,19 +744,30 @@
 #pragma mark - table fetchview
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated
 {
-    ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
     // private or group
     switch ([friend.messageType intValue]) {
         case XCMessageActivity_UserGroupMessage:
         {
-            chatview.title = @"群聊";
             NSString * gid =[friend.facebookId stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
-            chatview.gid = gid;
+//            chatview.gid = gid;
+            XCJHomeDynamicViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJHomeDynamicViewController"];
+            vc.Currentgid = gid;
+            vc.title = friend.facebookName;
+            vc.groupInfo = friend;
+            [self.navigationController pushViewController:vc animated:YES];
+            
         }
             break;
         case XCMessageActivity_UserPrivateMessage:
         {
+            
+            ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
             chatview.title = friend.facebookName;
+            
+            chatview.conversation = friend;
+            //[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+            
+            [self.navigationController pushViewController:chatview animated:YES];
         }
             break;
             
@@ -395,10 +775,6 @@
             break;
     }
     
-    chatview.conversation = friend;
-    //[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-    
-    [self.navigationController pushViewController:chatview animated:YES];
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -429,7 +805,7 @@
             break;
         case XCMessageActivity_UserGroupMessage:
         {
-            [imageIcon setImage:[UIImage imageNamed:@"tabbar_compose_envelope"]];
+            [imageIcon setImage:[UIImage imageNamed:@"buddy_header_icon_group"]];
             ((UILabel *)[cell.contentView viewWithTag:1]).text  = conver.facebookName;
         }
             break;
@@ -585,7 +961,6 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
         id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
         [managedObject MR_deleteEntity];
         [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];

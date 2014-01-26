@@ -1532,17 +1532,26 @@
 }
 
 #pragma mark  textview
-
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
+
 {
-    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
-    if (![text isNilOrEmpty]) { //range.location >= 0 &&
-        button.enabled = YES;
-       [button infoStyle];
+    if([text isEqualToString:@"\n"])  {
+        
+        [self SendTextMsgClick:nil];
+        return NO;
     }
-    if (range.location == 0 && [text isNilOrEmpty]) {
-        [button defaultStyle];
-    }
+    
+//    UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
+//    if (![text isNilOrEmpty]) { //range.location >= 0 &&
+//        button.enabled = YES;
+//       [button infoStyle];
+//       
+//
+//        
+//    }
+//    if (range.location == 0 && [text isNilOrEmpty]) {
+//        [button defaultStyle];
+//    }
     return YES;
 }
 

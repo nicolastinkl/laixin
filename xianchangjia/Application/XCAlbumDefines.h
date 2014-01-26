@@ -27,7 +27,7 @@ typedef enum {
 } KMessage_private_user_Msg_type;
 
 //#warning Release
-#define NEED_OUTPUT_LOG                     0   // 0 relese  1 debug
+#define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
 
 
