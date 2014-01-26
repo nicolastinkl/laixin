@@ -174,7 +174,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
    
-    
+    self.title = @"想要";
  // title消息 切换
 //    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
 //    
@@ -283,7 +283,7 @@
 
 -(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
 {
-    NSPredicate * pre = [NSPredicate predicateWithFormat:@" badgeNumber > %@",@"0"];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
     
     ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
     
@@ -317,10 +317,25 @@
         [tabBar.items[0] setBadgeValue:nil];
     }
     
+//    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+//    {
+//        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+//    }
+    NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
+    __block int brage = 0;
+    NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
+    
+    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ConverReply * con = obj;
+        brage += [con.badgeNumber integerValue];
+    }];
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-    {
+    if (brage > 0) {
+        [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
+    }else{
         [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
     }
+
     
     /*
      if (contr) {
@@ -429,15 +444,15 @@
     
     // select all unread bradge number
     
-    NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"gbadgeNumber > %d",0];
-    NSInteger  inter =  [FCHomeGroupMsg MR_countOfEntitiesWithPredicate:preCMD];
-    
-    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-    if (inter > 0) {
-        [delegate.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
-    }else{
-        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
-    }
+//    NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"gbadgeNumber > %d",0];
+//    NSInteger  inter =  [FCHomeGroupMsg MR_countOfEntitiesWithPredicate:preCMD];
+//    
+//    XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+//    if (inter > 0) {
+//        [delegate.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+//    }else{
+//        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+//    }
     
     
 	UITableView *tableView = self.tableView;
@@ -490,7 +505,7 @@
     XCJHomeDynamicViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJHomeDynamicViewController"];
     vc.Currentgid = info.gid;
     vc.title = info.gName;
-    vc.groupInfo = info;
+//    vc.groupInfo = info;
     [self.navigationController pushViewController:vc animated:YES];
     
 }

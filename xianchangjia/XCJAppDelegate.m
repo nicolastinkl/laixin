@@ -304,9 +304,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
             
             
             
-            
+            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
             __block int brage = 0;
-            NSArray * array = [ConverReply MR_findAll];
+            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 ConverReply * con = obj;
                 brage += [con.badgeNumber integerValue];
@@ -363,8 +363,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
             ConverRe.badgeNumber = @(unreadNumber);
             
             [localContext MR_saveToPersistentStoreAndWait];
+
+            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
             __block int brage = 0;
-            NSArray * array = [ConverReply MR_findAll];
+            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
+
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 ConverReply * con = obj;
                 brage += [con.badgeNumber integerValue];
@@ -666,25 +669,29 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                                  name:LaixinSetupDBMessageNotification
                                                object:nil];
     
+    
+    
   
     
-    //[[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(updateMessageTabBarItemBadge)
-//                                                 name:@"updateMessageTabBarItemBadge"
-//                                               object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(LoginInReceivingAllMessage)
+                                                 name:@"LoginInReceivingAllMessage"
+                                               object:nil];
 
    
     // Override point for customization after application launch.
     return YES;
 }
 
+
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     NSInteger index =  tabBarController.selectedIndex;
-    if (index == 2) {
-        [tabBarController.tabBar.items[2] setBadgeValue:nil];
-    }
-    
+//    if (index == 2) {
+//        [tabBarController.tabBar.items[2] setBadgeValue:nil];
+//    }
+//    
     if (index == 1) {
         [tabBarController.tabBar.items[1] setBadgeValue:nil];
     }
@@ -840,15 +847,33 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+
+-(void) LoginInReceivingAllMessage
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    double delayInSeconds = 0.5;
+    double delayInSeconds = 0.3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
         if([XCJAppDelegate hasLogin]){
+            
+            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
+            __block int brage = 0;
+            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
+            
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                ConverReply * con = obj;
+                brage += [con.badgeNumber integerValue];
+            }];
+            if (brage>0) {
+                
+                [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
+                
+            }else{
+                
+                [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
+                
+            }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
             NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
@@ -948,7 +973,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                     }
                                     
                                 }
-                                msg.imageUrl = imageurl;                                
+                                msg.imageUrl = imageurl;
                                 conversation.lastMessageDate = date;
                                 conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
                                 conversation.messageStutes = @(messageStutes_incoming);
@@ -966,7 +991,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                             }
                             
                             // update tabbar item  badge
-                            [self updateMessageTabBarItemBadge];                        
+                            [self updateMessageTabBarItemBadge];
                         }];
                     }
                 } failure:^(MLRequest *request, NSError *error) {
@@ -976,10 +1001,16 @@ static NSString * const kLaixinStoreName = @"Laixins";
             } failure:^(MLRequest *request, NSError *error) {
             }];
             
-          
+            
         }
     });
-    
+
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self LoginInReceivingAllMessage];
 }
 
 -(void) initEventData:(NSString *) requestKey Data:(NSDictionary  *)dictEvent

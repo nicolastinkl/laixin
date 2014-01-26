@@ -118,8 +118,7 @@
             //            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
             UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
             
-           NSURL * url = [asset.defaultRepresentation url];
-//            NSURL * url = [self uploadContent:theInfo];
+            NSURL * url = [asset.defaultRepresentation url];
             PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];
             // [[PostActivityViewController alloc]init];
             postVC.gID = _Currentgid;
@@ -130,9 +129,6 @@
             
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];
-//            [self presentViewController:postVC animated:YES completion:^{
-//                
-//            }];
         }
     }];
     
@@ -162,16 +158,15 @@
 
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"相册", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
 
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self.groupInfo.gbadgeNumber intValue] > 0) {
-        self.groupInfo.gbadgeNumber = @(0);
+    if ([self.groupInfo.badgeNumber intValue] > 0) {
+        self.groupInfo.badgeNumber = @(0);
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     }
 }
@@ -496,7 +491,7 @@
                     [[MLNetworkingManager sharedManager] sendWithAction:@"group.update" parameters:@{@"gid":self.Currentgid,@"name":str} success:^(MLRequest *request, id responseObject) {
                         if (responseObject) {
                             self.title = str;
-                            self.groupInfo.gName = str;
+                            self.groupInfo.facebookName = str;
                             [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
                         }
                     } failure:^(MLRequest *request, NSError *error) {
@@ -609,17 +604,18 @@
                 }
                     break;
                 case 1:{   //拍照
-//                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-//                        UIImagePickerController *camera = [[UIImagePickerController alloc] init];
-//                        camera.delegate = self;
-//                        camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-//                        [self presentViewController:camera animated:YES completion:nil];
-//                    }
+                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                        UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                        camera.delegate = self;
+                        camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                        [self presentViewController:camera animated:YES completion:nil];
+                    }
                     
-                    [self pickAssets:nil];
+                   
                 }
                     break;
                 case 2:{
+                     [self pickAssets:nil];
 //                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
 //                        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
 //                        photoLibrary.delegate = self;
@@ -819,13 +815,10 @@
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
 {
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:NO completion:nil];
     
     NSURL * url = [self uploadContent:theInfo];
-    PostActivityViewController *postVC = [[PostActivityViewController alloc]init];
-    if (_Currentgid == nil) {
-        _Currentgid = @"2";
-    }
+   PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];
     postVC.gID = _Currentgid;
     postVC.filePath = [url copy];
     postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];

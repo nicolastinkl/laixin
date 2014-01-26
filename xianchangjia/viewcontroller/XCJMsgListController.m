@@ -141,10 +141,10 @@
 }
 
 
-
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
-    [self initHomeData];  // get all data 
+    [self initHomeData];  // get all data
+    [[NSNotificationCenter defaultCenter] postNotificationName:@" LoginInReceivingAllMessage" object:nil];
 }
 
 
@@ -160,6 +160,8 @@
         menuView.Image_bg.alpha = .95f;
         UIImage *blurredImage = [menuView.Image_bg.image blurredImage:blurred];
         menuView.Image_bg.image = blurredImage;
+        [menuView setButtonLayout];
+        
     }
     
     if (menuView.top == 0) {
@@ -783,6 +785,9 @@
     
     UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
     UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
+    ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
+    ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time
+    
 //    UIImageView * imageFrame = (UIImageView *)[cell.contentView viewWithTag:6]; // frame
     switch ([conver.messageType intValue]) {
         case XCMessageActivity_UserPrivateMessage:
@@ -801,12 +806,32 @@
                 
             }
             
+            
+            switch ([conver.messageStutes intValue]) {
+                case messageStutes_incoming:
+                    [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
+                    break;
+                case messageStutes_outcoming:
+                    [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
+                    break;
+                case messageStutes_error:
+                    [imageStuts setImage:[UIImage imageNamed:@"inboxErrorIcon"]];
+                    break;
+                default:
+                    break;
+            }
         }
             break;
         case XCMessageActivity_UserGroupMessage:
         {
             [imageIcon setImage:[UIImage imageNamed:@"buddy_header_icon_group"]];
             ((UILabel *)[cell.contentView viewWithTag:1]).text  = conver.facebookName;
+            
+            if ([conver.isMute boolValue]) {
+                [imageStuts setImage:[UIImage imageNamed:@"inboxMutedIcon"]];
+            }else{
+                [imageStuts setImage:nil];
+            }
         }
             break;
         default:
@@ -816,23 +841,8 @@
     }
     
     
-    ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
-    ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time
+   
     
-    switch ([conver.messageStutes intValue]) {
-        case messageStutes_incoming:
-            [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
-            break;
-        case messageStutes_outcoming:
-            [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
-            break;
-        case messageStutes_error:
-            [imageStuts setImage:[UIImage imageNamed:@"inboxErrorIcon"]];
-            break;
-            
-        default:
-            break;
-    }
     UITabBar *tabBar =(UITabBar*) [cell.contentView viewWithTag:12];
     for (UIView *viewTab in tabBar.subviews) {
         for (UIView *subview in viewTab.subviews) {

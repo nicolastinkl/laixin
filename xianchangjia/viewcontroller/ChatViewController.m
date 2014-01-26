@@ -37,16 +37,21 @@
 #import "XCJChatSendImgViewController.h"
 #import "XCJChatSendInfoView.h"
 #import "XCJWholeNaviController.h"
+#import "UIImage+WebP.h"
+#import "UIButton+Bootstrap.h"
+
+#import "ChatVoiceRecorderVC.h"
+#import "VoiceConverter.h"
 
 #define  keyboardHeight 216
 #define  facialViewWidth 300
 #define facialViewHeight 180
 
-@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate>
+@interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate,VoiceRecorderBaseVCDelegate,UIGestureRecognizerDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
-    NSString * ImageFile;
+    UIImage * ImageFile;
     NSString * PasteboardStr;
     NSArray * userArray;
     UIScrollView *scrollView;
@@ -60,10 +65,20 @@
 @property (weak, nonatomic) IBOutlet UITextView *inputTextView;
 @property (weak, nonatomic) UIView *keyboardView;
 @property (strong,nonatomic) NSMutableArray *messageList;
+
+
+@property (retain, nonatomic)  ChatVoiceRecorderVC      *recorderVC;
+
+@property (retain, nonatomic)   AVAudioPlayer           *player;
+
+@property (copy, nonatomic)     NSString                *originWav;         //原wav文件名
+
+@property (copy, nonatomic)     NSString                *convertAmr;        //转换后的amr文件
+
 @end
 
 @implementation ChatViewController
-
+@synthesize recorderVC,player,originWav,convertAmr;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -85,7 +100,20 @@
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button defaultStyle];
     
+    UIButton * buttonChangeAudio = (UIButton *) [self.inputContainerView subviewWithTag:7];
+    [buttonChangeAudio addTarget:self action:@selector(SHowAudioButtonClick:) forControlEvents:UIControlEventTouchUpInside ];
     
+    UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
+    [buttonAudio sendMessageStyle];
+    [buttonAudio setTitle:@"按住说话" forState:UIControlStateNormal];
+    //添加长按手势
+    UILongPressGestureRecognizer *longPrees = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(recordBtnLongPressed:)];
+    longPrees.delegate = self;
+    [buttonAudio addGestureRecognizer:longPrees];
+    
+    UIButton * buttonAudio8 = (UIButton *) [self.inputContainerView subviewWithTag:8];
+    
+    [buttonAudio8 addTarget:self action:@selector(ShowkeyboardButtonClick:) forControlEvents:UIControlEventTouchUpInside ];
     
 //    self.inputContainerView.layer.borderColor = [UIColor grayColor].CGColor;
 //    self.inputContainerView.layer.borderWidth = 0.5f;
@@ -153,6 +181,82 @@
                 }
             } withuid:self.conversation.facebookId];
         }
+    }
+}
+
+-(IBAction)ShowkeyboardButtonClick:(id)sender
+{
+    ( (UIButton *) [self.inputContainerView subviewWithTag:8]).hidden = YES;
+    ( (UIButton *) [self.inputContainerView subviewWithTag:7]).hidden = NO;
+    ((UIButton *) [self.inputContainerView subviewWithTag:9]).hidden = YES;
+    [self.inputTextView becomeFirstResponder];
+    
+}
+-(IBAction)SHowAudioButtonClick:(id)sender
+{
+    ( (UIButton *) [self.inputContainerView subviewWithTag:9]).hidden = NO;
+    ( (UIButton *) [self.inputContainerView subviewWithTag:8]).hidden = NO;
+    ( (UIButton *) [self.inputContainerView subviewWithTag:7]).hidden = YES;
+    [self.inputTextView resignFirstResponder];
+}
+
+#pragma mark - VoiceRecorderBaseVC Delegate Methods
+//录音完成回调，返回文件路径和文件名
+- (void)VoiceRecorderBaseVCRecordFinish:(NSString *)_filePath fileName:(NSString*)_fileName{
+    NSLog(@"录音完成，文件路径:%@",_filePath);
+    
+    if (originWav.length > 0){
+        self.convertAmr = [originWav stringByAppendingString:@"wavToAmr"];
+        
+        //转格式
+        [VoiceConverter wavToAmr:[VoiceRecorderBaseVC getPathByFileName:originWav ofType:@"wav"] amrSavePath:[VoiceRecorderBaseVC getPathByFileName:convertAmr ofType:@"amr"]];
+        NSString * strAMRName = [VoiceRecorderBaseVC getPathByFileName:convertAmr  ofType:@"amr"];
+        if (strAMRName.length > 0) {
+            // send amr
+            SLog(@"amr : %@",strAMRName);
+        }
+    }
+}
+
+#pragma mark - 获取文件大小
+- (NSInteger) getFileSize:(NSString*) path{
+    NSFileManager * filemanager = [[NSFileManager alloc]init];
+    if([filemanager fileExistsAtPath:path]){
+        NSDictionary * attributes = [filemanager attributesOfItemAtPath:path error:nil];
+        NSNumber *theFileSize;
+        if ( (theFileSize = [attributes objectForKey:NSFileSize]) )
+            return  [theFileSize intValue];
+        else
+            return -1;
+    }
+    else{
+        return -1;
+    }
+}
+
+-(void)recordBtnLongPressed:(UILongPressGestureRecognizer*) longPressedRecognizer
+{
+     UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
+    //长按开始
+    if(longPressedRecognizer.state == UIGestureRecognizerStateBegan) {
+        //设置文件名
+        self.originWav = [VoiceRecorderBaseVC getCurrentTimeString];
+        
+        if (!self.recorderVC) {
+            
+            //初始化录音vc
+            self.recorderVC = [[ChatVoiceRecorderVC alloc]init];
+            recorderVC.vrbDelegate = self;
+           
+            [buttonAudio infoStyle];
+        }
+        //开始录音
+        [recorderVC beginRecordByFileName:self.originWav];
+        
+    }//长按结束
+    else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){
+        [buttonAudio sendMessageStyle];
+
     }
 }
 
@@ -742,8 +846,8 @@
                 }else{
                     [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
                 }
-                
-                NSData * imageDatasss = UIImageJPEGRepresentation(image, 0.5);
+                NSData *imageDatasss  =  [UIImage imageToWebP:image quality:75.0];
+//                NSData * imageDatasss = UIImageJPEGRepresentation(image, 0.5);
                 
                 operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
                     //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
@@ -904,15 +1008,12 @@
     [picker dismissViewControllerAnimated:NO completion:nil];
     
 //    UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
-    
-   
-//
     //upload image
     [self performSelector:@selector(uploadContent:) withObject:theInfo];
     
 }
 
-- (void) SendImageURL:(NSString * ) url  withKey:(NSString *) key
+- (void) SendImageURL:(UIImage * ) url  withKey:(NSString *) key
 {
     [SVProgressHUD showWithStatus:@"正在发送..."];
     [self uploadFile:url  key:key];
@@ -920,32 +1021,32 @@
 
 - (void)uploadContent:(NSDictionary *)theInfo {
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
-    //Optionally for time zone conversions
-    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    XCJChatSendImgViewController * chatImgView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJChatSendImgViewController"];
+    //    chatImgView.imageview.image = [postImage copy];
+    UIImage *image = theInfo[UIImagePickerControllerOriginalImage];
+    chatImgView.imageviewSource = image;
+    chatImgView.delegate = self;
+    [self presentViewController:chatImgView animated:YES completion:^{
+    }];
     
-    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
-    
-    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
-    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
-        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,self.conversation.facebookId]];
-        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
-        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-        SLLog(@"Upload Path: %@", filePath);
-        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
-        [webData writeToFile:filePath atomically:YES];
-//        [self uploadFile:filePath  key:key];
-        
-        XCJChatSendImgViewController * chatImgView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJChatSendImgViewController"];
-        //    chatImgView.imageview.image = [postImage copy];
-        chatImgView.imageviewURL = filePath;
-        chatImgView.key = key;
-        chatImgView.delegate = self;
-        [self presentViewController:chatImgView animated:YES completion:^{
-        }];
-        
-    }
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
+//    //Optionally for time zone conversions
+//    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+//    
+//    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
+//    
+//    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
+//    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
+////        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,self.conversation.facebookId]];
+////        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+////        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+////        SLLog(@"Upload Path: %@", filePath);
+////        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
+////        [webData writeToFile:filePath atomically:YES];
+////        [self uploadFile:filePath  key:key];
+//        
+//    }
 }
 
 - (NSString *)getMd5_32Bit_String:(NSString *)srcString{
@@ -1001,7 +1102,7 @@
 }
 
 
-- (void)uploadFile:(NSString *)filePath  key:(NSString *)key {
+- (void)uploadFile:(UIImage *)filePath  key:(NSString *)key {
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/Message?sessionid=YtcS7pKQSydYPnJ
     NSString * postType;
@@ -1013,7 +1114,7 @@
     }
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
         if (response) {
-            NSString * token =  [response objectForKey:@"token"];
+            NSString * token =  response[@"token"];
             TokenAPP = token;
             ImageFile = filePath;
             [self uploadImage:filePath token:token];
@@ -1021,7 +1122,7 @@
     } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
--(void) uploadImage:(NSString *)filePath  token:(NSString *)token
+-(void) uploadImage:(UIImage *)filePath  token:(NSString *)token
 {
 //    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
 //    [img setImage:[UIImage imageWithContentsOfFile:filePath]];
@@ -1029,7 +1130,7 @@
     // setup 2: upload image
     //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
     
-    
+    SLog(@"start uploading....");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
@@ -1042,9 +1143,9 @@
         [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
     }
     
-    UIImage *imageSend = [UIImage imageWithContentsOfFile:filePath];
-    NSData * imageDatasss = UIImageJPEGRepresentation(imageSend, 0.5);
-    
+    NSData *imageDatasss  =  [UIImage imageToWebP:filePath quality:75.0];
+    //NSData * imageDatasss = UIImageJPEGRepresentation(imageSend, 0.5);
+    SLog(@"imageDatasss : %.2f KB ",(double)imageDatasss.length/1024);
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         [formData appendPartWithFileData:imageDatasss name:@"file" fileName:@"file" mimeType:@"image/jpeg"];

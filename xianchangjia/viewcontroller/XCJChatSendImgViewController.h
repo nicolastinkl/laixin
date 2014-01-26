@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @protocol   XCJChatSendImgViewControllerdelegate <NSObject>
-- (void) SendImageURL:(NSString * ) url  withKey:(NSString *) key;
+- (void) SendImageURL:(UIImage * ) url  withKey:(NSString *) key;
 @end
 
 @class XCJChatSendImgViewControllerdelegate;
 @interface XCJChatSendImgViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageview;
+@property (strong, nonatomic) UIImage *imageviewSource;
 @property (strong, nonatomic) NSString *imageviewURL;
 @property (strong, nonatomic) NSString *key;
 @property (weak, nonatomic) id<XCJChatSendImgViewControllerdelegate>  delegate;

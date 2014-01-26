@@ -18,13 +18,13 @@
 #import "MLNetworkingManager.h"
 #import "UIAlertViewAddition.h"
 #import <AVFoundation/AVFoundation.h>
-
+#import "UIImage+WebP.h"
 
 @interface XCJCompleteUploadImgViewController ()< UINavigationControllerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,UIActionSheetDelegate, AVCaptureMetadataOutputObjectsDelegate>
 {
     AFHTTPRequestOperation *  operation;
     NSString * TokenAPP;
-    NSString * ImageFile;
+    UIImage * ImageFile;
 }
 
 
@@ -301,20 +301,21 @@
 
 - (void)uploadContent:(NSDictionary *)theInfo {
     
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
-    //Optionally for time zone conversions
-    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
-    
-    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
-    
-    NSString * namefile =  [self getMd5_32Bit_String:timeDesc];
-    NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
-    NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
-    SLLog(@"Upload Path: %@", filePath);
-    NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
-    [webData writeToFile:filePath atomically:YES];
-    [self uploadFile:filePath  key:key];
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
+//    //Optionally for time zone conversions
+//    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+//    
+//    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
+//    
+//    NSString * namefile =  [self getMd5_32Bit_String:timeDesc];
+//    NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+//    NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+//    SLLog(@"Upload Path: %@", filePath);
+//    NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
+//    [webData writeToFile:filePath atomically:YES];
+    UIImage * image = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    [self uploadFile:image ];
 }
 
 - (NSString *)getMd5_32Bit_String:(NSString *)srcString{
@@ -328,7 +329,7 @@
     return result;
 }
 
-- (void)uploadFile:(NSString *)filePath  key:(NSString *)key {
+- (void)uploadFile:(UIImage *)filePath  {
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
     
@@ -344,20 +345,22 @@
      } withParems:[NSString stringWithFormat:@"upload/HeadImg?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
--(void) uploadImage:(NSString *)filePath  token:(NSString *)token
+-(void) uploadImage:(UIImage *)filePath  token:(NSString *)token
 {
     [SVProgressHUD showWithStatus:@"正在上传头像..."];
     UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
-    [img setImage:[UIImage imageWithContentsOfFile:filePath]];
+    [img setImage:filePath];
     [img showIndicatorViewBlue];
     // setup 2: upload image
     //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
+    
+     NSData * imagedata = [UIImage imageToWebP:filePath quality:75];
     operation  = [manager POST:@"http://up.qiniu.com" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-//        [formData appendPartWithFileData:imageData name:@"user_avatar" fileName:@"me.jpg" mimeType:@"image/jpeg"];
+//        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
+        [formData appendPartWithFileData:imagedata name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
         SLLog(@"responseObject %@",responseObject);

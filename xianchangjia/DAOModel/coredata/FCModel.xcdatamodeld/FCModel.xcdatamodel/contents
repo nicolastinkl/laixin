@@ -12,6 +12,7 @@
         <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="facebookName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isMute" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastMessage" optional="YES" attributeType="Transformable" syncable="YES"/>
         <attribute name="lastMessageDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>

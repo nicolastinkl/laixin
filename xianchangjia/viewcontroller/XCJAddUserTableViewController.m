@@ -14,6 +14,10 @@
 #import "LXAPIController.h"
 #import "LXChatDBStoreManager.h"
 #import "FCFriends.h"
+#import "UIButton+Bootstrap.h"
+#import "ChatViewController.h"
+#import "Conversation.h"
+#import "CoreData+MagicalRecord.h"
 
 @interface XCJAddUserTableViewController ()
 {
@@ -104,32 +108,50 @@
     {
         BOOL bol =   [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCFriendsWithUid:self.UserInfo.uid];
         if (bol) {
-            self.Image_btnBG.hidden = YES;
-            self.Button_Sendmsg.hidden = YES;
+            // send message
+             [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateNormal];
+             [self.Button_Sendmsg sendMessageStyle];
+            [self.Button_Sendmsg addTarget:self action:@selector(sendMessageClick:) forControlEvents:UIControlEventTouchUpInside];
+        }else{
+            [self.Button_Sendmsg setTitle:@"添加好友" forState:UIControlStateNormal];
+            [self.Button_Sendmsg infoStyle];
+            [self.Button_Sendmsg addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     ((UILabel *) [self.tableView.tableFooterView subviewWithTag:1]).height = 0.3f;
     ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3f;
     
-    
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
-    [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUpOut:) forControlEvents:UIControlEventTouchUpOutside];
+}
+-(IBAction)sendMessageClick:(id)sender
+{
+    // target to chat view
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",self.UserInfo.uid];
+    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
+    ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
+    if (array) {
+        chatview.conversation = array;
+    }else{
+        // create new
+        Conversation * conversation =  [Conversation MR_createInContext:localContext];
+        conversation.lastMessage = @"";
+        conversation.lastMessageDate = [NSDate date];
+        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+        conversation.messageStutes = @(messageStutes_incoming);
+        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        conversation.facebookName = self.UserInfo.nick;
+        conversation.facebookId = self.UserInfo.uid;
+        conversation.badgeNumber = @0;
+        [localContext MR_saveOnlySelfAndWait];
+        chatview.conversation = conversation;
+    }
+    chatview.userinfo = self.UserInfo;
+    chatview.title = self.UserInfo.nick;
+    [self.navigationController pushViewController:chatview animated:YES];
 }
 
--(IBAction)touchBtnUpOut:(id)sender
+-(IBAction) addFriendClick:(id)sender
 {
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
-}
-
--(IBAction)touchBtnDown:(id)sender
-{
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_highlighted"]];
-}
-
--(IBAction)touchBtnUp:(id)sender
-{
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
     {
         [SVProgressHUD showWithStatus:@"正在添加"];
         NSDictionary * parames = @{@"uid":@[self.UserInfo.uid]};
@@ -208,7 +230,6 @@
     [content setHeight:[self sizebyText:text]]; // set label content frame with tinkl
     return cell;
 }
-
 
 -(CGFloat) sizebyText:(NSString * ) text
 {

@@ -93,7 +93,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDt-nh-fP0">
-                    <rect key="frame" x="137" y="409" width="47" height="47"/>
+                    <rect key="frame" x="137" y="419" width="47" height="47"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" backgroundImage="notifications-vote-minus">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -145,6 +145,7 @@
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <connections>
                 <outlet property="Image_bg" destination="7vm-md-uxO" id="ldn-y0-Xzh"/>
+                <outlet property="button_Close" destination="UDt-nh-fP0" id="SXs-m8-kge"/>
             </connections>
         </view>
         <tapGestureRecognizer id="Dee-yc-aNg">

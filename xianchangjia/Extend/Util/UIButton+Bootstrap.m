@@ -10,12 +10,24 @@
 #import "XCAlbumDefines.h"
 
 @implementation UIButton (Bootstrap)
+-(void)sendMessageStyle
+{
+    self.layer.borderWidth = 0.5;
+    self.layer.cornerRadius = 4.0;
+    self.layer.masksToBounds = YES;
+    [self setAdjustsImageWhenHighlighted:NO];
+    self.layer.borderColor = [ios7BlueColor CGColor];
+    
+    [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
 
+}
 -(void)bootstrapStyle{
     self.layer.borderWidth = 0.5;
     self.layer.cornerRadius = 4.0;
     self.layer.masksToBounds = YES;
     [self setAdjustsImageWhenHighlighted:NO];
+    self.layer.borderColor = [ios7BlueColor CGColor];
+
     [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     //[self.titleLabel setFont:[UIFont fontWithName:@"FontAwesome" size:self.titleLabel.font.pointSize]];
 }

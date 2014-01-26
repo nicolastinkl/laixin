@@ -23,7 +23,7 @@
 @dynamic messageType;
 @dynamic account;
 @dynamic messages;
-
+@dynamic isMute;
 - (void)addMessagesObject:(FCMessage *)value {
     NSSet *changedObjects = [[NSSet alloc] initWithObjects:&value count:1];
     [self willChangeValueForKey:@"messages" withSetMutation:NSKeyValueUnionSetMutation usingObjects:changedObjects];

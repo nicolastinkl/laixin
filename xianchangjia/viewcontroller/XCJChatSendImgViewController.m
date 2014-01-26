@@ -29,7 +29,7 @@
 
 - (IBAction)sureClick:(id)sender {
     [self cancelClick:nil];
-    [self.delegate SendImageURL:self.imageviewURL withKey:self.key];
+    [self.delegate SendImageURL:self.imageviewSource withKey:self.key];
 }
 - (IBAction)cancelClick:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
@@ -40,16 +40,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.imageview.image = [UIImage imageWithContentsOfFile:self.imageviewURL];
+    //self.imageview.image = [UIImage imageWithContentsOfFile:self.imageviewURL];
 	// Do any additional setup after loading the view.
+    [self.imageview setImage:_imageviewSource];
     
-    UIView * view =   [self.view subviewWithTag:1];
+    UIView * view =  [self.view subviewWithTag:1];
     view.top = self.view.height - view.height;
     
     UIButton * cancelButton = (UIButton * )[view subviewWithTag:1];
     UIButton * Sendbutton = (UIButton * )[view subviewWithTag:2];
     [cancelButton bootstrapStyle];
     [Sendbutton infoStyle];
+    
+    cancelButton.left = 10;
+    Sendbutton.left = self.view.width - Sendbutton.width - 10;
 }
 
 - (void)didReceiveMemoryWarning

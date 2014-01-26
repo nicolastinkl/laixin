@@ -30,6 +30,7 @@ enum messageStutes_type {
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) FCAccount *account;
 @property (nonatomic, retain) NSSet *messages;
+@property (nonatomic, retain) NSNumber * isMute;
 @end
 
 @interface Conversation (CoreDataGeneratedAccessors)

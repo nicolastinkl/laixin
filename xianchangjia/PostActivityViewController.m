@@ -20,6 +20,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImage+Addition.h"
+#import "UIImage+WebP.h"
+
 
 @interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -269,7 +271,6 @@
 
 -(void) uploadImagetoken:(NSString *)token
 {
-   
     //    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
     //    [img setImage:[UIImage imageWithContentsOfFile:filePath]];
     //    [img showIndicatorViewBlue];
@@ -282,11 +283,12 @@
     [parameters setValue:_inputTextView.text forKey:@"x:content"];
     [parameters setValue:@"" forKey:@"x:length"];
     [parameters setValue:self.gID forKey:@"x:gid"];
+    
+    NSData * imageData = UIImageJPEGRepresentation(self.postImage, 0.5);
+//     NSData *imageData  =  [UIImage imageToWebP:self.postImage quality:75.0];
+    
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-        
-//        UIImage * imageHere = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@",self.filePath]];
-        NSData * imageData = UIImageJPEGRepresentation(self.postImage, 0.5);
           [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3" }
@@ -296,7 +298,7 @@
 //        error = "No known serializer for object: datetime.datetime(2014, 1, 9, 17, 35, 39)";
 //    }
         
-        SLog(@"responseObject %@",responseObject);
+//        SLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {

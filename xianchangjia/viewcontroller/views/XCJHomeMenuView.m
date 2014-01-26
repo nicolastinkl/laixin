@@ -7,6 +7,7 @@
 //
 
 #import "XCJHomeMenuView.h"
+#import "XCAlbumAdditions.h"
 
 @implementation XCJHomeMenuView
 @synthesize delegate = _delegate;
@@ -15,10 +16,18 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
-        
     }
     return self;
+}
+-(void) setButtonLayout
+{
+    
+    if(IS_4_INCH)
+    {
+        [self.button_Close setTop:519];
+    }else{
+        [self.button_Close setTop:409];
+    }
 }
 
 - (IBAction)MoreClick:(id)sender {

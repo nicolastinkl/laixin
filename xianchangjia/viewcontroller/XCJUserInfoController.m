@@ -15,6 +15,7 @@
 #import "ChatViewController.h"
 #import "XCAlbumDefines.h"
 #import "DataHelper.h"
+#import "UIButton+Bootstrap.h"
 
 @interface XCJUserInfoController ()
 {
@@ -78,18 +79,6 @@
         
         [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""]]];
     }
-    
-    if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
-        self.Button_Sendmsg.hidden = YES;
-        self.Image_btnBG.hidden = YES;
-    }else{
-        
-        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnDown:) forControlEvents:UIControlEventTouchDown];
-        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
-        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUpOut:) forControlEvents:UIControlEventTouchUpOutside];
-    }
-    
-    
    
     if (self.UserInfo.create_time) {
         @try {
@@ -112,30 +101,33 @@
     if (![self.UserInfo.signature isNilOrEmpty]) {
         UserDict[@"个性签名"] = self.UserInfo.signature;
     }
+    
+    
+    
+    if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
+        self.Button_Sendmsg.hidden = YES;
+        self.Image_btnBG.hidden = YES;
+    }else{
+        self.Button_Sendmsg.hidden = NO;
+        [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
+        [self.Button_Sendmsg sendMessageStyle];
+    }
+    
+    
+    
     [self.tableView reloadData];
-}
-
--(IBAction)touchBtnUpOut:(id)sender
-{
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
-}
-
--(IBAction)touchBtnDown:(id)sender
-{
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_highlighted"]];
 }
 
 -(IBAction)touchBtnUp:(id)sender
 {
-    [self.Image_btnBG setImage:[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"]];
     
     // target to chat view
     NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
     NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",self.UserInfo.uid];
-    NSArray * array =  [Conversation MR_findAllWithPredicate:pre inContext:localContext];
+    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
     ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
-    if (array.count > 0) {
-        chatview.conversation = array[0];
+    if (array) {
+        chatview.conversation = array;
     }else{
         // create new
         Conversation * conversation =  [Conversation MR_createInContext:localContext];
@@ -151,7 +143,7 @@
          chatview.conversation = conversation;
      }
      chatview.userinfo = self.UserInfo;
-    chatview.title = self.UserInfo.nick;
+     chatview.title = self.UserInfo.nick;
      [self.navigationController pushViewController:chatview animated:YES];
 }
 

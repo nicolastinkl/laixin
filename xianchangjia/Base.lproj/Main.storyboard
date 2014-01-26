@@ -1020,6 +1020,7 @@
                     </tableView>
                     <tabBarItem key="tabBarItem" systemItem="topRated" id="MOH-NI-xZz"/>
                     <navigationItem key="navigationItem" title="来信" id="UnY-Ny-iWd">
+                        <barButtonItem key="backBarButtonItem" title="返回" id="HG1-qS-9aL"/>
                         <barButtonItem key="rightBarButtonItem" image="toolbar-action-button" id="rtS-nt-Rs2">
                             <connections>
                                 <action selector="ShowMenuClick:" destination="Vc6-7g-lYm" id="ENa-Na-JKu"/>
@@ -1412,7 +1413,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2t9-mg-vny" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2272" y="283"/>
+            <point key="canvasLocation" x="2680" y="378"/>
         </scene>
         <!--Post Text Navi Controller-->
         <scene sceneID="hoY-JD-6i3">
@@ -2186,11 +2187,6 @@
                             <rect key="frame" x="0.0" y="193" width="320" height="121"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_promobutton_28_2_5_2_5_normal" id="6Ee-rb-aZ7">
-                                    <rect key="frame" x="6" y="22" width="309" height="46"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <rect key="contentStretch" x="0.39999999999999963" y="0.29999999999999999" width="0.19999999999999968" height="0.59999999999999964"/>
-                                </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3a7-9J-FWP">
                                     <rect key="frame" x="6" y="27" width="309" height="41"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2239,7 +2235,6 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="Button_Sendmsg" destination="3a7-9J-FWP" id="3vh-8a-7AT"/>
-                        <outlet property="Image_btnBG" destination="6Ee-rb-aZ7" id="bGr-aK-h5s"/>
                         <outlet property="Image_sex" destination="gG1-S5-ivN" id="f0N-DD-Tem"/>
                         <outlet property="Image_user" destination="jH4-Yf-Tfs" id="Quh-4q-BzY"/>
                         <outlet property="Label_nick" destination="NRT-te-T8R" id="xzz-nM-PZR"/>
@@ -2916,11 +2911,6 @@
                             <rect key="frame" x="0.0" y="204" width="320" height="121"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_promobutton_28_2_5_2_5_normal" id="E3e-6E-K18">
-                                    <rect key="frame" x="6" y="22" width="309" height="46"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <rect key="contentStretch" x="0.39999999999999963" y="0.29999999999999999" width="0.19999999999999968" height="0.59999999999999964"/>
-                                </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="O9u-Y5-bf7">
                                     <rect key="frame" x="6" y="27" width="309" height="41"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2967,7 +2957,6 @@
                     </tableView>
                     <connections>
                         <outlet property="Button_Sendmsg" destination="O9u-Y5-bf7" id="TcB-lO-9fd"/>
-                        <outlet property="Image_btnBG" destination="E3e-6E-K18" id="OQ2-jD-BCw"/>
                         <outlet property="Image_sex" destination="ODi-Ji-zDz" id="lYP-5M-9Hu"/>
                         <outlet property="Image_user" destination="bMl-Pe-4dq" id="V22-GW-ys8"/>
                         <outlet property="Label_nick" destination="3lv-xm-feS" id="usA-Fb-1C8"/>
@@ -4101,11 +4090,12 @@
                                         <rect key="contentStretch" x="0.34999999999999998" y="0.14999999999999999" width="0.29999999999999999" height="0.55000000000000004"/>
                                     </imageView>
                                     <button clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CMQ-NG-epg">
-                                        <rect key="frame" x="281" y="4" width="38" height="38"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <rect key="frame" x="283" y="5" width="34" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <rect key="contentStretch" x="1" y="1" width="0.90000000000000024" height="1"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="message_add_background_os7"/>
+                                        <state key="normal" backgroundImage="chat_bottom_up_nor"/>
+                                        <state key="highlighted" backgroundImage="chat_bottom_up_press"/>
                                         <connections>
                                             <action selector="addImage:" destination="PQ7-1p-COo" eventType="touchUpInside" id="9do-Jq-Dg4"/>
                                         </connections>
@@ -4145,19 +4135,38 @@
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="CjN-NJ-ACR">
-                                        <rect key="frame" x="246" y="4" width="38" height="38"/>
+                                        <rect key="frame" x="248" y="6" width="34" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="message_emotion_background_highlighted_os7">
+                                        <state key="normal" backgroundImage="chat_bottom_keyboard_nor">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <state key="highlighted" backgroundImage="chat_bottom_keyboard_press"/>
                                         <connections>
                                             <action selector="KeyBoradViewShow:" destination="PQ7-1p-COo" eventType="touchUpInside" id="Z4V-xS-YEj"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ik-ba-t3a">
-                                        <rect key="frame" x="3" y="4" width="38" height="38"/>
+                                    <button hidden="YES" opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qfT-Ip-GCe">
+                                        <rect key="frame" x="2" y="5" width="34" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="message_voice_background_os7">
+                                        <state key="normal" backgroundImage="chat_bottom_keyboard_nor">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted" backgroundImage="chat_bottom_keyboard_press"/>
+                                        <connections>
+                                            <action selector="KeyBoradViewShow:" destination="PQ7-1p-COo" eventType="touchUpInside" id="5KO-8P-Jci"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6Ik-ba-t3a">
+                                        <rect key="frame" x="2" y="6" width="34" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="chat_bottom_voice_nor">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button hidden="YES" opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xBq-Xq-t5p">
+                                        <rect key="frame" x="44" y="6" width="200" height="33"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
@@ -4698,6 +4707,11 @@
         <image name="cameraBigFocus" width="132" height="132"/>
         <image name="cell_bottom_back" width="309" height="25"/>
         <image name="cell_monlog_background" width="303" height="69"/>
+        <image name="chat_bottom_keyboard_nor" width="34" height="34"/>
+        <image name="chat_bottom_keyboard_press" width="34" height="34"/>
+        <image name="chat_bottom_up_nor" width="34" height="34"/>
+        <image name="chat_bottom_up_press" width="34" height="34"/>
+        <image name="chat_bottom_voice_nor" width="34" height="34"/>
         <image name="chat_btn" width="40" height="40"/>
         <image name="chevron-light-grey" width="7" height="11"/>
         <image name="commercialize_payment_icon_success_os7" width="28" height="28"/>
@@ -4714,7 +4728,6 @@
         <image name="face_vip" width="20" height="20"/>
         <image name="fbc_TextEntryField_light_0_6_0_6" width="13" height="28"/>
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
-        <image name="fbc_promobutton_28_2_5_2_5_normal" width="11" height="32"/>
         <image name="fbc_promobutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="feedbackReplyBackground" width="254" height="306"/>
         <image name="free-sms-invite" width="280" height="80"/>
@@ -4737,10 +4750,7 @@
         <image name="login_user_os7" width="21" height="21"/>
         <image name="md_girl" width="10" height="10"/>
         <image name="menu_icon_bulb_pressed" width="28" height="28"/>
-        <image name="message_add_background_os7" width="24" height="24"/>
-        <image name="message_emotion_background_highlighted_os7" width="24" height="24"/>
         <image name="message_emotion_background_os7" width="24" height="24"/>
-        <image name="message_voice_background_os7" width="32" height="32"/>
         <image name="messages_textview_background_os7" width="17" height="34"/>
         <image name="mission-step-done" width="27" height="27"/>
         <image name="mobile" width="10" height="18"/>

@@ -23,6 +23,9 @@
 
 
 @interface XCJHomeMenuView : UIView
+@property (weak, nonatomic) IBOutlet UIButton *button_Close;
 @property (weak, nonatomic) IBOutlet UIImageView *Image_bg;
 @property (nonatomic, weak) id<XCJHomeMenuViewDelegate> delegate;
+
+-(void) setButtonLayout;
 @end
