@@ -247,7 +247,8 @@
             [parameters setValue:token forKey:@"token"];
             [parameters setValue:[NSString stringWithFormat:@"%d",type] forKey:@"x:filetype"];
             [parameters setValue:@"" forKey:@"x:content"];
-            [parameters setValue:@"" forKey:@"x:length"];
+            
+            [parameters setValue:@([self getFileSize:filePath]) forKey:@"x:length"];
             [parameters setValue:self.conversation.facebookId forKey:@"x:toid"];
             __block NSData * PCMData;
             operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -276,6 +277,23 @@
 //                            NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
                           //  [self SendImageWithMeImageurl:url withMsgID:msgID];
                         
+                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                        FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                        msg.text = @"";
+                        msg.sentDate = [NSDate date];
+                        msg.messageType = @(messageType_audio);
+                        msg.audioUrl = filePath;
+                        // message did not come, this will be on rigth
+                        msg.messageStatus = @(NO);
+                        msg.messageId = @"";//msgid;
+                            self.conversation.lastMessage = @"[语音]";
+                        self.conversation.lastMessageDate = [NSDate date];
+                        self.conversation.badgeNumber = @0;
+                        self.conversation.messageStutes = @(messageStutes_outcoming);    
+                        [self.conversation addMessagesObject:msg];
+                        [self.messageList addObject:msg];
+                        [localContext MR_saveToPersistentStoreAndWait];
+                        
                     }
                     [SVProgressHUD dismiss];
                     //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
@@ -285,7 +303,6 @@
                 SLLog(@"error :%@",error.userInfo);
                 [SVProgressHUD dismiss];
             }];
-
         }
     } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
     

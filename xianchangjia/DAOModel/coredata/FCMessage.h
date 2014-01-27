@@ -24,15 +24,12 @@ enum messageTypeEnum {
 
 @property (nonatomic, retain) NSNumber * messageStatus;
 @property (nonatomic, retain) NSNumber * read;
-@property (nonatomic, retain) NSDate * sentDate;
+@property (nonatomic, retain) NSDate   * sentDate;
 @property (nonatomic, retain) NSString * text;
-/**
- *  type  1: text
-          2: image
-          3: map
- */
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) NSString * imageUrl;
+@property (nonatomic, retain) NSString * audioUrl;
+@property (nonatomic, retain) NSString * videoUrl;
 @property (nonatomic, retain) NSString * messageId;
 
 @property (nonatomic, retain) NSNumber * latitude;

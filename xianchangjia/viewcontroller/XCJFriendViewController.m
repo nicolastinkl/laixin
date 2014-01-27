@@ -460,10 +460,14 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
 //    FCFriends *userdesp = (FCFriends *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
-    FCFriends *userdesp = [[sectionInfo objects] firstObject];
-    
-    return  [self.fetchedResultsController sectionIndexTitleForSectionName:userdesp.friendRelation.nick_pinyin];
+    // Return the number of rows in the section.
+    if ([[self.fetchedResultsController sections] count] > 0) {
+        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        FCFriends *userdesp = [[sectionInfo objects] firstObject];
+        
+        return  [self.fetchedResultsController sectionIndexTitleForSectionName:userdesp.friendRelation.nick_pinyin];
+    }
+    return @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
