@@ -125,7 +125,7 @@
             case messageType_map:
             {
                     //image map
-                [self setuploadRemoteFile:guid FromURL:strSrcURL fileType:4 withParems:dict];
+                [self setuploadRemoteFile:guid FromURL:strSrcURL fileType:1 withParems:dict];
             }
                 break;
             case messageType_audio:
@@ -198,8 +198,6 @@
                 // 图片压缩处理
                 UIImage * image = [UIImage imageWithContentsOfFile:strSrcURL];
                 NSData *FileData  =  [UIImage imageToWebP:image quality:75.0];
-//
-//                FileData = UIImageJPEGRepresentation(image, 0.5);
                 [formData appendPartWithFileData:FileData name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
             }
                 break;
@@ -219,11 +217,13 @@
                 break;
         }
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            SLog(@"responseObject :%@",responseObject);
+        
         if ([responseObject[@"errno"] intValue] == 0) {
             NSDictionary * dic = responseObject[@"result"];
             
             NSString * messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@""];
-            NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
+            NSString *url = [tools getStringValue:dic[@"url"] defaultValue:@""];
             parems[@"messageId"]  = messageId;
             parems[@"url"]  = url;
             if (blockSelf.delegate && [blockSelf.delegate respondsToSelector:@selector(sendMessage:sendMsgSuccess:fromGuid:)])

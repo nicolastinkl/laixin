@@ -1165,7 +1165,7 @@
 
 - (void) SendImageURL:(UIImage * ) url  withKey:(NSString *) key
 {
-    [SVProgressHUD showWithStatus:@"正在发送..."];
+//    [SVProgressHUD showWithStatus:@"正在发送..."];
     [self uploadFile:url  key:key];
 }
 
@@ -1260,9 +1260,8 @@
         postType = @"Post";
     }else{
         postType = @"Message";
-        
     }
-
+    
     NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
     if(token.length > 0){
          [self uploadImage:filePath token:token];
@@ -1274,6 +1273,7 @@
                 [[EGOCache globalCache] setString:token forKey:@"uploadtoken" withTimeoutInterval:60*60];
                 TokenAPP = token;
                 ImageFile = filePath;
+                [self uploadImage:filePath token:token];
             }
         } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
     }
@@ -1289,6 +1289,41 @@
     //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
     
     SLog(@"start uploading....");
+    
+    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
+    NSString *key = [NSString stringWithFormat:@"%@%@", guid, @".jpg"];
+    NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+    NSData *webData = UIImageJPEGRepresentation(filePath, 0.5f);
+    [webData writeToFile:file atomically:YES];
+    
+    
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+    msg.text = @"";
+    msg.sentDate = [NSDate date];
+    msg.imageUrl = file;
+    msg.messageType = @(messageType_image);
+    // message did not come, this will be on rigth
+    msg.messageStatus = @(NO);
+    msg.messageSendStatus = @(4); // ready to send
+    msg.messageId = @"";
+    msg.messageguid = guid;
+    self.conversation.lastMessage = @"[图片]";
+    self.conversation.lastMessageDate = [NSDate date];
+    self.conversation.badgeNumber = @0;
+    self.conversation.messageStutes = @(messageStutes_outcoming);
+    [self.conversation addMessagesObject:msg];
+    [localContext MR_saveToPersistentStoreAndWait];
+    [self.messageList addObject:msg];
+    [self insertTableRow];
+    
+    return;
+    
+    
+    /**
+     *  <#Description#>
+     */
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
@@ -1313,8 +1348,6 @@
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {
-                
-                
                 
                 if (self.gid.length > 0) {
                     
@@ -1553,12 +1586,10 @@
     else  if ([message.messageSendStatus intValue] == 0){
     {
             indictorView.hidden = YES;
-            
             retryButton.hidden = YES;
     }
     }else if([message.messageSendStatus intValue] == 4)
     {
-        
         [indictorView startAnimating];
         indictorView.hidden = NO;
         retryButton.hidden = YES;
@@ -1568,8 +1599,26 @@
         dictionary[@"MESSAGE_GUID"]  =  message.messageguid;
         dictionary[@"text"]  =  message.text;
         dictionary[@"userid"]  =  self.conversation.facebookId;
-        dictionary[@"messagetype"]  =  @(messageType_text);
-        
+        dictionary[@"messagetype"]  = message.messageType;// @(messageType_text);
+        NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
+        dictionary[@"token"]  =  token;
+        switch ([message.messageType intValue]) {
+            case messageType_image:
+            case messageType_map:
+            {
+                dictionary[@"fileSrc"] = message.imageUrl;
+            }
+                break;
+            case messageType_audio:
+            {
+                dictionary[@"fileSrc"] = message.audioUrl;
+            }
+                break;
+                
+            default:
+                break;
+        }
+      
         [cell SendMessageRemoteImgOper:_objImgListOper WithMessage:dictionary type:messageType_text];
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
@@ -1619,6 +1668,13 @@
         imageview_Img.userInteractionEnabled = YES;
         address.text = @"";
         address.hidden = YES;
+        
+        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+        indictorView.top = imageview_BG.height/2  + 20;
+        
+        retryButton.left = imageview_BG.left + imageview_BG.width  ;
+        retryButton.top = imageview_BG.height/2  + 10;
+        
     }else if ([message.messageType intValue] == messageType_text) {
         
         labelContent.text = message.text;
@@ -1632,7 +1688,7 @@
 #pragma clang diagnostic pop
         [labelContent setWidth:sizeToFit.width+2];
         [labelContent setHeight:sizeToFit.height]; // set label content frame with tinkl
-       
+        
         //min height and width  is 35.0f
         //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
         [imageview_BG setHeight:fmaxf(35.0f, sizeToFit.height + 18.0f )];
@@ -1665,6 +1721,13 @@
         imageview_BG.hidden = YES;
         address.text = @"";
         address.hidden = YES;
+        
+        
+        indictorView.left = imageview_Img.left + imageview_Img.width  + 5;
+        indictorView.top = imageview_Img.height/2  + 20;
+        
+        retryButton.left = imageview_Img.left + imageview_Img.width  ;
+        retryButton.top = imageview_Img.height/2  + 10;
     }else if([message.messageType intValue] == messageType_map)
     {
         //display image  115 108
@@ -1682,6 +1745,14 @@
         imageview_Img.userInteractionEnabled = YES;
         address.text = message.text;
         address.hidden = NO;
+        
+        
+        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+        indictorView.top = imageview_BG.height/2  + 20;
+        
+        retryButton.left = imageview_BG.left + imageview_BG.width  ;
+        retryButton.top = imageview_BG.height/2  + 10;
+        
     }
     
     return cell;

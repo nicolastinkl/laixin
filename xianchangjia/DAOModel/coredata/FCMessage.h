@@ -35,6 +35,7 @@ enum messageTypeEnum {
 @property (nonatomic, retain) NSNumber * latitude;
 @property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSNumber * messageSendStatus;   //0 sended,1..sending..2 error
+
 @property (nonatomic, retain) Conversation *conversation;
 @property (nonatomic, retain) FCUserDescription *messageUser;
 

@@ -16,7 +16,7 @@
 #import "Conversation.h"
 #import "DataHelper.h"
 #import "XCAlbumAdditions.h"
-
+#import "MLCanPopUpImageView.h"
 @implementation XCJChatMessageCell
 @synthesize m_objRemoteImgListOper = _objRemoteImgListOper;
 
@@ -101,7 +101,30 @@
                 [USER_DEFAULT synchronize];
             }
             NSString * messageId = dataImg[@"messageId"];
-            
+            NSString * url = [DataHelper getStringValue:dataImg[@"url"] defaultValue:@""];
+            switch ([dataImg[@"messagetype"] intValue]) {
+                case messageType_text:
+                {
+                }
+                    break;
+                case messageType_image:
+                case messageType_map:
+                {
+                    self.currentMessage.imageUrl = url;
+                     MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[self.contentView subviewWithTag:5];
+                    [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:160]] placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]];
+                    imageview_Img.fullScreenImageURL = [NSURL URLWithString:url];
+                }
+                    break;
+                case messageType_audio:
+                {
+                    self.currentMessage.audioUrl = url;
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
             
             self.currentMessage.messageId = messageId;
             self.currentMessage.messageSendStatus = @0;
@@ -124,14 +147,15 @@
                 msg.messageStatus = self.currentMessage.messageStatus;
                 msg.messageSendStatus = @(0);
                 msg.messageUser = self.currentMessage.messageUser;
-                msg.imageUrl = self.currentMessage.imageUrl;
-                msg.audioUrl = self.currentMessage.audioUrl;
-                msg.videoUrl = self.currentMessage.videoUrl;
+                msg.imageUrl = url;
+                msg.audioUrl = url;
+                msg.videoUrl = url;
                 msg.read = self.currentMessage.read;
                 msg.latitude = self.currentMessage.latitude;
                 msg.longitude =self.currentMessage.longitude;
                 msg.messageId = messageId;
                 msg.messageguid = guid;
+                
                 [self.conversation addMessagesObject:msg];
                 [self.conversation removeMessagesObject:self.currentMessage];
                 [localContext MR_saveToPersistentStoreAndWait];
@@ -162,7 +186,6 @@
         UIActivityIndicatorView * indictorView = (UIActivityIndicatorView *) [self.contentView subviewWithTag:9];
         indictorView.hidden = YES;
         
-        
         NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"messageguid == %@",guid];
         FCMessage * groupMessage = [FCMessage MR_findFirstWithPredicate:parCMDss ];
         if (groupMessage) {
@@ -187,9 +210,7 @@
             self.conversation.messageStutes = @(messageStutes_error);
             
             [self.conversation addMessagesObject:msg];
-            [localContext MR_saveToPersistentStoreAndWait];
-            
-            [groupMessage MR_deleteInContext:localContext];
+            [self.conversation removeMessagesObject:self.currentMessage];
             [localContext MR_saveToPersistentStoreAndWait];
             
             
