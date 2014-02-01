@@ -237,6 +237,63 @@
 
 -(void) SendMediaSource:(NSString *) filePath  withType:(NSInteger ) type
 {
+    
+    NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
+    if(token.length > 0){
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+        FCMessage *msg = [FCMessage MR_createInContext:localContext];
+        msg.text = @"";
+        msg.messageSendStatus = @(4); // ready to send
+        NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+        NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
+        msg.messageguid = guid;
+        msg.sentDate = [NSDate date];
+        msg.messageType = @(messageType_audio);
+        msg.audioUrl = filePath;
+        // message did not come, this will be on rigth
+        msg.messageStatus = @(NO);
+        msg.messageId =  @"";
+        self.conversation.lastMessage = @"[语音]";
+        self.conversation.lastMessageDate = [NSDate date];
+        self.conversation.badgeNumber = @0;
+        self.conversation.messageStutes = @(messageStutes_outcoming);
+        [self.conversation addMessagesObject:msg];
+        [self.messageList addObject:msg];
+        [localContext MR_saveToPersistentStoreAndWait];
+        [self insertTableRow];
+
+    }else{
+        // token has 1 hour expire
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
+            if (response) {
+                NSString * token =  response[@"token"];
+                [[EGOCache globalCache] setString:token forKey:@"uploadtoken" withTimeoutInterval:60*60];
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = @"";
+                msg.messageSendStatus = @(4); // ready to send
+                NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+                NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
+                msg.messageguid = guid;
+                msg.sentDate = [NSDate date];
+                msg.messageType = @(messageType_audio);
+                msg.audioUrl = filePath;
+                // message did not come, this will be on rigth
+                msg.messageStatus = @(NO);
+                msg.messageId =  @"";
+                self.conversation.lastMessage = @"[语音]";
+                self.conversation.lastMessageDate = [NSDate date];
+                self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_outcoming);
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
+                [self insertTableRow];
+            }
+        } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",@"Message",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+    }
+    return;
+    
      //2.audio   3.video
     NSString * postType;
     if (self.gid.length > 0) {
@@ -722,6 +779,30 @@
 #pragma mark facialView delegate 点击表情键盘上的文字
 -(void)selectedFacialView:(NSString*)str
 {
+    
+    
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+    msg.text = str;
+    msg.sentDate = [NSDate date];
+    msg.messageType = @(messageType_emj);
+    msg.messageSendStatus = @(4); // ready to send
+    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
+    msg.messageguid = guid;
+    // message did not come, this will be on rigth
+    msg.messageStatus = @(NO);
+    msg.messageId = @"";
+    self.conversation.lastMessage = @"[表情]";
+    self.conversation.lastMessageDate = [NSDate date];
+    self.conversation.badgeNumber = @0;
+    self.conversation.messageStutes = @(messageStutes_outcoming);
+    [self.conversation addMessagesObject:msg];
+    [self.messageList addObject:msg];
+    [localContext MR_saveToPersistentStoreAndWait];
+    [self insertTableRow];
+    
+    return;
     SLog(@"str:%@",str);
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button showIndicatorView];
@@ -732,7 +813,6 @@
         //"result":{"msgid":3,"url":"http://kidswant.u.qiniudn.com/FtkabSm4a4iXzHOfI7GO01jQ27LB"}
         NSDictionary * dic = [responseObject objectForKey:@"result"];
         if (dic) {
-            
             // update lastmessage id index
             NSInteger indexMsgID = [DataHelper getIntegerValue:dic[@"msgid"] defaultValue:0];
             
@@ -938,7 +1018,6 @@
     {
         [self.inputTextView becomeFirstResponder];
     }
-    
     self.inputTextView.inputView = nil;
     self.inputTextView.inputView = SendInfoView;
     [self.inputTextView reloadInputViews];
@@ -953,7 +1032,6 @@
         camera.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self presentViewController:camera animated:YES completion:nil];
     }
-
 }
 
 - (void)choseFromGalleryClick
@@ -966,25 +1044,82 @@
     }
 }
 
+- (void) postLoactionMsg:(NSDictionary * ) notity
+{
+    
+    UIImage * image =  notity[@"image"];
+    NSString * address =  notity[@"strAddresss"];
+    NSNumber * lat =  notity[@"lat"];
+    NSNumber * log =  notity[@"log"];
+    
+    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
+    NSString *key = [NSString stringWithFormat:@"%@%@", guid, @".jpg"];
+    NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+    NSData *webData = UIImageJPEGRepresentation(image, 0.5f);
+    [webData writeToFile:file atomically:YES];
+    
+    
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+    msg.sentDate = [NSDate date];
+    msg.imageUrl = file;
+    msg.messageType = @(messageType_map);
+    // message did not come, this will be on rigth
+    msg.messageStatus = @(NO);
+    msg.messageSendStatus = @(4); // ready to send
+    msg.messageId = @"";
+    msg.messageguid = guid;
+    msg.text = address;
+    msg.longitude = log;
+    msg.latitude = lat;
+    self.conversation.lastMessage = @"[位置信息]";
+    self.conversation.lastMessageDate = [NSDate date];
+    self.conversation.badgeNumber = @0;
+    self.conversation.messageStutes = @(messageStutes_outcoming);
+    [self.conversation addMessagesObject:msg];
+    [localContext MR_saveToPersistentStoreAndWait];
+    [self.messageList addObject:msg];
+    [self insertTableRow];
+    
+}
+
 -(void) PostLoacationClick:(NSNotification * ) notity
 {
     if (notity.userInfo) {
         //   NSDictionary *dict = @{@"image":image,@"strAddresss",strAddresss,@"lat":@(lat),@"log":@(log)};
+        
         UIImage * image =  notity.userInfo[@"image"];
         NSString * address =  notity.userInfo[@"strAddresss"];
         NSNumber * lat =  notity.userInfo[@"lat"];
         NSNumber * log =  notity.userInfo[@"log"];
+        NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
+        if(token.length > 0){
+            [self postLoactionMsg:notity.userInfo];
+        }else{
+            // token has 1 hour expire
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
+                if (response) {
+                    NSString * token =  response[@"token"];
+                    [[EGOCache globalCache] setString:token forKey:@"uploadtoken" withTimeoutInterval:60*60];
+                    [self postLoactionMsg:notity.userInfo];
+                }
+            } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",@"Message",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+        }
+        
+        return;
+        
+        
         NSString * postType;
         if (self.gid.length > 0) {
             postType = @"Post";
         }else{
             postType = @"Message";
-            
         }
+        
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id responsesssss, NSError *errorsssss) {
             if (responsesssss) {
                 NSString * token =  [responsesssss objectForKey:@"token"];
-                
                 AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
                 NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
                 [parameters setValue:token forKey:@"token"];
@@ -1013,7 +1148,7 @@
                                 NSString *msgID = [tools getStringValue:result[@"postid"] defaultValue:@""];
                                 NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
                                 [self SendImageWithMeImageurl:url withMsgID:msgID];
-                            }else{
+                            } else {
                                 // update lastmessage id index
                                 NSInteger indexMsgID = [DataHelper getIntegerValue:result[@"msgid"] defaultValue:0];
                                 
@@ -1022,6 +1157,7 @@
                                     [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
                                     [USER_DEFAULT synchronize];
                                 }
+                                
                                 NSString *msgID = [tools getStringValue:result[@"msgid"] defaultValue:@""];
                                 NSString *url = [tools getStringValue:result[@"url"] defaultValue:@""];
 //                                [self SendImageWithMeImageurl:url withMsgID:msgID];
@@ -1039,7 +1175,7 @@
                                 msg.longitude = log;
                                 msg.latitude = lat;
                                 
-                                self.conversation.lastMessage = @"[地图]";
+                                self.conversation.lastMessage = @"[位置信息]";
                                 self.conversation.lastMessageDate = [NSDate date];
                                 self.conversation.badgeNumber = @0;
                                 self.conversation.messageStutes = @(messageStutes_outcoming);    
@@ -1051,12 +1187,10 @@
                         }
                         [SVProgressHUD dismiss];
                         //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
-                        
                     }
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     SLLog(@"error :%@",error.userInfo);
                     [SVProgressHUD dismiss];
-                    
                 }];
             }
         } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",postType,[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
@@ -1572,6 +1706,7 @@
     UILabel * address = (UILabel *) [cell.contentView subviewWithTag:8];
     UIActivityIndicatorView * indictorView = (UIActivityIndicatorView *) [cell.contentView subviewWithTag:9];
     UIButton * retryButton = (UIButton *) [cell.contentView subviewWithTag:10];
+    UIButton * audioButton = (UIButton *) [cell.contentView subviewWithTag:11];
     if ([message.messageSendStatus intValue] == 1)
     {
         [indictorView startAnimating];
@@ -1602,6 +1737,7 @@
         dictionary[@"messagetype"]  = message.messageType;// @(messageType_text);
         NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
         dictionary[@"token"]  =  token;
+        
         switch ([message.messageType intValue]) {
             case messageType_image:
             case messageType_map:
@@ -1618,7 +1754,7 @@
             default:
                 break;
         }
-      
+        
         [cell SendMessageRemoteImgOper:_objImgListOper WithMessage:dictionary type:messageType_text];
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
@@ -1651,7 +1787,7 @@
         labelContent.textColor = [UIColor whiteColor];
     }
     labelTime.text = [tools FormatStringForDate:message.sentDate];
-
+    audioButton.left = 400.0f;
     if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
         labelContent.text  = @"";
@@ -1753,6 +1889,27 @@
         retryButton.left = imageview_BG.left + imageview_BG.width  ;
         retryButton.top = imageview_BG.height/2  + 10;
         
+    }else if([message.messageType intValue] == messageType_audio)
+    {
+        labelContent.text = @"";
+        //    [self creatAttributedLabel:message.content Label:labelContent];
+        /*build test frame */
+        [labelContent sizeToFit];
+        imageview_Img.hidden = YES;
+        //min height and width  is 35.0f
+        //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
+        [imageview_BG setHeight:35.0f];
+        [imageview_BG setWidth:100.0f];
+        imageview_BG.hidden = NO;
+        address.text = @"";
+        address.hidden = YES;
+        
+        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+        indictorView.top = imageview_BG.height/2  + 20;
+        
+        retryButton.left = imageview_BG.left + imageview_BG.width;
+        retryButton.top = imageview_BG.height/2  + 10;
+        audioButton.left = 45.0f;
     }
     
     return cell;

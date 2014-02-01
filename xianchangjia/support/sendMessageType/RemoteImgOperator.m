@@ -221,7 +221,6 @@
         
         if ([responseObject[@"errno"] intValue] == 0) {
             NSDictionary * dic = responseObject[@"result"];
-            
             NSString * messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@""];
             NSString *url = [tools getStringValue:dic[@"url"] defaultValue:@""];
             parems[@"messageId"]  = messageId;
@@ -252,6 +251,21 @@
 
 
 
+#pragma mark - 获取文件大小
+- (NSInteger) getFileSize:(NSString*) path{
+    NSFileManager * filemanager = [[NSFileManager alloc]init];
+    if([filemanager fileExistsAtPath:path]){
+        NSDictionary * attributes = [filemanager attributesOfItemAtPath:path error:nil];
+        NSNumber *theFileSize;
+        if ( (theFileSize = [attributes objectForKey:NSFileSize]) )
+            return  [theFileSize intValue];
+        else
+            return -1;
+    }
+    else{
+        return -1;
+    }
+}
 
 
 

@@ -4077,6 +4077,13 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>
+                                                <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kdv-xu-190">
+                                                    <rect key="frame" x="450" y="30" width="80" height="34"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" image="chat_bottom_voice_press">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
@@ -4742,6 +4749,7 @@
         <image name="chat_bottom_up_nor" width="34" height="34"/>
         <image name="chat_bottom_up_press" width="34" height="34"/>
         <image name="chat_bottom_voice_nor" width="34" height="34"/>
+        <image name="chat_bottom_voice_press" width="34" height="34"/>
         <image name="chat_btn" width="40" height="40"/>
         <image name="chevron-light-grey" width="7" height="11"/>
         <image name="commercialize_payment_icon_success_os7" width="28" height="28"/>
