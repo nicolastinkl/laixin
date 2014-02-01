@@ -7,18 +7,22 @@
 //
 
 #import "MLNetworkingManager.h"
-#import "SRWebSocket.h"
 #import "MLRequest.h"
 #import "MLJson.h"
-#import <zlib.h>
-
-#define kRequestKeyName @"client_code"
-#define kRequestKeyLength 5
-#define kTimeOut 5 //暂时设置10秒
+#import <zlib.h>   
+#import "XCAlbumDefines.h"
+#import "tools.h"
+#import "tools.h"
+#import "UIAlertViewAddition.h"
 
 NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
-static NSString * const MLNetworkingManagerBaseURLString = @"ws://service.xianchangjia.com:8000/ws?usezlib=1";
+#define kRequestKeyName @"cdata"// @"client_code"
+#define kRequestKeyLength 5
+#define kTimeOut 30 //暂时设置10秒
+
+
+//static NSString * const MLNetworkingManagerBaseURLString = LaixinWebsocketURL;
 
 //并发的队列，判断超时
 static dispatch_queue_t request_is_timeout_judge_queue() {
@@ -30,19 +34,10 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     return ml_request_is_timeout_judge_queue;
 }
 
-@interface MLNetworkingManager()<SRWebSocketDelegate>
-
-//对于requests的操作必须放在主线程，以免不安全
-@property (nonatomic,strong,readonly) NSArray *requests;
-//准备发送
-@property (nonatomic,strong) NSMutableArray *preparedRequests;
-//已经发送
-@property (nonatomic,strong) NSMutableArray *sentRequests;
-
-@property (nonatomic,strong) SRWebSocket *webSocket;
-
-@property (nonatomic,strong) NSURL *baseURL;
-@property (nonatomic,copy) NSString *sessionID;
+@interface MLNetworkingManager()<SRWebSocketDelegate,UIAlertViewDelegate>
+{
+    UIAlertView * currentAlert;
+}
 
 @end
 
@@ -55,6 +50,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedManager = [[self alloc]init];
+        NSString * MLNetworkingManagerBaseURLString = [USER_DEFAULT objectForKey:KeyChain_Laixin_systemconfig_websocketURL];
         _sharedManager.baseURL = [NSURL URLWithString:MLNetworkingManagerBaseURLString];
     });
     
@@ -74,6 +70,27 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     request.requestKey = [self uniqueRequestKey];
     request.successBlock = success;
     request.failureBlock = failure;
+    if (self.webSocket.readyState == SR_OPEN) {
+        [self sendRequest:request];
+    }else{
+        [self.preparedRequests addObject:request];
+    }
+}
+
+///发送标识请求
+- (void)sendWithAction:(NSString*)action
+                 Cdata:(NSString*)cdata
+            parameters:(NSDictionary *)parameters
+               success:(MLNetworkingSuccessBlcok)success
+               failure:(MLNetworkingFailureBlcok)failure
+{
+    MLRequest *request  = [[MLRequest alloc]init];
+    request.action = action;
+    request.cdata = cdata;
+    request.params = parameters;
+    request.requestKey = [self uniqueRequestKey];     //设置一个请求唯一标识
+    request.successBlock = success;
+    request.failureBlock = failure;
     
     if (self.webSocket.readyState == SR_OPEN) {
         [self sendRequest:request];
@@ -88,28 +105,45 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     NSAssert((self.webSocket.readyState == SR_OPEN), @"连接没有打开，无法发送");
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:3];
-    dict[@"function"] = request.action;
-    dict[@"params"] = request.params;
+    dict[@"func"] = request.action;
+    if (request.params) {
+        dict[@"parm"] = request.params;
+    }else{
+        dict[@"parm"] = @{};
+    }
+//    if (request.cdata && request.cdata != NULL) {
+//        dict[@"client_code"] = request.cdata;
+//    }
     dict[kRequestKeyName] = request.requestKey;
     [self.webSocket send:[dict JSONString]];
     
     [self.sentRequests addObject:request];
-    
+    SLog(@"send json :%@",[dict JSONString]);
     //加入超时队列
     double delayInSeconds = kTimeOut;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     //在超时之后执行block
     dispatch_after(popTime, request_is_timeout_judge_queue(), ^(void){
         //判断此request是否还存在于sentRequests里
-        if ([_sentRequests containsObject:request]) {
-            NSError *error = [NSError errorWithDomain:SRWebSocketErrorDomain code:8888 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Request timeout!"] forKey:NSLocalizedDescriptionKey]];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                request.failureBlock(request,error);
-                //删去request
-                [_sentRequests removeObject:request];
-            });
-        }else{
-            NSLog(@"没有超时");
+        @try {
+            if ([_sentRequests containsObject:request]) {
+                NSError *error = [NSError errorWithDomain:SRWebSocketErrorDomain code:8888 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Request timeout!"] forKey:NSLocalizedDescriptionKey]];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    request.failureBlock(request,error);
+                    //删去request
+                    [_sentRequests removeObject:request];
+                });
+            }else{
+                SLog(@"没有超时 , request key :  %@",request.requestKey);
+                
+                
+            }
+        }
+        @catch (NSException *exception) {
+            SLog(@"error: %@",exception.userInfo);
+        }
+        @finally {
+            
         }
     });
 }
@@ -160,15 +194,10 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 
 #pragma mark - SRWebSocket
 
-- (void)sendSessionID
-{
-
-}
-
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
-//    NSLog(@"Websocket Connected");
-    
+    SLog(@"Websocket Connected");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
     //检查如果有准备发送的请求，现在发送
     for (MLRequest *request in self.preparedRequests) {
        [self sendRequest:request];
@@ -178,7 +207,14 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
-//    NSLog(@":( Websocket Failed With Error %@", error);
+    SLog(@"Websocket Failed With Error (\n  %@ \n )", error);
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
+    
+    if (currentAlert == nil) {
+//        currentAlert =  [[UIAlertView alloc] initWithTitle:@"提示" message:@"网络连接失败,请检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+//        [currentAlert show];        
+    }
     self.webSocket = nil;
     //这里的话需要执行全部保存的requests的失败和清理操作
     for (MLRequest *request in self.requests) {
@@ -188,10 +224,14 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     [self.sentRequests removeAllObjects];
     [self.preparedRequests removeAllObjects];
 }
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    currentAlert = nil;
+}
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-//    NSLog(@"Received \"%@\"", message);
+     SLog(@"Received : ========== start<<<   \n  %@  \n    >>>>>end ===============", message);
 //    NSAssert([message isKindOfClass:[NSString class]],@"返回值不是字符串");
     if (![message isKindOfClass:[NSString class]]) {
         //不是字符串就认作是被zlib压缩的数据Data
@@ -200,15 +240,17 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     }
     
     NSDictionary *response = [message objectFromJSONString];
-    NSString *requestKey = [self getStringValue:response[kRequestKeyName] defaultValue:nil];
+    NSString *requestKey = [tools getStringValue:response[kRequestKeyName] defaultValue:nil];
+    SLog(@"requestKey ======  %@",requestKey);
     if (!requestKey) {
-        //说明此条是服务器直接推过来的数据,想得到的话就注册此通知
+//        说明此条是服务器直接推过来的数据,想得到的话就注册此通知
         [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceivePushMessageNotification object:nil userInfo:response];
-        return;
+//        return;
     }
     for (MLRequest *request in self.sentRequests) {
         if ([request.requestKey isEqualToString:requestKey]) {
             //执行对应的successBlock
+            SLLog(@"successBlock net");
             request.successBlock(request,response);
             [self.sentRequests removeObject:request]; //移除此请求
             break;
@@ -218,7 +260,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-//    NSLog(@"WebSocket closed");
+    SLog(@"WebSocket closed");
     self.webSocket = nil;
 }
 
@@ -228,7 +270,8 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 {
     //如果没有就执行重连接等等
     if (!_webSocket) {
-        _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:self.baseURL]];
+         NSString * MLNetworkingManagerBaseURLString = [USER_DEFAULT objectForKey:KeyChain_Laixin_systemconfig_websocketURL];
+        _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:MLNetworkingManagerBaseURLString]]];
         _webSocket.delegate = self;
         [_webSocket open];
     }
@@ -270,20 +313,10 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     return _sentRequests;
 }
 
-#pragma mark - other Common
-
-- (NSString*)randomStringWithLength:(NSUInteger)length
-{
-    char data[length];
-    for (int i=0;i<length;data[i++] = (char)('A' + arc4random_uniform(26)));
-    NSString *result = [[NSString alloc] initWithBytes:data length:length encoding:NSUTF8StringEncoding];
-    return result;
-}
-
 - (NSString*)uniqueRequestKey
 {
     //随机一个字符串
-    NSString *key = [self randomStringWithLength:kRequestKeyLength];
+    NSString *key = [tools randomStringWithLength:kRequestKeyLength];
     while (YES) {
         BOOL isHave = NO;
         for (MLRequest *request in self.requests) {
@@ -293,7 +326,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
             }
         }
         if (isHave) {
-            key = [self randomStringWithLength:kRequestKeyLength];
+            key = [tools randomStringWithLength:kRequestKeyLength];
         }else{
             break;
         }
@@ -301,15 +334,5 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     return key;
 }
 
-- (NSString *)getStringValue:(id)object
-                defaultValue:(NSString *)defaultValue{
-    if (object && ![object isKindOfClass:[NSNull class]]) {
-        if ([object isKindOfClass:[NSString class]]) {
-            return object;
-        } else if ([object isKindOfClass:[NSNumber class]]) {
-            return [object stringValue];
-        }
-    }
-    return defaultValue;
-}
+
 @end

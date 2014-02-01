@@ -152,7 +152,7 @@ extern NSString * const AFNetworkingOperationFailingURLResponseErrorKey;
         return nil;
     }
 
-    self.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", nil];
+    self.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/plain", nil];
 
     return self;
 }

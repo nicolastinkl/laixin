@@ -9,6 +9,9 @@
 #import "MLCanPopUpImageView.h"
 #import "UIImageView+WebCache.h"
 #import "SDWebImageManager.h"
+#import "XCAlbumDefines.h"
+#import "UIView+Additon.h"
+#import "UIAlertViewAddition.h"
 
 #define kFullScreenImageAnimationDuration .35f
 
@@ -34,7 +37,8 @@
     
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:style];
     CGRect activityFrame = activityIndicator.frame;
-    
+//    activityIndicator.backgroundColor = ios7BlueColor;
+    activityIndicator.color = ios7BlueColor;
     CGFloat side = 20;
     if (self.frame.size.height<20||self.frame.size.width<20) {
         if (self.frame.size.height<self.frame.size.width) {
@@ -60,9 +64,7 @@
         completedBlock(image,error,cacheType);
     }];
 }
-
 @end
-
 
 @interface UIView (FindAndResignFirstResponder)
 
@@ -85,11 +87,16 @@
 }
 @end
 
-@interface MLCanPopUpImageView()
+/**
+ *  显示图片view
+ */
+
+@interface MLCanPopUpImageView()<UIScrollViewDelegate,UIActionSheetDelegate>
 
 @property (nonatomic, strong) UIView *imageBackgroundView_FullScreen;
 @property (nonatomic, strong) UIView *imageMaskView_FullScreen;
 @property (nonatomic, strong) UIImageView *imageView_FullScreen;
+@property (nonatomic, strong) UIScrollView *scrollview;
 
 //放大和移动手势用到的
 @property (nonatomic, assign) CGFloat lastScale;
@@ -108,13 +115,11 @@
         
         self.contentMode = UIViewContentModeScaleAspectFill;
         self.clipsToBounds = YES;
-        
         //给自身添加点击事件
         self.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
         [super addGestureRecognizer:tapGesture];
         [tapGesture addTarget:self action:@selector(imageViewTap:)];
-        
     }
     return self;
 }
@@ -216,23 +221,38 @@
     UIView *maskView = [[UIView alloc]initWithFrame:frame];
     maskView.backgroundColor = [UIColor clearColor];
     maskView.clipsToBounds = YES;
-    [topView addSubview:self.imageMaskView_FullScreen = maskView];
+    [topView addSubview:self.imageMaskView_FullScreen = maskView]; // change by tinkl
+  
+    self.scrollview=[[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 320, topView.height)];//申明一个scrollview
+    self.scrollview.delegate=self;//需要在.h中引用scrollview的delegate
+    self.scrollview.backgroundColor=[UIColor clearColor];
+    self.scrollview.alpha=1.0;
+    self.scrollview.scrollEnabled = YES;
+//    self.scrollview.scrollsToTop = YES;
+    self.scrollview.bouncesZoom = YES;
+    self.scrollview.clipsToBounds = YES;
+    self.scrollview.showsHorizontalScrollIndicator = YES;
+    self.scrollview.showsVerticalScrollIndicator = YES;    
+//    self.scrollview.decelerationRate = UIScrollViewDecelerationRateFast;
+//    self.scrollview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    [self.imageMaskView_FullScreen addSubview:self.scrollview];
     
     //图片放大，设置大图片的网址
     CGRect imageframe = [self aspectFitFrameForAspectFillBounds:self.bounds andImageSize:self.image.size];
     UIImageView *fullScreenImageView = [[UIImageView alloc] initWithFrame:imageframe];
-    fullScreenImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [maskView addSubview:self.imageView_FullScreen = fullScreenImageView];
-    
-    //设置全屏图片，并且设置此图片点击后的selector
-    UITapGestureRecognizer *fullScreenImageSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullScreenImageEvent:)];
-    [fullScreenImageView addGestureRecognizer:fullScreenImageSingleTap];
-    
+    fullScreenImageView.contentMode = UIViewContentModeScaleAspectFill;
+    //UIViewContentModeScaleAspectFill;
+    // UIViewContentModeScaleAspectFit;
+//    [maskView addSubview:self.imageView_FullScreen = fullScreenImageView];
+    [self.scrollview addSubview:self.imageView_FullScreen = fullScreenImageView];
+
+ 
     //TODO:Molon 下面俩手势未完成，不好使
 //    //双指放大
 //    UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(scale:)];
 //    [fullScreenImageView addGestureRecognizer:pinchRecognizer];
-//
+
 //    //移动
 //    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(move:)];
 //    [panRecognizer setMinimumNumberOfTouches:1];
@@ -263,18 +283,33 @@
             //直接设置缓存里图片
             fullScreenImageView.image = cacheImage;
         }
+        
+        [self adjustFrame];
+//        float minimumScale = fullScreenImageView.height / fullScreenImageView.width;//设置缩放比例
+//        [self.scrollview setMinimumZoomScale:minimumScale];//设置最小的缩放大小
+//        [self.scrollview setZoomScale:minimumScale];//设置scrollview的缩放
+//        [self scrollViewDidZoom:self.scrollview];
 
     }else{
         toFrame = topView.bounds;
     }
     
+    
+    //设置全屏图片，并且设置此图片点击后的selector
+    UITapGestureRecognizer *fullScreenImageSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullScreenImageEvent:)];
+    [fullScreenImageView addGestureRecognizer:fullScreenImageSingleTap];
+    
+    UILongPressGestureRecognizer  *longGesTap = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(LongClick:)];
+    
+    [fullScreenImageView addGestureRecognizer:longGesTap];
 //    CGRect newImageViewFrame = [self realFrameForAspectFitFrame:toFrame andImageSize:self.image.size];
-
+//self.imageMaskView_FullScreen.frame = CGRectMake(0, 0, 320, topView.height);
     _imageView_FullScreen.userInteractionEnabled = NO;
     [UIView animateWithDuration:self.fullScreenAnimationDuration
                      animations:^{
                          _imageBackgroundView_FullScreen.backgroundColor = [UIColor blackColor];
-                         _imageMaskView_FullScreen.frame = toFrame;
+                         
+                         self.imageMaskView_FullScreen.frame = CGRectMake(0, 0, 320, topView.height);
 //                         _imageView_FullScreen.frame = newImageViewFrame;
                      }
                      completion:^(BOOL finished) {
@@ -285,18 +320,107 @@
                              
                              __weak MLCanPopUpImageView *weak_self = self;
                              [_imageView_FullScreen setImageWithURL:_fullScreenImageURL placeholderImage:self.image displayProgress:YES completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                                   [weak_self adjustFrame];
                                  
                                  [UIView animateWithDuration:weak_self.fullScreenAnimationDuration
                                                   animations:^{
-                                                      weak_self.imageMaskView_FullScreen.frame = topView.bounds;
-//                                                      weak_self.imageView_FullScreen.frame = finallyImageViewFrame;
+//                                                      weak_self.imageMaskView_FullScreen.frame = topView.bounds;
+                                                      
+                                                    
+                                                      //  weak_self.imageView_FullScreen.frame = finallyImageViewFrame;
                                                   }];
+
                              }];
 
                          }
+                         
                     }];
 }
 
+#pragma mark 调整frame
+- (void)adjustFrame
+{
+
+    if (self.imageView_FullScreen.image == nil) return;
+    
+    // 基本尺寸参数
+    CGSize boundsSize = self.scrollview.bounds.size;
+    CGFloat boundsWidth = boundsSize.width;
+    CGFloat boundsHeight = boundsSize.height;
+    
+    CGSize imageSize = self.imageView_FullScreen.image.size;
+    CGFloat imageWidth = imageSize.width;
+    CGFloat imageHeight = imageSize.height;
+	
+	// 设置伸缩比例
+    CGFloat minScale = boundsWidth / imageWidth;
+	if (minScale > 1) {
+		minScale = 1.0;
+	}
+	CGFloat maxScale = 2.0;
+	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
+		maxScale = maxScale / [[UIScreen mainScreen] scale];
+	}
+	self.scrollview.maximumZoomScale = maxScale;
+	self.scrollview.minimumZoomScale = minScale;
+	self.scrollview.zoomScale = minScale;
+    
+    CGRect imageFrame = CGRectMake(0, 0, boundsWidth, imageHeight * boundsWidth / imageWidth);
+    // 内容尺寸
+    self.scrollview.contentSize = CGSizeMake(0, imageFrame.size.height);
+    
+    // y值
+    if (imageFrame.size.height < boundsHeight) {
+        imageFrame.origin.y = floorf((boundsHeight - imageFrame.size.height) / 2.0);
+	} else {
+        imageFrame.origin.y = 0;
+	}
+    self.imageView_FullScreen.frame = imageFrame;
+
+}
+
+-(UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView//scrollview的delegate事件。需要设置缩放才会执行。
+{
+    return self.imageView_FullScreen;
+}
+
+//让图片居中
+//- (void)scrollViewDidZoom:(UIScrollView *)aScrollView
+//{
+//    CGFloat offsetX = (self.scrollview.width > self.scrollview.contentSize.width)?
+//    (self.scrollview.width - self.scrollview.contentSize.width) * 0.5 : 0.0;
+//    CGFloat offsetY = (self.scrollview.height > self.scrollview.contentSize.height)?
+//    (self.scrollview.height - self.scrollview.contentSize.height) * 0.5 : 0.0;
+//    
+//     self.imageView_FullScreen.center = CGPointMake(self.scrollview.contentSize.width * 0.5 + offsetX,  self.scrollview.contentSize.height * 0.5 + offsetY);
+//}
+
+- (void) LongClick:(UIGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        
+        UIActionSheet *  sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"保存照片" otherButtonTitles:@"投诉", nil];
+        [sheet showInView:self.imageMaskView_FullScreen];
+    }
+    
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        //投诉
+        [UIAlertView showAlertViewWithMessage:@"投诉成功"];
+    }else if (buttonIndex == 0)
+    {
+        if (self.imageView_FullScreen.image) {
+            // save to carmera
+            UIImageWriteToSavedPhotosAlbum(self.imageView_FullScreen.image, nil, nil, nil);
+            [UIAlertView showAlertViewWithMessage:@"保存成功"];            
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"保存失败"];
+        }
+
+    }
+}
 
 - (void)fullScreenImageEvent:(id)sender
 {
@@ -315,57 +439,58 @@
     _imageView_FullScreen.image = self.image;
     [UIView animateWithDuration:self.fullScreenAnimationDuration
                      animations:^{
-                         _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+//                         _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
                          
-                         _imageMaskView_FullScreen.frame = maskFrame;
+                         self.imageMaskView_FullScreen.frame = maskFrame;
 //                         _imageView_FullScreen.frame = imageframe;
                          _imageBackgroundView_FullScreen.backgroundColor = [UIColor clearColor];
                          
                      }
                      completion:^(BOOL finished) {
-                         [_imageMaskView_FullScreen removeFromSuperview];
+                         [self.scrollview removeFromSuperview];
+                         [self.imageMaskView_FullScreen removeFromSuperview];
+                         
                          [_imageBackgroundView_FullScreen removeFromSuperview];
                          [_imageView_FullScreen removeFromSuperview];
                      }];
 }
 
 // 缩放
-//-(void)scale:(id)sender {
-//    if([(UIPinchGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
-//        self.lastScale = 1.0;
-//    }else if ([(UIPinchGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
-//        if (_imageView_FullScreen.transform.a<1) {
-//            [UIView animateWithDuration:.25f
-//                             animations:^{
-//                                 _imageView_FullScreen.transform = _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
-//                             }];
-//            return;
-//        }else if (_imageView_FullScreen.transform.a>2){
-//            [UIView animateWithDuration:.25f
-//                             animations:^{
-//                                 _imageView_FullScreen.transform = _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 2.0, 2.0);
-//                             }];
-//            return;
-//        }
-//    }
-//    CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)sender scale])/_imageView_FullScreen.transform.a;
-//    
-//    CGAffineTransform currentTransform = _imageView_FullScreen.transform;
-//    CGAffineTransform newTransform = CGAffineTransformScale(currentTransform, scale, scale);
-//    [_imageView_FullScreen setTransform:newTransform];
-//    _lastScale = [(UIPinchGestureRecognizer*)sender scale];
-//}
-//
-//
-//// 移动
-//-(void)move:(id)sender {
-//    CGPoint translatedPoint = [(UIPanGestureRecognizer*)sender translationInView:_imageView_FullScreen];
-//    if([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
-//        _firstX = _imageView_FullScreen.center.x;
-//        _firstY = _imageView_FullScreen.center.y;
-//    }
-//    translatedPoint = CGPointMake(_firstX+translatedPoint.x, _firstY+translatedPoint.y);
-//    _imageView_FullScreen.center = translatedPoint;
-//}
+-(void)scale:(id)sender {
+    if([(UIPinchGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
+        self.lastScale = 1.0;
+    }else if ([(UIPinchGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
+        if (_imageView_FullScreen.transform.a<1) {
+            [UIView animateWithDuration:.25f
+                             animations:^{
+                                 _imageView_FullScreen.transform = _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+                             }];
+            return;
+        }else if (_imageView_FullScreen.transform.a>2){
+            [UIView animateWithDuration:.25f
+                             animations:^{
+                                 _imageView_FullScreen.transform = _imageView_FullScreen.transform = CGAffineTransformScale(CGAffineTransformIdentity, 2.0, 2.0);
+                             }];
+            return;
+        }
+    }
+    CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)sender scale])/_imageView_FullScreen.transform.a;
+    
+    CGAffineTransform currentTransform = _imageView_FullScreen.transform;
+    CGAffineTransform newTransform = CGAffineTransformScale(currentTransform, scale, scale);
+    [_imageView_FullScreen setTransform:newTransform];
+    _lastScale = [(UIPinchGestureRecognizer*)sender scale];
+}
+
+// 移动
+-(void)move:(id)sender {
+    CGPoint translatedPoint = [(UIPanGestureRecognizer*)sender translationInView:_imageView_FullScreen];
+    if([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
+        _firstX = _imageView_FullScreen.center.x;
+        _firstY = _imageView_FullScreen.center.y;
+    }
+    translatedPoint = CGPointMake(_firstX+translatedPoint.x, _firstY+translatedPoint.y);
+    _imageView_FullScreen.center = translatedPoint;
+}
 
 @end

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "blocktypedef.h"
 
+#define showErrorInfoWithRetryNotifition @"showErrorInfoWithRetryNotifition"
+
 /**
  *  UIViewController  Cagrote
  */
@@ -23,4 +25,11 @@
 - (void)hideIndicatorView:(NSString*)statusContent block:(SLBlockBlock) voidFun;
 
 - (void)hideIndicatorView;
+
+- (void) showErrorInfoWithRetry;
+
+- (void) hiddeErrorInfoWithRetry;
+
+- (void) showErrorText:(NSString * ) message;
+- (void) hiddeErrorText;
 @end

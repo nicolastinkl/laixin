@@ -5,6 +5,8 @@
 //  Created by JIJIA &&&&& ljh on 12-12-9.
 //  Copyright (c) 2012年 SlowsLab. All rights reserved.
 //
+
+
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 #ifndef DoubanAlbum_DoubanAlbumDefines_h
@@ -27,6 +29,11 @@ typedef enum {
 //#warning Release
 #define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
+
+
+#define LaixinSetupDBMessageNotification    @"com.laixin.LaixinSetupDBMessageNotification"
+#define LaixinCloseDBMessageNotification    @"com.laixin.LaixinCloseDBMessageNotification"
+
 #define ipAddress							@"im.xianchangjia.com"
 #define systemUser							@"register@im.xianchangjia.com"
 #define systemPushUser						@"system_push@im.xianchangjia.com"
@@ -38,7 +45,7 @@ typedef enum {
 #define FromOtherUser						@0
 #define FromMe								@1
 #define KBMapAPIKEY							@"4EFD73542AA0452489B5297EF4420994DCEF8CA4"
-#define kAppkeyForYoumeng					@"526a4d8f56240b8ecf035ab7"
+#define kAppkeyForYoumeng					@"52d604b156240b23f2081557"
 #define kAPpkeyForWeiChat					@"wx3c91c9881ed7d8ef"
 #define kAppKey								@"2824743419"
 #define kAppSecret							@"9c152c876ec980df305d54196539773f"
@@ -46,6 +53,7 @@ typedef enum {
 
 #define kidswantURL                         @"http://api.xianchangjia.com/"//@"http://app.kidswant.com.cn"
 #define xianchangjiaURI						@"2824743419://com.liveplus"
+#define LaixinWebsocketURL                  @"ws://127.0.0.1:8000/ws"
 
 #define USER_DEFAULT                [NSUserDefaults standardUserDefaults]
 #define FILE_MANAGER                [NSFileManager defaultManager]
@@ -66,10 +74,30 @@ typedef enum {
 #define RGBCOLOR(r,g,b)             [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 #define RGBACOLOR(r,g,b,a)          [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
+#define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
+
 #define APP_STORE_LINK_http         @"https://itunes.apple.com/cn/app/xian-chang-jia//id541873451?ls=1&mt=8"
 #define APP_STORE_LINK_iTunes       @"itms-apps://itunes.apple.com/cn/app/541873451?mt=8"
 
 #define APP_COMMENT_LINK_iTunes     @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=541873451"
+
+/*keychain group*/
+#define KeyChain_Laixin_account_phone           @"lifestyle.laixin.chengdu.account_phone"
+#define KeyChain_Laixin_account_pwd             @"lifestyle.laixin.chengdu.account_pwd"
+#define KeyChain_Laixin_account_user_id         @"lifestyle.laixin.chengdu.account_user_id"
+#define KeyChain_Laixin_account_user_nick       @"KeyChain_Laixin_account_user_nick"
+#define KeyChain_Laixin_account_user_headpic    @"KeyChain_Laixin_account_user_headpic"
+#define KeyChain_Laixin_account_user_signature    @"KeyChain_Laixin_account_user_signature"
+#define KeyChain_Laixin_account_user_position    @"KeyChain_Laixin_account_user_position"
+#define KeyChain_Laixin_account_sessionid       @"KeyChain_Laixin_account_sessionid"
+#define KeyChain_Laixin_Max_Event_messageID       @"KeyChain_Laixin_Max_Event_messageID"
+#define KeyChain_Laixin_systemconfig_websocketURL     @"KeyChain_Laixin_systemconfig_websocketURL"
+#define KeyChain_Laixin_account_HasLogin       @"KeyChain_Laixin_account_HasLogin"
+#define KeyChain_Laixin_account_devtokenstring @"KeyChain_Laixin_account_devtokenstring"
+#define KeyChain_Laixin_message_PrivateUnreadIndex @"KeyChain_Laixin_message_PrivateUnreadIndex"
+#define KeyChain_Laixin_message_GroupBeinvite @"KeyChain_Laixin_message_GroupBeinvite"
+
+#define KeyChain_Laixin_Code_Jihuo @"KeyChain_Laixin_Code_Jihuo"
 
 /*-----------------------------
  1. 类型1----新的好友动态
@@ -102,12 +130,14 @@ typedef enum {
 	XCMessageActivity_SceneSmallanchor			= 5,
 	XCMessageActivity_SceneBusniessMessage		= 6,
 	XCMessageActivity_NotityUserUseXC			= 7,
+    XCMessageActivity_UserGroupMessage          = 8,
 } _XCMessageActivity;
  
 #define  XCMessageActivity_photocomment_str @"comment-added"
 #define  XCMessageActivity_beingAddingFriends_str @"friends-added"
 #define  XCMessageActivity_musiccheckin_str @"musiccheckin-added"
 #define  XCMessageActivity_User_privateMessage @"User_privateMessage-added"
+#define  XCMessageActivity_User_GroupMessage @"User_GroupMessage-added"
 #define  XCMessageActivity_str_SceneSmallanchorMessage @"SceneSmallanchorMessage-added"
 #define  XCMessageActivity_str_SceneBusniessMessage @"SceneBusniessMessage-added"
 #define  XCMessageActivity_str_NotityUserUseXC @"NotityUserUseXC-added"

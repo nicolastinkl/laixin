@@ -17,12 +17,14 @@
 #import "UIView+Additon.h"
 #import "DAImageResizedImageView.h"
 #import "UIViewController+Indicator.h"
+#import "XCAlbumDefines.h"
 #import "XCJSendNewContentViewController.h"
 
 @interface XCJDyScenceViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     NSMutableArray *tempdata;
 }
+
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
 
 @end
@@ -41,7 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -64,7 +66,7 @@
     [params setValue:[NSNumber numberWithInt:50]  forKey:@"length"];
     [params setValue:[NSNumber numberWithInt:scene_id] forKey:@"scene_id"];
     params[@"stopsync"] = @0;
-    NSLog(@"json : %@",[params JSONString]);
+    SLLog(@"json : %@",[params JSONString]);
     [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params controller:@"post" Action:@"get_scene_posts" success:^(id obj) {
         NSArray *oldtalk = [obj objectForKey:@"posts"];
         [oldtalk enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -79,7 +81,7 @@
             [self hideIndicatorView:@"没有数据" block:nil];
         }
     } error:^(NSInteger index) {
-        NSLog(@"error .. ..");
+        SLLog(@"error .. ..");
         [self hideIndicatorView:@"加载失败" block:nil];        
     }];
     

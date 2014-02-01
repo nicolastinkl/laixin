@@ -11,7 +11,7 @@
 #import "AFHTTPSessionManager.h"
 #import "XCAlbumAdditions.h"
 
-@interface XCJSendNewContentViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface XCJSendNewContentViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 {
 	UIImagePickerController * picker;
 }
@@ -46,7 +46,7 @@
     NSNumber * lat = [USER_DEFAULT valueForKey:GlobalData_lat];
     [returnDict setObject:lat forKey:@"latitude"];
     [returnDict setObject:lng forKey:@"longitude"];
-    SLog(@"%@",returnDict);
+    SLLog(@"%@",returnDict);
     
     if (self.imageview.image) {
         
@@ -59,17 +59,18 @@
         } success:^(NSURLSessionDataTask *task, id responseObject) {
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
-            NSLog(@"error : %@" ,[error userInfo]);
+            SLLog(@"error : %@" ,[error userInfo]);
         }];
     }else{
         [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:returnDict controller:@"post" Action:@"add_post" success:^(id obj) {
             [self.navigationController popViewControllerAnimated:YES];
         } error:^(NSInteger index) {
-            NSLog(@"error : %d" ,index);
+            SLLog(@"error : %d" ,index);
         } failure:^(NSError *error) {
-            NSLog(@"error : %@" ,[error userInfo]);
+            SLLog(@"error : %@" ,[error userInfo]);
         }];
     }
+    
     /*
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString * newURL = @"http://api.xianchangjia.com/";
@@ -87,6 +88,7 @@
     UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"相册", nil];
     actionsheet.actionSheetStyle = UIActionSheetStyleAutomatic;
     [actionsheet showInView:self.view];
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -96,7 +98,6 @@
 	picker.allowsEditing=YES;
     switch (buttonIndex) {
         case 0://Take picture
-            
             if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 picker.sourceType = UIImagePickerControllerSourceTypeCamera;
                 

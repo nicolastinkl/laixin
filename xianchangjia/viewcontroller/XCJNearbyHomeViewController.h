@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJNearbyHomeViewController : UITableViewController
--(void) refershCurrentScene:(NSInteger) sceneID;
+
 @end

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ConverReply" representedClassName="ConverReply" syncable="YES">
+        <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="fcreplymesgships" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FCReplyMessage" inverseName="newRelationship" inverseEntity="FCReplyMessage" syncable="YES"/>
+    </entity>
+    <entity name="Conversation" representedClassName="Conversation" syncable="YES">
+        <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isMute" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="lastMessage" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="lastMessageDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageStutes" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="account" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="conversation" inverseEntity="FCAccount" syncable="YES"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="conversation" inverseEntity="FCMessage" syncable="YES"/>
+    </entity>
+    <entity name="FCAccount" representedClassName="FCAccount" syncable="YES">
+        <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sessionid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userJson" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="websocketURL" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="account" inverseEntity="Conversation" syncable="YES"/>
+        <relationship name="fcindefault" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDesp" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCBeAddFriend" representedClassName="FCBeAddFriend" syncable="YES">
+        <attribute name="addTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="eid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasAdd" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="beAddFriendShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCBeInviteGroup" representedClassName="FCBeInviteGroup" syncable="YES">
+        <attribute name="beaddTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="eid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupJson" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="fcBeinviteGroupInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCHomeGroupMsg" inverseName="newRelationship" inverseEntity="FCHomeGroupMsg" syncable="YES"/>
+        <relationship name="fcBeinviteGroupShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship1" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCContactsPhone" representedClassName="FCContactsPhone" syncable="YES">
+        <attribute name="hasLaixin" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="phoneName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="phoneFCuserDesships" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship2" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCFriends" representedClassName="FCFriends" syncable="YES">
+        <attribute name="friendID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="friendRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespFriends" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCHomeGroupMsg" representedClassName="FCHomeGroupMsg" syncable="YES">
+        <attribute name="gbadgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="gBoard" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gCreatorUid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="gid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gPosition" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isMute" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupInfo" inverseEntity="FCBeInviteGroup" syncable="YES"/>
+    </entity>
+    <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
+        <attribute name="audioUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="messageguid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="messageSendStatus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="messageStatus" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="messageType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="read" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="sentDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="videoUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="conversation" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Conversation" inverseName="messages" inverseEntity="Conversation" syncable="YES"/>
+        <relationship name="messageUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="userDespMsg" inverseEntity="FCUserDescription" syncable="YES"/>
+    </entity>
+    <entity name="FCReplyMessage" representedClassName="FCReplyMessage" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jsonStr" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="postid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="replyid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="typeReply" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ConverReply" inverseName="fcreplymesgships" inverseEntity="ConverReply" syncable="YES"/>
+    </entity>
+    <entity name="FCUserDescription" representedClassName="FCUserDescription" syncable="YES">
+        <attribute name="active_by" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="active_level" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="actor" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="actor_level" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="background_image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="birthday" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="create_time" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="headpic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="marriage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick_frist_pinyin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nick_pinyin" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sex" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="signature" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeAddFriend" inverseName="beAddFriendShips" inverseEntity="FCBeAddFriend" syncable="YES"/>
+        <relationship name="newRelationship1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupShips" inverseEntity="FCBeInviteGroup" syncable="YES"/>
+        <relationship name="newRelationship2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCContactsPhone" inverseName="phoneFCuserDesships" inverseEntity="FCContactsPhone" syncable="YES"/>
+        <relationship name="userDesp" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCAccount" inverseName="fcindefault" inverseEntity="FCAccount" syncable="YES"/>
+        <relationship name="userDespFriends" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCFriends" inverseName="friendRelation" inverseEntity="FCFriends" syncable="YES"/>
+        <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ConverReply" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Conversation" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCAccount" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCBeAddFriend" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCBeInviteGroup" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCContactsPhone" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCFriends" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCReplyMessage" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="FCUserDescription" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>

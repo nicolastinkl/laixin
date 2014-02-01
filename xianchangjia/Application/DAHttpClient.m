@@ -34,7 +34,7 @@ SINGLETON_GCD(DAHttpClient);
     //这里加入session id
     //parames[@"session"] = @"??????";
     [[GlobalData sharedGlobalData] addCommentCommandInfo:parames];
-    SLog(@"json : %@",[parames JSONString]);
+    SLLog(@"json : %@",[parames JSONString]);
    return [[AFAppAPIClient sharedClient] POST:[NSString stringWithFormat:@"/%@/%@",controller,action] parameters:parames success:^(NSURLSessionDataTask * __unused task, id JSON) {
         
        NSInteger r = [[JSON valueForKeyPath:@"response_code"] intValue];

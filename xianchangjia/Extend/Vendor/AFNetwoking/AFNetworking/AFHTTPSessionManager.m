@@ -73,7 +73,7 @@
 
 //    self.requestSerializer = [AFHTTPRequestSerializer serializer]; //change by ljh
       self.requestSerializer = [AFJSONRequestSerializer serializer]; //change by ljh
-    self.responseSerializer = [AFJSONResponseSerializer serializer];
+//    self.responseSerializer = [AFJSONResponseSerializer serializer];
 
     self.securityPolicy = [AFSecurityPolicy defaultPolicy];
 

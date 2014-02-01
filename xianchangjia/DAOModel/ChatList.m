@@ -173,7 +173,6 @@ NSString * const ChatListNeedUpdateToalUnreadCountNotification = @"com.molon.not
     if (isNeedUpdateDB) {
         [[MessageManager sharedMessageManager] updateChat:chat];
     }
-	
 }
 
 #pragma mark - other common

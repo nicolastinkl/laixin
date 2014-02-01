@@ -18,6 +18,13 @@
     if (self) {
         self.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.2].CGColor;
         self.layer.borderWidth = 0.5;
+        
+//        CALayer *roundCorner = [self layer];
+//        [roundCorner setMasksToBounds:YES];
+//        [roundCorner setCornerRadius:self.width/2];
+//        [roundCorner setBorderColor:[UIColor lightGrayColor].CGColor];
+//        [roundCorner setBorderWidth:1.0];
+
     }
     
     return self;

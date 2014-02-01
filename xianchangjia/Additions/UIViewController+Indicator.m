@@ -8,10 +8,12 @@
 
 #import "UIViewController+Indicator.h"
 #import "UIView+Additon.h"
-
+#import "XCJErrorView.h"
 typedef enum {
     kTagIndicatorView = 2900,
-    kTaglabelView = 2901
+    kTaglabelView = 2901,
+    kTagErrorView = 2902,
+    kTagErrorViewText = 2903,
 }kUIViewIndicatorTags;
 
 
@@ -114,6 +116,47 @@ typedef enum {
     };
     voidFun(voidblock);
     */
+}
+
+- (void) showErrorInfoWithRetry
+{
+    XCJErrorView * errorView = [[NSBundle mainBundle] loadNibNamed:@"XCJErrorView" owner:self options:nil][0];
+    errorView.tag  = kTagErrorView;
+    [self.view addSubview:errorView];
+}
+
+- (void) hiddeErrorInfoWithRetry
+{
+    UIView *textLabel = (UIView *)[self.view subviewWithTag:kTagErrorView];
+    if (textLabel) {
+        [textLabel removeFromSuperview];
+        textLabel = nil;
+    }
+}
+
+- (void) showErrorText:(NSString * ) message
+{
+    UILabel * textContent = (UILabel *)[self.view subviewWithTag:kTaglabelView];
+    if (textContent == nil) {
+        CGPoint point = CGPointMake(0, (self.view.height-100)/2);
+        textContent = [[UILabel alloc] init];
+        textContent.frame = CGRectMake(point.x, point.y, 320, 20);
+        textContent.tag = kTagErrorViewText;
+        textContent.textColor = [UIColor grayColor];
+        textContent.font = [UIFont systemFontOfSize:14.0f];
+        textContent.textAlignment = NSTextAlignmentCenter;
+    }
+    textContent.text = message;
+    [self.view addSubview:textContent];
+}
+
+- (void) hiddeErrorText
+{
+    UIView *textLabel = (UIView *)[self.view subviewWithTag:kTagErrorViewText];
+    if (textLabel) {
+        [textLabel removeFromSuperview];
+        textLabel = nil;
+    }
 }
 
 @end

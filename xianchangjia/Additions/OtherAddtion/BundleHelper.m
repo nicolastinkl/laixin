@@ -3,7 +3,7 @@
 //
 
 #import "BundleHelper.h"
-#import "NSStringAddition.h"
+#import "NSString+Addition.h"
 
 @implementation BundleHelper
 

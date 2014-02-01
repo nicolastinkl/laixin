@@ -14,7 +14,7 @@
 #import "XCModelAllEntity.h"
 #import "MessageManager.h"
 #import "JSONKit.h"
-#import "NSStringAddition.h"
+#import "NSString+Addition.h"
 
 @interface XCJMessageCenterViewController ()
 @property (strong, nonatomic) IBOutlet UITableView *tableview;
@@ -49,7 +49,7 @@
 {
 	NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
 	[[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"message" Action:@"check_unread_message" success:^(id obj) {
-		SLog(@"%@",obj);
+		SLLog(@"%@",obj);
 		NSDictionary * new_friend_status_array = [obj objectForKey:@"new_friend_status"]; //朋友动态
 		if (new_friend_status_array && new_friend_status_array.count > 0) {
 			[[new_friend_status_array allKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -225,14 +225,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
+//#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
+//#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return 0;
 }

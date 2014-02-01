@@ -7,13 +7,15 @@
 //
 
 #import "XCJDomainsViewController.h"
-#import "InviteInfo.h"
-#import "DAHttpClient.h"
 #import "UIImageView+AFNetworking.h"
 #import "DAImageResizedImageView.h"
 #import "UIViewController+Indicator.h"
 #import "UIAlertView+AFNetworking.h"
 #import "UIActivityIndicatorView+AFNetworking.h"
+#import "XCAlbumAdditions.h"
+#import "MLNetworkingManager.h"
+#import "XCJGroupPost_list.h"
+
 
 @interface XCJDomainsViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
@@ -52,44 +54,45 @@
     [_dataSource removeAllObjects];
     [self.tableview reloadData];
     self.navigationItem.rightBarButtonItem.enabled = NO;
-    NSURLSessionDataTask * task = [self loaddata];
-    [UIAlertView showAlertViewForTaskWithErrorOnCompletion:task delegate:nil];
-    UIActivityIndicatorView *activityIndicatorView = (UIActivityIndicatorView *)self.navigationItem.leftBarButtonItem.customView;
-    [activityIndicatorView setAnimatingWithStateOfTask:task];
-    
-}
-
-///获取圈子 然后获取圈子内的现场
--( NSURLSessionDataTask * ) loaddata
-{
-    [self showIndicatorView];
-    //    {"sessionid":"f57c653a8b55496db0f9abf4e8843524","wave_code":0,"offset":0,"length":10,"location":{"lat":39932130,"lng":116450980}}
-    NSMutableDictionary * params = [[NSMutableDictionary alloc] init];
-    [params setValue:@0  forKey:@"offset"];
-    [params setValue:@10  forKey:@"length"];
-    params[@"stopsync"] = @0;
-    
-   NSURLSessionDataTask * task = [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params controller:@"domain" Action:@"domains" success:^(id obj) {
-        NSArray *near_invite=[obj objectForKey:@"domains"];
-        if (near_invite && near_invite.count > 0) {
-            
-           [near_invite enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-               Nearest_areas_Info* invite=[[Nearest_areas_Info alloc] initWithJSONObject:obj];
-               [_dataSource addObject:invite];
-           }];
-            [self.tableview reloadData];
-            [self hideIndicatorView];
+    /**
+     *  gid,content
+     */
+    [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * groupsDict =  groups[@"groups"];
+            NSMutableArray * array = [[NSMutableArray alloc] init];
+            [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                /*  add group
+                 
+                 “gid”:
+                 “type”:
+                 “time”:
+                 
+                 */
+                NSString * str = [tools getStringValue:obj[@"gid"] defaultValue:@""];
+                [array addObject:str];
+            }];
+            if (array.count > 0) {
+                //group.info (gid<群id或者id数组>)
+                NSDictionary * paramess = @{@"gid":array};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                    NSDictionary * groupsss = responseObjects[@"result"];
+                    NSArray * groupsDicts =  groupsss[@"groups"];
+                    [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                        [_dataSource addObject:list];
+                    }];
+                    [self.tableview reloadData];
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            }
         }
-       self.navigationItem.rightBarButtonItem.enabled = YES;
-    } error:^(NSInteger index) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-        [self hideIndicatorView:@"加载失败" block:^(SLBlock block) {
-//            block();
-        }];
-    }];
-    return task;
-}
+       
 
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -110,7 +113,7 @@
     
     // Configure the cell...
     NSUInteger row = indexPath.row;
-    Nearest_areas_Info * info  = _dataSource[row];
+    XCJGroup_list * info  = _dataSource[row];
     DAImageResizedImageView *image = (DAImageResizedImageView*)[cell.contentView viewWithTag:1];
     NSString * strUrl;
     switch (row) {
@@ -150,7 +153,7 @@
     }
     [image setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",strUrl]] placeholderImage:nil];
     UILabel *label = (UILabel*)[cell.contentView viewWithTag:2];
-    label.text = info.area_name;
+    label.text = info.group_name;
     return cell;
 }
 
@@ -158,7 +161,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSUInteger row = indexPath.row;
-    Nearest_areas_Info * info  = _dataSource[row];
+    XCJGroup_list * info  = _dataSource[row];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:info];
     [self dismissViewControllerAnimated:YES completion:^{
         

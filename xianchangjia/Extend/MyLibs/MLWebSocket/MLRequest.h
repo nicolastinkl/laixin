@@ -17,6 +17,7 @@ typedef void(^MLNetworkingFailureBlcok)(MLRequest *request, NSError *error);
 
 @property (nonatomic,copy) NSString *requestKey;
 @property (nonatomic,copy) NSString *action;
+@property (nonatomic,copy) NSString *cdata;
 @property (nonatomic,strong) NSDictionary *params;
 @property (nonatomic,copy) MLNetworkingSuccessBlcok successBlock;
 @property (nonatomic,copy) MLNetworkingFailureBlcok failureBlock;

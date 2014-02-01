@@ -8,12 +8,15 @@
 
 #import "XCJSettingsViewController.h"
 #import "XCAlbumAdditions.h"
-
+#import "MLNetworkingManager.h"
+#import "LXAPIController.h"
 
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
-@property (weak, nonatomic) IBOutlet UILabel *UserName;
-@property (weak, nonatomic) IBOutlet UILabel *UserSign;
+@property (weak, nonatomic) IBOutlet UILabel *UserName; 
+@property (weak, nonatomic) IBOutlet UILabel *label_level;
+@property (weak, nonatomic) IBOutlet UIImageView *image_level;
+@property (weak, nonatomic) IBOutlet UIImageView *image_levelBg;
 
 @end
 
@@ -31,17 +34,97 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    [self LoadData];
+//    LXUser * user =  [[LXAPIController sharedLXAPIController] currentUser];
+//    self.title = user.nick;
+    
+    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+    
+    if ([LXAPIController sharedLXAPIController].currentUser) {
+        if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
+            self.image_levelBg.width = 80;
+            self.label_level.textColor = [UIColor lightGrayColor];
+            self.label_level.text = @"未激活";
+            self.image_level.image = [UIImage imageNamed:@"face_vip"];
+        }else{
+            self.image_level.image = [UIImage imageNamed:@"face_vip"];
+            self.label_level.textColor = [UIColor redColor];
+            self.image_levelBg.width = 50;
+            self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+        }
+        self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
+    }else{
+        [self LoadData];
+    }
 }
+
+- (IBAction)updateInfoClick:(id)sender {
+    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    NSDictionary * parames = @{@"nick":[NSString stringWithFormat:@"表弟 id%@",userid],@"signature":@" S开发中经常使用的数据持久化的技术。但其操作过程稍微繁琐，即使你只是实现简单的存"};
+    //@"headpic":@"http://media.breadtrip.com/photos/2013/02/10/5b4cd8bc68fd765e9ca9e68313c8030f.jpg"
+    //nick, signature,sex, birthday, marriage, height
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+//        SLog(@"responseObject :%@",responseObject);
+        [self LoadData];
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+}
+
+
 -(void) LoadData
 {
+    NSString * userid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    NSDictionary * parames = @{@"uid":@[userid]};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+        // "users":[....]
+        NSDictionary * userinfo = responseObject[@"result"];
+        NSArray * userArray = userinfo[@"users"];
+        if (userArray && userArray.count > 0) {
+            NSDictionary * dic = userArray[0];
+            
+            LXUser * user = [[LXUser alloc] initWithDict:dic];
+            [LXAPIController sharedLXAPIController].currentUser = user;
+            self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
+            if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
+                self.image_levelBg.width = 80;
+                self.label_level.textColor = [UIColor lightGrayColor];
+                self.label_level.text = @"未激活";
+                self.image_level.image = [UIImage imageNamed:@"threadInfoButtonSelected"];
+            }else{
+                self.image_level.image = [UIImage imageNamed:@"face_vip"];
+                self.label_level.textColor = [UIColor redColor];
+                self.image_levelBg.width = 50;
+                self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+            }
+            
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"headpic"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_headpic];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"signature"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_signature];
+            [USER_DEFAULT setObject:[tools getStringValue:dic[@"position"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_position];
+            
+            [USER_DEFAULT synchronize];
+            
+            self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+            [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+    
+    /*
     NSMutableDictionary * params = [[NSMutableDictionary alloc] init];
     params[@"uid"] = @1571;
     [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:params controller:@"user_profile" Action:@"profile" success:^(id obj) {
@@ -60,6 +143,13 @@
     } error:^(NSInteger index) {
     } failure:^(NSError *error) {
     }];
+     */
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,45 +183,6 @@
 //    
 //    return cell;
 //}
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

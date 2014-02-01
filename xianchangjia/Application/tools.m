@@ -7,9 +7,12 @@
 //
 
 #import "tools.h"
-
-
+#import "XCAlbumDefines.h"
+#import "DataHelper.h"
+#import "NSString+Addition.h" 
 #pragma  mark 使用Category来计算同一时代（AD|BC）两个日期午夜之间的天数：
+
+
 @implementation NSCalendar (SameSpecialCalculations)
 
 -(NSInteger)daysWithinEraFromDate:(NSDate *) startDate toDate:(NSDate *) endDate {
@@ -389,6 +392,36 @@
 	return fromDate;
 }
 
+
++ (NSString*)timeLabelTextOfTime:(NSTimeInterval)time
+{
+    if (time<=0) {
+        return nil;
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSString *text = [dateFormatter stringFromDate:date];
+    //最近时间处理
+    NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
+    if (timeAgo > 0 && timeAgo < 60) {
+        text = [NSString stringWithFormat:@"%ld秒前", (long)timeAgo];
+    }else if (timeAgo >= 60 && timeAgo < 3600) {
+        NSInteger timeAgoMinute = timeAgo / 60;
+        text = [NSString stringWithFormat:@"%ld分钟前", (long)timeAgoMinute];
+    }else if (timeAgo >= 3600 && timeAgo < 86400) {
+        [dateFormatter setDateFormat:@"今天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }else if (timeAgo >= 86400 && timeAgo < 86400*2) {
+        [dateFormatter setDateFormat:@"昨天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }else if (timeAgo >= 86400*2 && timeAgo < 86400*3) {
+        [dateFormatter setDateFormat:@"前天HH:mm"];
+        text = [dateFormatter stringFromDate:date];
+    }
+    return text;
+}
+
 +(NSURL*)UrlFromString:(NSString*) str
 {
     if(str==nil || [str isKindOfClass:[NSNull class]])
@@ -396,5 +429,54 @@
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@",str]];
 }
 
+
+
+#pragma mark - other Common
+
++ (NSString*)randomStringWithLength:(NSUInteger)length
+{
+    char data[length];
+    for (int i=0;i<length;data[i++] = (char)('A' + arc4random_uniform(26)));
+    NSString *result = [[NSString alloc] initWithBytes:data length:length encoding:NSUTF8StringEncoding];
+    return result;
+}
+
++ (NSString *)getStringValue:(id)object
+                defaultValue:(NSString *)defaultValue{
+    if (object && ![object isKindOfClass:[NSNull class]]) {
+        if ([object isKindOfClass:[NSString class]]) {
+            return object;
+        } else if ([object isKindOfClass:[NSNumber class]]) {
+            return [object stringValue];
+        }
+    }
+    return defaultValue;
+}
+
++ (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value
+{
+    if ([url isNilOrEmpty]) {
+        return @"";
+    }
+    url = [DataHelper getStringValue:url defaultValue:@""];
+    return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,value,value];
+}
+
++ (NSString *) getUrlByImageUrl:(NSString * ) url width:(NSInteger) width height:(NSInteger) height
+{
+    if ([url isNilOrEmpty]) {
+        return @"";
+    }
+    url = [DataHelper getStringValue:url defaultValue:@""];
+    return [NSString stringWithFormat:@"%@?imageView/1/w/%d/h/%d/q/85",url,width,height];
+}
++(UIColor *) colorWithIndex:( int ) strIndex
+{
+    if (strIndex >= 7) {
+      return [UIColor colorWithPatternImage:[UIImage imageNamed:@"med-name-bg-0"]];
+    }
+    
+    return  [UIColor colorWithPatternImage:[UIImage imageNamed:[NSString stringWithFormat:@"med-name-bg-%d",strIndex]]];
+}
 
 @end

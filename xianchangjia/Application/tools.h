@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
 @interface UIColor (Hex)
 + (UIColor*)colorWithHex:(NSInteger)hexValue alpha:(CGFloat)alphaValue;
 + (UIColor*)colorWithHex:(NSInteger)hexValue;
@@ -49,4 +48,13 @@
 +(NSString *)StringForDate:(NSDate *)date;
 + (NSDate*) convertToUTC:(NSDate*)sourceDate;
 +(NSURL*)UrlFromString:(NSString*) str;
++ (NSString*)timeLabelTextOfTime:(NSTimeInterval)time;
++ (NSString*)randomStringWithLength:(NSUInteger)length;
++ (NSString *)getStringValue:(id)object
+                defaultValue:(NSString *)defaultValue;
++(UIColor *) colorWithIndex:( int ) strIndex;
++ (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value;
+
++ (NSString *) getUrlByImageUrl:(NSString * ) url width:(NSInteger) width height:(NSInteger) height;
+
 @end

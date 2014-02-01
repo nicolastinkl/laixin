@@ -52,25 +52,22 @@
     viewcon.touserid = self.touserid;
     UINavigationController * navi = [[UINavigationController alloc] initWithRootViewController:viewcon];
     [self presentViewController:navi animated:YES completion:nil];
-
 }
 
 -(void) initCommentData
 {
-    SLog(@"self.talk_id: %lld",self.talk_id);
+    SLLog(@"self.talk_id: %lld",self.talk_id);
     NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
 	[postdata setObject:[NSNumber numberWithLongLong:self.talk_id] forKey:@"post_id"];
 	[postdata setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
 	[postdata setObject:[NSNumber numberWithInt:100] forKey:@"length"];
 	[[GlobalData sharedGlobalData] addCommentCommandInfo:postdata];
 	[[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"post_comment" Action:@"get_comments" success:^(id obj) {
-        SLog(@"%@",obj);
         [self performSelector:@selector(getListFin:) withObject:obj];
 	} error:^(NSInteger index) {
 	} failure:^(NSError *error) {
 	}];
 }
-
 
 -(void)getListFin:(NSDictionary*)result
 {
@@ -99,14 +96,12 @@
     return 1;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     CommitInfo *info= commetArray[indexPath.row];
     NSString * string =[NSString stringWithFormat:@"%@",info.words];
     return  [self heightForCellWithPost:string]+34.0f;
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -140,7 +135,6 @@
     return cell;
 }
 
-
 - (CGFloat)heightForCellWithPost:(NSString *)post {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -148,7 +142,6 @@
 #pragma clang diagnostic pop
     return  fmaxf(20.0f, sizeToFit.height + 10.0f );
 }
-
 
 /*
 // Override to support conditional editing of the table view.

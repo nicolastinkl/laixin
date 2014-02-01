@@ -46,6 +46,7 @@
         [self LoadUserPhotosData];
     }
 }
+
 -(void) LoadUserPhotosData
 {
     NSMutableDictionary * postdata = [[NSMutableDictionary alloc] init];
@@ -54,12 +55,10 @@
 	[postdata setObject:[NSNumber numberWithUnsignedInteger:self.userinfo.user_id] forKey:@"uid"];
 	[[GlobalData sharedGlobalData] addCommentCommandInfo:postdata];
     [[DAHttpClient sharedDAHttpClient] defautlRequestWithParameters:postdata controller:@"footprint" Action:@"get_user_photo_stream" success:^(id obj) {
-        SLog(@"%@",obj);
+        SLLog(@"%@",obj);
         [self getUserPicLogListFin:obj];
     } error:^(NSInteger index) {
-        
     } failure:^(NSError *error) {
-        
     }];
 }
 
