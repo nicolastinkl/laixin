@@ -11,9 +11,8 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreAudio/CoreAudioTypes.h>
 
-#warning 默认最大录音时间
 //默认最大录音时间
-#define kDefaultMaxRecordTime               10
+#define kDefaultMaxRecordTime               60
 
 @protocol VoiceRecorderBaseVCDelegate <NSObject>
 

@@ -439,6 +439,7 @@
     }//长按结束
     else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){
         [buttonAudio sendMessageStyle];
+        [buttonAudio setTitle:@"按住说话" forState:UIControlStateNormal];
 //        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:nil forKey:@"data"]]];
     }
 }
