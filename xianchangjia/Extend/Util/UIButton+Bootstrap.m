@@ -17,10 +17,11 @@
     self.layer.masksToBounds = YES;
     [self setAdjustsImageWhenHighlighted:NO];
     self.layer.borderColor = [ios7BlueColor CGColor];
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor clearColor];
     [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
 
 }
+
 -(void)bootstrapStyle{
     self.layer.borderWidth = 0.5;
     self.layer.cornerRadius = 4.0;
@@ -36,7 +37,7 @@
     [self bootstrapStyle];
     self.enabled = NO;
     [self setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-//    [self setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+//  [self setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
     self.backgroundColor = [UIColor whiteColor];
     self.layer.borderColor = [[UIColor colorWithRed:204/255.0 green:204/255.0 blue:204/255.0 alpha:0.7] CGColor];
     [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:235/255.0 green:235/255.0 blue:235/255.0 alpha:1]] forState:UIControlStateHighlighted];

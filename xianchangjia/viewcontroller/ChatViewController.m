@@ -111,6 +111,12 @@
         [buttonAudioss setTitle:@"按住说话" forState:UIControlStateNormal];
 //        [buttonAudioss addTarget:self action:@selector(speakClick:) forControlEvents:UIControlStateNormal];
         //添加长按手势
+        UILongPressGestureRecognizer *gr = [[UILongPressGestureRecognizer alloc] init];
+        [gr addTarget:self action:@selector(recordBtnLongPressed:)];
+        gr.minimumPressDuration = 0.3;
+        [buttonAudioss addGestureRecognizer:gr];
+        
+        
 //        UILongPressGestureRecognizer *longPrees = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(recordBtnLongPressed:)];
 //        longPrees.delegate = self;
 //        longPrees.minimumPressDuration = 0.3;
@@ -390,18 +396,13 @@
     }
 }
 
--(IBAction)recordBtnLongPressedss:(id)sender
-{
-    
-}
 
 -(IBAction)speakClick:(id)sender
 {
     if (!self.recorderVC) {
         //初始化录音vc
         self.recorderVC = [[ChatVoiceRecorderVC alloc]init];
-        recorderVC.vrbDelegate = self; 
-        
+        recorderVC.vrbDelegate = self;
     }
     //设置文件名
     self.originWav = [VoiceRecorderBaseVC getCurrentTimeString];
@@ -412,17 +413,33 @@
     [recorderVC beginRecordByFileName:self.originWav];
 }
 
+//-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+//    if (event.type == UIEventTypeTouches) {//发送一个名为‘nScreenTouch’（自定义）的事件
+//        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:event forKey:@"data"]]];
+//    }
+//    [super touchesEnded:touches withEvent:event];
+//}
+//
+//-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    if (event.type == UIEventTypeTouches) {//发送一个名为‘nScreenTouch’（自定义）的事件
+//        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:event forKey:@"data"]]];
+//    }
+//    [super touchesMoved:touches withEvent:event];
+//}
+
 -(void)recordBtnLongPressed:(UILongPressGestureRecognizer*) longPressedRecognizer
 {
+
      UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
     //长按开始
     if(longPressedRecognizer.state == UIGestureRecognizerStateBegan) {
-        
-        
+     SLog(@"recordBtnLongPressedss..");
+        [self speakClick:nil];
     }//长按结束
     else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){
         [buttonAudio sendMessageStyle];
-
+//        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:nil forKey:@"data"]]];
     }
 }
 

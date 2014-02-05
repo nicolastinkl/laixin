@@ -67,6 +67,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
     
 }
 
+
+
 - (void)onlineConfigCallBack:(NSNotification *)note {
     
     SLLog(@"online config has fininshed and note = %@", note.userInfo);

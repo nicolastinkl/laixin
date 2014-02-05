@@ -110,9 +110,12 @@
         if (bol) {
             // send message
              [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateNormal];
+             [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateHighlighted];
              [self.Button_Sendmsg sendMessageStyle];
             [self.Button_Sendmsg addTarget:self action:@selector(sendMessageClick:) forControlEvents:UIControlEventTouchUpInside];
         }else{
+            
+            [self.Button_Sendmsg setTitle:@"添加好友" forState:UIControlStateHighlighted];
             [self.Button_Sendmsg setTitle:@"添加好友" forState:UIControlStateNormal];
             [self.Button_Sendmsg infoStyle];
             [self.Button_Sendmsg addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];

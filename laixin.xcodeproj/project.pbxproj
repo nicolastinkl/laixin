@@ -220,6 +220,7 @@
 		86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C642311887A3D200E0CDDB /* NSDate+TimeInterval.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
+		86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CA8EF618A25E3000AFB15D /* XCJApplication.m */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
 		86D181D01834822C0005901D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CF1834822C0005901D /* CoreGraphics.framework */; };
 		86D181D21834822C0005901D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181D11834822C0005901D /* UIKit.framework */; };
@@ -801,6 +802,8 @@
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
 		86C72DE018433109001B6CA0 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageManager.m; path = Application/MessageManager.m; sourceTree = "<group>"; };
+		86CA8EF518A25E3000AFB15D /* XCJApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJApplication.h; sourceTree = "<group>"; };
+		86CA8EF618A25E3000AFB15D /* XCJApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJApplication.m; sourceTree = "<group>"; };
 		86D181CA1834822C0005901D /* laixin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = laixin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86D181CD1834822C0005901D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86D181CF1834822C0005901D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -2045,6 +2048,8 @@
 				86D1820518349B0A0005901D /* Support */,
 				86D181DC1834822C0005901D /* XCJAppDelegate.h */,
 				86D181DD1834822C0005901D /* XCJAppDelegate.m */,
+				86CA8EF518A25E3000AFB15D /* XCJApplication.h */,
+				86CA8EF618A25E3000AFB15D /* XCJApplication.m */,
 				86D181DF1834822C0005901D /* Main.storyboard */,
 				86D181E81834822D0005901D /* Images.xcassets */,
 				86D181D41834822C0005901D /* Supporting Files */,
@@ -3168,6 +3173,7 @@
 				86EB76D7185AA6CC00836947 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
+				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
 				86EB76D0185AA6CC00836947 /* AFHTTPSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

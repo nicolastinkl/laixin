@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 #import "XCJAppDelegate.h"
-
+#import "XCJApplication.h"
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([XCJAppDelegate class]));
+        return UIApplicationMain(argc, argv, NSStringFromClass([XCJApplication class]), NSStringFromClass([XCJAppDelegate class]));
     }
     
 }
