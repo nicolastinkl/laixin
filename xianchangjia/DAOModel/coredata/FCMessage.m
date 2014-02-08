@@ -21,6 +21,6 @@
 @dynamic imageUrl;
 @dynamic conversation;
 @dynamic messageUser;
-@synthesize messageId;
-@synthesize latitude,longitude,audioUrl,videoUrl,messageguid,messageSendStatus;
+@dynamic messageId;
+@dynamic latitude,longitude,audioUrl,videoUrl,messageguid,messageSendStatus;
 @end

@@ -977,7 +977,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 #endif
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-    return [UIImage imageNamed:@"eventPlusIcon"];//SVProgressHUD.bundle/success
+    return [UIImage imageNamed:@"scene_select"];//SVProgressHUD.bundle/success
 #else
     return [UIImage imageNamed:@"SVProgressHUD.bundle/success.png"];
 #endif
@@ -995,7 +995,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 #endif
     
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-    return [UIImage imageNamed:@"eventMinusIcon"];
+    return [UIImage imageNamed:@"ResultIconFail"];
 #else
     return [UIImage imageNamed:@"SVProgressHUD.bundle/error.png"];
 #endif

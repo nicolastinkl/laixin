@@ -1975,7 +1975,8 @@
         retryButton.top = imageview_BG.height/2  + 10;
         
         audioButton.left = 50.0f;
-        [audioButton setTitle:[NSString stringWithFormat:@"%d''",message.audioUrl.length] forState:UIControlStateNormal];
+        [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
+//        [audioButton setTitle:[NSString stringWithFormat:@"%d''",message.audioUrl.length] forState:UIControlStateNormal];
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -1985,34 +1986,50 @@
 -(IBAction)playaudioClick:(id)sender
 {
     UIButton * button = (UIButton*)sender;
-    button.userInteractionEnabled = NO;
-    [button showIndicatorView];
-    XCJChatMessageCell * cell = (XCJChatMessageCell*)button.superview.superview;
-    FCMessage *message = self.messageList[ [self.tableView indexPathForCell:cell].row ];
-    if (message.audioUrl) {
-        //download audio and play
-        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-        NSURL *URL = [NSURL URLWithString:message.audioUrl];
-        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-        
-        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-            NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
-            return [documentsDirectoryPath URLByAppendingPathComponent:[response suggestedFilename]];
-        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-            NSLog(@"File downloaded to: %@", filePath);
-            NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",filePath]];
+    NSString * audiourl = [button.layer valueForKey:@"audiourl"];
+    //self.messageList[[self.tableView indexPathForCell:cell].row];
+    if (audiourl) {
+        //http://kidswant.u.qiniudn.com/FpWbDbq6UIkbCw5PunVVB8yphaDL
+        NSArray *SeparatedArray = [[NSArray alloc]init];
+        SeparatedArray =[audiourl componentsSeparatedByString:@"/"];
+        NSString * filename = [SeparatedArray  lastObject];
+        NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
+        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        if(![fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@",url]]) //如果不存在
+        {
+            
+            button.userInteractionEnabled = NO;
+            [button showIndicatorView];
+            //download audio and play
+            NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+            NSURL *URL = [NSURL URLWithString:audiourl];
+            NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+            NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                SLLog(@"response type : %@",[response MIMEType]);
+                NSString * filename = [response suggestedFilename];
+                return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
+            } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                NSLog(@"File downloaded to: %@", filePath);
+                NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",filePath]];
+                [button setTitle:[NSString stringWithFormat:@"%d''",leng] forState:UIControlStateNormal];
+                [button hideIndicatorView];
+                button.userInteractionEnabled = YES;
+                player = [player initWithContentsOfURL:filePath error:nil];
+                [player play];
+            }];
+            [downloadTask resume];
+        }else{
+            SLLog(@"cache url %@",url);
+            NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",url]];
             [button setTitle:[NSString stringWithFormat:@"%d''",leng] forState:UIControlStateNormal];
-            [button hideIndicatorView];
-            button.userInteractionEnabled = YES;
-            player = [player initWithContentsOfURL:filePath error:nil];
+            player = [player initWithContentsOfURL:url error:nil];
             [player play];
-        }];
-        [downloadTask resume];
+        }
+        
     }else
     {
-        [button hideIndicatorView];
-        button.userInteractionEnabled = YES;
         [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
     }
 }
