@@ -70,6 +70,7 @@
         <relationship name="newRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCBeInviteGroup" inverseName="fcBeinviteGroupInfo" inverseEntity="FCBeInviteGroup" syncable="YES"/>
     </entity>
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
+        <attribute name="audioLength" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="audioUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>

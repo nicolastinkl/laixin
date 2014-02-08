@@ -30,6 +30,7 @@ enum messageTypeEnum {
 @property (nonatomic, retain) NSNumber * messageType;
 @property (nonatomic, retain) NSString * imageUrl;
 @property (nonatomic, retain) NSString * audioUrl;
+@property (nonatomic, retain) NSNumber * audioLength;
 @property (nonatomic, retain) NSString * videoUrl;
 @property (nonatomic, retain) NSString * messageId;
 @property (nonatomic, retain) NSString * messageguid;

@@ -22,5 +22,5 @@
 @dynamic conversation;
 @dynamic messageUser;
 @dynamic messageId;
-@dynamic latitude,longitude,audioUrl,videoUrl,messageguid,messageSendStatus;
+@dynamic latitude,longitude,audioUrl,videoUrl,messageguid,messageSendStatus,audioLength;
 @end

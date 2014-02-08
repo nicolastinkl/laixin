@@ -98,8 +98,6 @@
 //    panRecognizer.delegate = self;
 //    [self.tableView addGestureRecognizer:panRecognizer];
     
-    //初始化播放器
-    player = [[AVAudioPlayer alloc]init];
     
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button defaultStyle];
@@ -202,6 +200,8 @@
     }
     
     
+    //初始化播放器
+    player = [[AVAudioPlayer alloc]init];
 }
 
 -(IBAction)ShowkeyboardButtonClick:(id)sender
@@ -365,7 +365,6 @@
                         [self.conversation addMessagesObject:msg];
                         [self.messageList addObject:msg];
                         [localContext MR_saveToPersistentStoreAndWait];
-                        
                     }
                     [SVProgressHUD dismiss];
                     //{"errno":0,"error":"Success","result":{"msgid":80,"url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}}
@@ -380,7 +379,6 @@
     
     
 }
-
 
 #pragma mark - 获取文件大小
 - (NSInteger) getFileSize:(NSString*) path{
@@ -529,11 +527,13 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
-    /* receive websocket message*/
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(webSocketDidReceivePushMessage:)
-                                                 name:MLNetworkingManagerDidReceivePushMessageNotification
-                                               object:nil];
+    /* receive websocket message
+     */
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(webSocketDidReceivePushMessage:)
+     name:MLNetworkingManagerDidReceivePushMessageNotification
+     object:nil];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
 }
@@ -573,7 +573,6 @@
                 [USER_DEFAULT synchronize];
             }
             
-            
             NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
             if ([self.conversation.facebookId isEqualToString:facebookID]) {
                 // int view
@@ -581,58 +580,71 @@
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
                 NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                msg.text = content;
                 NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                msg.sentDate = date;
-                // message did come, this will be on left
-                msg.messageStatus = @(YES);
-                if ([typeMessage isEqualToString:@"txt"]) {
-                    if ([content containString:@"sticker_"]) {
-                        msg.messageType = @(messageType_emj);
-                        self.conversation.lastMessage = @"[表情]";
-                    }else{
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
+                //                FCMessage  find this infomation
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+                FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+                if (message) {
+                    // change by tinkl   ....MARK:  has this record
+                    [self.messageList addObject:message]; //table reload
+                    self.conversation.badgeNumber = @0;
+                    self.conversation.messageStutes = @(messageStutes_incoming);
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    
+                }else{
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = content;
+                    
+                    msg.sentDate = date;
+                    // message did come, this will be on left
+                    msg.messageStatus = @(YES);
+                    if ([typeMessage isEqualToString:@"txt"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            self.conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            self.conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"emj"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            self.conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            self.conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"pic"]) {
+                        //image
+                        msg.messageType = @(messageType_image);
+                        self.conversation.lastMessage = @"[图片]";
+                        msg.imageUrl = imageurl;
+                    }else if ([typeMessage isEqualToString:@"vic"]) {
+                        //audio
+                        NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
+                        self.conversation.lastMessage = @"[语音]";
+                        msg.audioUrl = audiourl;
+                        msg.messageType = @(messageType_audio);
+                    }else if ([typeMessage isEqualToString:@"map"]) {
+                        self.conversation.lastMessage = @"[位置信息]";
+                        msg.imageUrl = imageurl;
+                        msg.messageType = @(messageType_map);
+                    }else if ([typeMessage isEqualToString:@"video"]) {
+                        self.conversation.lastMessage = @"[视频]";
+                        msg.videoUrl = imageurl;
+                        msg.messageType = @(messageType_video);
                     }
-                }else if ([typeMessage isEqualToString:@"emj"]) {
-                    if ([content containString:@"sticker_"]) {
-                        msg.messageType = @(messageType_emj);
-                        self.conversation.lastMessage = @"[表情]";
-                    }else{
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
-                    }
-                }else if ([typeMessage isEqualToString:@"pic"]) {
-                    //image
-                    msg.messageType = @(messageType_image);
-                    self.conversation.lastMessage = @"[图片]";
-                    msg.imageUrl = imageurl;
-                }else if ([typeMessage isEqualToString:@"vic"]) {
-                    //audio
-                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
-                    self.conversation.lastMessage = @"[语音]";
-                    msg.audioUrl = audiourl;
-                    msg.messageType = @(messageType_audio);
-                }else if ([typeMessage isEqualToString:@"map"]) {
-                    self.conversation.lastMessage = @"[位置信息]";
-                    msg.imageUrl = imageurl;
-                    msg.messageType = @(messageType_map);
-                }else if ([typeMessage isEqualToString:@"video"]) {
-                    self.conversation.lastMessage = @"[视频]";
-                    msg.videoUrl = imageurl;
-                    msg.messageType = @(messageType_video);
+                    
+                    msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                    
+                    self.conversation.lastMessageDate = date;
+                    self.conversation.badgeNumber = @0;
+                    self.conversation.messageStutes = @(messageStutes_incoming);
+                    [self.conversation addMessagesObject:msg];
+                    [self.messageList addObject:msg]; //table reload
+                    [localContext MR_saveToPersistentStoreAndWait];
                 }
-                
-                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                
-                self.conversation.lastMessageDate = date;
-                self.conversation.badgeNumber = @0;
-                self.conversation.messageStutes = @(messageStutes_incoming);
-                [self.conversation addMessagesObject:msg];
-                [self.messageList addObject:msg]; //table reload
-                [localContext MR_saveToPersistentStoreAndWait];
                 [self insertTableRow];
 
             }else if(![self.conversation.facebookId isEqualToString:facebookID]){
@@ -650,63 +662,70 @@
                     [USER_DEFAULT synchronize];
                 }
                 
-                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                msg.text = content;
-                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                msg.sentDate = date;
-                if ([typeMessage isEqualToString:@"txt"]) {
-                    if ([content containString:@"sticker_"]) {
-                        msg.messageType = @(messageType_emj);
-                        self.conversation.lastMessage = @"[表情]";
-                    }else{
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
+                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+                FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+                if (message) {
+                    // change by tinkl   ....MARK:  has this record
+                }else{
+                    
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    msg.text = content;
+                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                    msg.sentDate = date;
+                    if ([typeMessage isEqualToString:@"txt"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            self.conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            self.conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"emj"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            self.conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            self.conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"pic"]) {
+                        //image
+                        msg.messageType = @(messageType_image);
+                        self.conversation.lastMessage = @"[图片]";
+                        msg.imageUrl = imageurl;
+                    }else if ([typeMessage isEqualToString:@"vic"]) {
+                        //audio
+                        NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
+                        self.conversation.lastMessage = @"[语音]";
+                        msg.audioUrl = audiourl;
+                        msg.messageType = @(messageType_audio);
+                    }else if ([typeMessage isEqualToString:@"map"]) {
+                        self.conversation.lastMessage = @"[位置信息]";
+                        msg.imageUrl = imageurl;
+                        msg.messageType = @(messageType_map);
+                    }else if ([typeMessage isEqualToString:@"video"]) {
+                        self.conversation.lastMessage = @"[视频]";
+                        msg.videoUrl = imageurl;
+                        msg.messageType = @(messageType_video);
                     }
-                }else if ([typeMessage isEqualToString:@"emj"]) {
-                    if ([content containString:@"sticker_"]) {
-                        msg.messageType = @(messageType_emj);
-                        self.conversation.lastMessage = @"[表情]";
-                    }else{
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
-                    }
-                }else if ([typeMessage isEqualToString:@"pic"]) {
-                    //image
-                    msg.messageType = @(messageType_image);
-                    self.conversation.lastMessage = @"[图片]";
-                    msg.imageUrl = imageurl;
-                }else if ([typeMessage isEqualToString:@"vic"]) {
-                    //audio
-                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
-                    self.conversation.lastMessage = @"[语音]";
-                    msg.audioUrl = audiourl;
-                    msg.messageType = @(messageType_audio);
-                }else if ([typeMessage isEqualToString:@"map"]) {
-                    self.conversation.lastMessage = @"[位置信息]";
-                    msg.imageUrl = imageurl;
-                    msg.messageType = @(messageType_map);
-                }else if ([typeMessage isEqualToString:@"video"]) {
-                    self.conversation.lastMessage = @"[视频]";
-                    msg.videoUrl = imageurl;
-                    msg.messageType = @(messageType_video);
+                    
+                    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
+                    // message did come, this will be on left
+                    msg.messageStatus = @(YES);
+                    msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                    self.conversation.lastMessage = content;
+                    self.conversation.lastMessageDate = date;
+                    self.conversation.messageStutes = @(messageStutes_incoming);
+                    // increase badge number.
+                    int badgeNumber = [self.conversation.badgeNumber intValue];
+                    badgeNumber ++;
+                    self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                    
+                    [self.conversation addMessagesObject:msg];
+                    [localContext MR_saveToPersistentStoreAndWait];
                 }
-                
-                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
-                // message did come, this will be on left
-                msg.messageStatus = @(YES);
-                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                self.conversation.lastMessage = content;
-                self.conversation.lastMessageDate = date;
-                self.conversation.messageStutes = @(messageStutes_incoming);
-                // increase badge number.
-                int badgeNumber = [self.conversation.badgeNumber intValue];
-                badgeNumber ++;
-                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                
-                [self.conversation addMessagesObject:msg];
-                [localContext MR_saveToPersistentStoreAndWait];
             }
         }else if ([requestKey isEqualToString:@"newpost_error"]){
             // group new msg
@@ -1693,7 +1712,6 @@
 	
 }
 
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1771,6 +1789,7 @@
     UIActivityIndicatorView * indictorView = (UIActivityIndicatorView *) [cell.contentView subviewWithTag:9];
     UIButton * retryButton = (UIButton *) [cell.contentView subviewWithTag:10];
     UIButton * audioButton = (UIButton *) [cell.contentView subviewWithTag:11];
+    UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
     if ([message.messageSendStatus intValue] == 1)
     {
         [indictorView startAnimating];
@@ -1953,6 +1972,7 @@
         retryButton.left = imageview_BG.left + imageview_BG.width  ;
         retryButton.top = imageview_BG.height/2  + 10;
         
+        
     }else if([message.messageType intValue] == messageType_audio)
     {
         labelContent.text = @"";
@@ -1978,6 +1998,8 @@
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
 //        [audioButton setTitle:[NSString stringWithFormat:@"%d''",message.audioUrl.length] forState:UIControlStateNormal];
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
+        Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
+        Image_playing.top = imageview_BG.height/2 + 17 ;
     }
     
     return cell;
@@ -1994,11 +2016,12 @@
         SeparatedArray =[audiourl componentsSeparatedByString:@"/"];
         NSString * filename = [SeparatedArray  lastObject];
         NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
-        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
+//        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        if(![fileManager fileExistsAtPath:[NSString stringWithFormat:@"%@",url]]) //如果不存在
+        NSString * strFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        NSString * fileNameWhole =  [NSString stringWithFormat:@"%@/%@.amr",strFile,filename];
+        if(![fileManager fileExistsAtPath:fileNameWhole]) //如果不存在
         {
-            
             button.userInteractionEnabled = NO;
             [button showIndicatorView];
             //download audio and play
@@ -2012,26 +2035,55 @@
                 return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
             } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                 NSLog(@"File downloaded to: %@", filePath);
-                NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",filePath]];
-                [button setTitle:[NSString stringWithFormat:@"%d''",leng] forState:UIControlStateNormal];
                 [button hideIndicatorView];
                 button.userInteractionEnabled = YES;
-                player = [player initWithContentsOfURL:filePath error:nil];
+                int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
+                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+                [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
                 [player play];
+                [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1000];
             }];
             [downloadTask resume];
         }else{
-            SLLog(@"cache url %@",url);
-            NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",url]];
-            [button setTitle:[NSString stringWithFormat:@"%d''",leng] forState:UIControlStateNormal];
-            player = [player initWithContentsOfURL:url error:nil];
+            button.userInteractionEnabled = YES;
+            int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
+            [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+            [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+            player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
+            [player prepareToPlay];
             [player play];
+            [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1000];
         }
         
     }else
     {
         [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
     }
+}
+
+- (void) ShowPlayingimgArray:(UITableViewCell * ) cell withTime:(int) timer
+{
+    UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
+    NSArray * gifArray = [NSArray arrayWithObjects:
+                [UIImage imageNamedTwo:@"voice_receive_icon_1"],
+                [UIImage imageNamedTwo:@"voice_receive_icon_2"],
+                [UIImage imageNamedTwo:@"voice_receive_icon_3"], nil];
+    
+    Image_playing.animationImages = gifArray; //动画图片数组
+	Image_playing.animationDuration = 1; //执行一次完整动画所需的时长
+	//    self.Image_playing.animationRepeatCount = 1;  //动画重复次数
+	[Image_playing startAnimating];
+    
+    [self performSelector:@selector(removeImageAnimation:) withObject:cell afterDelay:timer];
+}
+-(void) removeImageAnimation:(id) cell
+{
+    UITableViewCell * cellself = cell;
+    UIImageView * Image_playing = (UIImageView*)[cellself.contentView subviewWithTag:12];
+    [Image_playing stopAnimating];
+    Image_playing.image = nil;
+    
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
