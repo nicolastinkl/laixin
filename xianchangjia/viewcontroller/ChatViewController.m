@@ -578,6 +578,7 @@
                 // int view
                 NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+                NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
                 msg.text = content;
@@ -586,15 +587,7 @@
                 msg.sentDate = date;
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);
-                if (imageurl.length > 5)
-                {
-                    msg.messageType = @(messageType_image);
-                    self.conversation.lastMessage = @"[图片]";
-                }
-                
-                else
-                {
-
+                if ([typeMessage isEqualToString:@"txt"]) {
                     if ([content containString:@"sticker_"]) {
                         msg.messageType = @(messageType_emj);
                         self.conversation.lastMessage = @"[表情]";
@@ -602,9 +595,31 @@
                         msg.messageType = @(messageType_text);
                         self.conversation.lastMessage = content;
                     }
+                }else if ([typeMessage isEqualToString:@"emj"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"pic"]) {
+                    //image
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"vic"]) {
+                    //audio
+                    self.conversation.lastMessage = @"[语音]";
+                    msg.audioUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"map"]) {
+                    self.conversation.lastMessage = @"[位置信息]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"video"]) {
+                    self.conversation.lastMessage = @"[视频]";
+                    msg.videoUrl = imageurl;
                 }
                 
-                msg.imageUrl = imageurl;
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 
                 self.conversation.lastMessageDate = date;
@@ -619,7 +634,7 @@
                 //out view
                 NSString * content = dicMessage[@"content"];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                
+                NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
                 
                 // update lastmessage id index
                 NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
@@ -636,17 +651,39 @@
                 NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
                 msg.sentDate = date;
-                if (imageurl.length > 5)
-                {
+                if ([typeMessage isEqualToString:@"txt"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"emj"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"pic"]) {
+                    //image
                     msg.messageType = @(messageType_image);
                     self.conversation.lastMessage = @"[图片]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"vic"]) {
+                    //audio
+                    self.conversation.lastMessage = @"[语音]";
+                    msg.audioUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"map"]) {
+                    self.conversation.lastMessage = @"[位置信息]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"video"]) {
+                    self.conversation.lastMessage = @"[视频]";
+                    msg.videoUrl = imageurl;
                 }
                 
-                else
-                {
-                    msg.messageType = @(messageType_text);
-                    self.conversation.lastMessage = content;
-                }
                 [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);

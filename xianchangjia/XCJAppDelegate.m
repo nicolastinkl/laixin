@@ -435,7 +435,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
             //out view
             NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
             NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-            
+            NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
             // Build the predicate to find the person sought
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
@@ -456,14 +456,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
             // message did come, this will be on left
             msg.messageStatus = @(YES);
             msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-            
-            if (imageurl.length > 5)
-            {
-                msg.messageType = @(messageType_image);
-                conversation.lastMessage = @"[图片]";
-            }
-            else
-            {
+            if ([typeMessage isEqualToString:@"txt"]) {
                 if ([content containString:@"sticker_"]) {
                     msg.messageType = @(messageType_emj);
                     conversation.lastMessage = @"[表情]";
@@ -471,8 +464,31 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     msg.messageType = @(messageType_text);
                     conversation.lastMessage = content;
                 }
+            }else if ([typeMessage isEqualToString:@"emj"]) {
+                if ([content containString:@"sticker_"]) {
+                    msg.messageType = @(messageType_emj);
+                    conversation.lastMessage = @"[表情]";
+                }else{
+                    msg.messageType = @(messageType_text);
+                    conversation.lastMessage = content;
+                }
+            }else if ([typeMessage isEqualToString:@"pic"]) {
+                //image
+                msg.messageType = @(messageType_image);
+                conversation.lastMessage = @"[图片]";
+                msg.imageUrl = imageurl;
+            }else if ([typeMessage isEqualToString:@"vic"]) {
+                //audio
+                conversation.lastMessage = @"[语音]";
+                msg.audioUrl = imageurl;
+            }else if ([typeMessage isEqualToString:@"map"]) {
+                conversation.lastMessage = @"[位置信息]";
+                msg.imageUrl = imageurl;
+            }else if ([typeMessage isEqualToString:@"video"]) {
+                conversation.lastMessage = @"[视频]";
+                msg.videoUrl = imageurl;
             }
-            msg.imageUrl = imageurl;
+
             
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);

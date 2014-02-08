@@ -128,7 +128,8 @@
                         }//  自己除外
                         
                     }];
-                    if(uidArray.count < 1){
+                    if(uidArray.count <= 0){
+                        [SVProgressHUD dismiss];
                         [self showErrorText:@"没有找到附近用户"];
                         return ;
                     }

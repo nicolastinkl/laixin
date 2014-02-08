@@ -104,10 +104,6 @@
 }      // load from main bundle
 @end
 
-
-
-
-
 @implementation tools
 
 +(NSString * ) ReturnNewURLBySize:(NSString *) URL lengDp:(int) lengDP status:(NSString*) smb
