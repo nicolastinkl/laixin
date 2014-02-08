@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class FCReplyMessage;
+@class FCReplyMessage,XCJGroupPost_list;
 @interface XCJMessageReplyInfoViewController : UIViewController
 
 @property (nonatomic,weak) FCReplyMessage * message;
-
+@property (nonatomic,weak) XCJGroupPost_list * post;
 @end

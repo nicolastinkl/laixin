@@ -49,6 +49,7 @@
 + (NSDate*) convertToUTC:(NSDate*)sourceDate;
 +(NSURL*)UrlFromString:(NSString*) str;
 + (NSString*)timeLabelTextOfTime:(NSTimeInterval)time;
++ (NSString*)timeLabelTextOfTimeMoth:(NSTimeInterval)time;
 + (NSString*)randomStringWithLength:(NSUInteger)length;
 + (NSString *)getStringValue:(id)object
                 defaultValue:(NSString *)defaultValue;

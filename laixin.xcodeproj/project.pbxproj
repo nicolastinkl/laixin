@@ -113,6 +113,7 @@
 		86740A981839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A941839FA2A0041B603 /* UIImage+ImageEffects.m */; };
 		86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */; };
 		86740A9A1839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */; };
+		867AF35C18A623A400121DCF /* XCJSelfPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */; };
 		8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */; };
 		8681BDBC1834B2A300521D36 /* DirectionsJson.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */; };
 		8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BDBF1834B34D00521D36 /* XCJSceneInfo.m */; };
@@ -607,6 +608,8 @@
 		86740A941839FA2A0041B603 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		86740A951839FA2A0041B603 /* UINavigationController+MHDismissModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+MHDismissModalView.h"; sourceTree = "<group>"; };
 		86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+MHDismissModalView.m"; sourceTree = "<group>"; };
+		867AF35A18A623A400121DCF /* XCJSelfPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelfPhotoViewController.h; path = viewcontroller/XCJSelfPhotoViewController.h; sourceTree = "<group>"; };
+		867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelfPhotoViewController.m; path = viewcontroller/XCJSelfPhotoViewController.m; sourceTree = "<group>"; };
 		8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DirectionsJson.geojson; sourceTree = "<group>"; };
 		8681BDBE1834B34D00521D36 /* XCJSceneInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJSceneInfo.h; sourceTree = "<group>"; };
 		8681BDBF1834B34D00521D36 /* XCJSceneInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJSceneInfo.m; sourceTree = "<group>"; };
@@ -2734,6 +2737,8 @@
 				86F9B9B118728AFE00ED768B /* XCJUserInfoController.m */,
 				866995E41879087100233C47 /* XCJErWeiCodeViewController.h */,
 				866995E51879087100233C47 /* XCJErWeiCodeViewController.m */,
+				867AF35A18A623A400121DCF /* XCJSelfPhotoViewController.h */,
+				867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -3035,6 +3040,7 @@
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,
 				869CE534186BE38D0004C1EC /* MagicalRecord+Setup.m in Sources */,
 				86EB76C7185AA6CC00836947 /* ObjcRuntime.m in Sources */,
+				867AF35C18A623A400121DCF /* XCJSelfPhotoViewController.m in Sources */,
 				86FB210118716C80006BDE32 /* XCJRegisterViewController.m in Sources */,
 				86D183061834AFB00005901D /* XCDataDBFactory.m in Sources */,
 				869CE532186BE38D0004C1EC /* MagicalRecord+iCloud.m in Sources */,

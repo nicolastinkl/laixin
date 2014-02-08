@@ -36,4 +36,5 @@
 #import "MobClick.h"
 #import "UIView+Convenience.h"
 #import "UIImage-Helpers.h"
+#import "EGOCache.h"
 #endif

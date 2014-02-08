@@ -418,6 +418,33 @@
     return text;
 }
 
++ (NSString*)timeLabelTextOfTimeMoth:(NSTimeInterval)time
+{
+    if (time<=0) {
+        return @"";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSString *text = [dateFormatter stringFromDate:date];
+    //最近时间处理
+    NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
+    if (timeAgo > 0 && timeAgo < 60) {
+        return @"今天";
+    }else if (timeAgo >= 60 && timeAgo < 3600) {
+        return @"今天";
+    }else if (timeAgo >= 3600 && timeAgo < 86400) {
+        return @"今天";
+    }else if (timeAgo >= 86400 && timeAgo < 86400*2) {
+       return @"昨天";
+    }else if (timeAgo >= 86400*2 && timeAgo < 86400*3) {
+        return @"前天";
+    }
+    return text;
+}
+
+
+
 +(NSURL*)UrlFromString:(NSString*) str
 {
     if(str==nil || [str isKindOfClass:[NSNull class]])

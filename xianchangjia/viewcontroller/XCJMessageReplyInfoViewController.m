@@ -17,7 +17,7 @@
 #import "UIAlertViewAddition.h"
 #import "InterceptTouchView.h"
 #import "FCUserDescription.h"
-
+#import "XCJGroupPost_list.h"
 
 @interface XCJMessageReplyInfoViewController ()<ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -102,24 +102,30 @@
             [self.tableView reloadData];
         }
     }else{
-        //post.get(postid) 参数可以是数组
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"postid": self.message.postid} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dict = responseObject[@"result"];
-                NSArray *array = dict[@"posts"];
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    if (idx == 0) {
-                        self.message.jsonStr =  obj;
-                        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-                        XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
-                        currentGroup = list;
-                        [self.tableView reloadData];
-                    }
-                }];
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            [self showErrorText:@"数据请求失败"];
-        }];
+        if (self.post) {
+            currentGroup = self.post;
+            [self.tableView reloadData];
+        }else{
+            //post.get(postid) 参数可以是数组
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"postid": self.message.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dict = responseObject[@"result"];
+                    NSArray *array = dict[@"posts"];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        if (idx == 0) {
+                            self.message.jsonStr =  obj;
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                            XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
+                            currentGroup = list;
+                            [self.tableView reloadData];
+                        }
+                    }];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [self showErrorText:@"数据请求失败"];
+            }];
+
+        }
     }
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
