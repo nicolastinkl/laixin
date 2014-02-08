@@ -110,8 +110,11 @@
     
 //    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     [self cancelClick:sender];
-    
-    NSDictionary *dict = @{@"image":image,@"strAddresss":strAddresss,@"lat":@(lat),@"log":@(log)};
+    NSString * newstr  ;
+    if (strAddresss) {
+        newstr = [strAddresss stringByReplacingOccurrencesOfString:@"(null)" withString:@""];
+    }
+    NSDictionary *dict = @{@"image":image,@"strAddresss":newstr,@"lat":@(lat),@"log":@(log)};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PostChatLoacation" object:nil userInfo:dict];
     
     //UIViewma [self.view subviewWithTag:1];

@@ -18,6 +18,7 @@ enum messageTypeEnum {
     messageType_emj = 4,
     messageType_audio = 5,
     messageType_contacts = 6,
+    messageType_video = 7,
     };
 
 @interface FCMessage : NSManagedObject

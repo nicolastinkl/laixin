@@ -59,7 +59,6 @@
     UIView  * EmjView;
     XCJChatSendInfoView *SendInfoView;
 }
-
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextView *inputTextView;
@@ -98,6 +97,9 @@
 //    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
 //    panRecognizer.delegate = self;
 //    [self.tableView addGestureRecognizer:panRecognizer];
+    
+    //初始化播放器
+    player = [[AVAudioPlayer alloc]init];
     
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button defaultStyle];
@@ -396,7 +398,6 @@
     }
 }
 
-
 -(IBAction)speakClick:(id)sender
 {
     if (!self.recorderVC) {
@@ -610,14 +611,18 @@
                     msg.imageUrl = imageurl;
                 }else if ([typeMessage isEqualToString:@"vic"]) {
                     //audio
+                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
                     self.conversation.lastMessage = @"[语音]";
-                    msg.audioUrl = imageurl;
+                    msg.audioUrl = audiourl;
+                    msg.messageType = @(messageType_audio);
                 }else if ([typeMessage isEqualToString:@"map"]) {
                     self.conversation.lastMessage = @"[位置信息]";
                     msg.imageUrl = imageurl;
+                    msg.messageType = @(messageType_map);
                 }else if ([typeMessage isEqualToString:@"video"]) {
                     self.conversation.lastMessage = @"[视频]";
                     msg.videoUrl = imageurl;
+                    msg.messageType = @(messageType_video);
                 }
                 
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
@@ -674,14 +679,18 @@
                     msg.imageUrl = imageurl;
                 }else if ([typeMessage isEqualToString:@"vic"]) {
                     //audio
+                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
                     self.conversation.lastMessage = @"[语音]";
-                    msg.audioUrl = imageurl;
+                    msg.audioUrl = audiourl;
+                    msg.messageType = @(messageType_audio);
                 }else if ([typeMessage isEqualToString:@"map"]) {
                     self.conversation.lastMessage = @"[位置信息]";
                     msg.imageUrl = imageurl;
+                    msg.messageType = @(messageType_map);
                 }else if ([typeMessage isEqualToString:@"video"]) {
                     self.conversation.lastMessage = @"[视频]";
                     msg.videoUrl = imageurl;
+                    msg.messageType = @(messageType_video);
                 }
                 
                 [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
@@ -1954,7 +1963,7 @@
         //min height and width  is 35.0f
         //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
         [imageview_BG setHeight:35.0f];
-        [imageview_BG setWidth:100.0f];
+        [imageview_BG setWidth:80.0f];
         imageview_BG.hidden = NO;
         address.text = @"";
         address.hidden = YES;
@@ -1964,10 +1973,48 @@
         
         retryButton.left = imageview_BG.left + imageview_BG.width;
         retryButton.top = imageview_BG.height/2  + 10;
-        audioButton.left = 45.0f;
+        
+        audioButton.left = 50.0f;
+        [audioButton setTitle:[NSString stringWithFormat:@"%d''",message.audioUrl.length] forState:UIControlStateNormal];
+        [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return cell;
+}
+
+-(IBAction)playaudioClick:(id)sender
+{
+    UIButton * button = (UIButton*)sender;
+    button.userInteractionEnabled = NO;
+    [button showIndicatorView];
+    XCJChatMessageCell * cell = (XCJChatMessageCell*)button.superview.superview;
+    FCMessage *message = self.messageList[ [self.tableView indexPathForCell:cell].row ];
+    if (message.audioUrl) {
+        //download audio and play
+        NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+        AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+        NSURL *URL = [NSURL URLWithString:message.audioUrl];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        
+        NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+            NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
+            return [documentsDirectoryPath URLByAppendingPathComponent:[response suggestedFilename]];
+        } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+            NSLog(@"File downloaded to: %@", filePath);
+            NSInteger leng = [self getFileSize:[NSString stringWithFormat:@"%@",filePath]];
+            [button setTitle:[NSString stringWithFormat:@"%d''",leng] forState:UIControlStateNormal];
+            [button hideIndicatorView];
+            button.userInteractionEnabled = YES;
+            player = [player initWithContentsOfURL:filePath error:nil];
+            [player play];
+        }];
+        [downloadTask resume];
+    }else
+    {
+        [button hideIndicatorView];
+        button.userInteractionEnabled = YES;
+        [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
+    }
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

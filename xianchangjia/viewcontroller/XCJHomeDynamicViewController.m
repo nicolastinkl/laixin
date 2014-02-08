@@ -54,8 +54,6 @@
     NSArray * JsonArray;
 }
 
-
-
 @property (nonatomic, strong) NSMutableArray *assets;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
@@ -169,6 +167,17 @@
         self.groupInfo.badgeNumber = @(0);
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     }
+    if (self.activities.count > 0) {
+        XCJGroupPost_list * post = [self.activities firstObject];
+        if (post) {
+            if (![self.groupInfo.lastMessage isEqualToString: post.content]) {
+                self.groupInfo.lastMessage = post.content;
+                self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+            }
+        }
+    }
+    
 }
 
 - (IBAction)openGroupClick:(id)sender {
@@ -250,6 +259,12 @@
                             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                             lasID = [post.postid integerValue];
                             [self.activities addObject:post];
+                            
+                            if (idx == 0) {  //upload last message info
+                                self.groupInfo.lastMessage = post.content;
+                                self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];//[tools convertToUTC:];
+                                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                            }
                         }];
                         [self successGetActivities:self.activities withLastID:lasID];
                     }else{
@@ -809,7 +824,6 @@
         infoview.title = @"详细资料";
         [self.navigationController pushViewController:infoview animated:YES];
     } withuid:activity.uid];
-    
 }
 
 #pragma mark - UIImagePickerController delegate

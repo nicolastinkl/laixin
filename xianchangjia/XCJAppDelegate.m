@@ -479,14 +479,18 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.imageUrl = imageurl;
             }else if ([typeMessage isEqualToString:@"vic"]) {
                 //audio
+                NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
                 conversation.lastMessage = @"[语音]";
-                msg.audioUrl = imageurl;
+                msg.audioUrl = audiourl;
+                msg.messageType = @(messageType_audio);
             }else if ([typeMessage isEqualToString:@"map"]) {
                 conversation.lastMessage = @"[位置信息]";
                 msg.imageUrl = imageurl;
+                msg.messageType = @(messageType_map);
             }else if ([typeMessage isEqualToString:@"video"]) {
                 conversation.lastMessage = @"[视频]";
                 msg.videoUrl = imageurl;
+                msg.messageType = @(messageType_video);
             }
 
             

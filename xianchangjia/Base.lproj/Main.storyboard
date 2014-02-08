@@ -4080,6 +4080,7 @@
                                                 <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kdv-xu-190">
                                                     <rect key="frame" x="450" y="30" width="80" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                                     <state key="normal" image="chat_bottom_voice_press">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
@@ -4680,7 +4681,7 @@
             <objects>
                 <viewController restorationIdentifier="XCJActiveViewController" storyboardIdentifier="XCJActiveViewController" hidesBottomBarWhenPushed="YES" id="vvD-82-ccm" customClass="XCJActiveViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Quc-mH-HN3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568.00000000000011"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wPF-ho-Oak">
