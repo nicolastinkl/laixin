@@ -961,6 +961,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 NSString * content = [tools getStringValue:obj[@"content"] defaultValue:@""];
                                 NSString * imageurl = [tools getStringValue:obj[@"picture"] defaultValue:@""];
                                 
+                                NSString * typeMessage = [tools getStringValue:obj[@"type"] defaultValue:@""];
                                 // Build the predicate to find the person sought
                                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                                 NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
@@ -982,13 +983,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 msg.messageStatus = @(YES);
                                 msg.messageId = [tools getStringValue:obj[@"msgid"] defaultValue:@"0"];
                                 
-                                if (imageurl.length > 5)
-                                {
-                                    msg.messageType = @(messageType_image);
-                                    conversation.lastMessage = @"[图片]";
-                                }
-                                else
-                                {
+                                if ([typeMessage isEqualToString:@"txt"]) {
                                     if ([content containString:@"sticker_"]) {
                                         msg.messageType = @(messageType_emj);
                                         conversation.lastMessage = @"[表情]";
@@ -996,8 +991,34 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                         msg.messageType = @(messageType_text);
                                         conversation.lastMessage = content;
                                     }
+                                }else if ([typeMessage isEqualToString:@"emj"]) {
+                                    if ([content containString:@"sticker_"]) {
+                                        msg.messageType = @(messageType_emj);
+                                        conversation.lastMessage = @"[表情]";
+                                    }else{
+                                        msg.messageType = @(messageType_text);
+                                        conversation.lastMessage = content;
+                                    }
+                                }else if ([typeMessage isEqualToString:@"pic"]) {
+                                    //image
+                                    msg.messageType = @(messageType_image);
+                                    conversation.lastMessage = @"[图片]";
+                                    msg.imageUrl = imageurl;
+                                }else if ([typeMessage isEqualToString:@"vic"]) {
+                                    //audio
+                                    NSString * audiourl = [tools getStringValue:obj[@"voice"] defaultValue:@""];
+                                    conversation.lastMessage = @"[语音]";
+                                    msg.audioUrl = audiourl;
+                                    msg.messageType = @(messageType_audio);
+                                }else if ([typeMessage isEqualToString:@"map"]) {
+                                    conversation.lastMessage = @"[位置信息]";
+                                    msg.imageUrl = imageurl;
+                                    msg.messageType = @(messageType_map);
+                                }else if ([typeMessage isEqualToString:@"video"]) {
+                                    conversation.lastMessage = @"[视频]";
+                                    msg.videoUrl = imageurl;
+                                    msg.messageType = @(messageType_video);
                                 }
-                                msg.imageUrl = imageurl;
                                 conversation.lastMessageDate = date;
                                 conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
                                 conversation.messageStutes = @(messageStutes_incoming);

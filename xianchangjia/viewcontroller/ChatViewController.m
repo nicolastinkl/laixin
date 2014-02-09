@@ -258,6 +258,7 @@
         msg.sentDate = [NSDate date];
         msg.messageType = @(messageType_audio);
         msg.audioUrl = filePath;
+        msg.audioLength = @([self getFileSize:filePath]);
         // message did not come, this will be on rigth
         msg.messageStatus = @(NO);
         msg.messageId =  @"";
@@ -1772,7 +1773,6 @@
     [label.layer display];
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //MESSAGE_GUID
@@ -1820,7 +1820,6 @@
         dictionary[@"messagetype"]  = message.messageType;// @(messageType_text);
         NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
         dictionary[@"token"]  =  token;
-        
         switch ([message.messageType intValue]) {
             case messageType_image:
             case messageType_map:
@@ -1831,13 +1830,13 @@
             case messageType_audio:
             {
                 dictionary[@"fileSrc"] = message.audioUrl;
+                dictionary[@"length"]  = @([self getFileSize:message.audioUrl]);
             }
                 break;
                 
             default:
                 break;
         }
-        
         [cell SendMessageRemoteImgOper:_objImgListOper WithMessage:dictionary type:messageType_text];
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
@@ -1996,7 +1995,7 @@
         
         audioButton.left = 50.0f;
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
-//        [audioButton setTitle:[NSString stringWithFormat:@"%d''",message.audioUrl.length] forState:UIControlStateNormal];
+        [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
         Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
         Image_playing.top = imageview_BG.height/2 + 17 ;

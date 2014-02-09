@@ -217,8 +217,7 @@
                 break;
         }
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            SLog(@"responseObject :%@",responseObject);
-        
+            SLog(@"responseObject :%@",responseObject);        
         if ([responseObject[@"errno"] intValue] == 0) {
             NSDictionary * dic = responseObject[@"result"];
             NSString * messageId = [tools getStringValue:dic[@"msgid"] defaultValue:@""];

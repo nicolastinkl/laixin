@@ -119,6 +119,8 @@
                 case messageType_audio:
                 {
                     self.currentMessage.audioUrl = url;
+                    NSNumber * audiolength = @([DataHelper getIntegerValue:dataImg[@"length"] defaultValue:0]);
+                    self.currentMessage.audioLength = audiolength;
                 }
                     break;
                     
@@ -155,7 +157,7 @@
                 msg.longitude =self.currentMessage.longitude;
                 msg.messageId = messageId;
                 msg.messageguid = guid;
-                
+                msg.audioLength = self.currentMessage.audioLength;
                 [self.conversation addMessagesObject:msg];
                 [self.conversation removeMessagesObject:self.currentMessage];
                 [localContext MR_saveToPersistentStoreAndWait];

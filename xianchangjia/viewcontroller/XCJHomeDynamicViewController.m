@@ -172,7 +172,13 @@
         if (post) {
             if (![self.groupInfo.lastMessage isEqualToString: post.content]) {
                 self.groupInfo.lastMessage = post.content;
-                self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];
+                SLog(@"post.time: %f",post.time);
+                if(post.time < 0)
+                {
+                    self.groupInfo.lastMessageDate = [NSDate date];
+                }else{
+                    self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];
+                }
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
             }
         }

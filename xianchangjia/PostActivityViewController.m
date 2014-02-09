@@ -315,7 +315,7 @@
                 glist.width = [self.postImage size].width;
                 glist.height = [self.postImage size].height;
                 glist.group_id = self.gID;
-                glist.time = [NSDate timeIntervalSinceReferenceDate];
+                glist.time = [[NSDate date] timeIntervalSinceNow];//[NSDate timeIntervalSinceReferenceDate];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
                 glist.comments = array;
                 

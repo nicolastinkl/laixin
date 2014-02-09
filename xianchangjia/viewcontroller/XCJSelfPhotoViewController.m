@@ -42,18 +42,22 @@
     UIImageView * imageIcon = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:3];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
     if ([LXAPIController sharedLXAPIController].currentUser) {
-        label_name.text = [LXAPIController sharedLXAPIController].currentUser.nick;
-        label_sign.text = [LXAPIController sharedLXAPIController].currentUser.signature;
         
-        UIImage  *chacheImage =    [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
-        if (chacheImage) {
-            [imagebg setImage:chacheImage];
-        }else{
-            [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
-        }
-        [imageIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+       
         
     }
+    label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    //[LXAPIController sharedLXAPIController].currentUser.nick;
+    label_sign.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
+    
+    UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
+    if (chacheImage) {
+        [imagebg setImage:chacheImage];
+    }else{
+        //[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] [LXAPIController sharedLXAPIController].currentUser.background_image
+        [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+    }
+    [imageIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  

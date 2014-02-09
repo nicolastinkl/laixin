@@ -75,7 +75,7 @@
                 glist.like = 0;
                 glist.replycount = 0;
                 glist.group_id = self.gID;
-                glist.time = [NSDate timeIntervalSinceReferenceDate];
+                glist.time = [[NSDate date] timeIntervalSinceNow];// [NSDate timeIntervalSinceReferenceDate];
                 // [[NSDate date] timeIntervalSinceNow];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
                 glist.comments = array;

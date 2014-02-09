@@ -11,10 +11,14 @@
 @class RemoteImgListOperator;
 @class FCMessage,Conversation;
 @interface XCJChatMessageCell : UITableViewCell
+
 @property (nonatomic, readonly) RemoteImgListOperator *m_objRemoteImgListOper;
 - (void)setRemoteImgOper:(RemoteImgListOperator *)objOper;
 - (void) SendMessageRemoteImgOper:(RemoteImgListOperator *)objOper WithMessage:(NSMutableDictionary *) dict type:(int) type;
 
 @property (nonatomic,strong) FCMessage * currentMessage;
 @property (nonatomic,strong) Conversation * conversation;
+
+
+@property (nonatomic,assign) Boolean isplayingAudio;
 @end
