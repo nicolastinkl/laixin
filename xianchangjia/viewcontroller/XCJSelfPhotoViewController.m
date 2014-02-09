@@ -14,7 +14,7 @@
 #import "XCJMessageReplyInfoViewController.h"
 
 
-@interface XCJSelfPhotoViewController ()
+@interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSMutableArray * dataSource;
 }
@@ -44,8 +44,15 @@
     if ([LXAPIController sharedLXAPIController].currentUser) {
         label_name.text = [LXAPIController sharedLXAPIController].currentUser.nick;
         label_sign.text = [LXAPIController sharedLXAPIController].currentUser.signature;
+        
+        UIImage  *chacheImage =    [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
+        if (chacheImage) {
+            [imagebg setImage:chacheImage];
+        }else{
+            [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+        }
         [imageIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
-        [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+        
     }
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -92,6 +99,58 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (buttonIndex) {
+        case 0:{   //拍照
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                camera.delegate = self;
+                camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                camera.allowsEditing = YES;
+                [self presentViewController:camera animated:YES completion:nil];
+            }
+        }
+            break;
+        case 1:{
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+                UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
+                photoLibrary.delegate = self;
+                photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                photoLibrary.allowsEditing = YES;
+                [self presentViewController:photoLibrary animated:YES completion:nil];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+    [self performSelectorInBackground:@selector(uploadContent:) withObject:theInfo];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+
+
+- (void)uploadContent:(NSDictionary *)theInfo {
+    UIImage * image = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
+    [imagebg setImage:image];
+    [[EGOCache globalCache] setImage:image forKey:@"myphotoBgImage"];
 }
 
 #pragma mark - Table view data source
@@ -176,6 +235,12 @@
         height = 95;
     }
     return height-12;
+}
+
+-(IBAction)changeMyPhoto:(id)sender
+{
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"更换相册封面" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照" ,@"从相册选择", nil];
+    [sheet showInView:self.view];
 }
 
 /*

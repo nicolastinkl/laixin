@@ -300,7 +300,8 @@
 }
 
 - (void)uploadContent:(NSDictionary *)theInfo {
-    
+    UIImage * image = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    [self uploadFile:image ];
 //    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 //    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
 //    //Optionally for time zone conversions
@@ -314,8 +315,7 @@
 //    SLLog(@"Upload Path: %@", filePath);
 //    NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
 //    [webData writeToFile:filePath atomically:YES];
-    UIImage * image = [theInfo objectForKey:UIImagePickerControllerEditedImage];
-    [self uploadFile:image ];
+ 
 }
 
 - (NSString *)getMd5_32Bit_String:(NSString *)srcString{
