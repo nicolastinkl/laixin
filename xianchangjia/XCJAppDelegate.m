@@ -483,6 +483,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 conversation.lastMessage = @"[语音]";
                 msg.audioUrl = audiourl;
                 msg.messageType = @(messageType_audio);
+                int length  = [dicMessage[@"length"] intValue];
+                msg.audioLength = @(length/1000);
             }else if ([typeMessage isEqualToString:@"map"]) {
                 conversation.lastMessage = @"[位置信息]";
                 msg.imageUrl = imageurl;
@@ -1010,6 +1012,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                     conversation.lastMessage = @"[语音]";
                                     msg.audioUrl = audiourl;
                                     msg.messageType = @(messageType_audio);
+                                    int length  = [obj[@"length"] intValue];
+                                    msg.audioLength = @(length/1000);
                                 }else if ([typeMessage isEqualToString:@"map"]) {
                                     conversation.lastMessage = @"[位置信息]";
                                     msg.imageUrl = imageurl;

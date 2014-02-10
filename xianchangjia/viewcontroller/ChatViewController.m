@@ -43,6 +43,7 @@
 #import "ChatVoiceRecorderVC.h"
 #import "VoiceConverter.h"
 #import "EGOCache.h"
+
 #define  keyboardHeight 216
 #define  facialViewWidth 300
 #define facialViewHeight 180
@@ -258,7 +259,8 @@
         msg.sentDate = [NSDate date];
         msg.messageType = @(messageType_audio);
         msg.audioUrl = filePath;
-        msg.audioLength = @([self getFileSize:filePath]);
+        int leg = [self getFileSize:filePath];
+        msg.audioLength = @(leg/1000);
         // message did not come, this will be on rigth
         msg.messageStatus = @(NO);
         msg.messageId =  @"";
@@ -270,7 +272,6 @@
         [self.messageList addObject:msg];
         [localContext MR_saveToPersistentStoreAndWait];
         [self insertTableRow];
-
     }else{
         // token has 1 hour expire
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
@@ -382,7 +383,7 @@
 }
 
 #pragma mark - 获取文件大小
-- (NSInteger) getFileSize:(NSString*) path{
+- (int) getFileSize:(NSString*) path{
     NSFileManager * filemanager = [[NSFileManager alloc]init];
     if([filemanager fileExistsAtPath:path]){
         NSDictionary * attributes = [filemanager attributesOfItemAtPath:path error:nil];
@@ -627,6 +628,8 @@
                         self.conversation.lastMessage = @"[语音]";
                         msg.audioUrl = audiourl;
                         msg.messageType = @(messageType_audio);
+                        int length  = [dicMessage[@"length"] intValue];
+                        msg.audioLength = @(length/1000);
                     }else if ([typeMessage isEqualToString:@"map"]) {
                         self.conversation.lastMessage = @"[位置信息]";
                         msg.imageUrl = imageurl;
@@ -1833,7 +1836,6 @@
                 dictionary[@"length"]  = @([self getFileSize:message.audioUrl]);
             }
                 break;
-                
             default:
                 break;
         }
@@ -1995,10 +1997,24 @@
         
         audioButton.left = 50.0f;
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
-        [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+        if ([message.audioLength intValue] > 1000) {
+            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/1000] forState:UIControlStateNormal];
+        }else{
+            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+        }
+        
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
         Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
         Image_playing.top = imageview_BG.height/2 + 17 ;
+        
+         if ([message.messageStatus boolValue])
+         {
+             //other
+             [audioButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+         }else {
+             //self
+             [audioButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+         }
     }
     
     return cell;
@@ -2018,7 +2034,13 @@
 //        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString * strFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        NSString * fileNameWhole =  [NSString stringWithFormat:@"%@/%@.amr",strFile,filename];
+        NSString * fileNameWhole;
+        if ([audiourl containString:@".amr"]) {
+            fileNameWhole = [NSString stringWithFormat:@"%@/%@",strFile,filename];
+        }else{
+            fileNameWhole = [NSString stringWithFormat:@"%@/%@.amr",strFile,filename];
+        }
+        
         if(![fileManager fileExistsAtPath:fileNameWhole]) //如果不存在
         {
             button.userInteractionEnabled = NO;
@@ -2037,9 +2059,10 @@
                 [button hideIndicatorView];
                 button.userInteractionEnabled = YES;
                 int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+//                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
                 [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                 player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
+                [player prepareToPlay];
                 [player play];
                 [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1000];
             }];
