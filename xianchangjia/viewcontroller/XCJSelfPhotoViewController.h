@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJSelfPhotoViewController : UITableViewController
-
+@property (nonatomic,strong) NSString * userID;
 @end

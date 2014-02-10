@@ -18,6 +18,8 @@
 #import "ChatViewController.h"
 #import "Conversation.h"
 #import "CoreData+MagicalRecord.h"
+#import "XCJGroupPost_list.h"
+#import "XCJSelfPhotoViewController.h"
 
 @interface XCJAddUserTableViewController ()
 {
@@ -68,9 +70,7 @@
          @property (nonatomic, retain) NSNumber * sex;
          @property (nonatomic, retain) NSString * signature;*/
         
-        if (![self.UserInfo.signature isNilOrEmpty]) {
-            UserDict[@"个性签名"] = self.UserInfo.signature;
-        }
+        
         if (self.UserInfo.create_time) {
             @try {
                 UserDict[@"注册时间"] = [tools timeLabelTextOfTime:[self.UserInfo.create_time doubleValue]];
@@ -91,6 +91,24 @@
                 UserDict[@"地区"] = self.UserInfo.position;
             }
         }
+        if (![self.UserInfo.signature isNilOrEmpty]) {
+            UserDict[@"个性签名"] = self.UserInfo.signature;
+        }
+        
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dicreult = responseObject[@"result"];
+                NSArray * array = dicreult[@"posts"];
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                    UserDict[@"最新动态"] = post.content;
+                }];
+                [self.tableView reloadData];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            
+        }];
+        
         
     }
     // Uncomment the following line to preserve selection between presentations.
@@ -230,6 +248,14 @@
     title.text =  UserDict.allKeys[indexPath.row];
     NSString * text = UserDict.allValues[indexPath.row];
     content.text = text;
+    if ([title.text isEqualToString:@"最新动态"]) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
     [content setHeight:[self sizebyText:text]]; // set label content frame with tinkl
     return cell;
 }
@@ -241,6 +267,20 @@
     CGSize sizeToFit = [ text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(186.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
     return fmaxf(35.0f, sizeToFit.height + 18.0f );
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString * title = UserDict.allKeys[indexPath.row];
+    if ([title isEqualToString:@"最新动态"]) {
+        // enter to user des
+        XCJSelfPhotoViewController * selfviewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPhotoViewController"];
+        selfviewcontr.userID = self.UserInfo.uid;
+        selfviewcontr.title = self.UserInfo.nick;
+        [self.navigationController pushViewController:selfviewcontr animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

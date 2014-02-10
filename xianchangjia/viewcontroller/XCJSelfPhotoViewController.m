@@ -12,6 +12,7 @@
 #import "MLNetworkingManager.h"
 #import "XCJGroupPost_list.h"
 #import "XCJMessageReplyInfoViewController.h"
+#import "FCUserDescription.h"
 
 
 @interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -41,45 +42,68 @@
     UILabel * label_sign = (UILabel *)[self.tableView.tableHeaderView viewWithTag:2];
     UIImageView * imageIcon = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:3];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
-    if ([LXAPIController sharedLXAPIController].currentUser) {
+    if (!self.userID || [self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
+        label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+        //[LXAPIController sharedLXAPIController].currentUser.nick;
+        label_sign.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
         
-       
+        UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
+        if (chacheImage) {
+            [imagebg setImage:chacheImage];
+        }else{
+            //[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] [LXAPIController sharedLXAPIController].currentUser.background_image
+            [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+        }
+        [imageIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        // Uncomment the following line to preserve selection between presentations.
+        // self.clearsSelectionOnViewWillAppear = NO;
         
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+        
+        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
+        if (jsonData.length > 10) {
+            // parse
+            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+            
+            NSDictionary * responseObject =[data  objectFromJSONData] ;
+            NSDictionary * dicreult = responseObject[@"result"];
+            NSArray * array = dicreult[@"posts"];
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                [dataSource addObject:post];
+            }];
+            
+        }else{
+            // get json data from networking
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id],@"count":@"50"} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dicreult = responseObject[@"result"];
+                    NSArray * array = dicreult[@"posts"];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        [dataSource addObject:post];
+                    }];
+                    [self.tableView reloadData];
+                    if (array.count > 0) {
+                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache"];
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
     }
-    label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-    //[LXAPIController sharedLXAPIController].currentUser.nick;
-    label_sign.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
-    
-    UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
-    if (chacheImage) {
-        [imagebg setImage:chacheImage];
-    }else{
-        //[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] [LXAPIController sharedLXAPIController].currentUser.background_image
-        [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
-    }
-    [imageIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
-    if (jsonData.length > 10) {
-        // parse
-        NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-        
-        NSDictionary * responseObject =[data  objectFromJSONData] ;
-        NSDictionary * dicreult = responseObject[@"result"];
-        NSArray * array = dicreult[@"posts"];
-        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-            [dataSource addObject:post];
-        }];
-        
-    }else{
-        // get json data from networking
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id],@"count":@"50"} success:^(MLRequest *request, id responseObject) {
+    else{
+        imagebg.userInteractionEnabled = NO;
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id userdes, NSError *error) {
+            FCUserDescription * localdespObject = userdes;
+            label_name.text = localdespObject.nick;
+            label_sign.text = localdespObject.signature;
+            [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:localdespObject.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+             [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:160]]];
+        } withuid:self.userID];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.userID,@"count":@"50"} success:^(MLRequest *request, id responseObject) {
             if (responseObject) {
                 NSDictionary * dicreult = responseObject[@"result"];
                 NSArray * array = dicreult[@"posts"];
@@ -88,14 +112,13 @@
                     [dataSource addObject:post];
                 }];
                 [self.tableView reloadData];
-                if (array.count > 0) {
-                    [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache"];
-                }
             }
         } failure:^(MLRequest *request, NSError *error) {
             
         }];
     }
+    
+    
     
 }
 

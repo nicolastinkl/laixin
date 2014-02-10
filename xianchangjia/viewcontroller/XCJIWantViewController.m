@@ -14,7 +14,7 @@
 #import "XCJAppDelegate.h"
 #import "FCUserDescription.h"
 #import "XCJMessageReplylistController.h"
-
+#import "UIAlertViewAddition.h"
 
 @interface XCJIWantViewController ()
 
@@ -121,6 +121,7 @@
                     } withuid:contr.uid];
                     imageSign.hidden = NO;
                     image_New.hidden = NO;
+                    [image_New setFrame:CGRectMake(273, 2, 10, 10)];
                 }else{
                      image_New.hidden = YES;
                      badage.hidden = YES;
@@ -139,6 +140,7 @@
             label_name.text = @"抢你妹";
             badage.hidden = YES;
             image_New.hidden = YES;
+            [image_New setFrame:CGRectMake(273, 17, 10, 10)];
         }
             break;
             
@@ -164,7 +166,7 @@
            break;
         case 1:
         {
-            
+            [UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
         }
             break;
         default:

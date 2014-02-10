@@ -16,6 +16,8 @@
 #import "XCAlbumDefines.h"
 #import "DataHelper.h"
 #import "UIButton+Bootstrap.h"
+#import "XCJGroupPost_list.h"
+#import "XCJSelfPhotoViewController.h"
 
 @interface XCJUserInfoController ()
 {
@@ -102,7 +104,21 @@
         UserDict[@"个性签名"] = self.UserInfo.signature;
     }
     
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * dicreult = responseObject[@"result"];
+            NSArray * array = dicreult[@"posts"];
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                 UserDict[@"最新动态"] = post.content;
+            }];
+            [self.tableView reloadData];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        
+    }];
     
+   
     
     if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
         self.Button_Sendmsg.hidden = YES;
@@ -171,7 +187,17 @@
     title.text =  UserDict.allKeys[indexPath.row];
     NSString * text  = UserDict.allValues[indexPath.row];
     content.text = text;
+    if ([title.text isEqualToString:@"最新动态"]) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    }else{
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
     [content setHeight:[self sizebyText:text]]; // set label content frame with tinkl
+//    [content sizeToFit];
+//    [content setWidth:186.0f];
+    
     return cell;
 }
 
@@ -182,6 +208,18 @@
     CGSize sizeToFit = [ text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(186.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
     return fmaxf(35.0f, sizeToFit.height + 18.0f );
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString * title = UserDict.allKeys[indexPath.row];
+    if ([title isEqualToString:@"最新动态"]) {
+        // enter to user des
+        XCJSelfPhotoViewController * selfviewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPhotoViewController"];
+        selfviewcontr.userID = self.UserInfo.uid;
+        selfviewcontr.title = self.UserInfo.nick;
+        [self.navigationController pushViewController:selfviewcontr animated:YES];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
