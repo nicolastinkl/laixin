@@ -67,7 +67,7 @@
     }else{
         [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
     }
-    
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
