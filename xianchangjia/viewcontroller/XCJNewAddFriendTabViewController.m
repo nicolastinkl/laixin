@@ -205,10 +205,19 @@
         imgViewbuttonBG.hidden = YES;
         labelSign.text = @"已添加";
     }else{
-        button.hidden = NO;
-        imgViewbuttonBG.hidden = NO;
-        labelSign.text = @"";
-        [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[[LXAPIController sharedLXAPIController] chatDataStoreManager] isMyFriends:info.beAddFriendShips.uid]) {
+            //is my friend
+            button.hidden = YES;
+            imgViewbuttonBG.hidden = YES;
+            labelSign.text = @"已添加";
+            info.hasAdd = @(YES);
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+        }else{
+            button.hidden = NO;
+            imgViewbuttonBG.hidden = NO;
+            labelSign.text = @"";
+            [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     
 }

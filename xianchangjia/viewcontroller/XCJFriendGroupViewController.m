@@ -150,6 +150,24 @@
          newIcon.hidden = YES;
          newIcon_sign.hidden = YES;
      }
+    
+    UIBarButtonItem * baritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleBordered target:self action:@selector(showActionClick:)];
+    self.navigationItem.rightBarButtonItem = baritem;
+}
+
+-(IBAction)showActionClick:(id)sender
+{
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:Nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"查看消息列表", nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        XCJMessageReplylistController * viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplylistController"];
+        viewcontr.conversation = self.conversation;
+        [self.navigationController pushViewController:viewcontr animated:YES];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -215,7 +233,6 @@
                     [self failedGetActivitiesWithLastID:0];
                     [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
                 }];
-                
             }
                 break;
             case Enum_UpdateTopData:
