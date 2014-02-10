@@ -19,6 +19,10 @@
 {
     NSMutableArray * dataSource;
 }
+
+@property (nonatomic,assign) BOOL isLoading;
+@property (nonatomic,assign) BOOL isDontNeedLazyLoad;
+
 @end
 
 @implementation XCJSelfPhotoViewController
@@ -38,11 +42,13 @@
     
     NSMutableArray * array = [[NSMutableArray alloc]init];
     dataSource =array;
+    self.isDontNeedLazyLoad = NO;
     UILabel * label_name = (UILabel *)[self.tableView.tableHeaderView viewWithTag:1];
     UILabel * label_sign = (UILabel *)[self.tableView.tableHeaderView viewWithTag:2];
     UIImageView * imageIcon = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:3];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
     if (!self.userID || [self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
+        self.userID = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
         label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
         //[LXAPIController sharedLXAPIController].currentUser.nick;
         label_sign.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
@@ -71,31 +77,16 @@
             NSArray * array = dicreult[@"posts"];
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                //是当前用户
                 [dataSource addObject:post];
             }];
             
         }else{
             // get json data from networking
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id],@"count":@"50"} success:^(MLRequest *request, id responseObject) {
-                if (responseObject) {
-                    NSDictionary * dicreult = responseObject[@"result"];
-                    NSArray * array = dicreult[@"posts"];
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                        [dataSource addObject:post];
-                    }];
-                    [self.tableView reloadData];
-                    if (array.count > 0) {
-                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache"];
-                    }
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-                
-            }];
+            [self initDataSourcewithBeforeID:@""];
         }
     }
     else{
-        imagebg.userInteractionEnabled = NO;
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id userdes, NSError *error) {
             FCUserDescription * localdespObject = userdes;
             label_name.text = localdespObject.nick;
@@ -103,23 +94,42 @@
             [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:localdespObject.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
              [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:160]]];
         } withuid:self.userID];
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.userID,@"count":@"50"} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dicreult = responseObject[@"result"];
-                NSArray * array = dicreult[@"posts"];
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                    [dataSource addObject:post];
-                }];
-                [self.tableView reloadData];
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            
-        }];
+        
+        [self initDataSourcewithBeforeID:@""];
+       
     }
-    
-    
-    
+}
+
+-(void) initDataSourcewithBeforeID:(NSString *) beforeid
+{
+    NSDictionary * parems = @{@"uid":self.userID,@"count":@"50",@"before":beforeid};
+    if (beforeid.length <=0) {
+        parems = @{@"uid":self.userID,@"count":@"50"};
+    }
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:parems success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * dicreult = responseObject[@"result"];
+            NSArray * array = dicreult[@"posts"];
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                [dataSource addObject:post];
+            }];
+            [self.tableView reloadData];
+            if (array.count < 50) {
+                self.isDontNeedLazyLoad = YES;
+            }
+            self.isLoading = NO;
+            if (array.count > 0) {
+                if ([self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
+                    if(beforeid.length <= 0)
+                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache" withTimeoutInterval:60*5];
+                    // init with that...
+                }
+            }
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        self.isLoading = NO;
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -264,10 +274,33 @@
     return height-12;
 }
 
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (dataSource.count < 50) {
+        return;
+    }
+    if (self.isDontNeedLazyLoad) {
+        return;
+    }
+    if ((indexPath.row) >= (NSInteger)(dataSource.count-1)) {
+        if (!_isLoading) {
+            self.isLoading = YES;
+             XCJGroupPost_list * post = [dataSource lastObject];
+            [self initDataSourcewithBeforeID:post.postid];
+        }
+    }
+}
+
+
 -(IBAction)changeMyPhoto:(id)sender
 {
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"更换相册封面" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照" ,@"从相册选择", nil];
-    [sheet showInView:self.view];
+    if (!self.userID || [self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
+        
+        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"更换相册封面" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照" ,@"从相册选择", nil];
+        [sheet showInView:self.view];
+    }
+    
 }
 
 /*
