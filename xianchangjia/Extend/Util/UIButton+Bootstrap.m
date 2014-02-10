@@ -76,9 +76,12 @@
 
 -(void)dangerStyle{
     [self bootstrapStyle];
-    self.backgroundColor = [UIColor colorWithRed:217/255.0 green:83/255.0 blue:79/255.0 alpha:1];
-    self.layer.borderColor = [[UIColor colorWithRed:212/255.0 green:63/255.0 blue:58/255.0 alpha:1] CGColor];
-    [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:210/255.0 green:48/255.0 blue:51/255.0 alpha:1]] forState:UIControlStateHighlighted];
+    self.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"med-name-bg-0"]];
+    // [UIColor colorWithRed:217/255.0 green:83/255.0 blue:79/255.0 alpha:1];
+    self.layer.borderColor =[[UIColor colorWithPatternImage:[UIImage imageNamed:@"med-name-bg-0"]] CGColor];
+    // [[UIColor colorWithRed:212/255.0 green:63/255.0 blue:58/255.0 alpha:1] CGColor];
+//    [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:210/255.0 green:48/255.0 blue:51/255.0 alpha:1]] forState:UIControlStateHighlighted];
+     [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:235/255.0 green:235/255.0 blue:235/255.0 alpha:1]] forState:UIControlStateHighlighted];
 }
 
 - (void)addAwesomeIcon:(FAIcon)icon beforeTitle:(BOOL)before

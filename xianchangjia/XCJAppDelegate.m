@@ -570,6 +570,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 
             } withuid:uid];
             
+            //然后更新朋友圈最新发图
+            
+            
             
             
 #pragma mark 这里是群组聊天室 代码

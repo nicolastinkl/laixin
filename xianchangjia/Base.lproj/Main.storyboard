@@ -2419,6 +2419,45 @@
             </objects>
             <point key="canvasLocation" x="777" y="3728"/>
         </scene>
+        <!--Friend Group View Controller-->
+        <scene sceneID="Tgc-zy-v6e">
+            <objects>
+                <viewController restorationIdentifier="XCJFriendGroupViewController" storyboardIdentifier="XCJFriendGroupViewController" hidesBottomBarWhenPushed="YES" id="CvS-MW-qnH" customClass="XCJFriendGroupViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3Eq-cM-dk4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view tag="1" contentMode="scaleToFill" id="aFQ-iH-vbq">
+                                <rect key="frame" x="0.0" y="-50" width="320" height="332"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="opengroup_profile_cover" id="sTX-ka-glV">
+                                        <rect key="frame" x="0.0" y="-19" width="320" height="320"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <gestureRecognizers/>
+                                    </imageView>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatar_default_small" id="1VG-Cl-d2I">
+                                        <rect key="frame" x="237" y="250" width="70" height="70"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OKq-GI-QiN">
+                                        <rect key="frame" x="7" y="274" width="216" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ghj-qn-OMj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1156" y="3728"/>
+        </scene>
         <!--Create Group Table View Controller - 创建群组-->
         <scene sceneID="5mt-Uf-xmu">
             <objects>

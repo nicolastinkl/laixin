@@ -15,6 +15,7 @@
 #import "FCUserDescription.h"
 #import "XCJMessageReplylistController.h"
 #import "UIAlertViewAddition.h"
+#import "XCJFriendGroupViewController.h"
 
 @interface XCJIWantViewController ()
 
@@ -159,9 +160,11 @@
         {
             NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-            XCJMessageReplylistController * viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplylistController"];
-            viewcontr.conversation = contr;
+            
+            XCJFriendGroupViewController *viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFriendGroupViewController"];
+             viewcontr.conversation = contr;
             [self.navigationController pushViewController:viewcontr animated:YES];
+            
         }
            break;
         case 1:

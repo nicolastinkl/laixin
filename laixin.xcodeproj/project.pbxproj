@@ -334,6 +334,9 @@
 		86D9A886186D294600147631 /* LXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A885186D294600147631 /* LXUser.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
+		86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */; };
+		86E392BA18A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */; };
+		86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */; };
 		86E57CD818794DF600978AFA /* XCJChangeNickNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */; };
 		86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CDF18794E1100978AFA /* XCJChangeSignNaviController.m */; };
 		86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CE218794E2900978AFA /* XCJChangeNickViewController.m */; };
@@ -939,6 +942,11 @@
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
+		86E392B418A8B46500FFD8C7 /* XCJFriendGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupViewController.h; path = viewcontroller/XCJFriendGroupViewController.h; sourceTree = "<group>"; };
+		86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFriendGroupViewController.m; path = viewcontroller/XCJFriendGroupViewController.m; sourceTree = "<group>"; };
+		86E392B818A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupNewmsg.h; path = viewcontroller/views/XCJFriendGroupNewmsg.h; sourceTree = "<group>"; };
+		86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFriendGroupNewmsg.m; path = viewcontroller/views/XCJFriendGroupNewmsg.m; sourceTree = "<group>"; };
+		86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJFriendGroupNewmsg.xib; path = viewcontroller/views/XCJFriendGroupNewmsg.xib; sourceTree = "<group>"; };
 		86E57CD618794DF600978AFA /* XCJChangeNickNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeNickNaviController.h; path = viewcontroller/XCJChangeNickNaviController.h; sourceTree = "<group>"; };
 		86E57CD718794DF600978AFA /* XCJChangeNickNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChangeNickNaviController.m; path = viewcontroller/XCJChangeNickNaviController.m; sourceTree = "<group>"; };
 		86E57CDE18794E1100978AFA /* XCJChangeSignNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChangeSignNaviController.h; path = viewcontroller/XCJChangeSignNaviController.h; sourceTree = "<group>"; };
@@ -2142,6 +2150,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86E392B318A8B44800FFD8C7 /* FriendGroup */,
 				862F54B118A879EA005DFD6C /* WantView */,
 				8666187B18951B07000228FC /* AudioView */,
 				86608404188FBBDF00F4870B /* ActiveView */,
@@ -2395,6 +2404,26 @@
 				86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */,
 			);
 			name = LXDatabaseManager;
+			sourceTree = "<group>";
+		};
+		86E392B318A8B44800FFD8C7 /* FriendGroup */ = {
+			isa = PBXGroup;
+			children = (
+				86E392B718A8B98B00FFD8C7 /* viewFriendNewmsg */,
+				86E392B418A8B46500FFD8C7 /* XCJFriendGroupViewController.h */,
+				86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */,
+			);
+			name = FriendGroup;
+			sourceTree = "<group>";
+		};
+		86E392B718A8B98B00FFD8C7 /* viewFriendNewmsg */ = {
+			isa = PBXGroup;
+			children = (
+				86E392B818A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.h */,
+				86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */,
+				86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */,
+			);
+			name = viewFriendNewmsg;
 			sourceTree = "<group>";
 		};
 		86E57CDD18794DFB00978AFA /* change */ = {
@@ -2890,6 +2919,7 @@
 				86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */,
 				86E57CEF18795CC900978AFA /* city.plist in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
+				86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */,
 				8668E47D187540DB00D20C9E /* like_comment_bg@2x.png in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
 				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
@@ -3019,6 +3049,7 @@
 				86EB76E2185AA6CC00836947 /* TTTAttributedLabel.m in Sources */,
 				86D182941834AED30005901D /* UIView+Additon.m in Sources */,
 				86EB76C3185AA6CC00836947 /* MLCanPopUpImageView.m in Sources */,
+				86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */,
 				869CE52E186BE38D0004C1EC /* NSPersistentStore+MagicalRecord.m in Sources */,
 				86FB20F6186D8215006BDE32 /* FCFriends.m in Sources */,
 				865632E9185FFDDA00E9903C /* XCJMessageCenterViewController.m in Sources */,
@@ -3174,6 +3205,7 @@
 				86D182821834AED30005901D /* BundleHelper.m in Sources */,
 				862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */,
 				869CE51F186BE38D0004C1EC /* NSEntityDescription+MagicalDataImport.m in Sources */,
+				86E392BA18A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m in Sources */,
 				86E57CE618794E3500978AFA /* XCJChangeSignViewController.m in Sources */,
 				86EB76E0185AA6CC00836947 /* NSData+SRB64Additions.m in Sources */,
 				866995E61879087100233C47 /* XCJErWeiCodeViewController.m in Sources */,
