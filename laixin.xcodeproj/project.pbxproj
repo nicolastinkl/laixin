@@ -21,6 +21,8 @@
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
+		862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B318A87A00005DFD6C /* XCJIWantViewController.m */; };
+		862F54B818A87ED6005DFD6C /* LKBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B718A87ED6005DFD6C /* LKBadgeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86467A97188F8763004AC59C /* XCJJIhuoViewController.m */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -442,6 +444,10 @@
 		862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChatSendImgViewController.m; path = viewcontroller/XCJChatSendImgViewController.m; sourceTree = "<group>"; };
 		862EC4CF188E2A8B006F4D43 /* MTAnimatedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAnimatedLabel.h; sourceTree = "<group>"; };
 		862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAnimatedLabel.m; sourceTree = "<group>"; };
+		862F54B218A87A00005DFD6C /* XCJIWantViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJIWantViewController.h; path = viewcontroller/XCJIWantViewController.h; sourceTree = "<group>"; };
+		862F54B318A87A00005DFD6C /* XCJIWantViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJIWantViewController.m; path = viewcontroller/XCJIWantViewController.m; sourceTree = "<group>"; };
+		862F54B618A87ED6005DFD6C /* LKBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKBadgeView.h; sourceTree = "<group>"; };
+		862F54B718A87ED6005DFD6C /* LKBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LKBadgeView.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		86467A96188F8763004AC59C /* XCJJIhuoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJJIhuoViewController.h; path = viewcontroller/XCJJIhuoViewController.h; sourceTree = "<group>"; };
 		86467A97188F8763004AC59C /* XCJJIhuoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJJIhuoViewController.m; path = viewcontroller/XCJJIhuoViewController.m; sourceTree = "<group>"; };
@@ -1207,6 +1213,24 @@
 				862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */,
 			);
 			name = AnimationLabel;
+			sourceTree = "<group>";
+		};
+		862F54B118A879EA005DFD6C /* WantView */ = {
+			isa = PBXGroup;
+			children = (
+				862F54B218A87A00005DFD6C /* XCJIWantViewController.h */,
+				862F54B318A87A00005DFD6C /* XCJIWantViewController.m */,
+			);
+			name = WantView;
+			sourceTree = "<group>";
+		};
+		862F54B518A87ECE005DFD6C /* LKBadgeView */ = {
+			isa = PBXGroup;
+			children = (
+				862F54B618A87ED6005DFD6C /* LKBadgeView.h */,
+				862F54B718A87ED6005DFD6C /* LKBadgeView.m */,
+			);
+			name = LKBadgeView;
 			sourceTree = "<group>";
 		};
 		8646F8B9187A90CE004A8696 /* groupView */ = {
@@ -2118,6 +2142,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				862F54B118A879EA005DFD6C /* WantView */,
 				8666187B18951B07000228FC /* AudioView */,
 				86608404188FBBDF00F4870B /* ActiveView */,
 				8622C894187D8F2400776A38 /* Friends */,
@@ -2236,6 +2261,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				862F54B518A87ECE005DFD6C /* LKBadgeView */,
 				86ADDA321894E73E000A0C22 /* iOS-WebP */,
 				868B5D471893B068004D1743 /* PinYin4Objc */,
 				8646FDD118863CD2007CE6F4 /* UMAnalytics_Sdk_2.2.1.OpenUDID */,
@@ -2926,6 +2952,7 @@
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
 				86D182B41834AED30005901D /* NSObject+LKDBHelper.m in Sources */,
 				8668E474187540DB00D20C9E /* ActivityTableViewCell.m in Sources */,
+				862F54B818A87ED6005DFD6C /* LKBadgeView.m in Sources */,
 				86581E04187E95E500FCDC85 /* FCBeAddFriend.m in Sources */,
 				866618A618951B07000228FC /* ChatVoiceRecorderVC.m in Sources */,
 				86D182881834AED30005901D /* UIAlertViewAddition.m in Sources */,
@@ -3181,6 +3208,7 @@
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
 				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
 				86EB76D0185AA6CC00836947 /* AFHTTPSessionManager.m in Sources */,
+				862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
