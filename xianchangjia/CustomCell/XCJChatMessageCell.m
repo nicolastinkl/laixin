@@ -112,7 +112,7 @@
                 {
                     self.currentMessage.imageUrl = url;
                      MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[self.contentView subviewWithTag:5];
-                    [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:160]] placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]];
+                    [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:160]] placeholderImage:[UIImage imageNamed:@"aio_image_default"]];
                     imageview_Img.fullScreenImageURL = [NSURL URLWithString:url];
                 }
                     break;

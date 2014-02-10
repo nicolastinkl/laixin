@@ -1876,7 +1876,7 @@
     if ([message.messageType intValue] == messageType_image) {
         //display image  115 108
         labelContent.text  = @"";
-        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]]];
+        [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]] placeholderImage:[UIImage imageNamed:@"aio_image_default"]];
         imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];

@@ -250,31 +250,24 @@
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/Message?sessionid=YtcS7pKQSydYPnJ
     
-    NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
-    if(token.length > 0){
-        TokenAPP = token;
-        [self uploadImagetoken:token];
-    }else{
-        // token has 1 hour expire
-        [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
-            if (response) {
-                NSString * token =  response[@"token"];
-                
-                if ([token isNilOrEmpty]) {
-                    [SVProgressHUD dismiss];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
-                    [alert show];
-                }else{
-                [[EGOCache globalCache] setString:token forKey:@"uploadtoken" withTimeoutInterval:60*60];
+    // token has 1 hour expire
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
+        if (response) {
+            NSString * token =  response[@"token"];
+            
+            if ([token isNilOrEmpty]) {
+                [SVProgressHUD dismiss];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
+                [alert show];
+            }else{ 
                 [self.inputTextView resignFirstResponder];
                 [SVProgressHUD showWithStatus:@"正在发送..."];
                 
                 TokenAPP = token;
-                    [self uploadImagetoken:token];
-                }
+                [self uploadImagetoken:token];
             }
-        } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",@"Post",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
-    }
+        }
+    } withParems:[NSString stringWithFormat:@"upload/%@?sessionid=%@",@"Post",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
 -(void) uploadImagetoken:(NSString *)token
