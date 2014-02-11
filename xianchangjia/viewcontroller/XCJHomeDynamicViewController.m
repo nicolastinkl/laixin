@@ -113,8 +113,15 @@
         {
             
             ALAsset *asset  = obj;
-            //            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
-            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
+//            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
+//            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
+            
+            ALAssetRepresentation *assetRep = [asset defaultRepresentation];
+            CGImageRef imgRef = [assetRep fullResolutionImage];
+            UIImage *image = [UIImage imageWithCGImage:imgRef
+                                               scale:assetRep.scale
+                                         orientation:(UIImageOrientation)assetRep.orientation];
+            
             
             NSURL * url = [asset.defaultRepresentation url];
             PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];

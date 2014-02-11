@@ -31,8 +31,10 @@
 
 - (void) SendMessageRemoteImgOper:(RemoteImgListOperator *)objOper WithMessage:(NSMutableDictionary *) dict type:(int) type
 {
-    [self setRemoteImgOper:objOper];
+
     NSString * guid =  dict[@"MESSAGE_GUID"];
+    [self setRemoteImgOper:objOper withGUID:guid];
+    SLLog(@"guid : %@",guid);
     __block NSMutableDictionary *blockDict = [dict mutableCopy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -49,36 +51,37 @@
     });
 }
 
-
-- (void)setRemoteImgOper:(RemoteImgListOperator *)objOper
+- (void)setRemoteImgOper:(RemoteImgListOperator *)objOper  withGUID:(NSString * ) guid
 {
+    
+    NSString * _strSuccNotificationName = [NSString stringWithFormat:@"RemoteImgOperListSucc%@", guid];
+    NSString * _strFailedNotificationName = [NSString stringWithFormat:@"RemoteImgOperListFailed%@", guid];
+    
     if (_objRemoteImgListOper != objOper)
     {
         if (_objRemoteImgListOper)
         {
             SLog(@"register not ");            
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strSuccNotificationName object:nil];
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strFailedNotificationName object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:_strSuccNotificationName object:nil];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:_strFailedNotificationName object:nil];
         }else{}
         
         _objRemoteImgListOper = objOper;
         
         if (_objRemoteImgListOper)
         {
-            SLog(@"register    %@",_objRemoteImgListOper.m_strSuccNotificationName);
+            SLog(@"register    %@",_strSuccNotificationName);
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(sendMessageSucc:)
-                                                         name:_objRemoteImgListOper.m_strSuccNotificationName
+                                                         name:_strSuccNotificationName
                                                        object:nil];
             [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(sendMessageFail:)
-                                                         name:_objRemoteImgListOper.m_strFailedNotificationName
+                                                         name:_strFailedNotificationName
                                                        object:nil];
         }else{}
     }else{}
 }
-
-
 
 #pragma mark - RemoteImgListOper notification
 // 响应下载完成的通知，并显示图片。

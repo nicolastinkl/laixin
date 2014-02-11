@@ -43,6 +43,7 @@
 #import "ChatVoiceRecorderVC.h"
 #import "VoiceConverter.h"
 #import "EGOCache.h"
+#import "UIImage+Resize.h"
 
 #define  keyboardHeight 216
 #define  facialViewWidth 300
@@ -253,14 +254,12 @@
         FCMessage *msg = [FCMessage MR_createInContext:localContext];
         msg.text = @"";
         msg.messageSendStatus = @(4); // ready to send
-        NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-        NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-        msg.messageguid = guid;
+        msg.messageguid = [self getMD4HashWithObj];
         msg.sentDate = [NSDate date];
         msg.messageType = @(messageType_audio);
         msg.audioUrl = filePath;
         int leg = [self getFileSize:filePath];
-        msg.audioLength = @(leg/1000);
+        msg.audioLength = @(leg/1024);
         // message did not come, this will be on rigth
         msg.messageStatus = @(NO);
         msg.messageId =  @"";
@@ -282,9 +281,7 @@
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
                 msg.text = @"";
                 msg.messageSendStatus = @(4); // ready to send
-                NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-                NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-                msg.messageguid = guid;
+                msg.messageguid = [self getMD4HashWithObj];
                 msg.sentDate = [NSDate date];
                 msg.messageType = @(messageType_audio);
                 msg.audioUrl = filePath;
@@ -630,7 +627,7 @@
                         msg.audioUrl = audiourl;
                         msg.messageType = @(messageType_audio);
                         int length  = [dicMessage[@"length"] intValue];
-                        msg.audioLength = @(length/1000);
+                        msg.audioLength = @(length/1024);
                     }else if ([typeMessage isEqualToString:@"map"]) {
                         self.conversation.lastMessage = @"[位置信息]";
                         msg.imageUrl = imageurl;
@@ -863,21 +860,26 @@
 }
 
 
+-(NSString * ) getMD4HashWithObj
+{
+     NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+    int x = arc4random() % 1000000;
+    NSString * guid = [[NSString stringWithFormat:@"%f%d",doub, x] md5Hash];
+    SLLog(@"gener guid: %@",guid);
+    return guid;
+}
+
 #pragma mark -
 #pragma mark facialView delegate 点击表情键盘上的文字
 -(void)selectedFacialView:(NSString*)str
-{
-    
-    
+{    
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     FCMessage *msg = [FCMessage MR_createInContext:localContext];
     msg.text = str;
     msg.sentDate = [NSDate date];
     msg.messageType = @(messageType_emj);
     msg.messageSendStatus = @(4); // ready to send
-    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-    msg.messageguid = guid;
+    msg.messageguid = [self getMD4HashWithObj];
     // message did not come, this will be on rigth
     msg.messageStatus = @(NO);
     msg.messageId = @"";
@@ -1003,10 +1005,8 @@
             // message did not come, this will be on rigth
             msg.messageStatus = @(NO);
             msg.messageSendStatus = @(4); // ready to send
-            NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-            NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
             msg.messageId = @"";
-            msg.messageguid = guid;
+            msg.messageguid = [self getMD4HashWithObj];
             self.conversation.lastMessage = text;
             self.conversation.lastMessageDate = [NSDate date];
             self.conversation.badgeNumber = @0;
@@ -1140,9 +1140,7 @@
     NSNumber * lat =  notity[@"lat"];
     NSNumber * log =  notity[@"log"];
     
-    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-    NSString *key = [NSString stringWithFormat:@"%@%@", guid, @".jpg"];
+    NSString *key = [NSString stringWithFormat:@"%@%@", [self getMD4HashWithObj], @".jpg"];
     NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
     NSData *webData = UIImageJPEGRepresentation(image, 0.5f);
     [webData writeToFile:file atomically:YES];
@@ -1157,7 +1155,7 @@
     msg.messageStatus = @(NO);
     msg.messageSendStatus = @(4); // ready to send
     msg.messageId = @"";
-    msg.messageguid = guid;
+    msg.messageguid = [self getMD4HashWithObj];
     msg.text = address;
     msg.longitude = log;
     msg.latitude = lat;
@@ -1396,7 +1394,11 @@
     XCJChatSendImgViewController * chatImgView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJChatSendImgViewController"];
     //    chatImgView.imageview.image = [postImage copy];
     UIImage *image = theInfo[UIImagePickerControllerOriginalImage];
-    chatImgView.imageviewSource = image;
+    int Wasy = image.size.width/APP_SCREEN_WIDTH;
+    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
+    int quality = Wasy/2;
+    UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+    chatImgView.imageviewSource = newimage;
     chatImgView.delegate = self;
     [self presentViewController:chatImgView animated:YES completion:^{
     }];
@@ -1512,13 +1514,10 @@
     
     SLog(@"start uploading....");
     
-    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-    NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-    NSString *key = [NSString stringWithFormat:@"%@%@", guid, @".jpg"];
+    NSString *key = [NSString stringWithFormat:@"%@%@", [self getMD4HashWithObj], @".jpg"];
     NSString *file = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
     NSData *webData = UIImageJPEGRepresentation(filePath, 0.5f);
-    [webData writeToFile:file atomically:YES];
-    
+    [webData writeToFile:file atomically:YES];    
     
     NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
     FCMessage *msg = [FCMessage MR_createInContext:localContext];
@@ -1530,7 +1529,7 @@
     msg.messageStatus = @(NO);
     msg.messageSendStatus = @(4); // ready to send
     msg.messageId = @"";
-    msg.messageguid = guid;
+    msg.messageguid = [self getMD4HashWithObj];
     self.conversation.lastMessage = @"[图片]";
     self.conversation.lastMessageDate = [NSDate date];
     self.conversation.badgeNumber = @0;
@@ -1999,7 +1998,7 @@
         audioButton.left = 50.0f;
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         if ([message.audioLength intValue] > 1000) {
-            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/1000] forState:UIControlStateNormal];
+            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/1024] forState:UIControlStateNormal];
         }else{
             [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
         }
@@ -2065,18 +2064,18 @@
                 player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
                 [player prepareToPlay];
                 [player play];
-                [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1000];
+                [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1024];
             }];
             [downloadTask resume];
         }else{
             button.userInteractionEnabled = YES;
             int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-            [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+            [button setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
             [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
             player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
             [player prepareToPlay];
             [player play];
-            [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1000];
+            [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1024];
         }
         
     }else

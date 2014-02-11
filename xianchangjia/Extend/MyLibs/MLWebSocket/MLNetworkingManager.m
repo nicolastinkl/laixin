@@ -53,7 +53,6 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
         NSString * MLNetworkingManagerBaseURLString = [USER_DEFAULT objectForKey:KeyChain_Laixin_systemconfig_websocketURL];
         _sharedManager.baseURL = [NSURL URLWithString:MLNetworkingManagerBaseURLString];
     });
-    
     return _sharedManager;
 }
 

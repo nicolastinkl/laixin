@@ -12,6 +12,8 @@
 #import "FCMessage.h"
 #import "CoreData+MagicalRecord.h"
 #import "UIImage+WebP.h"
+#import "UIImage+Resize.h"
+
 @protocol DownloadImgProgressDelegate <NSObject>
 
 - (void)setProgress:(float)newProgress;
@@ -197,7 +199,12 @@
             {
                 // 图片压缩处理
                 UIImage * image = [UIImage imageWithContentsOfFile:strSrcURL];
-                NSData *FileData  =  [UIImage imageToWebP:image quality:75.0];
+                int Wasy = image.size.width/APP_SCREEN_WIDTH;
+                int Hasy = image.size.height/APP_SCREEN_HEIGHT;
+                int quality = Wasy/2;
+                UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+                  NSData * FileData = UIImageJPEGRepresentation(newimage, 0.5);
+//                NSData *FileData  =  [UIImage imageToWebP:newimage quality:75.0];
                 [formData appendPartWithFileData:FileData name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
             }
                 break;

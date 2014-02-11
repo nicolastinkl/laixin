@@ -21,7 +21,8 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImage+Addition.h"
 #import "UIImage+WebP.h"
-
+#import "UIImage+Resize.h"
+#import "XCAlbumDefines.h"
 
 @interface PostActivityViewController () <UITextViewDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate,UIAlertViewDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 {
@@ -84,9 +85,6 @@
     
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamedTwo:@"header_bg_opaque"] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStyleDone target:self action:@selector(CompletionPostImage:)];
-    
-    self.title = @"发布动态";
     
 //    //scrollView
 //    self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, self.view.frameWidth, self.view.frameHeight)];
@@ -128,28 +126,28 @@
 //    
 //    [_scrollView addSubview:_postImageView];
     
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStyleDone target:self action:@selector(CompletionPostImage:)];
+    
+    self.title = @"发布动态";
+    
     self.inputTextView = (UITextView * )[self.view subviewWithTag:2];
     self.postImageView = (UIImageView * )[self.view subviewWithTag:1];
     if (_postImage) {
-        if(self.postImage.imageOrientation!=UIImageOrientationUp)
-        {
-            self.postImage = [self.postImage fixOrientation] ;//[tools rotateImage:self.postImage];
-        }
-        
+//        self.postImage = [self.postImage resizedImage:CGSizeMake(self.postImage.size.width/(self.postImage.size.width/APP_SCREEN_WIDTH), self.postImage.size.height/(self.postImage.size.height/APP_SCREEN_HEIGHT)) interpolationQuality:0.5];
+//         UIImage * newimg = [self.postImage fixOrientation];
         _postImageView.image = self.postImage;
     }
     
     _postImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeImage)];
     [_postImageView addGestureRecognizer:tapGes];
-
     
     double delayInSeconds = 0.3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
          [_inputTextView becomeFirstResponder];
     });
-     
     
 }
 
@@ -211,12 +209,10 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    
     UIImage * image =  [theInfo objectForKey:UIImagePickerControllerOriginalImage];
-    
-    _postImageView.image = image;
-    
-    self.filePath = [self uploadContent:theInfo];
+    self.postImage = image;
+    _postImageView.image = self.postImage;
+//    self.filePath = [self uploadContent:theInfo];
 }
 
 
@@ -245,12 +241,12 @@
     _postImage = [postImage fixOrientation];
 }
 
-
 - (void)uploadFile{
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/Message?sessionid=YtcS7pKQSydYPnJ
     
     // token has 1 hour expire
+    [SVProgressHUD showWithStatus:@"正在发送..."];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
         if (response) {
             NSString * token =  response[@"token"];
@@ -261,8 +257,6 @@
                 [alert show];
             }else{ 
                 [self.inputTextView resignFirstResponder];
-                [SVProgressHUD showWithStatus:@"正在发送..."];
-                
                 TokenAPP = token;
                 [self uploadImagetoken:token];
             }
@@ -285,21 +279,17 @@
     [parameters setValue:@"" forKey:@"x:length"];
     [parameters setValue:self.gID forKey:@"x:gid"];
     
-    NSData * imageData = UIImageJPEGRepresentation(self.postImage, 0.5);
-//     NSData *imageData  =  [UIImage imageToWebP:self.postImage quality:75.0];
-    
+    int Wasy = self.postImage.size.width/APP_SCREEN_WIDTH;
+    int Hasy = self.postImage.size.height/APP_SCREEN_HEIGHT;
+    int quality = Wasy/2;
+    UIImage * newimage = [self.postImage resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+    NSData * imageData = UIImageJPEGRepresentation(newimage, 0.5);
+    //     NSData *imageData  =  [UIImage imageToWebP:self.postImage quality:75.0];
+    SLog(@"%d KB",imageData.length/1024);
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
           [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3" }
-        
-// responseObject {
-//        errno = 5;
-//        error = "No known serializer for object: datetime.datetime(2014, 1, 9, 17, 35, 39)";
-//    }
-        
-//        SLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {
@@ -313,8 +303,8 @@
                 glist.ilike = NO;
                 glist.like = 0;
                 glist.replycount = 0;
-                glist.width = [self.postImage size].width;
-                glist.height = [self.postImage size].height;
+                glist.width = [newimage size].width;
+                glist.height = [newimage size].height;
                 glist.group_id = self.gID;
                 glist.time = [[NSDate date] timeIntervalSinceNow];//[NSDate timeIntervalSinceReferenceDate];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
@@ -356,6 +346,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
+        [SVProgressHUD showWithStatus:@"正在发送..."];
         [self uploadImagetoken:TokenAPP];
     }
 }

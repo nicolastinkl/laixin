@@ -156,7 +156,6 @@ static const CGFloat SVProgressHUDRingThickness = 6;
     [[self sharedView] showImage:image status:string duration:displayInterval];
 }
 
-
 #pragma mark - Dismiss Methods
 
 + (void)popActivity {

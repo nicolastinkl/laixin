@@ -51,16 +51,20 @@
         _arrRemoteImgOper = [[NSMutableArray alloc] init];
         
         
-        NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
-        NSString * guid = [[NSString stringWithFormat:@"%f",doub] md5Hash];
-        
-        _strSuccNotificationName = [NSString stringWithFormat:@"RemoteImgOperListSucc%@", guid];
-        _strFailedNotificationName = [NSString stringWithFormat:@"RemoteImgOperListFailed%@", guid];
-        
         _iListSize = INT_DefaultListSize;
     }else{}
     return self;
 }
+
+
+-(NSString * ) getMD4HashWithObj
+{
+    NSTimeInterval doub = [[NSDate date] timeIntervalSinceNow];
+    int x = arc4random() % 1000000;
+    NSString * guid = [[NSString stringWithFormat:@"%f%d",doub, x] md5Hash];
+    return guid;
+}
+
 
 - (void)dealloc
 {
@@ -100,6 +104,8 @@
 {
     if (guid && guid.length > 0) {
         
+        _strSuccNotificationName = [NSString stringWithFormat:@"RemoteImgOperListSucc%@", guid];
+        _strFailedNotificationName = [NSString stringWithFormat:@"RemoteImgOperListFailed%@", guid];
         
         __block NSString *strBlockURL = [guid copy];
         __weak id progressBlock = progress;

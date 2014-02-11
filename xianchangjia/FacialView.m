@@ -45,10 +45,18 @@
 {
     if (delegate) {
         NSString * name = [[GlobalData sharedGlobalData] facImageNameWithIndex:(bt.tag)];
-        [delegate selectedFacialView:name];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(selectedFacialView:) object:name];
+        [self performSelector:@selector(selectedFacialView:) withObject:name afterDelay:0.3];
+//        [delegate selectedFacialView:name];
     }
-
 }
+
+-(void)selectedFacialView:(NSString*)name
+{
+    [delegate selectedFacialView:name];
+}
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
