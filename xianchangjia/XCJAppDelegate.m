@@ -95,6 +95,18 @@ static NSString * const kLaixinStoreName = @"Laixins";
             [self.tabBarController.tabBar.items[0] setBadgeValue:nil];
             [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         }
+        
+        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+        ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+        if ([ConverRe.content isEqualToString:@"新朋友圈消息"]) {
+            [self.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+        }else{
+            if ([[ConverRe badgeNumber] intValue] > 0) {
+                 [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[ConverRe.badgeNumber intValue]]];
+            }
+           
+        }
+        
     }
 }
 
@@ -308,24 +320,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
             ConverRe.badgeNumber = @(unreadNumber);
             [localContext MR_saveToPersistentStoreAndWait];
             
+            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",unreadNumber]];
             
-            
-            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
-            __block int brage = 0;
-            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                ConverReply * con = obj;
-                brage += [con.badgeNumber integerValue];
-            }];
-            if (brage>0) {
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
-                
-            }else{
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
-                
-            }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
         }else if ([eventType isEqualToString:@"newreply"])
@@ -369,24 +365,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
             ConverRe.badgeNumber = @(unreadNumber);
             
             [localContext MR_saveToPersistentStoreAndWait];
-
-            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
-            __block int brage = 0;
-            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
-
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                ConverReply * con = obj;
-                brage += [con.badgeNumber integerValue];
-            }];
-            if (brage>0) {
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
-                
-            }else{
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
-                
-            }
+            
+            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",unreadNumber]];
+            
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
             
@@ -715,7 +696,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
     return YES;
 }
 
-
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
     NSInteger index =  tabBarController.selectedIndex;
@@ -724,7 +704,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 //    }
 //    
     if (index == 1) {
-        [tabBarController.tabBar.items[1] setBadgeValue:nil];
+        //[tabBarController.tabBar.items[1] setBadgeValue:nil];
     }
 }
 
@@ -888,28 +868,23 @@ static NSString * const kLaixinStoreName = @"Laixins";
         
         if([XCJAppDelegate hasLogin]){
             
-            NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
-            __block int brage = 0;
-            NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
-            
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                ConverReply * con = obj;
-                brage += [con.badgeNumber integerValue];
-            }];
-            if (brage>0) {
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
-                
-            }else{
-                
-                [self.tabBarController.tabBar.items[2] setBadgeValue:nil];
-                
+            { //我的好友
+                NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd == %@",@NO];
+                NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
+                if (cont > 0 || [USER_DEFAULT boolForKey:KeyChain_Laixin_message_GroupBeinvite]) {
+                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                }else{
+                    
+                    [self.tabBarController.tabBar.items[1] setBadgeValue:nil];
+                }
             }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
             NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
             NSDictionary * parames = @{@"sessionid":sessionid};
             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObjectsss) {
+              
+                {
                 
                 // 读取事件
                 // get  event.read(pos=0)
@@ -932,6 +907,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     }
                 } failure:^(MLRequest *request, NSError *error) {
                 }];
+                }
+                
                 
                 //读取未读私信
                 //message.read(afterid=0) 读私信
@@ -1050,11 +1027,61 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
                     
                 }];
+                //读取朋友圈新事件
+                {
+                    NSDictionary * parames = @{@"count":@"1"};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                        //    postid = 12;
+                        /*
+                         Result={
+                         “posts”:[*/
+                        if (responseObject) {
+                            NSDictionary * groups = responseObject[@"result"];
+                            NSArray * postsDict =  groups[@"posts"];
+                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                if(idx == 0)
+                                {
+                                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                                    int oldpostid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+                                    if (oldpostid <= 0 || oldpostid != [post.postid intValue]) {
+                                        [USER_DEFAULT setInteger:[post.postid intValue] forKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+                                        [USER_DEFAULT synchronize];
+                                        
+                                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+                                        ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+                                        if (ConverRe == nil) {
+                                            ConverRe = [ConverReply MR_createInContext:localContext];
+                                        }
+                                        ConverRe.uid = post.uid;
+                                        ConverRe.postid = post.postid;
+                                        ConverRe.content = @"新朋友圈消息";
+                                        ConverRe.time = @(post.time);
+                                        
+                                        [localContext MR_saveToPersistentStoreAndWait];
+                                        //提示有新朋友圈消息
+                                        if ([ConverRe.badgeNumber intValue]<=0) {
+                                            [self.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+                                        }else{
+                                            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[ConverRe.badgeNumber intValue]]];
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }];
+                        }
+                    } failure:^(MLRequest *request, NSError *error) {
+                    }];
+                }
+
+                
             } failure:^(MLRequest *request, NSError *error) {
             }];
+      
             
-            
-        }
+    }
     });
 
 }

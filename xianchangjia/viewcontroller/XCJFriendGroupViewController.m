@@ -90,6 +90,15 @@
         [tablehead setHeight:300.0f];
     }
     
+    
+    NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+    ConverReply * con = [ConverReply MR_findFirstWithPredicate:predicatesss];
+    if ([con.content isEqualToString:@"新朋友圈消息"]) {
+        con.content = @"";
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    }
+    
+    
     double delayInSeconds = .1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -105,6 +114,7 @@
             [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                 lasID = [post.postid integerValue];
+                SLLog(@"lasID : %@",post.postid);
                 [self.activities addObject:post];
             }];
             [self successGetActivities:self.activities withLastID:lasID];
@@ -120,7 +130,16 @@
      newIcon = (UIImageView *) [tablehead subviewWithTag:5];
      newIcon_sign = (UIImageView *) [tablehead subviewWithTag:7];
     label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-    [label_bg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+
+    
+    UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
+    if (chacheImage) {
+        [label_bg setImage:chacheImage];
+    }else{
+        //[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick] [LXAPIController sharedLXAPIController].currentUser.background_image
+           [label_bg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:[LXAPIController sharedLXAPIController].currentUser.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+    }
+    
     [label_icon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:160]]];
     [label_bg setHeight:270.0f];
     
@@ -173,6 +192,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+   
     if (tablehead) {
         if ([self.conversation.badgeNumber intValue] > 0) {
         [tablehead setHeight:340.0f];
@@ -208,8 +228,7 @@
         switch (typeIndex) {
             case Enum_initData:
             {
-                NSDictionary * parames = @{@"count":@"20"};
-                
+                NSDictionary * parames = @{@"count":@"20"};                
                 [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
                     //    postid = 12;
                     /*
@@ -239,31 +258,31 @@
             {
                 //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
                 //                Result=同11
-                NSDictionary* parames = @{@"count":@(20),@"before":@(lastID)};
-                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline" parameters:parames success:^(MLRequest *request, id responseObject) {
-                    NSDictionary * groups = responseObject[@"result"];
-                    NSArray * postsDict =  groups[@"posts"];
-                    __block NSInteger lasID = 0;
-                    if (postsDict &&  postsDict.count > 0) {
-                        
-                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                            if (post) {
-                                lasID = [post.postid integerValue];
-                                [self.activities insertObject:post atIndex:0];
-                                [self.cellHeights insertObject:@0 atIndex:0];
-                                [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-                            }
-                        }];
-                        [self successGetActivities:self.activities withLastID:lasID];
-                    }else{
-                        [self failedGetActivitiesWithLastID:0];
-                    }
-                    
-                } failure:^(MLRequest *request, NSError *error) {
-                    [self failedGetActivitiesWithLastID:0];
-                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                }];
+//                NSDictionary* parames = @{@"count":@(20),@"before":@(lastID)};
+//                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline" parameters:parames success:^(MLRequest *request, id responseObject) {
+//                    NSDictionary * groups = responseObject[@"result"];
+//                    NSArray * postsDict =  groups[@"posts"];
+//                    __block NSInteger lasID = 0;
+//                    if (postsDict &&  postsDict.count > 0) {
+//                        
+//                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+//                            if (post) {
+//                                lasID = [post.postid integerValue];
+//                                [self.activities insertObject:post atIndex:0];
+//                                [self.cellHeights insertObject:@0 atIndex:0];
+//                                [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+//                            }
+//                        }];
+//                        [self successGetActivities:self.activities withLastID:lasID];
+//                    }else{
+//                        [self failedGetActivitiesWithLastID:0];
+//                    }
+//                    
+//                } failure:^(MLRequest *request, NSError *error) {
+//                    [self failedGetActivitiesWithLastID:0];
+//                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+//                }];
             }
                 break;
             case Enum_MoreData:

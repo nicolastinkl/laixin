@@ -10,10 +10,14 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="340"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="opengroup_profile_cover" translatesAutoresizingMaskIntoConstraints="NO" id="Y6S-vx-evf">
+                <imageView clipsSubviews="YES" tag="2" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="opengroup_profile_cover" translatesAutoresizingMaskIntoConstraints="NO" id="Y6S-vx-evf">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="270"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <gestureRecognizers/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="aio_sendimage_lastmark" translatesAutoresizingMaskIntoConstraints="NO" id="dgH-dl-sDx">
+                    <rect key="frame" x="233" y="216" width="74" height="74"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="3" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="avatar_default_small" translatesAutoresizingMaskIntoConstraints="NO" id="Pd3-YF-yvc">
                     <rect key="frame" x="235" y="218" width="70" height="70"/>
@@ -47,6 +51,7 @@
         </view>
     </objects>
     <resources>
+        <image name="aio_sendimage_lastmark" width="79" height="79"/>
         <image name="avatar_default_small" width="34" height="34"/>
         <image name="fbc_glyphviewheaderdisclosureindicator" width="20" height="20"/>
         <image name="opengroup_profile_cover" width="320" height="250"/>

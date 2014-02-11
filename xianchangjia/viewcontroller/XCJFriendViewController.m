@@ -134,6 +134,14 @@
     [self add_friend_Notify:nil];
     [self group_invite_Notify:nil];
     
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd == %@",@NO];
+    NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
+    if (cont > 0 || [USER_DEFAULT boolForKey:KeyChain_Laixin_message_GroupBeinvite]) {
+        [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+    }else{
+        
+        [self.tabBarController.tabBar.items[1] setBadgeValue:nil];
+    }
 }
 - (void) add_friend_Notify:(NSNotification * ) notiy
 {

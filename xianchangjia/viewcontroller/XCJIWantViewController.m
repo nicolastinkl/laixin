@@ -45,28 +45,26 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     [[self tableView] reloadData];
     [self MainappControllerUpdateDataReplyMessage:nil];
 }
 
 -(void) MainappControllerUpdateDataReplyMessage:(NSNotification * ) noty
 {
-    NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"badgeNumber > %@", @"0"];
-    __block int brage = 0;
-    NSArray * array = [ConverReply MR_findAllWithPredicate:predicatesss];
-    
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        ConverReply * con = obj;
-        brage += [con.badgeNumber integerValue];
-    }];
+    NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+    ConverReply * con = [ConverReply MR_findFirstWithPredicate:predicatesss];
     XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-    if (brage > 0) {
-        [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",brage]];
+    if ([con.badgeNumber intValue] > 0) {
+        [delegate.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[con.badgeNumber intValue]]];
     }else{
-        [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+        if ([con.content isEqualToString:@"新朋友圈消息"]) {
+            [delegate.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+        }else{
+            [delegate.tabBarController.tabBar.items[2] setBadgeValue:nil];
+        }
     }
     [self.tableView reloadData];
 }
@@ -109,12 +107,13 @@
         case 0:
         {
            label_name.text = @"朋友圈";
-            NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
+            NSPredicate * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
             
             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
             if (contr) {
-                if ([contr.badgeNumber intValue ] > 0) {
-                    badage.text = [NSString stringWithFormat:@"%@",contr.badgeNumber];
+                if ([contr.badgeNumber intValue ] > 0 || [contr.content isEqualToString:@"新朋友圈消息"]) {
+                    if([contr.badgeNumber intValue ] > 0)
+                        badage.text = [NSString stringWithFormat:@"%@",contr.badgeNumber];
                     badage.hidden = NO;
                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id resobj, NSError *error) {
                         FCUserDescription * localdespObject = resobj;
@@ -126,6 +125,7 @@
                 }else{
                      image_New.hidden = YES;
                      badage.hidden = YES;
+                    imageSign.hidden = YES;
                 }
             }else{
                 badage.text = @"";
