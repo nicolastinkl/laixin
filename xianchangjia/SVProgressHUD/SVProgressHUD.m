@@ -152,7 +152,7 @@ static const CGFloat SVProgressHUDRingThickness = 6;
 }
 
 + (void)showImage:(UIImage *)image status:(NSString *)string {
-    NSTimeInterval displayInterval = [[SVProgressHUD sharedView] displayDurationForString:string] + 1.5;
+    NSTimeInterval displayInterval = [[SVProgressHUD sharedView] displayDurationForString:string] + 0.5;
     [[self sharedView] showImage:image status:string duration:displayInterval];
 }
 

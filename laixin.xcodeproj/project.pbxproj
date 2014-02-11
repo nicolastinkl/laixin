@@ -23,6 +23,7 @@
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
 		862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B318A87A00005DFD6C /* XCJIWantViewController.m */; };
 		862F54B818A87ED6005DFD6C /* LKBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B718A87ED6005DFD6C /* LKBadgeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86467A97188F8763004AC59C /* XCJJIhuoViewController.m */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -451,6 +452,8 @@
 		862F54B318A87A00005DFD6C /* XCJIWantViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJIWantViewController.m; path = viewcontroller/XCJIWantViewController.m; sourceTree = "<group>"; };
 		862F54B618A87ED6005DFD6C /* LKBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKBadgeView.h; sourceTree = "<group>"; };
 		862F54B718A87ED6005DFD6C /* LKBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LKBadgeView.m; sourceTree = "<group>"; };
+		863FCCA218A9F0C700422DEB /* HTCopyableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCopyableLabel.h; sourceTree = "<group>"; };
+		863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCopyableLabel.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		86467A96188F8763004AC59C /* XCJJIhuoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJJIhuoViewController.h; path = viewcontroller/XCJJIhuoViewController.h; sourceTree = "<group>"; };
 		86467A97188F8763004AC59C /* XCJJIhuoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJJIhuoViewController.m; path = viewcontroller/XCJJIhuoViewController.m; sourceTree = "<group>"; };
@@ -1239,6 +1242,15 @@
 				862F54B718A87ED6005DFD6C /* LKBadgeView.m */,
 			);
 			name = LKBadgeView;
+			sourceTree = "<group>";
+		};
+		863FCCA118A9F0BE00422DEB /* coyLabel */ = {
+			isa = PBXGroup;
+			children = (
+				863FCCA218A9F0C700422DEB /* HTCopyableLabel.h */,
+				863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */,
+			);
+			name = coyLabel;
 			sourceTree = "<group>";
 		};
 		8646F8B9187A90CE004A8696 /* groupView */ = {
@@ -2270,6 +2282,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				863FCCA118A9F0BE00422DEB /* coyLabel */,
 				862F54B518A87ECE005DFD6C /* LKBadgeView */,
 				86ADDA321894E73E000A0C22 /* iOS-WebP */,
 				868B5D471893B068004D1743 /* PinYin4Objc */,
@@ -3012,6 +3025,7 @@
 				866516A3187BF276001F05F6 /* qrencode.c in Sources */,
 				86D182981834AED30005901D /* UIView+Shadow.m in Sources */,
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
+				863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */,
 				8622C87B187D192100776A38 /* ListItem.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,

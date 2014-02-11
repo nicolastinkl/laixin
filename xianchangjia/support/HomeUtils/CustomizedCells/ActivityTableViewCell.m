@@ -22,6 +22,7 @@
 #import "FCUserDescription.h"
 #import "XCAlbumDefines.h"
 #import "UIView+Additon.h"
+#import "HTCopyableLabel.h"
 
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
@@ -33,7 +34,7 @@
 //发布时间Label
 @property (nonatomic, strong) UILabel *timeLabel;
 //内容Label
-@property (nonatomic, strong) UILabel *contentLabel;
+@property (nonatomic, strong) HTCopyableLabel *contentLabel;
 //图片View
 @property (nonatomic, strong) MLCanPopUpImageView *activityImageView;
 //评论按钮
@@ -102,10 +103,9 @@
         _lineCell.backgroundColor = [UIColor lightGrayColor];
         _lineCell.alpha = 0.6f;
         [self addSubview:_lineCell];
-        
-        
+                
         //正文
-        self.contentLabel = [[UILabel alloc] init];
+        self.contentLabel = [[HTCopyableLabel alloc] init];
         _contentLabel.font = [UIFont systemFontOfSize:14];
         _contentLabel.numberOfLines = 0;
         _contentLabel.backgroundColor = [UIColor clearColor];
