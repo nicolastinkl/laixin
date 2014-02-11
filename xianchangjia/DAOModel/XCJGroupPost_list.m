@@ -44,6 +44,7 @@
     result.like = [DataHelper getIntegerValue:dict[@"like"] defaultValue:0];
     result.width = [DataHelper getIntegerValue:dict[@"width"] defaultValue:0];
     result.height = [DataHelper getIntegerValue:dict[@"height"] defaultValue:0];
+    result.excount =[DataHelper getIntegerValue:dict[@"excount"] defaultValue:0];
     NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
     result.time = timeinter;
     result.timeText = [tools timeLabelTextOfTime:timeinter];
@@ -54,6 +55,10 @@
     {
         NSMutableArray * array = [[NSMutableArray alloc] init];
         result.likeUsers = array;
+    }
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        result.excountImages = array;
     }
     return result;
 }

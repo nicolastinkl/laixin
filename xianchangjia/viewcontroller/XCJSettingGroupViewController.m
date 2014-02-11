@@ -61,12 +61,10 @@
             
            
         } failure:^(MLRequest *request, NSError *error) {
-            
             POHorizontalList *  list = [[POHorizontalList alloc] initWithFrame:CGRectMake(0.0, 0.0, 290.0, 135.0) title:@"群成员" items:freeList];
             [list setDelegate:self];
             UIView * view =  [self.tableView.tableHeaderView subviewWithTag:11];
             [view addSubview:list];
-            
         }];
     }
     // Uncomment the following line to preserve selection between presentations.

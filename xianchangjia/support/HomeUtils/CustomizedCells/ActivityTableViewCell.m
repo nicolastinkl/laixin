@@ -23,7 +23,7 @@
 #import "XCAlbumDefines.h"
 #import "UIView+Additon.h"
 #import "HTCopyableLabel.h"
-
+#import "POHorizontalList.h"
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
 
@@ -44,6 +44,8 @@
 //举报按钮
 @property (nonatomic, strong) UIButton *ReportButton;
 
+//多图提示
+@property (nonatomic, strong) POHorizontalList * imageListScroll;
 
 //赞和评论的背景View，主要就是为了带箭头
 @property (nonatomic, strong) UIImageView *likeCommentBackView;
@@ -114,7 +116,7 @@
         
         //图片
         self.activityImageView = [[MLCanPopUpImageView alloc] init];
-        [self addSubview:_activityImageView];
+        [self addSubview:_activityImageView];        
         
         //评论按钮
         self.commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -327,9 +329,11 @@
      [_contentLabel sizeToFit];//自适应高度
     yOffset += _contentLabel.frameHeight+10;
     
+    /**
+     *  单图模式
+     */
     if (_activity.imageURL && _activity.imageURL.length > 5) {
         _activityImageView.hidden = NO;
-        
         if (_activity.width > 2000) {
             _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
             yOffset += _activityImageView.frameHeight+10;  // 正方形

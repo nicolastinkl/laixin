@@ -88,4 +88,32 @@
     }
     return self;
 }
+
+- (id)initWithFrame:(CGRect)frame imageUrl:(NSString *)imageurl
+{
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        [self setUserInteractionEnabled:YES];
+        
+        self.imageurl = imageurl;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        [imageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:imageurl Size:200]] placeholderImage:[UIImage imageNamed:@"sticker_placeholder_list"]];
+        
+        CALayer *roundCorner = [imageView layer];
+        [roundCorner setMasksToBounds:YES];
+        [roundCorner setCornerRadius:1.0];
+        [roundCorner setBorderColor:[UIColor lightGrayColor].CGColor];
+        [roundCorner setBorderWidth:1.0];
+        
+        imageRect = CGRectMake(0.0, 0.0, 75.0, 75.0);
+        [imageView setFrame:imageRect];
+        
+        [self addSubview:imageView];
+    }
+    return self;
+}
+
+
 @end

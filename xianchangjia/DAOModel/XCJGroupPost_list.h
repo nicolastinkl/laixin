@@ -23,12 +23,12 @@
 @property (assign, nonatomic) BOOL ilike;
 @property (assign, nonatomic) NSTimeInterval time;
 @property (strong, nonatomic) NSString * timeText;
-
+@property (assign, nonatomic) NSInteger excount;
 @property (assign, nonatomic) NSInteger height;
 @property (assign, nonatomic) NSInteger width;
 @property (nonatomic,strong) NSMutableArray *comments;
 @property (nonatomic,strong) NSMutableArray * likeUsers;
-
+@property (nonatomic,strong) NSMutableArray * excountImages;
 
 //@property (strong, nonatomic) NSString *video;
 //@property (strong, nonatomic) NSString *voice;

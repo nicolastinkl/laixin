@@ -27,4 +27,5 @@
 
 - (id)initWithFrame:(CGRect)frame imageUrl:(NSString *)image nick:(NSString *)imageTitle uid:(NSString * ) uid;
 
+- (id)initWithFrame:(CGRect)frame imageUrl:(NSString *)imageurl ;
 @end
