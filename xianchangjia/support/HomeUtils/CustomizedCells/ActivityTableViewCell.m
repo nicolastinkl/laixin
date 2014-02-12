@@ -24,6 +24,7 @@
 #import "UIView+Additon.h"
 #import "HTCopyableLabel.h"
 #import "POHorizontalList.h"
+#import "DataHelper.h"
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
 
@@ -45,7 +46,7 @@
 @property (nonatomic, strong) UIButton *ReportButton;
 
 //多图提示
-@property (nonatomic, strong) POHorizontalList * imageListScroll;
+@property (nonatomic, strong) UIScrollView * imageListScroll;
 
 //赞和评论的背景View，主要就是为了带箭头
 @property (nonatomic, strong) UIImageView *likeCommentBackView;
@@ -116,7 +117,16 @@
         
         //图片
         self.activityImageView = [[MLCanPopUpImageView alloc] init];
-        [self addSubview:_activityImageView];        
+        [self addSubview:_activityImageView];
+        
+        //多图
+        self.imageListScroll = [[UIScrollView alloc] init];
+        self.imageListScroll.backgroundColor = [UIColor clearColor];
+        
+        self.imageListScroll.showsHorizontalScrollIndicator = YES;
+        self.imageListScroll.showsVerticalScrollIndicator = NO;
+        self.imageListScroll.decelerationRate = UIScrollViewDecelerationRateFast;
+        [self addSubview:self.imageListScroll];
         
         //评论按钮
         self.commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -330,26 +340,89 @@
     yOffset += _contentLabel.frameHeight+10;
     
     /**
-     *  单图模式
+     *  多图模式
      */
-    if (_activity.imageURL && _activity.imageURL.length > 5) {
-        _activityImageView.hidden = NO;
-        if (_activity.width > 2000) {
-            _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
-            yOffset += _activityImageView.frameHeight+10;  // 正方形
-        }else{
-            NSInteger width = _activity.width/10;
-            NSInteger height = _activity.height/10;
-            if (height > 200) {
-                height = 200;
-            }
-            _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
-            yOffset += _activityImageView.frameHeight+10;   //不规则形状
-        }
-    }else{
+    if (_activity.excount > 0) {
         _activityImageView.hidden = YES;
         _activityImageView.frame = CGRectMake(0, 0, 0, 0);
+        if (_activity.excountImages.count <= 0) {
+            //check from networking
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":_activity.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary  * result = responseObject[@"result"];
+                    NSArray * array = result[@"exdata"];
+                     NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                    
+                    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
+                    __block NSUInteger page = 0;
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                        ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
+                        [arrayURLS addObject:stringurl];
+                        
+                        [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
+                         // add self view
+                        [self.imageListScroll addSubview:item1];
+                        
+                    }];
+                    self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [arrayURLS count], pageSize.height);
+                    [_activity.excountImages addObjectsFromArray:arrayURLS];
+                    _activity.excount = _activity.excountImages.count;
+                    
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }else{
+            //有数据
+            CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
+            if (self.imageListScroll.subviews.count <= 0 ) {
+                [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    [obj removeFromSuperview];
+                }];
+                __block NSUInteger page = 0;
+                [_activity.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
+                    
+                    [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
+                    // add self view
+                    [self.imageListScroll addSubview:item1];
+                }];
+                self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [_activity.excountImages count], pageSize.height);
+            }
+            [self.imageListScroll layoutIfNeeded];
+        }
+        self.imageListScroll.frame = CGRectMake(xOffset-10, yOffset, 270.0, 150.0);
+        self.imageListScroll.hidden = NO;
+        yOffset += 150+10;   //不规则形状
+    }else{
+        self.imageListScroll.frame = CGRectMake(0,0,0,0);
+        self.imageListScroll.hidden = YES;
+        
+        /**
+         *  单图模式
+         */
+        if (_activity.imageURL && _activity.imageURL.length > 5) {
+            _activityImageView.hidden = NO;
+            if (_activity.width > 2000) {
+                _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
+                yOffset += _activityImageView.frameHeight+10;  // 正方形
+            }else{
+                NSInteger width = _activity.width/10;
+                NSInteger height = _activity.height/10;
+                if (height > 200) {
+                    height = 200;
+                }
+                _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
+                yOffset += _activityImageView.frameHeight+10;   //不规则形状
+            }
+        }else{
+            _activityImageView.hidden = YES;
+            _activityImageView.frame = CGRectMake(0, 0, 0, 0);
+        }
     }
+    
     
     _likeButton.frame = CGRectMake(self.frameWidth-120, yOffset, 50, 20);
     _commentButton.frame = CGRectMake(_likeButton.frame.origin.x+_likeButton.frameWidth+10, yOffset, 50, _likeButton.frameHeight);
@@ -421,23 +494,28 @@
     [_contentLabel sizeToFit];//自适应高度
     yOffset += _contentLabel.frameHeight+10;
     
-    if (_activity_new.imageURL) {
-        _activityImageView.hidden = NO;
-        if (_activity.width > 2000) {
-            _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
-            yOffset += _activityImageView.frameHeight+10;  // 正方形
-        }else{
-            NSInteger width = _activity.width/10;
-            NSInteger height = _activity.height/10;
-            if (height > 200) {
-                height = 200;
-            }
-            _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
-            yOffset += _activityImageView.frameHeight+10;   //不规则形状
-        }
-        
+    if (_activity.excount > 0) {
+         yOffset += 150 + 10;  // 正方形
     }else{
-        _activityImageView.hidden = YES;
+        if (_activity_new.imageURL && _activity.imageURL.length > 5) {
+            _activityImageView.hidden = NO;
+            if (_activity.width > 2000) {
+                _activityImageView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-100, self.frameWidth-xOffset-100);
+                yOffset += _activityImageView.frameHeight+10;  // 正方形
+            }else{
+                NSInteger width = _activity.width/10;
+                NSInteger height = _activity.height/10;
+                if (height > 200) {
+                    height = 200;
+                }
+                _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
+                yOffset += _activityImageView.frameHeight+10;   //不规则形状
+            }
+            
+        }else{
+            _activityImageView.hidden = YES;
+        }
+
     }
     
     _likeButton.frame = CGRectMake(self.frameWidth-120, yOffset, 50, 20);

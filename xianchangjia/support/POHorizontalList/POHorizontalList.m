@@ -71,6 +71,35 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame  items:(NSMutableArray *)items
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0f, TITLE_HEIGHT, self.frame.size.width, self.frame.size.height)];
+        self.scrollView.backgroundColor = [UIColor clearColor];
+        CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollView.frame.size.height);
+        NSUInteger page = 0;
+        
+        for(ListItem *item in items) {
+            [item setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
+            
+            UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(itemTapped:)];
+            [item addGestureRecognizer:singleFingerTap];
+            
+            [self.scrollView addSubview:item];
+        }
+        
+        self.scrollView.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [items count], pageSize.height);
+        self.scrollView.showsHorizontalScrollIndicator = NO;
+        self.scrollView.showsVerticalScrollIndicator = NO;
+        self.scrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+        
+        [self addSubview:self.scrollView];
+
+    }
+    return self;
+}
+
 - (void)itemTapped:(UITapGestureRecognizer *)recognizer {
     ListItem *item = (ListItem *)recognizer.view;
 

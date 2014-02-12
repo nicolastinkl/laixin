@@ -107,20 +107,16 @@
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
-    
-    [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if(idx == 0)
-        {
-            
-            ALAsset *asset  = obj;
-//            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
-//            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
+    if (assets.count == 1) {
+        //单图模式
+       ALAsset *asset =  [assets firstObject];
+        if (asset) {
             
             ALAssetRepresentation *assetRep = [asset defaultRepresentation];
             CGImageRef imgRef = [assetRep fullResolutionImage];
             UIImage *image = [UIImage imageWithCGImage:imgRef
-                                               scale:assetRep.scale
-                                         orientation:(UIImageOrientation)assetRep.orientation];
+                                                 scale:assetRep.scale
+                                           orientation:(UIImageOrientation)assetRep.orientation];
             
             
             NSURL * url = [asset.defaultRepresentation url];
@@ -135,9 +131,12 @@
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];
         }
-    }];
-    
-    
+    }else if(assets.count > 1){
+        //多图模式
+        
+    }
+//            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
+//            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];
     
 //    [self.tableView beginUpdates];
 //    [self.tableView insertRowsAtIndexPaths:[self indexPathOfNewlyAddedAssets:assets]
@@ -163,7 +162,7 @@
 
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字",@"多图", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
@@ -643,13 +642,17 @@
                 }
                     break;
                 case 2:{
-                     [self pickAssets:nil];
+                     [self pickAssets:1];
 //                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
 //                        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
 //                        photoLibrary.delegate = self;
 //                        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 //                        [self presentViewController:photoLibrary animated:YES completion:nil];
 //                    }
+                }
+                    break;
+                case 3:{
+                    [self pickAssets:20];
                 }
                     break;
                 default:
@@ -666,7 +669,7 @@
 
 
 
-- (void)pickAssets:(id)sender
+- (void)pickAssets:(int )sender
 {
     if (!self.assets)
         self.assets = [[NSMutableArray alloc] init];
@@ -680,16 +683,13 @@
     picker.navigationBarHidden = NO;
     //    picker.navigationBar.backgroundColor = [UIColor whiteColor];
     
-    
-    picker.maximumNumberOfSelection = 1;
+    picker.maximumNumberOfSelection = sender;
     picker.assetsFilter = [ALAssetsFilter allAssets];
-    
-    
     // only allow video clips if they are at least 5s
     picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
         if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
             NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-            return duration >= 5;
+            return duration >= 1;
         } else {
             return YES;
         }
