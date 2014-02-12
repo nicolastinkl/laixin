@@ -17,6 +17,7 @@
 #import "DataHelper.h"
 #import "UIButton+Bootstrap.h"
 #import "XCJGroupPost_list.h"
+#import "SJAvatarBrowser.h"
 #import "XCJSelfPhotoViewController.h"
 
 @interface XCJUserInfoController ()
@@ -66,7 +67,7 @@
             self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
         }
         
-        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.UserInfo.headpic defaultValue:@""]]];
+        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:self.UserInfo.headpic defaultValue:@""] Size:100]]];
 
     }else{
         self.UserInfo = self.frend.friendRelation;
@@ -79,7 +80,7 @@
             self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
         }
         
-        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""]]];
+        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:self.frend.friendRelation.headpic defaultValue:@""] Size:100]]];
     }
    
     if (self.UserInfo.create_time) {
@@ -127,11 +128,17 @@
         self.Button_Sendmsg.hidden = NO;
         [self.Button_Sendmsg addTarget:self action:@selector(touchBtnUp:) forControlEvents:UIControlEventTouchUpInside];
         [self.Button_Sendmsg sendMessageStyle];
+    }     
+    [self.tableView reloadData];
+}
+
+- (IBAction)seeUsericonclick:(id)sender {
+    if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]){
+        [SJAvatarBrowser showImage:self.Image_user withURL:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]];
+    }else{
+        [SJAvatarBrowser showImage:self.Image_user withURL:self.UserInfo.headpic];
     }
     
-    
-    
-    [self.tableView reloadData];
 }
 
 -(IBAction)touchBtnUp:(id)sender

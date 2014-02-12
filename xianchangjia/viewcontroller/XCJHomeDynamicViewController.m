@@ -162,7 +162,7 @@
 
 -(IBAction)SendPostClick:(id)sender
 {
-    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字",@"多图", nil];
+    UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字", nil];
     action.tag = 3;
     [action showInView:self.view];
 }
@@ -642,17 +642,7 @@
                 }
                     break;
                 case 2:{
-                     [self pickAssets:1];
-//                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-//                        UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
-//                        photoLibrary.delegate = self;
-//                        photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-//                        [self presentViewController:photoLibrary animated:YES completion:nil];
-//                    }
-                }
-                    break;
-                case 3:{
-                    [self pickAssets:20];
+                     [self pickAssets:20];
                 }
                     break;
                 default:
@@ -688,8 +678,8 @@
     // only allow video clips if they are at least 5s
     picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
         if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
-            NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
-            return duration >= 1;
+//            NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+            return NO;
         } else {
             return YES;
         }

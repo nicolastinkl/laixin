@@ -19,6 +19,7 @@
 #import "Conversation.h"
 #import "CoreData+MagicalRecord.h"
 #import "XCJGroupPost_list.h"
+#import "SJAvatarBrowser.h"
 #import "XCJSelfPhotoViewController.h"
 
 @interface XCJAddUserTableViewController ()
@@ -43,7 +44,6 @@
     }
     return self;
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,7 +59,7 @@
             self.Image_sex.image = [UIImage imageNamed:@"md_girl"];
         }
         
-        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getStringValue:self.UserInfo.headpic defaultValue:@""]]];
+        [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:self.UserInfo.headpic defaultValue:@""] Size:100]]];
         
         /*
          @property (nonatomic, retain) NSNumber * create_time;
@@ -143,6 +143,18 @@
     ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).height = 0.3f;
     
 }
+
+- (IBAction)seeUserIconClick:(id)sender {
+    
+    if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:self.UserInfo.uid]) {
+        [SJAvatarBrowser showImage:self.Image_user withURL:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]];
+    }else{
+        [SJAvatarBrowser showImage:self.Image_user withURL:self.UserInfo.headpic];
+    }
+}
+
+
+
 -(IBAction)sendMessageClick:(id)sender
 {
     // target to chat view

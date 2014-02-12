@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
 		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
@@ -424,6 +425,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
+		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		8622C876187D192100776A38 /* ListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItem.h; sourceTree = "<group>"; };
@@ -2253,6 +2256,8 @@
 				862D31951855B52C00C2D252 /* UIViewController+Indicator.m */,
 				86ADDA2D1893DAC7000A0C22 /* MKMapView+ZoomLevel.h */,
 				86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */,
+				8607385218AB4BFC003830DE /* SJAvatarBrowser.h */,
+				8607385318AB4BFC003830DE /* SJAvatarBrowser.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -3136,6 +3141,7 @@
 				869CE4C1186A73880004C1EC /* OHAttributedLabel.m in Sources */,
 				8622C880187D2BEC00776A38 /* XCJErrorView.m in Sources */,
 				86EB76BD185AA6CC00836947 /* Message.m in Sources */,
+				8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */,
 				869CE525186BE38D0004C1EC /* NSManagedObject+MagicalDataImport.m in Sources */,
 				86EB76DF185AA6CC00836947 /* base64.c in Sources */,
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,

@@ -2448,9 +2448,13 @@
                                     <rect key="frame" x="83" y="37" width="15" height="10"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="Id7-Pe-a3T">
+                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="Id7-Pe-a3T">
                                     <rect key="frame" x="20" y="12" width="60" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <gestureRecognizers/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="8c8-EF-exq" appends="YES" id="Fc0-Ep-GgB"/>
+                                    </connections>
                                 </imageView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -2513,6 +2517,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zm4-hE-4DN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="8c8-EF-exq">
+                    <connections>
+                        <action selector="seeUsericonclick:" destination="DWj-Qd-zl1" id="Ufi-xC-Dw8"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="777" y="3728"/>
         </scene>
@@ -3211,9 +3220,13 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </imageView>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="VHh-3M-Lve">
+                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="groupMaskPressed" id="VHh-3M-Lve">
                                     <rect key="frame" x="24" y="27" width="60" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <gestureRecognizers/>
+                                    <connections>
+                                        <outletCollection property="gestureRecognizers" destination="ee8-fc-Vxv" appends="YES" id="xNb-DO-A9b"/>
+                                    </connections>
                                 </imageView>
                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="md_girl" id="ODi-Ji-zDz">
                                     <rect key="frame" x="87" y="52" width="15" height="10"/>
@@ -3278,6 +3291,11 @@
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CgI-gR-Mjq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ee8-fc-Vxv">
+                    <connections>
+                        <action selector="seeUserIconClick:" destination="INX-wP-Apu" id="7wD-W3-8AG"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1677" y="5151"/>
         </scene>

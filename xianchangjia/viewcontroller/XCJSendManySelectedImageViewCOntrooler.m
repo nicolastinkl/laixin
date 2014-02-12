@@ -22,7 +22,7 @@
 #define ITEM_WIDTH              65.0
 #define TITLE_HEIGHT            40.0
 
-@interface XCJSendManySelectedImageViewCOntrooler ()<UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,CTAssetsPickerControllerDelegate>
+@interface XCJSendManySelectedImageViewCOntrooler ()<UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,CTAssetsPickerControllerDelegate,UITextViewDelegate>
 
 @end
 
@@ -66,7 +66,6 @@
             [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
             
             [self.scrollPhotos addSubview:imageview];
-            
             
         }
     }];
@@ -148,14 +147,37 @@
     }];
 }
 
-
 - (IBAction)addPhotoClick:(id)sender {
     
     if ([self.TextMsg isFirstResponder]) {
         [self.TextMsg resignFirstResponder];
     }
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"添加照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选取", nil];
-    [sheet showInView:self.view];
+    
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
+    picker.navigationBar.barStyle = UIBarStyleBlack;
+    picker.navigationBar.barTintColor  = [UIColor colorWithRed:48.0/255.0 green:167.0/255.0 blue:255.0/255.0 alpha:1.0];
+    picker.navigationBar.translucent = YES;
+    picker.navigationBar.tintColor  = [UIColor whiteColor];
+    picker.navigationBarHidden = NO;
+    
+    picker.maximumNumberOfSelection = 20-self.array.count;
+    picker.assetsFilter = [ALAssetsFilter allAssets];
+    // only allow video clips if they are at least 5s
+    picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
+        if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+            NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+            return duration >= 1;
+        } else {
+            return YES;
+        }
+    }];
+    
+    picker.delegate = self;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+    
+//    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"添加照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选取", nil];
+//    [sheet showInView:self.view];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
