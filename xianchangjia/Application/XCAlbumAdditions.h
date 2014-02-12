@@ -37,4 +37,5 @@
 #import "UIView+Convenience.h"
 #import "UIImage-Helpers.h"
 #import "EGOCache.h"
+#import "UIAlertViewAddition.h"
 #endif

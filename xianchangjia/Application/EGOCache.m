@@ -328,7 +328,7 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 #pragma mark -
 #pragma mark Property List methods
 
-- (NSData*)plistForKey:(NSString*)key; {
+- (id)plistForKey:(NSString*)key; {
 	NSData* plistData = [self dataForKey:key];
 	
 	return [NSPropertyListSerialization propertyListFromData:plistData

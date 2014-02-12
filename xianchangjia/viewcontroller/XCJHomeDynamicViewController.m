@@ -45,6 +45,7 @@
 #import "XCJPostTextViewController.h"
 #import "XCJCreateChatNaviController.h"
 #import "CTAssetsPickerController.h"
+#import "XCJSendManySelectedImageViewCOntrooler.h"
 #import "XCJErWeiCodeViewController.h"
 
 @interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,CTAssetsPickerControllerDelegate>
@@ -110,15 +111,12 @@
     if (assets.count == 1) {
         //单图模式
        ALAsset *asset =  [assets firstObject];
-        if (asset) {
-            
+        if (asset) {            
             ALAssetRepresentation *assetRep = [asset defaultRepresentation];
             CGImageRef imgRef = [assetRep fullResolutionImage];
             UIImage *image = [UIImage imageWithCGImage:imgRef
                                                  scale:assetRep.scale
                                            orientation:(UIImageOrientation)assetRep.orientation];
-            
-            
             NSURL * url = [asset.defaultRepresentation url];
             PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];
             // [[PostActivityViewController alloc]init];
@@ -126,14 +124,16 @@
             postVC.filePath = [url copy];
             postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
             postVC.postImage = image;
-            // [theInfo objectForKey:UIImagePickerControllerOriginalImage];
-            
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];
         }
     }else if(assets.count > 1){
         //多图模式
-        
+        XCJSendManySelectedImageViewCOntrooler * contr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendManySelectedImageViewCOntrooler"];
+        contr.array = [assets mutableCopy];
+        contr.gID = _Currentgid;
+        contr.needRefreshViewController = self;
+        [self.navigationController pushViewController:contr animated:YES];
     }
 //            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
 //            UIImage * image  = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]];

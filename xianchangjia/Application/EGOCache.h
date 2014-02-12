@@ -45,7 +45,7 @@
 - (void)setImage:(NSImage*)anImage forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
 #endif
 
-- (NSData*)plistForKey:(NSString*)key;
+- (id)plistForKey:(NSString*)key;
 - (void)setPlist:(id)plistObject forKey:(NSString*)key;
 - (void)setPlist:(id)plistObject forKey:(NSString*)key withTimeoutInterval:(NSTimeInterval)timeoutInterval;
 

@@ -1,0 +1,350 @@
+//
+//  XCJSendManySelectedImageViewCOntrooler.m
+//  laixin
+//
+//  Created by apple on 14-2-12.
+//  Copyright (c) 2014年 jijia. All rights reserved.
+//
+
+#import "XCJSendManySelectedImageViewCOntrooler.h"
+
+#import <CommonCrypto/CommonDigest.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <Foundation/Foundation.h>
+#import "UIButton+Bootstrap.h"
+#import "CTAssetsPickerController.h"
+#import "XCAlbumAdditions.h"
+#import "XCJGroupPost_list.h"
+#import "MinroadOperation.h"
+
+#define DISTANCE_BETWEEN_ITEMS  5.0
+#define LEFT_PADDING            5.0
+#define ITEM_WIDTH              65.0
+#define TITLE_HEIGHT            40.0
+
+@interface XCJSendManySelectedImageViewCOntrooler ()<UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,CTAssetsPickerControllerDelegate>
+
+@end
+
+@implementation XCJSendManySelectedImageViewCOntrooler
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"发表动态";
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+ 
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    
+    UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"发表" style:UIBarButtonItemStyleDone target:self action:@selector(SendPhoto:)];
+     self.navigationItem.rightBarButtonItem = item;
+    
+    __block NSUInteger page = 1;
+    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollPhotos.frame.size.height);
+    [self.array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ALAsset *asset =  obj;
+        if (asset) {
+             UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
+//            ALAssetRepresentation *assetRep = [asset defaultRepresentation];
+//            CGImageRef imgRef = [assetRep fullResolutionImage];
+//            UIImage *image = [UIImage imageWithCGImage:imgRef
+//                                                 scale:assetRep.scale
+//                                           orientation:(UIImageOrientation)assetRep.orientation];
+//            NSURL * url = [asset.defaultRepresentation url];
+            UIImageView * imageview = [[UIImageView alloc] initWithImage:image];
+            
+            [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
+            
+            [self.scrollPhotos addSubview:imageview];
+            
+            
+        }
+    }];
+    
+    self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [self.array count ], pageSize.height);
+    [self.button sendMessageStyle];
+    
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.TextMsg isFirstResponder]) {
+        [self.TextMsg resignFirstResponder];
+    }
+}
+
+-(IBAction)SendPhoto:(id)sender
+{
+    
+    if ([self.TextMsg isFirstResponder]) {
+        [self.TextMsg resignFirstResponder];
+    }
+    
+    [SVProgressHUD showWithStatus:@"正在发表..."];
+    
+    NSDictionary * parames = @{@"gid":self.gID,@"content":self.TextMsg.text};
+    //nick, signature,sex, birthday, marriage, height
+    [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * result = responseObject[@"result"];
+            [SVProgressHUD dismiss];
+            NSString *postID = [tools getStringValue:result[@"postid"] defaultValue:@""];
+            if ([postID intValue ] > 0) {
+                
+                XCJGroupPost_list *glist = [[XCJGroupPost_list alloc] init];
+                glist.postid = postID;
+                glist.imageURL = @"";
+                glist.content = self.TextMsg.text;
+                glist.uid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+                glist.ilike = NO;
+                glist.like = 0;
+                glist.excount = self.array.count;
+                glist.replycount = 0;
+                glist.group_id = self.gID;
+                glist.time = [[NSDate date] timeIntervalSinceNow];// [NSDate
+                {
+                    NSMutableArray * array = [[NSMutableArray alloc] init];
+                    glist.comments = array;
+                }
+                {
+                    
+                    NSMutableArray * array = [[NSMutableArray alloc] init];
+                    [self.array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        
+                        ALAsset *asset =  obj;
+                        if (asset) {
+                            NSURL * url = [asset.defaultRepresentation url];
+                            [array addObject:[NSString stringWithFormat:@"%@",url]];
+                            
+                            /**
+                             *  添加到上传队列
+                             */
+                            [[MinroadOperation sharedMinroadOperation] addOperation:@{@"url":url,@"postid":postID,@"asset":asset}];
+                        }                        
+                    }];
+                    glist.excountImages = array;
+                }
+                [_needRefreshViewController.activities insertObject:glist atIndex:0];
+                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
+                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                [SVProgressHUD showErrorWithStatus:@"发送失败"];
+
+            }
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD showErrorWithStatus:@"发送失败"];
+    }];
+}
+
+
+- (IBAction)addPhotoClick:(id)sender {
+    
+    if ([self.TextMsg isFirstResponder]) {
+        [self.TextMsg resignFirstResponder];
+    }
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"添加照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从相册选取", nil];
+    [sheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (self.array.count >= 20) {
+        [UIAlertView showAlertViewWithMessage:@"最多只能选20张照片"];
+        return;
+    }
+    switch (buttonIndex) {
+        case 0:
+        {
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                camera.delegate = self;
+                camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                [self presentViewController:camera animated:YES completion:nil];
+            }
+        }
+            break;
+        case 1:
+        {
+            
+            CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
+            picker.navigationBar.barStyle = UIBarStyleBlack;
+            picker.navigationBar.barTintColor  = [UIColor colorWithRed:48.0/255.0 green:167.0/255.0 blue:255.0/255.0 alpha:1.0];
+            picker.navigationBar.translucent = YES;
+            picker.navigationBar.tintColor  = [UIColor whiteColor];
+            picker.navigationBarHidden = NO;
+            
+            picker.maximumNumberOfSelection = 20-self.array.count;
+            picker.assetsFilter = [ALAssetsFilter allAssets];
+            // only allow video clips if they are at least 5s
+            picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
+                if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+                    NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+                    return duration >= 1;
+                } else {
+                    return YES;
+                }
+            }];     
+            
+            picker.delegate = self;
+            
+            [self presentViewController:picker animated:YES completion:NULL];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
+{
+    if (assets.count > 0) {
+        __block NSUInteger page = self.array.count + 1;
+        [self.array addObjectsFromArray:assets];
+        // add view
+        CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollPhotos.frame.size.height);
+        [assets enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            ALAsset *asset =  obj;
+            if (asset) {
+                UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail];
+                UIImageView * imageview = [[UIImageView alloc] initWithImage:image];
+                
+                [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
+                [self.scrollPhotos addSubview:imageview];
+            }
+        }];
+        self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [self.array count], pageSize.height);
+    }
+}
+
+
+#pragma mark - UIImagePickerController delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
+{
+    
+   /* UIImage *image = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
+    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    NSURL *imageRefURL = [theInfo valueForKey:UIImagePickerControllerReferenceURL];
+    
+    ALAssetsLibrary* assetLibrary = [[ALAssetsLibrary alloc] init];
+    void (^ALAssetsLibraryAssetForURLResultBlock)(ALAsset *) = ^(ALAsset *asset)
+    {
+        if (asset != nil)
+        {
+            NSDictionary *metadata = [[asset defaultRepresentation] metadata];
+            SLog(@"metadata = %@",metadata);
+            NSDictionary *exif = [metadata objectForKey:@"{Exif}"];
+            SLog(@"exif = %@",exif);
+            
+        } else
+        {
+            SLog(@"ASSET was nil");
+        }
+    };
+    
+    [assetLibrary assetForURL:imageRefURL
+                  resultBlock:ALAssetsLibraryAssetForURLResultBlock
+                 failureBlock:^(NSError *error){
+                     SLog(@"[ERROR] error: %@",error);
+                 }];*/
+    [picker dismissViewControllerAnimated:NO completion:nil];
+}
+
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Table view data source
+
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//#warning Potentially incomplete method implementation.
+//    // Return the number of sections.
+//    return 0;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//#warning Incomplete method implementation.
+//    // Return the number of rows in the section.
+//    return 0;
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+//    
+//    // Configure the cell...
+//    
+//    return cell;
+//}
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }   
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
+
+/*
+#pragma mark - Navigation
+
+// In a story board-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+
+ */
+
+@end
