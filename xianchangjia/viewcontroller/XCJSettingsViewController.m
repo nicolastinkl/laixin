@@ -17,7 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_level;
 @property (weak, nonatomic) IBOutlet UIImageView *image_level;
 @property (weak, nonatomic) IBOutlet UIImageView *image_levelBg;
-
+@property (weak, nonatomic) IBOutlet UIImageView *image_level_number;
 @end
 
 @implementation XCJSettingsViewController
@@ -43,12 +43,13 @@
 //    LXUser * user =  [[LXAPIController sharedLXAPIController] currentUser];
 //    self.title = user.nick;
     
-    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
-    
+    self.UserName.text =  [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
+    self.image_level_number.image = nil;
     if ([LXAPIController sharedLXAPIController].currentUser) {
         if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
             self.image_levelBg.width = 80;
+            self.image_level_number.image = nil;
             self.label_level.textColor = [UIColor lightGrayColor];
             self.label_level.text = @"未激活";
             self.image_level.image = [UIImage imageNamed:@"face_vip"];
@@ -56,11 +57,29 @@
             self.image_level.image = [UIImage imageNamed:@"face_vip"];
             self.label_level.textColor = [UIColor redColor];
             self.image_levelBg.width = 50;
-            self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+//            self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+            self.image_level_number.image  = [UIImage imageNamed:[NSString stringWithFormat:@"mqz_widget_vip_lv%d",[LXAPIController sharedLXAPIController].currentUser.actor_level]];
         }
         self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
     }else{
         [self LoadData];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ChangeNick:) name:@"changeSlefNick" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSlefHeadpic:) name:@"changeSlefHeadpic" object:nil];
+}
+
+-(void) changeSlefHeadpic:(NSNotification *) notify
+{
+    if (notify.object) {
+          [self.UserImageicon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:notify.object Size:100]] placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
+    }
+}
+
+-(void) ChangeNick:(NSNotification *) notify
+{
+    if (notify.object) {
+        self.UserName.text = notify.object;
     }
 }
 
@@ -74,14 +93,6 @@
         [self LoadData];
     } failure:^(MLRequest *request, NSError *error) {
     }];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-    [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
 }
 
 
@@ -101,6 +112,7 @@
             self.UserName.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
             if ([LXAPIController sharedLXAPIController].currentUser.actor_level <= 0) {
                 self.image_levelBg.width = 80;
+                self.image_level_number.image = nil;
                 self.label_level.textColor = [UIColor lightGrayColor];
                 self.label_level.text = @"未激活";
                 self.image_level.image = [UIImage imageNamed:@"threadInfoButtonSelected"];
@@ -108,7 +120,7 @@
                 self.image_level.image = [UIImage imageNamed:@"face_vip"];
                 self.label_level.textColor = [UIColor redColor];
                 self.image_levelBg.width = 50;
-                self.label_level.text = [NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.actor_level];
+                self.image_level_number.image  = [UIImage imageNamed:[NSString stringWithFormat:@"mqz_widget_vip_lv%d",[LXAPIController sharedLXAPIController].currentUser.actor_level]];
             }
             
             [USER_DEFAULT setObject:[tools getStringValue:dic[@"nick"] defaultValue:@""] forKey:KeyChain_Laixin_account_user_nick];
@@ -118,8 +130,8 @@
             
             [USER_DEFAULT synchronize];
             
-            self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-            [self.UserImageicon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+        self.UserName.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+            [self.UserImageicon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
         }
     } failure:^(MLRequest *request, NSError *error) {
     }];

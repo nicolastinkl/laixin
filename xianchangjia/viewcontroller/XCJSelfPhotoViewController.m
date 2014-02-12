@@ -214,32 +214,69 @@
     UILabel * label_time = (UILabel *) [cell.contentView subviewWithTag:3];
     UILabel * label_address = (UILabel *) [cell.contentView subviewWithTag:4];
     UILabel * label_text = (UILabel *) [cell.contentView subviewWithTag:5];
+    UILabel * label_photoNumber = (UILabel *) [cell.contentView subviewWithTag:9];
     XCJGroupPost_list * post = dataSource[indexPath.row];
-    if (post.imageURL.length > 5) {
+    
+    if (post.excount > 0) {
         label_text.hidden = YES;
         imageview.hidden = NO;
         labelimage_text.hidden = NO;
         labelimage_text.text = post.content;
-        [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:post.imageURL width:60 height:90]] placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]];
-       CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
+        [imageview setImage:nil];
+        CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
+        if (height > 77) {
+            height = 75;
+        }
         [labelimage_text setHeight:height];
         [labelimage_text sizeToFit];
         [labelimage_text setWidth:177];
+        label_photoNumber.text = [NSString stringWithFormat:@"共%d张",post.excount];
     }else{
-        label_text.hidden = NO;
-        imageview.hidden = YES;
-        labelimage_text.hidden = YES;
-        label_text.text = post.content;
-        
-        CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
-        if (height > 97) {
-            height = 95;
+        label_photoNumber.text  = @"";
+        if (post.imageURL.length > 5) {
+            label_text.hidden = YES;
+            imageview.hidden = NO;
+            labelimage_text.hidden = NO;
+            labelimage_text.text = post.content;
+            SLog(@"%@",[tools getUrlByImageUrl:post.imageURL width:60 height:100]);
+            [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:post.imageURL width:60 height:100]]]; //placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]
+            CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
+            
+            [labelimage_text setHeight:height];
+            [labelimage_text sizeToFit];
+            [labelimage_text setWidth:177];
+        }else{
+            label_text.hidden = NO;
+            imageview.hidden = YES;
+            labelimage_text.hidden = YES;
+            label_text.text = post.content;
+            
+            CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
+            if (height > 97) {
+                height = 95;
+            }
+            [label_text setHeight:height];
+            [label_text sizeToFit];
+            [label_text setWidth:237];
         }
-        [label_text setHeight:height];
-        [label_text sizeToFit];
-        [label_text setWidth:237];
     }
-    label_time.text = [tools timeLabelTextOfTimeMoth:post.time];
+
+    
+    NSString * currentTime = [tools timeLabelTextOfTimeMoth:post.time];
+    
+    if(indexPath.row>=1)
+    {
+        XCJGroupPost_list * postPre = dataSource[indexPath.row-1];
+        NSString * string = [tools timeLabelTextOfTimeMoth:postPre.time];
+        if ([currentTime isEqualToString:string]) {
+            label_time.text = @"";
+        }else{
+            label_time.text = currentTime;
+        }
+    }else
+    {
+        label_time.text = currentTime;
+    }
     label_address.text = @"";
     return cell;
 }
@@ -263,8 +300,8 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    XCJGroupPost_list * post = dataSource[indexPath.row];
-    if (post.imageURL.length > 5) {
+    XCJGroupPost_list * post = dataSource[indexPath.row];    
+    if (post.imageURL.length > 5 || post.excount > 0) {
         return 100.0f;
     }
     CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
@@ -302,56 +339,5 @@
     }
     
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-
- */
 
 @end

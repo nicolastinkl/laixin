@@ -103,10 +103,9 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyFriendGroupPhotoCache"];
-        if (jsonData.length > 10) {
+        if (jsonData.length > 150) {
             // parse
-            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-            
+            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];            
             NSDictionary * responseObject =[data  objectFromJSONData] ;
             NSDictionary * dicreult = responseObject[@"result"];
             NSArray * postsDict = dicreult[@"posts"];

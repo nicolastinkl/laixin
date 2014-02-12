@@ -54,24 +54,26 @@
     [self.array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         ALAsset *asset =  obj;
         if (asset) {
-             UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail] ;
-//            ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-//            CGImageRef imgRef = [assetRep fullResolutionImage];
-//            UIImage *image = [UIImage imageWithCGImage:imgRef
-//                                                 scale:assetRep.scale
-//                                           orientation:(UIImageOrientation)assetRep.orientation];
-//            NSURL * url = [asset.defaultRepresentation url];
+            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail];
+            
             UIImageView * imageview = [[UIImageView alloc] initWithImage:image];
             
             [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
             
             [self.scrollPhotos addSubview:imageview];
             
+            
         }
     }];
     
     self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [self.array count ], pageSize.height);
     [self.button sendMessageStyle];
+    
+    [self.button addTarget:self action:@selector(locationClick:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(IBAction)locationClick:(id)sender
+{
     
 }
 
@@ -151,6 +153,11 @@
     
     if ([self.TextMsg isFirstResponder]) {
         [self.TextMsg resignFirstResponder];
+    }
+    
+    if (self.array.count >= 20) {
+        [UIAlertView showAlertViewWithMessage:@"最多只能选20张照片"];
+        return;
     }
     
     CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];

@@ -22,10 +22,13 @@ static CGRect oldframe;
     backgroundView.backgroundColor=[UIColor blackColor];
     backgroundView.alpha=0;
     UIImageView *imageView=[[UIImageView alloc]initWithFrame:oldframe];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.clipsToBounds = YES;
     if (image) {
-        [imageView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"talk_add_default"] displayProgress:YES];
+        imageView.image = image;
+        [imageView setImageWithURL:[NSURL URLWithString:url] placeholderImage:image];
     }else{
-        [imageView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"talk_add_default"] displayProgress:YES];
+        [imageView setImageWithURL:[NSURL URLWithString:url] placeholderImage:[UIImage imageNamed:@"talk_add_default"] ];
     }
     imageView.tag=1;
     [backgroundView addSubview:imageView];

@@ -62,12 +62,20 @@
 //    self.Label_nick.textColor = [tools colorWithIndex:[LXAPIController sharedLXAPIController].currentUser.actor_level];
     self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
     if ([USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position]) {
-        
         self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
     }else{
         self.Label_address.text = @"四川 成都";
     }
-    [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+    [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]] placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSlefHeadpic:) name:@"changeSlefHeadpic" object:nil];
+}
+
+-(void) changeSlefHeadpic:(NSNotification *) notify
+{
+    if (notify.object) {
+        [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:notify.object Size:100]] placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -77,7 +85,7 @@
     self.Label_nick.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
     self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
     self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
-    [self.Image_userIcon setImageWithURL:[NSURL URLWithString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]]];
+
 
 }
 
@@ -270,20 +278,26 @@
     
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
-    
+    [SVProgressHUD showWithStatus:@"正在上传头像..."];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
         if (response) {
-            NSString * token =  [response objectForKey:@"token"];
-            TokenAPP = token;
-            ImageFile = filePath;
-            [self uploadImage:filePath token:token];
+            NSString * token = response[@"token"];//  [response objectForKey:@"token"];
+            if (token && token.length > 10) {
+                TokenAPP = token;
+                ImageFile = filePath;
+                [self uploadImage:filePath token:token];
+            }else{
+                [self.Image_userIcon hideIndicatorViewBlueOrGary];
+                [SVProgressHUD dismiss];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
+                [alert show];
+            }
         }
     } withParems:[NSString stringWithFormat:@"upload/HeadImg?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
 }
 
 -(void) uploadImage:(UIImage *)filePath  token:(NSString *)token
 {
-    [SVProgressHUD showWithStatus:@"正在上传头像..."];
     [self.Image_userIcon setImage:filePath];
     [self.Image_userIcon showIndicatorViewBlue];
     // setup 2: upload image
@@ -303,7 +317,8 @@
             
             [USER_DEFAULT setObject:stringURL forKey:KeyChain_Laixin_account_user_headpic];
             [USER_DEFAULT synchronize];
-          
+           
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"changeSlefHeadpic" object:stringURL];
             
             [UIView animateWithDuration:0.3 animations:^{
                 UIImageView * successImg = (UIImageView *) [self.view subviewWithTag:3];
@@ -329,6 +344,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
+        [SVProgressHUD showWithStatus:@"正在上传头像..."];
         [self uploadImage:ImageFile token:TokenAPP];
     }
 }

@@ -36,22 +36,26 @@
                                                     <rect key="frame" x="8" y="8" width="60" height="60"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_primarybutton_28_3_3_3_3_normal_ios7" id="Fq9-Pl-E9t">
-                                                    <rect key="frame" x="82" y="10" width="50" height="25"/>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fbc_primarybutton_28_3_3_3_3_normal_ios7" id="Fq9-Pl-E9t">
+                                                    <rect key="frame" x="82" y="10" width="69" height="25"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <rect key="contentStretch" x="0.29999999999999999" y="0.29999999999999999" width="0.19999999999999968" height="0.19999999999999968"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="face_vip" id="f6r-Dv-Hzx">
-                                                    <rect key="frame" x="90" y="13" width="20" height="20"/>
+                                                    <rect key="frame" x="82" y="13" width="20" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I7v-Ic-UVb">
-                                                    <rect key="frame" x="114" y="13" width="48" height="21"/>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I7v-Ic-UVb">
+                                                    <rect key="frame" x="106" y="13" width="48" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mqz_widget_vip_lv5" id="Nm4-Rx-vMp">
+                                                    <rect key="frame" x="105" y="17" width="29" height="13"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -193,6 +197,7 @@
                         <outlet property="UserName" destination="bcP-5j-pcS" id="iLz-J1-knh"/>
                         <outlet property="image_level" destination="f6r-Dv-Hzx" id="3HC-HH-IFc"/>
                         <outlet property="image_levelBg" destination="Fq9-Pl-E9t" id="3HE-J5-bUl"/>
+                        <outlet property="image_level_number" destination="Nm4-Rx-vMp" id="BBs-xg-Oxz"/>
                         <outlet property="label_level" destination="I7v-Ic-UVb" id="pJR-z1-Ruz"/>
                     </connections>
                 </tableViewController>
@@ -213,7 +218,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" tag="4" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="opengroup_profile_cover" id="oP2-C4-LwR">
-                                    <rect key="frame" x="0.0" y="-19" width="320" height="320"/>
+                                    <rect key="frame" x="0.0" y="-18" width="320" height="320"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <gestureRecognizers/>
                                     <connections>
@@ -259,9 +264,10 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2Ie-LJ-Ys0">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2Ie-LJ-Ys0">
                                             <rect key="frame" x="63" y="9" width="54" height="84"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.85941485969387754" green="0.85941485969387754" blue="0.85941485969387754" alpha="0.94000000000000006" colorSpace="calibratedRGB"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iXt-y8-rMG">
                                             <rect key="frame" x="125" y="9" width="177" height="60"/>
@@ -281,6 +287,13 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.86822385204081631" green="0.86822385204081631" blue="0.86822385204081631" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="9" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oWb-b9-YVa">
+                                            <rect key="frame" x="123" y="76" width="108" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -5134,6 +5147,7 @@
         <image name="more" width="19" height="6"/>
         <image name="mqz_group_album_plus" width="60" height="60"/>
         <image name="mqz_ugc_photoCell_add" width="65" height="65"/>
+        <image name="mqz_widget_vip_lv5" width="29" height="13"/>
         <image name="nav_badge_6_6_6_6" width="13" height="13"/>
         <image name="notifications-heart" width="47" height="47"/>
         <image name="notifications-popular" width="47" height="47"/>

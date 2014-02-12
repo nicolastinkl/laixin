@@ -883,7 +883,14 @@ static NSString * const kLaixinStoreName = @"Laixins";
             NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
             NSDictionary * parames = @{@"sessionid":sessionid};
             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObjectsss) {
-              
+               
+                NSDictionary * userinfo = responseObjectsss[@"result"];
+                LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
+                if (currentUser) {
+                    [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                }
+
+                
                 {
                 
                 // 读取事件

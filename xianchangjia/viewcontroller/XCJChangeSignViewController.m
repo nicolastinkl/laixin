@@ -73,22 +73,16 @@
     UILabel * label_num = (UILabel *)  [self.view subviewWithTag:2];
     
     if (textView.text.length > 100) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
         label_num.textColor = [UIColor redColor];
         label_num.text = [NSString stringWithFormat:@"-%d",textView.text.length - 100];
     }else{
+        self.navigationItem.rightBarButtonItem.enabled = YES;
         label_num.textColor = [UIColor lightGrayColor];
         label_num.text = [NSString stringWithFormat:@"%d",textView.text.length];
     }
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text  // return NO to not change text
-{
-    if (textView.text.length > 101) {
-        return NO;
-    }
-   
-    return YES;
-}
 
 - (void)didReceiveMemoryWarning
 {

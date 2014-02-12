@@ -14,12 +14,12 @@
 #import "tools.h"
 #import "tools.h"
 #import "UIAlertViewAddition.h"
-
+#import "DataHelper.h"
 NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
 #define kRequestKeyName @"cdata"// @"client_code"
-#define kRequestKeyLength 5
-#define kTimeOut 30 //暂时设置10秒
+#define kRequestKeyLength 10
+#define kTimeOut 10 //暂时设置10秒
 
 
 //static NSString * const MLNetworkingManagerBaseURLString = LaixinWebsocketURL;
@@ -240,21 +240,37 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     
     NSDictionary *response = [message objectFromJSONString];
     NSString *requestKey = [tools getStringValue:response[kRequestKeyName] defaultValue:nil];
-    SLog(@"requestKey ======  %@",requestKey);
-    if (!requestKey) {
-//        说明此条是服务器直接推过来的数据,想得到的话就注册此通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceivePushMessageNotification object:nil userInfo:response];
-//        return;
-    }
-    for (MLRequest *request in self.sentRequests) {
-        if ([request.requestKey isEqualToString:requestKey]) {
-            //执行对应的successBlock
-            SLLog(@"successBlock net");
-            request.successBlock(request,response);
-            [self.sentRequests removeObject:request]; //移除此请求
-            break;
+    
+    int errnoMesg = [DataHelper getIntegerValue:response[@"errno"] defaultValue:0];
+    if (errnoMesg == 0) {
+        SLog(@"requestKey ======  %@",requestKey);
+        if (!requestKey) {
+            //        说明此条是服务器直接推过来的数据,想得到的话就注册此通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceivePushMessageNotification object:nil userInfo:response];
+            //        return;
+        }
+        for (MLRequest *request in self.sentRequests) {
+            if ([request.requestKey isEqualToString:requestKey]) {
+                //执行对应的successBlock
+                SLLog(@"successBlock net");
+                request.successBlock(request,response);
+                [self.sentRequests removeObject:request]; //移除此请求
+                break;
+            }
+        }
+    }else{
+        //error Explem: "error": "session not found"
+        for (MLRequest *request in self.sentRequests) {
+            if ([request.requestKey isEqualToString:requestKey]) {
+                //执行对应的successBlock
+                SLLog(@"successBlock net");
+                request.failureBlock(request,nil);
+                [self.sentRequests removeObject:request]; //移除此请求
+                break;
+            }
         }
     }
+    
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;

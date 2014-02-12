@@ -25,6 +25,7 @@
 #import "LXRequestFacebookManager.h"
 #import "CoreData+MagicalRecord.h"
 #import "MessageList.h"
+#import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Foundation/Foundation.h>
@@ -2024,6 +2025,9 @@
 {
     UIButton * button = (UIButton*)sender;
     NSString * audiourl = [button.layer valueForKey:@"audiourl"];
+    //close or stop other audio
+    //[self.tableView reloadData];
+    
     //self.messageList[[self.tableView indexPathForCell:cell].row];
     if (audiourl) {
         //http://kidswant.u.qiniudn.com/FpWbDbq6UIkbCw5PunVVB8yphaDL
@@ -2061,6 +2065,21 @@
                 int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
 //                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
                 [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                
+                 //初始化播放器的时候如下设置
+                UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+                AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
+                                        sizeof(sessionCategory),&sessionCategory);
+                
+                UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+                AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,
+                                         sizeof (audioRouteOverride), &audioRouteOverride);
+                
+                AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+                //默认情况下扬声器播放
+                [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+                [audioSession setActive:YES error:nil];
+                
                 player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
                 [player prepareToPlay];
                 [player play];
@@ -2072,6 +2091,21 @@
             int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
             [button setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
             [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+            
+            //初始化播放器的时候如下设置
+            UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+            AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
+                                    sizeof(sessionCategory),&sessionCategory);
+            
+            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,
+                                     sizeof (audioRouteOverride), &audioRouteOverride);
+            
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            //默认情况下扬声器播放
+            [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+            [audioSession setActive:YES error:nil];
+            
             player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
             [player prepareToPlay];
             [player play];

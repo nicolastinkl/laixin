@@ -56,6 +56,7 @@
             [USER_DEFAULT setObject:nicktext.text forKey:KeyChain_Laixin_account_user_nick];
             [USER_DEFAULT synchronize];
             [SVProgressHUD dismiss];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"changeSlefNick" object:nicktext.text];
             [self  dismissThisNavi:nil];
         } failure:^(MLRequest *request, NSError *error) {
             [SVProgressHUD showErrorWithStatus:@"修改失败"];
