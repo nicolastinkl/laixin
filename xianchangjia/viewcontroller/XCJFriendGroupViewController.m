@@ -112,8 +112,7 @@
             __block NSInteger lasID = 0;
             [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                lasID = [post.postid integerValue];
-                SLLog(@"lasID : %@",post.postid);
+                lasID = [post.postid integerValue]; 
                 [self.activities addObject:post];
             }];
             [self successGetActivities:self.activities withLastID:lasID];
@@ -243,6 +242,7 @@
                             [self.activities addObject:post];
                         }];
                         [self successGetActivities:self.activities withLastID:lasID];
+                        
                         [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60];
                     }else{
                         [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
@@ -257,31 +257,47 @@
             {
                 //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
                 //                Result=同11
-//                NSDictionary* parames = @{@"count":@(20),@"before":@(lastID)};
-//                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline" parameters:parames success:^(MLRequest *request, id responseObject) {
-//                    NSDictionary * groups = responseObject[@"result"];
-//                    NSArray * postsDict =  groups[@"posts"];
-//                    __block NSInteger lasID = 0;
-//                    if (postsDict &&  postsDict.count > 0) {
-//                        
-//                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-//                            if (post) {
-//                                lasID = [post.postid integerValue];
-//                                [self.activities insertObject:post atIndex:0];
-//                                [self.cellHeights insertObject:@0 atIndex:0];
-//                                [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-//                            }
-//                        }];
-//                        [self successGetActivities:self.activities withLastID:lasID];
-//                    }else{
-//                        [self failedGetActivitiesWithLastID:0];
-//                    }
-//                    
-//                } failure:^(MLRequest *request, NSError *error) {
-//                    [self failedGetActivitiesWithLastID:0];
-//                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-//                }];
+                NSDictionary* parames = @{@"after":@(lastID)};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline_new" parameters:parames success:^(MLRequest *request, id responseObject) {
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"posts"];
+                    __block NSInteger lasID = 0;
+                    if (postsDict &&  postsDict.count > 0) {
+                        
+                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                            if (post) {
+                                lasID = [post.postid integerValue];
+                                [self.activities insertObject:post atIndex:0];
+                                [self.cellHeights insertObject:@0 atIndex:0];
+                                [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                            }
+                        }];
+                        
+                        // update cache
+                        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyFriendGroupPhotoCache"];
+                        if (jsonData.length > 150) {
+                            // parse
+                            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+                            NSDictionary * responseObjectold =[data  objectFromJSONData] ;
+                            NSDictionary * dicreultold = responseObjectold[@"result"];
+                            NSArray * postsDictOld = dicreultold[@"posts"];
+                            NSMutableArray * array = [[NSMutableArray alloc] initWithArray:postsDict];
+                            [array addObjectsFromArray:postsDictOld];
+                            
+                             [[EGOCache globalCache] setString:[@{@"result":@{@"posts":array}} JSONString] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60];
+                            
+                        }
+                        
+                        [self successGetActivities:self.activities withLastID:lasID];
+                    }else{
+                        [self failedGetActivitiesWithLastID:0];
+                    }
+                    
+                } failure:^(MLRequest *request, NSError *error) {
+                    [self failedGetActivitiesWithLastID:0];
+                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+                }];
             }
                 break;
             case Enum_MoreData:

@@ -282,14 +282,20 @@
     int Wasy = self.postImage.size.width/APP_SCREEN_WIDTH;
     int Hasy = self.postImage.size.height/APP_SCREEN_HEIGHT;
     int quality = Wasy/2;
-    UIImage * newimage = [self.postImage resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+    UIImage * newimage = [[self.postImage copy] resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
     NSData * imageData = UIImageJPEGRepresentation(newimage, 0.5);
     //     NSData *imageData  =  [UIImage imageToWebP:self.postImage quality:75.0];
-    SLog(@"%d KB",imageData.length/1024);
+    if (!imageData) {
+        imageData = UIImageJPEGRepresentation(self.postImage, 0.5);
+    }
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:self.filePath name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
-          [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(imageData)
+        {
+            [formData appendPartWithFileData:imageData name:@"file" fileName:[NSString stringWithFormat:@"%@.jpg",self.uploadKey] mimeType:@"image/jpeg" ];
+        }
+            
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             if (result) {

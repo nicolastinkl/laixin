@@ -350,7 +350,7 @@
         _activityImageView.frame = CGRectMake(0, 0, 0, 0);
         if (_activity.excountImages.count <= 0 && !self.isloadingphotos) {
             //check from networking
-            self.isloadingphotos = YES;
+            self.isloadingphotos = YES; 
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":_activity.postid} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
                      NSDictionary  * result = responseObject[@"result"];
@@ -366,8 +366,11 @@
                         [arrayURLS addObject:stringurl];
                         
                         MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                        iv.contentMode = UIViewContentModeScaleAspectFill;
+                        iv.clipsToBounds = YES;
                         iv.userInteractionEnabled = YES;
                         [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                        
                          // add self view
                         [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
                         iv.hidden = NO;
@@ -387,9 +390,9 @@
             //有数据
             //CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
             if (self.imageListScroll.subviews.count <= 0 ) {
-                [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    [obj removeFromSuperview];
-                }];
+//                [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                    [obj removeFromSuperview];
+//                }];
 //                __block NSUInteger page = 0;
                 
 //                self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [_activity.excountImages count], pageSize.height);
@@ -403,6 +406,8 @@
                 //                    [self.imageListScroll addSubview:item1];
                 int row = idx/3;
                 MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                iv.contentMode = UIViewContentModeScaleAspectFill;
+                iv.clipsToBounds = YES;
                 if([stringurl containString:@"assets-library://asset/"])
                 {
                     //系统图片
@@ -428,7 +433,7 @@
     }else{
         self.imageListScroll.frame = CGRectMake(0,0,0,0);
         [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [obj removeFromSuperview];
+             ((UIView *)obj).hidden = YES;
         }];
         self.imageListScroll.hidden = YES;
         /**
