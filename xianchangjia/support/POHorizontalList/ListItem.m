@@ -97,7 +97,6 @@
         [self setUserInteractionEnabled:YES];
         
         self.imageurl = imageurl;
-        
         MLCanPopUpImageView *imageView = [[MLCanPopUpImageView alloc] init];
         [imageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:imageurl Size:200]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
         [imageView setFullScreenImageURL:[NSURL URLWithString:imageurl]];
@@ -106,7 +105,7 @@
 //        [roundCorner setCornerRadius:1.0];
         [roundCorner setBorderColor:[UIColor lightGrayColor].CGColor];
         [roundCorner setBorderWidth:0.5];
-        
+        imageView.userInteractionEnabled = YES;
         imageRect = CGRectMake(0.0, 0.0, 140.0, 140.0);
         [imageView setFrame:imageRect];
         

@@ -260,17 +260,18 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
         }
     }else{
         //error Explem: "error": "session not found"
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
         for (MLRequest *request in self.sentRequests) {
             if ([request.requestKey isEqualToString:requestKey]) {
                 //执行对应的successBlock
-                SLLog(@"successBlock net");
+                SLLog(@"error  net");
                 request.failureBlock(request,nil);
                 [self.sentRequests removeObject:request]; //移除此请求
                 break;
             }
         }
     }
-    
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;

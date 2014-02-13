@@ -45,7 +45,7 @@
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    
+    self.TextMsg.textColor = [UIColor lightGrayColor];
     UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"发表" style:UIBarButtonItemStyleDone target:self action:@selector(SendPhoto:)];
      self.navigationItem.rightBarButtonItem = item;
     
@@ -62,7 +62,6 @@
             
             [self.scrollPhotos addSubview:imageview];
             
-            
         }
     }];
     
@@ -70,10 +69,22 @@
     [self.button sendMessageStyle];
     
     [self.button addTarget:self action:@selector(locationClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.TextMsg.delegate = self;
+}
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"说点什么吧"]) {
+        textView.text = @"";
+        self.TextMsg.textColor = [UIColor blackColor];
+    }
+    return YES;
 }
 
 -(IBAction)locationClick:(id)sender
 {
+    [self.button setImage:[UIImage imageNamed:@"ComposerLocationOn-flat"] forState:UIControlStateNormal];
+    [self.button setTitle:@"成都市武侯区锦绣路" forState:UIControlStateNormal];
+    [self.button setWidth:170.0f];
     
 }
 
