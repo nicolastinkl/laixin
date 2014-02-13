@@ -46,7 +46,7 @@
 @property (nonatomic, strong) UIButton *ReportButton;
 
 //多图提示
-@property (nonatomic, strong) UIScrollView * imageListScroll;
+@property (nonatomic, strong) UIView * imageListScroll;
 
 //赞和评论的背景View，主要就是为了带箭头
 @property (nonatomic, strong) UIImageView *likeCommentBackView;
@@ -123,9 +123,9 @@
         self.imageListScroll = [[UIScrollView alloc] init];
         self.imageListScroll.backgroundColor = [UIColor clearColor];
         
-        self.imageListScroll.showsHorizontalScrollIndicator = YES;
-        self.imageListScroll.showsVerticalScrollIndicator = NO;
-        self.imageListScroll.decelerationRate = UIScrollViewDecelerationRateFast;
+//        self.imageListScroll.showsHorizontalScrollIndicator = YES;
+//        self.imageListScroll.showsVerticalScrollIndicator = NO;
+//        self.imageListScroll.decelerationRate = UIScrollViewDecelerationRateFast;
         [self addSubview:self.imageListScroll];
         
         //评论按钮
@@ -343,63 +343,94 @@
      *  多图模式
      */
     if (_activity.excount > 0) {
+        [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            ((UIView *)obj).hidden = YES;
+        }];
         _activityImageView.hidden = YES;
         _activityImageView.frame = CGRectMake(0, 0, 0, 0);
-        if (_activity.excountImages.count <= 0) {
+        if (_activity.excountImages.count <= 0 && !self.isloadingphotos) {
             //check from networking
+            self.isloadingphotos = YES;
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":_activity.postid} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
-                    NSDictionary  * result = responseObject[@"result"];
-                    NSArray * array = result[@"exdata"];
+                     NSDictionary  * result = responseObject[@"result"];
+                     NSArray * array = result[@"exdata"];
                      NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
-                    
-                    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
-                    __block NSUInteger page = 0;
+//                    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
+//                    __block NSUInteger page = 0;
                     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        int row = idx/3;
                         NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
-                        ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
+//                        ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
+//                         [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
                         [arrayURLS addObject:stringurl];
                         
-                        [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
+                        MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                        iv.userInteractionEnabled = YES;
+                        [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
                          // add self view
-                        [self.imageListScroll addSubview:item1];
-                        
+                        [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
+                        iv.hidden = NO;
+                        [self.imageListScroll addSubview:iv];
                     }];
-                    self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [arrayURLS count], pageSize.height);
+//                    self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [arrayURLS count], pageSize.height);
+                    [_activity.excountImages removeAllObjects];
                     [_activity.excountImages addObjectsFromArray:arrayURLS];
-                    _activity.excount = _activity.excountImages.count;
+//                    _activity.excount = _activity.excountImages.count;
                     
                 }
+                self.isloadingphotos = NO;
             } failure:^(MLRequest *request, NSError *error) {
-                
+                self.isloadingphotos = NO;
             }];
         }else{
             //有数据
-            CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
+            //CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
             if (self.imageListScroll.subviews.count <= 0 ) {
                 [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     [obj removeFromSuperview];
                 }];
-                __block NSUInteger page = 0;
-                [_activity.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSString * stringurl = obj;
-                    ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
-                    
-                    [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
-                    // add self view
-                    [self.imageListScroll addSubview:item1];
-                }];
-                self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [_activity.excountImages count], pageSize.height);
+//                __block NSUInteger page = 0;
+                
+//                self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [_activity.excountImages count], pageSize.height);
             }
-            [self.imageListScroll layoutIfNeeded];
+            [_activity.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString * stringurl = obj;
+                //                    ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
+                //
+                //                    [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
+                //                    // add self view
+                //                    [self.imageListScroll addSubview:item1];
+                int row = idx/3;
+                MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                if([stringurl containString:@"assets-library://asset/"])
+                {
+                    //系统图片
+                    [iv setImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                }else {
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                }
+                [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
+                // add self view
+                [self.imageListScroll addSubview:iv];
+            }];
+//            [self.imageListScroll layoutIfNeeded];
         }
-        self.imageListScroll.frame = CGRectMake(xOffset-10, yOffset, 270.0, 150.0);
+      
+        
+        float imageviewHeight = (_activity.excount/3)*65 +(_activity.excount/3)*TITLE_jianxi;
+        if (_activity.excount%3>0) {
+            imageviewHeight += TITLE_jianxi+65;
+        }
+        self.imageListScroll.frame = CGRectMake(xOffset, yOffset, 255.0, imageviewHeight);
         self.imageListScroll.hidden = NO;
-        yOffset += 150+10;   //不规则形状
+        yOffset += imageviewHeight+10;   //不规则形状
     }else{
         self.imageListScroll.frame = CGRectMake(0,0,0,0);
+        [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [obj removeFromSuperview];
+        }];
         self.imageListScroll.hidden = YES;
-        
         /**
          *  单图模式
          */
@@ -495,7 +526,11 @@
     yOffset += _contentLabel.frameHeight+10;
     
     if (_activity.excount > 0) {
-         yOffset += 150 + 10;  // 正方形
+        float imageviewHeight = (_activity.excount/3)*65 + (_activity.excount/3)*TITLE_jianxi;
+        if (_activity.excount%3>0) {
+            imageviewHeight += TITLE_jianxi+65;
+        }
+        yOffset += imageviewHeight + 10;  // 正方形
     }else{
         if (_activity_new.imageURL && _activity.imageURL.length > 5) {
             _activityImageView.hidden = NO;

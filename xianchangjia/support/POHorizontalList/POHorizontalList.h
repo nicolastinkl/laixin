@@ -10,10 +10,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import "POHorizontalListDelegate.h"
 
-#define DISTANCE_BETWEEN_ITEMS  15.0
-#define LEFT_PADDING            15.0
+#define DISTANCE_BETWEEN_ITEMS  9.0
+#define LEFT_PADDING            9.0
 #define ITEM_WIDTH              135.0
 #define TITLE_HEIGHT            40.0
+#define TITLE_jianxi            2.5
 
 @interface POHorizontalList : UIView <UIScrollViewDelegate> {
     CGFloat scale;

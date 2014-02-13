@@ -196,57 +196,65 @@
     }
     XCJGroupPost_list* activity = currentGroup;
     
-    
     if (activity.like == 0 && !cell.HasLoadlisks) {
         cell.HasLoadlisks = YES;
-        
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"100"};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * postsDict =  groups[@"users"];
-            if (postsDict&& postsDict.count > 0) {
-                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    postlikes * likes = [postlikes turnObject:obj];
-                    [mutaArray addObject:likes];
-                }];
-                
-                [activity.likeUsers addObjectsFromArray:mutaArray];
-                //indexofActivitys
-                [self reloadSingleActivityRowOfTableView:0  withAnimation:NO];
-            }
-            cell.HasLoadlisks = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-            cell.HasLoadlisks =YES;
-        }];
+        if (activity) {
+            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"100"};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"users"];
+                if (postsDict&& postsDict.count > 0) {
+                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        postlikes * likes = [postlikes turnObject:obj];
+                        [mutaArray addObject:likes];
+                    }];
+                    
+                    [activity.likeUsers addObjectsFromArray:mutaArray];
+                    //indexofActivitys
+                    [self reloadSingleActivityRowOfTableView:0  withAnimation:NO];
+                }
+                cell.HasLoadlisks = YES;
+            } failure:^(MLRequest *request, NSError *error) {
+                cell.HasLoadlisks =YES;
+            }];
+        }else{
+            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+        }
+       
          
     }
     
     if (activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //    postid = 12;
-            /*
-             Result={
-             “posts”:[*/
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * postsDict =  groups[@"replys"];
-            if (postsDict && postsDict.count > 0) {
-                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    Comment * comment = [Comment turnObject:obj];
-                    [mutaArray addObject:comment];
-                }];
-                [activity.comments addObjectsFromArray:mutaArray];
-                //indexofActivitys
-                [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
-            }
-            cell.HasLoad = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-            cell.HasLoad = NO;
-        }];
+        if (activity) {
+            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //    postid = 12;
+                /*
+                 Result={
+                 “posts”:[*/
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"replys"];
+                if (postsDict && postsDict.count > 0) {
+                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        Comment * comment = [Comment turnObject:obj];
+                        [mutaArray addObject:comment];
+                    }];
+                    [activity.comments addObjectsFromArray:mutaArray];
+                    //indexofActivitys
+                    [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
+                }
+                cell.HasLoad = YES;
+            } failure:^(MLRequest *request, NSError *error) {
+                cell.HasLoad = NO;
+            }];
+        }else{
+            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+        }
+        
     }
     //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;

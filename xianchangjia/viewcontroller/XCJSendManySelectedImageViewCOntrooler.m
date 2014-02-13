@@ -136,8 +136,9 @@
                         ALAsset *asset =  obj;
                         if (asset) {
                             NSURL * url = [asset.defaultRepresentation url];
+//                            UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail];
                             [array addObject:[NSString stringWithFormat:@"%@",url]];
-                            
+//                            [array addObject:image];
                             /**
                              *  添加到上传队列
                              */

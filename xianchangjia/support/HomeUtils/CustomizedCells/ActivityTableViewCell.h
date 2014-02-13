@@ -45,6 +45,8 @@
 
 @property (nonatomic, assign) BOOL HasLoadlisks;
 
+@property (nonatomic, assign) BOOL isloadingphotos;
+
 //delegate
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 

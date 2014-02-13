@@ -250,10 +250,16 @@
 
 - (void)showRecipe:(FCReplyMessage *) info animated:(BOOL)animated
 {
-    XCJMessageReplyInfoViewController * msgReplyInfoViewCr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplyInfoViewController"];
-    msgReplyInfoViewCr.message = info;
-    [self.navigationController pushViewController:msgReplyInfoViewCr animated:YES];
-    
+    //检查帖子是否存在
+    if (info) {
+        
+        XCJMessageReplyInfoViewController * msgReplyInfoViewCr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplyInfoViewController"];
+        msgReplyInfoViewCr.message = info;
+        [self.navigationController pushViewController:msgReplyInfoViewCr animated:YES];
+        
+    }else{
+        [UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+    }
 }
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
