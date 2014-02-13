@@ -350,7 +350,7 @@
         _activityImageView.frame = CGRectMake(0, 0, 0, 0);
         if (_activity.excountImages.count <= 0 && !self.isloadingphotos) {
             //check from networking
-            self.isloadingphotos = YES; 
+            self.isloadingphotos = YES;
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":_activity.postid} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
                      NSDictionary  * result = responseObject[@"result"];
