@@ -57,6 +57,8 @@ SINGLETON_GCD(MinroadOperation);
     [self.operationQueue addOperation:theOp];
     
     //更新UI
+    
+    
 }
 
 - (void)reStartOperation:(NSDictionary *)_dic
@@ -129,6 +131,7 @@ SINGLETON_GCD(MinroadOperation);
     }
     
 }
+
 -(void) uploadimagewithPostid:(NSString *) postid  image:(UIImage*) image token:(NSString*) token withDict:(NSDictionary *) dict
 {
     

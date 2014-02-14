@@ -16,7 +16,7 @@
 #import "XCAlbumAdditions.h"
 #import "XCJGroupPost_list.h"
 #import "MinroadOperation.h"
-
+#import "UINavigationController+SGProgress.h"
 #define DISTANCE_BETWEEN_ITEMS  5.0
 #define LEFT_PADDING            5.0
 #define ITEM_WIDTH              65.0
@@ -146,10 +146,12 @@
                         }                        
                     }];
                     glist.excountImages = array;
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"StartPostUploadimages" object:@([array count])];
                 }
                 [_needRefreshViewController.activities insertObject:glist atIndex:0];
                 [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
                 [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+               
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
                 [SVProgressHUD showErrorWithStatus:@"发送失败"];

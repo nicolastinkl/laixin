@@ -47,6 +47,7 @@
 #import "CTAssetsPickerController.h"
 #import "XCJSendManySelectedImageViewCOntrooler.h"
 #import "XCJErWeiCodeViewController.h"
+#import "UINavigationController+SGProgress.h"
 
 @interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,CTAssetsPickerControllerDelegate>
 {
@@ -101,8 +102,15 @@
     // init data with parent viewcontroller
     [self.refreshView beginRefreshing];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(StartPostUploadimages:) name:@"StartPostUploadimages" object:nil];
 }
 
+-(void) StartPostUploadimages:(NSNotification * ) notify
+{
+    if (notify.object) {
+          [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:ios7BlueColor andTitle:@"发送中..." ];
+    }
+}
 
 #pragma mark - Assets Picker Delegate
 

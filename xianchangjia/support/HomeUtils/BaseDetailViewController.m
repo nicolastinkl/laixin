@@ -232,7 +232,7 @@
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
     
-    
+    cell.needRefreshViewController = self;
     if (activity.like > 0 && !cell.HasLoadlisks) {
         cell.HasLoadlisks = YES;
        /*

@@ -25,8 +25,10 @@
 #import "HTCopyableLabel.h"
 #import "POHorizontalList.h"
 #import "DataHelper.h"
+#import "BaseDetailViewController.h"
+#import "IDMPhotoBrowser.h"
 
-@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
+@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate,IDMPhotoBrowserDelegate>
 
 //用户头像View
 @property (nonatomic, strong) UIButton *avatarButton;
@@ -37,7 +39,7 @@
 //内容Label
 @property (nonatomic, strong) HTCopyableLabel *contentLabel;
 //图片View
-@property (nonatomic, strong) MLCanPopUpImageView *activityImageView;
+@property (nonatomic, strong) UIImageView *activityImageView;
 //评论按钮
 @property (nonatomic, strong) UIButton *commentButton;
 //赞按钮
@@ -116,8 +118,11 @@
         [self addSubview:_contentLabel];
         
         //图片
-        self.activityImageView = [[MLCanPopUpImageView alloc] init];
+        self.activityImageView = [[UIImageView alloc] init];
         [self addSubview:_activityImageView];
+        self.activityImageView.userInteractionEnabled = YES;
+        UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewClick:)];
+        [self.activityImageView addGestureRecognizer:tapges];
         
         //多图
         self.imageListScroll = [[UIScrollView alloc] init];
@@ -156,7 +161,6 @@
         _ReportButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _ReportButton.tag = 805;
         [self addSubview:_ReportButton];
-        
         
         //赞按钮
         self.likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -227,6 +231,45 @@
     // Configure the view for the selected state
 }
 
+-(void) SeeBigImageviewmulitClick:(id) sender
+{
+    UITapGestureRecognizer * ges = sender;
+    UIImageView *buttonSender = (UIImageView *)ges.view;
+    if (_activity.excount > 0) {
+        NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:_activity.excountImages];
+        // Create and setup browser
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+        browser.delegate = self;
+        browser.displayActionButton = NO;
+        browser.displayArrowButton = YES;
+        browser.displayCounterLabel = YES;
+        [browser setInitialPageIndex:buttonSender.tag];
+        //            browser.scaleImage = buttonSender.image;        // Show
+        [self.needRefreshViewController presentViewController:browser animated:YES completion:nil];
+    }
+}
+
+-(void) SeeBigImageviewClick:(id) sender
+{
+//    UIImageView *buttonSender = (UIImageView*)sender;
+    
+    if(_activity.imageURL && _activity.imageURL.length > 5)
+    {
+        IDMPhoto * photo = [IDMPhoto photoWithURL:[NSURL URLWithString:_activity.imageURL]];
+        photo.caption = _activity.content;
+        // Create and setup browser
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:@[photo]];
+        browser.delegate = self;
+//        browser.scaleImage = buttonSender.image;
+        [self.needRefreshViewController presentViewController:browser animated:YES completion:nil];
+    }
+    else{
+       
+    }
+        
+    
+}
+
 #pragma mark - set Activity
 - (void)setActivity:(XCJGroupPost_list *)activity
 {
@@ -262,16 +305,10 @@
     
     //重置下
     _activityImageView.image = nil;
-    _activityImageView.fullScreenImageURL = nil;
+//    _activityImageView.fullScreenImageURL = nil;
     _activityImageView.backgroundColor = [UIColor colorWithHex:0xF0F0F0];
-    if (_activity.imageURL) {
-//        NSRange range = [_activity.imageURL rangeOfString:@"/" options:NSBackwardsSearch];
-//        NSString *thumbImageURL = [_activity.imageURL stringByReplacingCharactersInRange:range withString:@"/320/"];
-        
-//        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL Size:160]] placeholderImage:nil displayProgress:YES];
-        
-        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL width:_activity.width/10 height:_activity.height/10]] placeholderImage:nil displayProgress:YES];
-        _activityImageView.fullScreenImageURL = [NSURL URLWithString:_activity.imageURL];
+    if (_activity.imageURL && _activity.imageURL.length > 5 && _activity.excount <= 0) {
+        [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL width:_activity.width/10 height:_activity.height/10]]];
     }
     
     if (_activity.ilike) {
@@ -365,14 +402,17 @@
 //                         [item1 setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, 0, pageSize.width, pageSize.height)];
                         [arrayURLS addObject:stringurl];
                         
-                        MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                        iv.tag = idx;
                         iv.contentMode = UIViewContentModeScaleAspectFill;
                         iv.clipsToBounds = YES;
                         iv.userInteractionEnabled = YES;
                         [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-                        
+                        iv.userInteractionEnabled = YES;
+                        UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
+                        [iv addGestureRecognizer:tapges];
                          // add self view
-                        [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
+//                        [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
                         iv.hidden = NO;
                         [self.imageListScroll addSubview:iv];
                     }];
@@ -405,9 +445,10 @@
                 //                    // add self view
                 //                    [self.imageListScroll addSubview:item1];
                 int row = idx/3;
-                MLCanPopUpImageView *iv = [[MLCanPopUpImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
+                 iv.tag = idx;
                 if([stringurl containString:@"assets-library://asset/"])
                 {
                     //系统图片
@@ -415,7 +456,10 @@
                 }else {
                     [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
                 }
-                [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
+                iv.userInteractionEnabled = YES;
+                UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
+                [iv addGestureRecognizer:tapges];
+//                [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
                 // add self view
                 [self.imageListScroll addSubview:iv];
             }];
@@ -450,6 +494,7 @@
                 if (height > 200) {
                     height = 200;
                 }
+                
                 _activityImageView.frame = CGRectMake(xOffset, yOffset, width, height);
                 yOffset += _activityImageView.frameHeight+10;   //不规则形状
             }
@@ -675,5 +720,22 @@
     }
     return text;
 }
+
+#pragma mark - IDMPhotoBrowser Delegate
+
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index
+{
+    id <IDMPhoto> photo = [photoBrowser photoAtIndex:index];
+    SLog(@"Dissmised with photo index: %d, photo caption: %@", index, photo.caption);
+}
+
+- (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex
+{
+    [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Option %d", buttonIndex+1] message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    
+    id <IDMPhoto> photo = [photoBrowser photoAtIndex:photoIndex];
+    SLog(@"Dissmised actionSheet with photo index: %d, photo caption: %@", photoIndex, photo.caption);
+}
+
 
 @end

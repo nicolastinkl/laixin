@@ -19,6 +19,7 @@
 		8622C897187D8F5100776A38 /* XCJNewAddFriendTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C896187D8F5100776A38 /* XCJNewAddFriendTabViewController.m */; };
 		8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */; };
 		8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */; };
+		8626559C18ADADB700F05B81 /* UINavigationController+SGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
@@ -110,6 +111,18 @@
 		8669982118792BE300233C47 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982018792BE300233C47 /* AudioToolbox.framework */; };
 		8669982318792BEF00233C47 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982218792BEF00233C47 /* CoreMedia.framework */; };
 		8669982518792BF700233C47 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8669982418792BF700233C47 /* CoreVideo.framework */; };
+		866C155D18ADE75F0054F686 /* DACircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154318ADE75F0054F686 /* DACircularProgressView.m */; };
+		866C155E18ADE75F0054F686 /* DCCrossHairView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154618ADE75F0054F686 /* DCCrossHairView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		866C155F18ADE75F0054F686 /* DCFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154818ADE75F0054F686 /* DCFrameView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		866C156018ADE75F0054F686 /* DCIntrospect.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154A18ADE75F0054F686 /* DCIntrospect.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		866C156118ADE75F0054F686 /* DCStatusBarOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154D18ADE75F0054F686 /* DCStatusBarOverlay.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		866C156218ADE75F0054F686 /* IDMCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C154F18ADE75F0054F686 /* IDMCaptionView.m */; };
+		866C156318ADE75F0054F686 /* IDMPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C155218ADE75F0054F686 /* IDMPhoto.m */; };
+		866C156418ADE75F0054F686 /* IDMPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 866C155318ADE75F0054F686 /* IDMPhotoBrowser.bundle */; };
+		866C156518ADE75F0054F686 /* IDMPhotoBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C155518ADE75F0054F686 /* IDMPhotoBrowser.m */; };
+		866C156618ADE75F0054F686 /* IDMTapDetectingImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C155818ADE75F0054F686 /* IDMTapDetectingImageView.m */; };
+		866C156718ADE75F0054F686 /* IDMTapDetectingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C155A18ADE75F0054F686 /* IDMTapDetectingView.m */; };
+		866C156818ADE75F0054F686 /* IDMZoomingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866C155C18ADE75F0054F686 /* IDMZoomingScrollView.m */; };
 		866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 866F0618185724EE007A57CF /* SinaWeibo.bundle */; };
 		866F0621185724EE007A57CF /* SinaWeibo.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061A185724EE007A57CF /* SinaWeibo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061C185724EE007A57CF /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -447,6 +460,8 @@
 		8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNewAddGroupTabViewController.m; path = viewcontroller/XCJNewAddGroupTabViewController.m; sourceTree = "<group>"; };
 		8622C89B187E3F7A00776A38 /* FCHomeGroupMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCHomeGroupMsg.h; path = DAOModel/coredata/FCHomeGroupMsg.h; sourceTree = "<group>"; };
 		8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCHomeGroupMsg.m; path = DAOModel/coredata/FCHomeGroupMsg.m; sourceTree = "<group>"; };
+		8626559A18ADADB700F05B81 /* UINavigationController+SGProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+SGProgress.h"; sourceTree = "<group>"; };
+		8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+SGProgress.m"; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		862EC4CB188E0FE5006F4D43 /* XCJChatSendImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendImgViewController.h; path = viewcontroller/XCJChatSendImgViewController.h; sourceTree = "<group>"; };
@@ -616,6 +631,32 @@
 		8669982018792BE300233C47 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8669982218792BEF00233C47 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		8669982418792BF700233C47 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		866C154218ADE75F0054F686 /* DACircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DACircularProgressView.h; sourceTree = "<group>"; };
+		866C154318ADE75F0054F686 /* DACircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DACircularProgressView.m; sourceTree = "<group>"; };
+		866C154518ADE75F0054F686 /* DCCrossHairView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCrossHairView.h; sourceTree = "<group>"; };
+		866C154618ADE75F0054F686 /* DCCrossHairView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCrossHairView.m; sourceTree = "<group>"; };
+		866C154718ADE75F0054F686 /* DCFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCFrameView.h; sourceTree = "<group>"; };
+		866C154818ADE75F0054F686 /* DCFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCFrameView.m; sourceTree = "<group>"; };
+		866C154918ADE75F0054F686 /* DCIntrospect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIntrospect.h; sourceTree = "<group>"; };
+		866C154A18ADE75F0054F686 /* DCIntrospect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCIntrospect.m; sourceTree = "<group>"; };
+		866C154B18ADE75F0054F686 /* DCIntrospectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCIntrospectSettings.h; sourceTree = "<group>"; };
+		866C154C18ADE75F0054F686 /* DCStatusBarOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCStatusBarOverlay.h; sourceTree = "<group>"; };
+		866C154D18ADE75F0054F686 /* DCStatusBarOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCStatusBarOverlay.m; sourceTree = "<group>"; };
+		866C154E18ADE75F0054F686 /* IDMCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMCaptionView.h; sourceTree = "<group>"; };
+		866C154F18ADE75F0054F686 /* IDMCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMCaptionView.m; sourceTree = "<group>"; };
+		866C155018ADE75F0054F686 /* IDMPBConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMPBConstants.h; sourceTree = "<group>"; };
+		866C155118ADE75F0054F686 /* IDMPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMPhoto.h; sourceTree = "<group>"; };
+		866C155218ADE75F0054F686 /* IDMPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMPhoto.m; sourceTree = "<group>"; };
+		866C155318ADE75F0054F686 /* IDMPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = IDMPhotoBrowser.bundle; sourceTree = "<group>"; };
+		866C155418ADE75F0054F686 /* IDMPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMPhotoBrowser.h; sourceTree = "<group>"; };
+		866C155518ADE75F0054F686 /* IDMPhotoBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMPhotoBrowser.m; sourceTree = "<group>"; };
+		866C155618ADE75F0054F686 /* IDMPhotoProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMPhotoProtocol.h; sourceTree = "<group>"; };
+		866C155718ADE75F0054F686 /* IDMTapDetectingImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMTapDetectingImageView.h; sourceTree = "<group>"; };
+		866C155818ADE75F0054F686 /* IDMTapDetectingImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMTapDetectingImageView.m; sourceTree = "<group>"; };
+		866C155918ADE75F0054F686 /* IDMTapDetectingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMTapDetectingView.h; sourceTree = "<group>"; };
+		866C155A18ADE75F0054F686 /* IDMTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMTapDetectingView.m; sourceTree = "<group>"; };
+		866C155B18ADE75F0054F686 /* IDMZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDMZoomingScrollView.h; sourceTree = "<group>"; };
+		866C155C18ADE75F0054F686 /* IDMZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDMZoomingScrollView.m; sourceTree = "<group>"; };
 		866F0618185724EE007A57CF /* SinaWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SinaWeibo.bundle; sourceTree = "<group>"; };
 		866F0619185724EE007A57CF /* SinaWeibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeibo.h; sourceTree = "<group>"; };
 		866F061A185724EE007A57CF /* SinaWeibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeibo.m; sourceTree = "<group>"; };
@@ -1205,6 +1246,15 @@
 			name = Friends;
 			sourceTree = "<group>";
 		};
+		8626559918ADADB700F05B81 /* UINavigationController+SGProgress */ = {
+			isa = PBXGroup;
+			children = (
+				8626559A18ADADB700F05B81 /* UINavigationController+SGProgress.h */,
+				8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */,
+			);
+			path = "UINavigationController+SGProgress";
+			sourceTree = "<group>";
+		};
 		862D25B818585D4B005208C8 /* Appicon */ = {
 			isa = PBXGroup;
 			children = (
@@ -1601,6 +1651,63 @@
 				86608402188FB20100F4870B /* XCJAddGroupInfoViewController.m */,
 			);
 			name = ScanView;
+			sourceTree = "<group>";
+		};
+		866C153F18ADE75F0054F686 /* PhotoBrowerClasses */ = {
+			isa = PBXGroup;
+			children = (
+				866C154018ADE75F0054F686 /* ExternalLibraries */,
+				866C154E18ADE75F0054F686 /* IDMCaptionView.h */,
+				866C154F18ADE75F0054F686 /* IDMCaptionView.m */,
+				866C155018ADE75F0054F686 /* IDMPBConstants.h */,
+				866C155118ADE75F0054F686 /* IDMPhoto.h */,
+				866C155218ADE75F0054F686 /* IDMPhoto.m */,
+				866C155318ADE75F0054F686 /* IDMPhotoBrowser.bundle */,
+				866C155418ADE75F0054F686 /* IDMPhotoBrowser.h */,
+				866C155518ADE75F0054F686 /* IDMPhotoBrowser.m */,
+				866C155618ADE75F0054F686 /* IDMPhotoProtocol.h */,
+				866C155718ADE75F0054F686 /* IDMTapDetectingImageView.h */,
+				866C155818ADE75F0054F686 /* IDMTapDetectingImageView.m */,
+				866C155918ADE75F0054F686 /* IDMTapDetectingView.h */,
+				866C155A18ADE75F0054F686 /* IDMTapDetectingView.m */,
+				866C155B18ADE75F0054F686 /* IDMZoomingScrollView.h */,
+				866C155C18ADE75F0054F686 /* IDMZoomingScrollView.m */,
+			);
+			path = PhotoBrowerClasses;
+			sourceTree = "<group>";
+		};
+		866C154018ADE75F0054F686 /* ExternalLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				866C154118ADE75F0054F686 /* DACircularProgress */,
+				866C154418ADE75F0054F686 /* DCIntrospect */,
+			);
+			path = ExternalLibraries;
+			sourceTree = "<group>";
+		};
+		866C154118ADE75F0054F686 /* DACircularProgress */ = {
+			isa = PBXGroup;
+			children = (
+				866C154218ADE75F0054F686 /* DACircularProgressView.h */,
+				866C154318ADE75F0054F686 /* DACircularProgressView.m */,
+			);
+			path = DACircularProgress;
+			sourceTree = "<group>";
+		};
+		866C154418ADE75F0054F686 /* DCIntrospect */ = {
+			isa = PBXGroup;
+			children = (
+				866C154518ADE75F0054F686 /* DCCrossHairView.h */,
+				866C154618ADE75F0054F686 /* DCCrossHairView.m */,
+				866C154718ADE75F0054F686 /* DCFrameView.h */,
+				866C154818ADE75F0054F686 /* DCFrameView.m */,
+				866C154918ADE75F0054F686 /* DCIntrospect.h */,
+				866C154A18ADE75F0054F686 /* DCIntrospect.m */,
+				866C154B18ADE75F0054F686 /* DCIntrospectSettings.h */,
+				866C154C18ADE75F0054F686 /* DCStatusBarOverlay.h */,
+				866C154D18ADE75F0054F686 /* DCStatusBarOverlay.m */,
+			);
+			path = DCIntrospect;
 			sourceTree = "<group>";
 		};
 		866F0617185724EE007A57CF /* SinaWeibo */ = {
@@ -2297,6 +2404,8 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				866C153F18ADE75F0054F686 /* PhotoBrowerClasses */,
+				8626559918ADADB700F05B81 /* UINavigationController+SGProgress */,
 				863FCCA118A9F0BE00422DEB /* coyLabel */,
 				862F54B518A87ECE005DFD6C /* LKBadgeView */,
 				86ADDA321894E73E000A0C22 /* iOS-WebP */,
@@ -2961,6 +3070,7 @@
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
 				86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */,
 				86C642331887A3D200E0CDDB /* Images.xcassets in Resources */,
+				866C156418ADE75F0054F686 /* IDMPhotoBrowser.bundle in Resources */,
 				8668E481187540DB00D20C9E /* MLScrollRefreshHeader.bundle in Resources */,
 				866F0620185724EE007A57CF /* SinaWeibo.bundle in Resources */,
 				8668E477187540DB00D20C9E /* btn_comment@2x.png in Resources */,
@@ -3004,6 +3114,7 @@
 				866516A7187BF276001F05F6 /* split.c in Sources */,
 				869CE528186BE38D0004C1EC /* NSManagedObject+MagicalRequests.m in Sources */,
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
+				866C156218ADE75F0054F686 /* IDMCaptionView.m in Sources */,
 				869DDC621874422600560AFD /* Conversation.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
 				86ADDA2C1893D8F5000A0C22 /* MMLocationManager.m in Sources */,
@@ -3057,7 +3168,9 @@
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
 				86EB76BB185AA6CC00836947 /* Chat.m in Sources */,
 				866516A1187BF276001F05F6 /* mask.c in Sources */,
+				866C156318ADE75F0054F686 /* IDMPhoto.m in Sources */,
 				86D1830A1834AFD90005901D /* DAHttpClient.m in Sources */,
+				866C156118ADE75F0054F686 /* DCStatusBarOverlay.m in Sources */,
 				86D1830E1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
@@ -3065,6 +3178,7 @@
 				8688CCCC188E513F002CD2C8 /* FacialView.m in Sources */,
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
 				86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */,
+				8626559C18ADADB700F05B81 /* UINavigationController+SGProgress.m in Sources */,
 				86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */,
 				86D182FE1834AF7E0005901D /* GlobalData.m in Sources */,
 				86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */,
@@ -3094,6 +3208,7 @@
 				86494CC31881511800C22B14 /* FCReplyMessage.m in Sources */,
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
 				86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */,
+				866C156718ADE75F0054F686 /* IDMTapDetectingView.m in Sources */,
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
 				86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */,
 				86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */,
@@ -3132,6 +3247,7 @@
 				86FB210118716C80006BDE32 /* XCJRegisterViewController.m in Sources */,
 				86D183061834AFB00005901D /* XCDataDBFactory.m in Sources */,
 				869CE532186BE38D0004C1EC /* MagicalRecord+iCloud.m in Sources */,
+				866C156018ADE75F0054F686 /* DCIntrospect.m in Sources */,
 				869CE527186BE38D0004C1EC /* NSManagedObject+MagicalRecord.m in Sources */,
 				86D182B81834AED30005901D /* MyMD5.m in Sources */,
 				86D1828C1834AED30005901D /* UIImage+Alpha.m in Sources */,
@@ -3143,6 +3259,7 @@
 				86EB76BD185AA6CC00836947 /* Message.m in Sources */,
 				8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */,
 				869CE525186BE38D0004C1EC /* NSManagedObject+MagicalDataImport.m in Sources */,
+				866C156818ADE75F0054F686 /* IDMZoomingScrollView.m in Sources */,
 				86EB76DF185AA6CC00836947 /* base64.c in Sources */,
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,
 				86D1828E1834AED30005901D /* UIImage+Resize.m in Sources */,
@@ -3211,6 +3328,7 @@
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
 				86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
+				866C156518ADE75F0054F686 /* IDMPhotoBrowser.m in Sources */,
 				8622C87C187D192100776A38 /* POHorizontalList.m in Sources */,
 				866516A5187BF276001F05F6 /* qrspec.c in Sources */,
 				86608407188FBBF300F4870B /* XCJActiveViewController.m in Sources */,
@@ -3246,7 +3364,10 @@
 				86660DC11876BB78007477C0 /* XCJHomeMenuView.m in Sources */,
 				868B5D571893B068004D1743 /* HanyuPinyinOutputFormat.m in Sources */,
 				86D182F41834AF540005901D /* FMDatabaseQueue.m in Sources */,
+				866C156618ADE75F0054F686 /* IDMTapDetectingImageView.m in Sources */,
 				866516A4187BF276001F05F6 /* qrinput.c in Sources */,
+				866C155E18ADE75F0054F686 /* DCCrossHairView.m in Sources */,
+				866C155D18ADE75F0054F686 /* DACircularProgressView.m in Sources */,
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,
@@ -3263,6 +3384,7 @@
 				8668E480187540DB00D20C9E /* MLJson.m in Sources */,
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
 				86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */,
+				866C155F18ADE75F0054F686 /* DCFrameView.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
 				8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */,
@@ -3405,7 +3527,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "87449695-4398-4E99-95C2-91CFED4ED7E7";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3439,7 +3561,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "87449695-4398-4E99-95C2-91CFED4ED7E7";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
