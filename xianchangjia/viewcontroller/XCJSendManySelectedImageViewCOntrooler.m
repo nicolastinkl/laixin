@@ -169,8 +169,8 @@
         [self.TextMsg resignFirstResponder];
     }
     
-    if (self.array.count >= 20) {
-        [UIAlertView showAlertViewWithMessage:@"最多只能选20张照片"];
+    if (self.array.count >= 21) {
+        [UIAlertView showAlertViewWithMessage:@"最多只能选21张照片"];
         return;
     }
     
@@ -181,7 +181,7 @@
     picker.navigationBar.tintColor  = [UIColor whiteColor];
     picker.navigationBarHidden = NO;
     
-    picker.maximumNumberOfSelection = 20-self.array.count;
+    picker.maximumNumberOfSelection = 21-self.array.count;
     picker.assetsFilter = [ALAssetsFilter allAssets];
     // only allow video clips if they are at least 5s
     picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {

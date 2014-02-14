@@ -108,7 +108,7 @@
 -(void) StartPostUploadimages:(NSNotification * ) notify
 {
     if (notify.object) {
-          [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:ios7BlueColor andTitle:@"发送中..." ];
+          [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:[UIColor redColor] andTitle:@"发送中..." ];
     }
 }
 
@@ -650,7 +650,7 @@
                 }
                     break;
                 case 2:{
-                     [self pickAssets:20];
+                     [self pickAssets:21];
                 }
                     break;
                 default:
@@ -664,7 +664,6 @@
     }
     
 }
-
 
 
 - (void)pickAssets:(int )sender

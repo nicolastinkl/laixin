@@ -244,7 +244,10 @@
         browser.displayArrowButton = YES;
         browser.displayCounterLabel = YES;
         [browser setInitialPageIndex:buttonSender.tag];
-        //            browser.scaleImage = buttonSender.image;        // Show
+        if (buttonSender.image) {
+            browser.scaleImage = buttonSender.image;        // Show
+        }
+
         [self.needRefreshViewController presentViewController:browser animated:YES completion:nil];
     }
 }

@@ -1125,7 +1125,7 @@
 - (void)updateNavigation {
     // Counter
 	if ([self numberOfPhotos] > 1) {
-		_counterLabel.text = [NSString stringWithFormat:@"%i %@ %i", _currentPageIndex+1, NSLocalizedString(@"of", nil), [self numberOfPhotos]];
+		_counterLabel.text = [NSString stringWithFormat:@"%i / %i", _currentPageIndex+1,[self numberOfPhotos]]; // NSLocalizedString(@"of", nil),
 	} else {
 		_counterLabel.text = nil;
 	}
