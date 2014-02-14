@@ -195,6 +195,7 @@
         cell.delegate = self;
     }
     XCJGroupPost_list* activity = currentGroup;
+    cell.needRefreshViewController = self;
     
     if (activity.like == 0 && !cell.HasLoadlisks) {
         cell.HasLoadlisks = YES;

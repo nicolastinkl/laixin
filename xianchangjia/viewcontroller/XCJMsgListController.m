@@ -242,6 +242,7 @@
         [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
         [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
         [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
+        [USER_DEFAULT setObject:currentUser.background_image forKey:KeyChain_Laixin_account_user_backgroupbg];
         [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
         [USER_DEFAULT synchronize];
         

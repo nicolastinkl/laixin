@@ -114,9 +114,9 @@
                 case messageType_map:
                 {
                     self.currentMessage.imageUrl = url;
-                     MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[self.contentView subviewWithTag:5];
+                     UIImageView * imageview_Img = (UIImageView *)[self.contentView subviewWithTag:5];
                     [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:160]] placeholderImage:[UIImage imageNamed:@"aio_image_default"]];
-                    imageview_Img.fullScreenImageURL = [NSURL URLWithString:url];
+//                    imageview_Img.fullScreenImageURL = [NSURL URLWithString:url];
                 }
                     break;
                 case messageType_audio:

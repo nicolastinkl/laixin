@@ -72,7 +72,12 @@
                 }
                 
             } failure:^(MLRequest *request, NSError *error) {
-                [SVProgressHUD dismiss];            
+                ((UILabel *)[self.view subviewWithTag:1]).textColor = [UIColor redColor];
+                ((UILabel *)[self.view subviewWithTag:1]).text = @"等级不够,没有激活码";
+                ((UILabel *)[self.view subviewWithTag:3]).text =@"";
+                ((UIImageView *)[self.view subviewWithTag:2]).image = [UIImage imageNamed:@"common_image_loading_failure"];
+                self.navigationItem.rightBarButtonItem.enabled = NO;
+                [SVProgressHUD dismiss];
             }];
         });
     }

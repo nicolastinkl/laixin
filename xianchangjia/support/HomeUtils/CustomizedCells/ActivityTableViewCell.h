@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @class XCJGroupPost_list;
-@class BaseDetailViewController;
 @protocol ActivityTableViewCellDelegate <NSObject>
 
 //点击某用户
@@ -51,5 +50,5 @@
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 
 -(int) heigthforCell:(XCJGroupPost_list * )activity;
-@property (nonatomic,weak) BaseDetailViewController *needRefreshViewController;
+@property (nonatomic,weak) UIViewController *needRefreshViewController;
 @end

@@ -28,7 +28,7 @@
 #import "BaseDetailViewController.h"
 #import "IDMPhotoBrowser.h"
 
-@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate,IDMPhotoBrowserDelegate>
+@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
 
 //用户头像View
 @property (nonatomic, strong) UIButton *avatarButton;
@@ -239,7 +239,7 @@
         NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:_activity.excountImages];
         // Create and setup browser
         IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
-        browser.delegate = self;
+//        browser.delegate = self;
         browser.displayActionButton = NO;
         browser.displayArrowButton = YES;
         browser.displayCounterLabel = YES;
@@ -262,15 +262,10 @@
         photo.caption = _activity.content;
         // Create and setup browser
         IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:@[photo]];
-        browser.delegate = self;
+//        browser.delegate = self;
 //        browser.scaleImage = buttonSender.image;
         [self.needRefreshViewController presentViewController:browser animated:YES completion:nil];
     }
-    else{
-       
-    }
-        
-    
 }
 
 #pragma mark - set Activity

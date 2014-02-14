@@ -13,11 +13,15 @@
 #import "XCJGroupPost_list.h"
 #import "XCJMessageReplyInfoViewController.h"
 #import "FCUserDescription.h"
-
+#import "UIImage+WebP.h"
 
 @interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSMutableArray * dataSource;
+    UIImage * ImageFile;
+    NSString * TokenAPP;
+    
+    AFHTTPRequestOperation *  operation;
 }
 
 @property (nonatomic,assign) BOOL isLoading;
@@ -187,7 +191,67 @@
     UIImage * image = [theInfo objectForKey:UIImagePickerControllerEditedImage];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
     [imagebg setImage:image];
+    ImageFile  = image;
     [[EGOCache globalCache] setImage:image forKey:@"myphotoBgImage"];
+    
+    [SVProgressHUD showWithStatus:@"正在上传背景..."];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
+        if (response) {
+            NSString * token = response[@"token"];//  [response objectForKey:@"token"];
+            if (token && token.length > 10) {
+                TokenAPP = token;
+                [self uploadImage:ImageFile token:token];
+            }else{
+                [SVProgressHUD dismiss];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
+                [alert show];
+            }
+        }
+    } withParems:[NSString stringWithFormat:@"upload/BackgroundImg?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
+    
+}
+
+
+-(void) uploadImage:(UIImage *)filePath  token:(NSString *)token
+{
+    // setup 2: upload image
+    //method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
+    [parameters setValue:token forKey:@"token"];
+    NSData * formDataddd = [UIImage imageToWebP:filePath quality:75];
+    operation  = [manager POST:@"http://up.qiniu.com" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
+        [formData appendPartWithFileData:formDataddd name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //{"errno":0,"error":"Success","url":"http://kidswant.u.qiniudn.com/FlVY_hfxn077gaDZejW0uJSWglk3"}
+        SLLog(@"responseObject %@",responseObject);
+        if (responseObject) {
+            
+            NSString * stringURL =  [tools getStringValue:[responseObject objectForKey:@"url"] defaultValue:@""];
+            [USER_DEFAULT setObject:stringURL forKey:KeyChain_Laixin_account_user_backgroupbg];
+            [USER_DEFAULT synchronize];
+            [SVProgressHUD dismiss];
+            //nick, signature,sex, birthday, marriage, height
+            //            NSDictionary * parames = @{@"headpic":stringURL};
+            //            [[MLNetworkingManager sharedManager] sendWithAction:@"user.update"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //
+            //            } failure:^(MLRequest *request, NSError *error) {
+            //            }];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) { 
+        [SVProgressHUD dismiss];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"网络错误" message:@"上传失败,是否重新上传?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新上传", nil];
+        [alert show];
+    }];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [SVProgressHUD showWithStatus:@"正在上传头像..."];
+        [self uploadImage:ImageFile token:TokenAPP];
+    }
 }
 
 #pragma mark - Table view data source

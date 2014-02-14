@@ -45,6 +45,8 @@
 #import "VoiceConverter.h"
 #import "EGOCache.h"
 #import "UIImage+Resize.h"
+#import "IDMPhoto.h"
+#import "IDMPhotoBrowser.h"
 
 #define  keyboardHeight 216
 #define  facialViewWidth 300
@@ -1844,7 +1846,7 @@
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
     
-    MLCanPopUpImageView * imageview_Img = (MLCanPopUpImageView *)[cell.contentView subviewWithTag:5];
+    UIImageView * imageview_Img = (UIImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
     
     if ([message.messageStatus boolValue]) {
@@ -1877,7 +1879,11 @@
         //display image  115 108
         labelContent.text  = @"";
         [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:160]] placeholderImage:[UIImage imageNamed:@"aio_image_default"]];
-        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
+//        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
+        imageview_Img.userInteractionEnabled = YES;
+        UITapGestureRecognizer * ges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewClick:)];
+        [imageview_Img addGestureRecognizer:ges];
+        
         imageview_Img.hidden = NO;
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
@@ -1886,7 +1892,7 @@
         [imageview_Img setWidth:100.0f];
         
         imageview_BG.hidden = NO;
-        imageview_Img.userInteractionEnabled = YES;
+
         address.text = @"";
         address.hidden = YES;
         
@@ -1929,7 +1935,7 @@
         labelContent.text  = @"";
         //display image  115 108
         [imageview_Img setImage:[UIImage imageNamed:message.text]];
-        imageview_Img.fullScreenImageURL = nil;
+//        imageview_Img.fullScreenImageURL = nil;
         imageview_Img.hidden = NO;
         imageview_Img.userInteractionEnabled = NO;
         [imageview_BG setHeight:108.0f];
@@ -1954,7 +1960,7 @@
         //display image  115 108
         labelContent.text  = @"";
         [imageview_Img setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:message.imageUrl Size:320]] placeholderImage:[UIImage imageNamed:@"messages_map_image_default"]];
-        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
+//        imageview_Img.fullScreenImageURL = [NSURL URLWithString:message.imageUrl];
         imageview_Img.hidden = NO;
         [imageview_BG setWidth:174.0f];
         [imageview_BG setHeight:168.0f];
@@ -2019,6 +2025,23 @@
     }
     
     return cell;
+}
+
+
+-(void) SeeBigImageviewClick:(id) sender
+{
+    UITapGestureRecognizer * ges = sender;
+    UIImageView *buttonSender = (UIImageView *)ges.view;
+    UIView * uiview =  buttonSender.superview.superview;
+    XCJChatMessageCell * cell = (XCJChatMessageCell* ) uiview.superview;
+    if ([cell.currentMessage.messageType  intValue] == messageType_image) {
+        
+        //    UIImageView *buttonSender = (UIImageView*)sender;
+        IDMPhoto * photo = [IDMPhoto photoWithURL:[NSURL URLWithString:cell.currentMessage.imageUrl]];
+        // Create and setup browser
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:@[photo]];
+        [self presentViewController:browser animated:YES completion:nil];
+    }
 }
 
 -(IBAction)playaudioClick:(id)sender
