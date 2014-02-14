@@ -509,7 +509,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
             {
                 return;
             }
-            //out view
             NSString * content = dicMessage[@"content"];
             NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
             
@@ -519,22 +518,22 @@ static NSString * const kLaixinStoreName = @"Laixins";
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
+#warning       //查看我是否有加入此圈子
+                //查看我是否有加入此圈子
+                return;
                 conversation =  [Conversation MR_createInContext:localContext];
             }
+            
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
- 
-        
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
                 FCUserDescription * localdespObject = response;
-                
                 if (imageurl.length > 5)
                 {
                     conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",localdespObject.nick];
                 }else
                 {
                     conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
-                    
                 }
                 
                 conversation.lastMessageDate = date;
@@ -552,9 +551,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
             } withuid:uid];
             
             //然后更新朋友圈最新发图
-            
-            
-            
             
 #pragma mark 这里是群组聊天室 代码
             

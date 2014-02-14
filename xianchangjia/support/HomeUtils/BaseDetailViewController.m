@@ -187,6 +187,80 @@
     return _activities.count+1;
 }
 
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)activityCell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//lazy loading
+    
+    XCJGroupPost_list* activity = _activities[indexPath.row];
+    ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
+    
+    if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
+        /* get all list data*/
+        cell.HasLoad = YES;
+        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //    postid = 12;
+            /*
+             Result={
+             “posts”:[*/
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * postsDict =  groups[@"replys"];
+            if (postsDict && postsDict.count > 0) {
+                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    Comment * comment = [Comment turnObject:obj];
+                    [mutaArray addObject:comment];
+                    
+                }];
+                [activity.comments addObjectsFromArray:mutaArray];
+                //indexofActivitys
+                [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+            }
+            cell.HasLoad = YES;
+        } failure:^(MLRequest *request, NSError *error) {
+            cell.HasLoad = NO;
+        }];
+    }
+    
+    if (activity.excount > 0) {
+        if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
+            //check from networking
+            cell.isloadingphotos = YES;
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary  * result = responseObject[@"result"];
+                    NSArray * array = result[@"exdata"];
+                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                        [arrayURLS addObject:stringurl];
+                    }];
+                    [activity.excountImages removeAllObjects];
+                    [activity.excountImages addObjectsFromArray:arrayURLS];
+//                    [_tableView reloadData];
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                cell.isloadingphotos = NO;
+            } failure:^(MLRequest *request, NSError *error) {
+                cell.isloadingphotos = NO;
+            }];
+        }
+        
+    }
+    
+    if (_isDontNeedLazyLoad) {
+        return;
+    }
+    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
+        if (!_isLoading) {
+            self.isLoading = YES;
+            [self postLoadMoreActivitiesRequest];
+        }
+    }
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     /*if (indexPath.row>=_activities.count) {
@@ -231,7 +305,6 @@
         cell.delegate = self;
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
-    
     cell.needRefreshViewController = self;
     if (activity.like > 0 && !cell.HasLoadlisks) {
         cell.HasLoadlisks = YES;
@@ -259,39 +332,6 @@
         */
     }
 
-    if (activity.comments.count <= 0 && !cell.HasLoad) {
-        /* get all list data*/
-        cell.HasLoad = YES;
-        NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //    postid = 12;
-            /*
-             Result={
-             “posts”:[*/
-            NSDictionary * groups = responseObject[@"result"];
-            NSArray * postsDict =  groups[@"replys"];
-            if (postsDict && postsDict.count > 0) {
-                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    /*“replyid”:
-                     “postid”:
-                     “uid”:
-                     “content”:
-                     “time”:
-                     */
-                    Comment * comment = [Comment turnObject:obj];
-                    [mutaArray addObject:comment];
-                    
-                }];
-                [activity.comments addObjectsFromArray:mutaArray];
-                //indexofActivitys
-                [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];   
-            }
-            cell.HasLoad = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-            cell.HasLoad = NO;
-        }];
-    }
 //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;
     // start requst comments  and likes
@@ -338,18 +378,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_isDontNeedLazyLoad) {
-        return;
-    }
-    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
-        if (!_isLoading) {
-            self.isLoading = YES;
-            [self postLoadMoreActivitiesRequest];
-        }
-    }
-}
 
 #pragma mark - ActivityTableViewCellDelegate
 //点击某用户名

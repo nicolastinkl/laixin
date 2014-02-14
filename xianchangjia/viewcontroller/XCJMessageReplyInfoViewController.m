@@ -197,6 +197,20 @@
     XCJGroupPost_list* activity = currentGroup;
     cell.needRefreshViewController = self;
     
+   
+    //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
+    cell.activity = activity;
+    // start requst comments  and likes
+    
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)activityCell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    XCJGroupPost_list* activity = currentGroup;
+    ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
+    
     if (activity.like == 0 && !cell.HasLoadlisks) {
         cell.HasLoadlisks = YES;
         if (activity) {
@@ -221,12 +235,11 @@
             }];
         }else{
             //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
-        }
-       
-         
+        } 
+        
     }
     
-    if (activity.comments.count <= 0 && !cell.HasLoad) {
+    if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
         if (activity) {
@@ -257,13 +270,33 @@
         }
         
     }
-    //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
-    cell.activity = activity;
-    // start requst comments  and likes
     
-    return cell;
+    if (activity.excount > 0) {
+        if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
+            //check from networking
+            cell.isloadingphotos = YES;
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary  * result = responseObject[@"result"];
+                    NSArray * array = result[@"exdata"];
+                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                        [arrayURLS addObject:stringurl];
+                    }];
+                    [activity.excountImages removeAllObjects];
+                    [activity.excountImages addObjectsFromArray:arrayURLS];
+                    //                    [_tableView reloadData];
+                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                }
+                cell.isloadingphotos = NO;
+            } failure:^(MLRequest *request, NSError *error) {
+                cell.isloadingphotos = NO;
+            }];
+        }
+        
+    }
 }
-
 #pragma mark  comments
 
 - (void)reloadSingleActivityRowOfTableView:(NSInteger)row withAnimation:(BOOL)animation

@@ -383,8 +383,8 @@
         }];
         _activityImageView.hidden = YES;
         _activityImageView.frame = CGRectMake(0, 0, 0, 0);
-        if (_activity.excountImages.count <= 0 && !self.isloadingphotos) {
-            //check from networking
+      if (_activity.excountImages.count <= 0 && !self.isloadingphotos) {
+          /*    //check from networking
             self.isloadingphotos = YES;
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":_activity.postid} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
@@ -409,12 +409,9 @@
                         iv.userInteractionEnabled = YES;
                         UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
                         [iv addGestureRecognizer:tapges];
-                         // add self view
-//                        [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
                         iv.hidden = NO;
                         [self.imageListScroll addSubview:iv];
                     }];
-//                    self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [arrayURLS count], pageSize.height);
                     [_activity.excountImages removeAllObjects];
                     [_activity.excountImages addObjectsFromArray:arrayURLS];
 //                    _activity.excount = _activity.excountImages.count;
@@ -424,17 +421,9 @@
             } failure:^(MLRequest *request, NSError *error) {
                 self.isloadingphotos = NO;
             }];
+           */
         }else{
             //有数据
-            //CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.imageListScroll.frame.size.height);
-            if (self.imageListScroll.subviews.count <= 0 ) {
-//                [self.imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//                    [obj removeFromSuperview];
-//                }];
-//                __block NSUInteger page = 0;
-                
-//                self.imageListScroll.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [_activity.excountImages count], pageSize.height);
-            }
             [_activity.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 NSString * stringurl = obj;
                 //                    ListItem *item1 = [[ListItem alloc] initWithFrame:CGRectZero imageUrl:stringurl];
