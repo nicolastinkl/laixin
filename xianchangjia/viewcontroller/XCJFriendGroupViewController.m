@@ -172,6 +172,18 @@
     self.navigationItem.rightBarButtonItem = baritem;
 }
 
+-(void) hasNewPostInfo
+{
+    double delayInSeconds = 1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        XCJGroupPost_list * post = [self.activities firstObject];
+        if (post) {
+        [self postGetActivitiesWithLastID:[post.postid intValue] withType:Enum_UpdateTopData];
+        }
+    });
+}
+
 -(IBAction)showActionClick:(id)sender
 {
     UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:Nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"查看消息列表", nil];

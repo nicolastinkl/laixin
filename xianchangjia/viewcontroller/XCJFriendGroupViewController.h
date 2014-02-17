@@ -11,4 +11,5 @@
 #import "ConverReply.h"
 @interface XCJFriendGroupViewController : BaseDetailViewController
 @property (readwrite, nonatomic, strong) ConverReply *conversation;
+-(void) hasNewPostInfo;
 @end

@@ -76,12 +76,9 @@
     // Set up the fetched results controller if needed.
     if (_fetchedResultsController == nil) {
         /*
-         http://stackoverflow.com/questions/14690681/nsfetchedresultschangeupdate-fired-instead-of-nsfetchedresultschangedelete#new-answer
-         
+         http://stackoverflow.com/questions/14690681/nsfetchedresultschangeupdate-fired-instead-of-nsfetchedresultschangedelete#new-answer         
          If I update this property to [NSNumber numberWithBool:YES] the NSFetchedResultsControllerDelegate calls didChangeObject but firing NSFetchedResultsChangeUpdate instead of NSFetchedResultsChangeDelete.
-         
          MARK:     [NSPredicate predicateWithFormat:@" gType = 1"];  get error
-         
          */
         self.fetchedResultsController = [FCBeInviteGroup MR_fetchAllSortedBy:@"beaddTime" ascending:NO withPredicate:nil groupBy:nil delegate:self];
     }

@@ -160,9 +160,9 @@
         {
             NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-            
             XCJFriendGroupViewController *viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFriendGroupViewController"];
-             viewcontr.conversation = contr;
+            viewcontr.conversation = contr;
+            [viewcontr hasNewPostInfo];
             [self.navigationController pushViewController:viewcontr animated:YES];
             
         }

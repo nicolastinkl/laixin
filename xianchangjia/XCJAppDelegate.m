@@ -518,37 +518,65 @@ static NSString * const kLaixinStoreName = @"Laixins";
             Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
             if(conversation == nil)
             {
-#warning       //查看我是否有加入此圈子
                 //查看我是否有加入此圈子
-                return;
-                conversation =  [Conversation MR_createInContext:localContext];
-            }
-            
-            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                FCUserDescription * localdespObject = response;
-                if (imageurl.length > 5)
-                {
-                    conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",localdespObject.nick];
-                }else
-                {
-                    conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
-                }
+//                return;
+//                conversation =  [Conversation MR_createInContext:localContext];
                 
-                conversation.lastMessageDate = date;
-                conversation.messageStutes = @(messageStutes_incoming);
-                // increase badge number.
-                int badgeNumber = [conversation.badgeNumber intValue];
-                badgeNumber ++;
-                conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+            }else {
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                    FCUserDescription * localdespObject = response;
+                    if (imageurl.length > 5)
+                    {
+                        conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",localdespObject.nick];
+                    }else
+                    {
+                        conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    }
+                    
+                    conversation.lastMessageDate = date;
+                    conversation.messageStutes = @(messageStutes_incoming);
+                    // increase badge number.
+                    int badgeNumber = [conversation.badgeNumber intValue];
+                    badgeNumber ++;
+                    conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                    
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    
+                    SystemSoundID id = 1007; //声音
+                    AudioServicesPlaySystemSound(id);
+                    
+                } withuid:uid];
+            }
+            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:dicMessage];
+            int oldpostid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+            if (oldpostid <= 0 || oldpostid != [post.postid intValue]) {
+                [USER_DEFAULT setInteger:[post.postid intValue] forKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+                [USER_DEFAULT synchronize];
+                
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+                ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+                if (ConverRe == nil) {
+                    ConverRe = [ConverReply MR_createInContext:localContext];
+                }
+                ConverRe.uid = post.uid;
+                ConverRe.postid = post.postid;
+                ConverRe.content = @"新朋友圈消息";
+                ConverRe.time = @(post.time);
                 
                 [localContext MR_saveToPersistentStoreAndWait];
+                //提示有新朋友圈消息
+                if ([ConverRe.badgeNumber intValue]<=0) {
+                    [self.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+                }else{
+                    [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[ConverRe.badgeNumber intValue]]];
+                }
                 
-                SystemSoundID id = 1007; //声音
-                AudioServicesPlaySystemSound(id);
-                
-            } withuid:uid];
+            }
+
+          
             
             //然后更新朋友圈最新发图
             

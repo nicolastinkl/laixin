@@ -195,7 +195,7 @@
     UILabel *labelSign = (UILabel *)[cell.contentView viewWithTag:6];
     
     {
-        [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:info.beAddFriendShips.headpic Size:160]]];
+        [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:info.beAddFriendShips.headpic Size:160]] placeholderImage:[UIImage imageNamed:@"mqz_album_private"]];
         labelnick.text = info.beAddFriendShips.nick;
         labelLiyou.text = [tools FormatStringForDate:info.addTime];// info.beAddFriendShips.signature;
     }
@@ -226,18 +226,30 @@
 {
     UIButton * button = (UIButton*)sender;
     UIView * superView = button.superview.superview.superview;
-    
     NSIndexPath * indexPath = [self.tableView indexPathForCell:(UITableViewCell *)superView];
-//    NSIndexPath * indexPath = [[NSIndexPath alloc] initWithIndex:0];
     FCBeAddFriend *userinfo = (FCBeAddFriend *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    if (userinfo) {
-        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:userinfo.beAddFriendShips];
-        userinfo.hasAdd = @YES;
-        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-    }
     
-    // reload this cell
-    [self configureCell:(UITableViewCell *)superView atIndexPath:indexPath];
+    if (userinfo) {
+        [SVProgressHUD showWithStatus:@"正在添加"];
+        NSDictionary * parames = @{@"uid":@[userinfo.beAddFriendShips.uid]};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+            // add this user to friends DB
+            // setFriendsObject
+            if (responseObject) {
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:userinfo.beAddFriendShips];
+                userinfo.hasAdd = @YES;
+                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                [SVProgressHUD showSuccessWithStatus:@"添加成功"];
+                // reload this cell
+                [self configureCell:(UITableViewCell *)superView atIndexPath:indexPath];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD showErrorWithStatus:@"添加失败"];
+        }];
+    }else{
+      [SVProgressHUD showErrorWithStatus:@"添加失败"];
+    }
+  
     
 }
 

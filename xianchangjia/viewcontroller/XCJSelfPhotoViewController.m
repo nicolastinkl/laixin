@@ -72,7 +72,7 @@
         // self.navigationItem.rightBarButtonItem = self.editButtonItem;
         
         NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
-        if (jsonData.length > 10) {
+        if (jsonData.length > 150) {
             // parse
             NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
             
@@ -126,7 +126,7 @@
             if (array.count > 0) {
                 if ([self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
                     if(beforeid.length <= 0)
-                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache" withTimeoutInterval:60*5];
+                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache" withTimeoutInterval:60*60 ];
                     // init with that...
                 }
             }

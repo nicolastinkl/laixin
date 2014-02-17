@@ -548,7 +548,6 @@
 }
 
 #pragma mark - MLScrollRefreshHeaderDelegate
-
 - (void)refreshHeaderBeginRefreshing:(MLScrollRefreshHeader *)refreshHeader
 {
     self.isLoading = YES;
