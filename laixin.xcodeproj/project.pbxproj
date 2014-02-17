@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86045FC018B1F8C80002581E /* XCJFindYouMMViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */; };
+		86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
@@ -438,6 +440,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86045FBE18B1F8C80002581E /* XCJFindYouMMViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindYouMMViewcontr.h; path = viewcontroller/XCJFindYouMMViewcontr.h; sourceTree = "<group>"; };
+		86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindYouMMViewcontr.m; path = viewcontroller/XCJFindYouMMViewcontr.m; sourceTree = "<group>"; };
+		86045FC118B21D3D0002581E /* XCJRecommendLSFriendViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRecommendLSFriendViewcontr.h; path = viewcontroller/XCJRecommendLSFriendViewcontr.h; sourceTree = "<group>"; };
+		86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRecommendLSFriendViewcontr.m; path = viewcontroller/XCJRecommendLSFriendViewcontr.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
@@ -1201,6 +1207,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		86045FBD18B1F8B00002581E /* FindYouMM */ = {
+			isa = PBXGroup;
+			children = (
+				86045FBE18B1F8C80002581E /* XCJFindYouMMViewcontr.h */,
+				86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */,
+				86045FC118B21D3D0002581E /* XCJRecommendLSFriendViewcontr.h */,
+				86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */,
+			);
+			name = FindYouMM;
+			sourceTree = "<group>";
+		};
 		8622C875187D192100776A38 /* POHorizontalList */ = {
 			isa = PBXGroup;
 			children = (
@@ -2282,6 +2299,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86045FBD18B1F8B00002581E /* FindYouMM */,
 				86E392B318A8B44800FFD8C7 /* FriendGroup */,
 				862F54B118A879EA005DFD6C /* WantView */,
 				8666187B18951B07000228FC /* AudioView */,
@@ -3198,6 +3216,7 @@
 				86FB20F6186D8215006BDE32 /* FCFriends.m in Sources */,
 				865632E9185FFDDA00E9903C /* XCJMessageCenterViewController.m in Sources */,
 				865632E8185FFDDA00E9903C /* XCJLoginViewController.m in Sources */,
+				86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */,
 				868B5D561893B068004D1743 /* ChineseToPinyinResource.m in Sources */,
 				86EB76ED185AA72F00836947 /* MLTextView.m in Sources */,
 				8668E489187541BB00D20C9E /* Comment.m in Sources */,
@@ -3341,6 +3360,7 @@
 				86660DC91876DA0D007477C0 /* XCJCreateNaviController.m in Sources */,
 				865632E4185FFDDA00E9903C /* XCJCommentViewController.m in Sources */,
 				869D15131839BDBB00B14A02 /* JSONKit.m in Sources */,
+				86045FC018B1F8C80002581E /* XCJFindYouMMViewcontr.m in Sources */,
 				869CE4E0186BE37B0004C1EC /* Sequencer.m in Sources */,
 				869CE544186BE3A00004C1EC /* NSString+DDXML.m in Sources */,
 				8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */,
@@ -3527,7 +3547,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "C531D6FE-ADB9-4A01-97D8-5FA2A137C414";
+				PROVISIONING_PROFILE = "7AB1CEA1-BD3F-412E-832A-77B02DBAA2F3";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -3561,7 +3581,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "C531D6FE-ADB9-4A01-97D8-5FA2A137C414";
+				PROVISIONING_PROFILE = "7AB1CEA1-BD3F-412E-832A-77B02DBAA2F3";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

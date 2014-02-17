@@ -227,8 +227,7 @@
     UIButton * button = (UIButton*)sender;
     UIView * superView = button.superview.superview.superview;
     NSIndexPath * indexPath = [self.tableView indexPathForCell:(UITableViewCell *)superView];
-    FCBeAddFriend *userinfo = (FCBeAddFriend *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    
+    FCBeAddFriend *userinfo = (FCBeAddFriend *)[self.fetchedResultsController objectAtIndexPath:indexPath];    
     if (userinfo) {
         [SVProgressHUD showWithStatus:@"正在添加"];
         NSDictionary * parames = @{@"uid":@[userinfo.beAddFriendShips.uid]};
