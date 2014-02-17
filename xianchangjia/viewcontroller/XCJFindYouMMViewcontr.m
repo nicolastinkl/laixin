@@ -80,6 +80,7 @@ enum actionTag {
     viewSubPhoto.hidden = YES;
 }
 
+
 //发MM
 - (IBAction)PutMMClick:(id)sender {
     UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"发妹妹" otherButtonTitles:@"发自己", nil];

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		86045FC018B1F8C80002581E /* XCJFindYouMMViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */; };
 		86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */; };
+		86045FC618B254DA0002581E /* SCJChooseSignOrDesViewControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
@@ -444,6 +445,8 @@
 		86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindYouMMViewcontr.m; path = viewcontroller/XCJFindYouMMViewcontr.m; sourceTree = "<group>"; };
 		86045FC118B21D3D0002581E /* XCJRecommendLSFriendViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRecommendLSFriendViewcontr.h; path = viewcontroller/XCJRecommendLSFriendViewcontr.h; sourceTree = "<group>"; };
 		86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRecommendLSFriendViewcontr.m; path = viewcontroller/XCJRecommendLSFriendViewcontr.m; sourceTree = "<group>"; };
+		86045FC418B254DA0002581E /* SCJChooseSignOrDesViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCJChooseSignOrDesViewControl.h; path = viewcontroller/SCJChooseSignOrDesViewControl.h; sourceTree = "<group>"; };
+		86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCJChooseSignOrDesViewControl.m; path = viewcontroller/SCJChooseSignOrDesViewControl.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
@@ -1214,6 +1217,8 @@
 				86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */,
 				86045FC118B21D3D0002581E /* XCJRecommendLSFriendViewcontr.h */,
 				86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */,
+				86045FC418B254DA0002581E /* SCJChooseSignOrDesViewControl.h */,
+				86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */,
 			);
 			name = FindYouMM;
 			sourceTree = "<group>";
@@ -3228,6 +3233,7 @@
 				8668E476187540DB00D20C9E /* MLTapGrayView.m in Sources */,
 				86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */,
 				866C156718ADE75F0054F686 /* IDMTapDetectingView.m in Sources */,
+				86045FC618B254DA0002581E /* SCJChooseSignOrDesViewControl.m in Sources */,
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
 				86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */,
 				86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */,
