@@ -235,7 +235,7 @@
             }];
         }else{
             //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
-        } 
+        }
         
     }
     

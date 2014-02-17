@@ -293,9 +293,10 @@
     }else if ([info.typeReply isEqualToString:@"newreply"])
     {
         labelContent.text = info.content;
-        [labelContent sizeToFit];
         CGFloat height = [self heightForCellWithPost:info.content];
         [labelContent setHeight:height];
+        [labelContent sizeToFit];
+        [labelContent setWidth:180.0f];
         imageviewTag.hidden = YES;
         labelTime.top = labelContent.top + labelContent.height + 2;
     }

@@ -11,7 +11,7 @@
 #import "IDMZoomingScrollView.h"
 #import "SVProgressHUD.h"
 #import "UIButton+Bootstrap.h"
-
+#import "UIAlertViewAddition.h"
 // Private
 @interface IDMPhotoBrowser () {
 	// Data
@@ -1249,7 +1249,7 @@
     
     if ([self numberOfPhotos] > 0 && [photo underlyingImage])
     {
-        if(!_actionButtonTitles)
+        if(NO)//!_actionButtonTitles
         {
             // Activity view
             NSMutableArray *activityItems = [NSMutableArray arrayWithObject:[photo underlyingImage]];
@@ -1270,11 +1270,12 @@
             // Action sheet
             self.actionsSheet = [UIActionSheet new];
             self.actionsSheet.delegate = self;
-            for(NSString *action in _actionButtonTitles) {
-                [self.actionsSheet addButtonWithTitle:action];
-            }
-            
-            self.actionsSheet.cancelButtonIndex = [self.actionsSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+//            for(NSString *action in _actionButtonTitles) {
+//                [self.actionsSheet addButtonWithTitle:action];
+//            }
+//                  [self.actionsSheet addButtonWithTitle:@"保存到相册"];
+                  [self.actionsSheet addButtonWithTitle:@"举报"];
+            self.actionsSheet.cancelButtonIndex = [self.actionsSheet addButtonWithTitle:NSLocalizedString(@"取消", nil)];
             self.actionsSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -1304,7 +1305,20 @@
                 [_delegate photoBrowser:self didDismissActionSheetWithButtonIndex:buttonIndex photoIndex:_currentPageIndex];
                 return;
             }
+            
+            if(buttonIndex == 0)
+            {
+                  [UIAlertView showAlertViewWithMessage:@"举报成功"];
+//                id<IDMPhoto> * photo = [self photoAtIndex:_currentPageIndex];
+//                photo.underlyingImage
+//                UIImageWriteToSavedPhotosAlbum(Nil, nil, nil, nil);
+            }else if(buttonIndex == 1)
+            {
+//                [UIAlertView showAlertViewWithMessage:@"举报成功"];
+                
+            }
         }
+        
     }
     
     [self hideControlsAfterDelay]; // Continue as normal...
