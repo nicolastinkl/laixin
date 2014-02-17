@@ -63,6 +63,8 @@
     UIPageControl *pageControl;
     UIView  * EmjView;
     XCJChatSendInfoView *SendInfoView;
+    NSURL * playingURL;
+    XCJChatMessageCell * playingCell;
 }
 @property (weak, nonatomic) IBOutlet UIView *inputContainerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -1842,6 +1844,7 @@
             default:
                 break;
         }
+        [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         [cell SendMessageRemoteImgOper:_objImgListOper WithMessage:dictionary type:messageType_text];
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
@@ -2007,7 +2010,13 @@
         if ([message.audioLength intValue] > 1000) {
             [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/1024] forState:UIControlStateNormal];
         }else{
-            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+            if ([message.audioLength intValue] < 0) {
+                int leng = [message.audioLength intValue];
+                leng = -leng;
+                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
+            }else{
+                [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+            }
         }
         
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -2050,46 +2059,94 @@
     NSString * audiourl = [button.layer valueForKey:@"audiourl"];
     //close or stop other audio
     //[self.tableView reloadData];
-    
-    //self.messageList[[self.tableView indexPathForCell:cell].row];
-    if (audiourl) {
-        //http://kidswant.u.qiniudn.com/FpWbDbq6UIkbCw5PunVVB8yphaDL
-        NSArray *SeparatedArray = [[NSArray alloc]init];
-        SeparatedArray =[audiourl componentsSeparatedByString:@"/"];
-        NSString * filename = [SeparatedArray  lastObject];
-        NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
-//        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSString * strFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-        NSString * fileNameWhole;
-        if ([audiourl containString:@".amr"]) {
-            fileNameWhole = [NSString stringWithFormat:@"%@/%@",strFile,filename];
-        }else{
-            fileNameWhole = [NSString stringWithFormat:@"%@/%@.amr",strFile,filename];
+     XCJChatMessageCell *cell = (XCJChatMessageCell *)button.superview.superview.superview;
+    if (playingCell && cell != playingCell &&  playingCell.isplayingAudio) {
+        if (playingURL) {
+            player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
+            [player stop];
         }
+        [self StopPlayingimgArray:playingCell];
+        playingCell.isplayingAudio = NO;
+    }
+    
+   
+    if (cell.isplayingAudio) {
+        if (playingURL) {
+            player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
+            [player stop];
+        }
+//        [self.tableView reloadData];
+        [self StopPlayingimgArray:cell];
+        cell.isplayingAudio = NO;
+    }else{
         
-        if(![fileManager fileExistsAtPath:fileNameWhole]) //如果不存在
-        {
-            button.userInteractionEnabled = NO;
-            [button showIndicatorView];
-            //download audio and play
-            NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-            AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
-            NSURL *URL = [NSURL URLWithString:audiourl];
-            NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-            NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                SLLog(@"response type : %@",[response MIMEType]);
-                NSString * filename = [response suggestedFilename];
-                return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
-            } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-                NSLog(@"File downloaded to: %@", filePath);
-                [button hideIndicatorView];
+        playingCell = cell;
+        cell.isplayingAudio = YES;
+        //self.messageList[[self.tableView indexPathForCell:cell].row];
+        if (audiourl) {
+            //http://kidswant.u.qiniudn.com/FpWbDbq6UIkbCw5PunVVB8yphaDL
+            NSArray *SeparatedArray = [[NSArray alloc]init];
+            SeparatedArray =[audiourl componentsSeparatedByString:@"/"];
+            NSString * filename = [SeparatedArray  lastObject];
+            NSURL *documentsDirectoryPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
+            //        NSURL * url =  [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSString * strFile = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+            NSString * fileNameWhole;
+            if ([audiourl containString:@".amr"]) {
+                fileNameWhole = [NSString stringWithFormat:@"%@/%@",strFile,filename];
+            }else{
+                fileNameWhole = [NSString stringWithFormat:@"%@/%@.amr",strFile,filename];
+            }
+            
+            if(![fileManager fileExistsAtPath:fileNameWhole]) //如果不存在
+            {
+                button.userInteractionEnabled = NO;
+                [button showIndicatorView];
+                //download audio and play
+                NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+                AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
+                NSURL *URL = [NSURL URLWithString:audiourl];
+                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+                NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                    SLLog(@"response type : %@",[response MIMEType]);
+                    NSString * filename = [response suggestedFilename];
+                    return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
+                } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                    NSLog(@"File downloaded to: %@", filePath);
+                    [button hideIndicatorView];
+                    button.userInteractionEnabled = YES;
+                    int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
+                    //                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+                    [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                    
+                    //初始化播放器的时候如下设置
+                    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
+                    AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
+                                            sizeof(sessionCategory),&sessionCategory);
+                    
+                    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+                    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,
+                                             sizeof (audioRouteOverride), &audioRouteOverride);
+                    
+                    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+                    //默认情况下扬声器播放
+                    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
+                    [audioSession setActive:YES error:nil];
+                    playingURL = [NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                    player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
+                    [player prepareToPlay];
+                    [player play];
+                    [self ShowPlayingimgArray:cell withTime:(int) leng/1024];
+                }];
+                [downloadTask resume];
+            }else{
                 button.userInteractionEnabled = YES;
                 int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-//                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
+//                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
                 [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                 
-                 //初始化播放器的时候如下设置
+                //初始化播放器的时候如下设置
                 UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
                 AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
                                         sizeof(sessionCategory),&sessionCategory);
@@ -2102,43 +2159,28 @@
                 //默认情况下扬声器播放
                 [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
                 [audioSession setActive:YES error:nil];
+                playingURL = [NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                 
-                player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
+                player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
                 [player prepareToPlay];
                 [player play];
-                [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1024];
-            }];
-            [downloadTask resume];
-        }else{
-            button.userInteractionEnabled = YES;
-            int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-            [button setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
-            [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                [self ShowPlayingimgArray:cell withTime:(int) leng/1024];
+            }
             
-            //初始化播放器的时候如下设置
-            UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-            AudioSessionSetProperty(kAudioSessionProperty_AudioCategory,
-                                    sizeof(sessionCategory),&sessionCategory);
-            
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,
-                                     sizeof (audioRouteOverride), &audioRouteOverride);
-            
-            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-            //默认情况下扬声器播放
-            [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-            [audioSession setActive:YES error:nil];
-            
-            player = [player initWithContentsOfURL:[NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]] error:nil];
-            [player prepareToPlay];
-            [player play];
-            [self ShowPlayingimgArray:(UITableViewCell *)button.superview.superview.superview withTime:(int) leng/1024];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
         }
-        
-    }else
-    {
-        [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
     }
+    
+}
+
+
+-(void) StopPlayingimgArray:(UITableViewCell*) cell
+{
+    UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
+    [Image_playing stopAnimating];
+    [Image_playing.layer removeAllAnimations];
 }
 
 - (void) ShowPlayingimgArray:(UITableViewCell * ) cell withTime:(int) timer
