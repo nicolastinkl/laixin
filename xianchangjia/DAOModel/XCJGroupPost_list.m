@@ -88,6 +88,8 @@
     result.age = [DataHelper getStringValue:dict[@"age"] defaultValue:@""];
     result.contact = [DataHelper getStringValue:dict[@"contact"] defaultValue:@""];
     result.recommend_uid = [DataHelper getStringValue:dict[@"recommend_uid"] defaultValue:@""];
+    result.recommend_word = [DataHelper getStringValue:dict[@"recommend_word"] defaultValue:@""];
+    
     result.sex = [DataHelper getIntegerValue:dict[@"sex"] defaultValue:0];
     result.message_count = [DataHelper getIntegerValue:dict[@"message_count"] defaultValue:0];
     result.like_count = [DataHelper getIntegerValue:dict[@"like_count"] defaultValue:0];
@@ -97,6 +99,15 @@
     NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"create_time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
     result.time = timeinter;
     result.timeText = [tools timeLabelTextOfTime:timeinter];
+    
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        result.labels = array;
+    }
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        result.medias = array;
+    }
     return result;
 }
 

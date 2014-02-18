@@ -92,6 +92,8 @@
 @property (assign, nonatomic) NSTimeInterval time;
 @property (strong, nonatomic) NSString * timeText;
 
+@property (nonatomic,strong) NSMutableArray * medias;
+@property (nonatomic,strong) NSMutableArray * labels;
 @end
 
 

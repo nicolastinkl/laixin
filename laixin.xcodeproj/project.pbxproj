@@ -161,6 +161,9 @@
 		86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86893DAE187FA7CA00DC0CB8 /* XCJGroupMenuView.xib */; };
 		86893DB3187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */; };
 		86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */; };
+		868A0EF218B3608000C2875F /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 868A0EF118B3608000C2875F /* iCarousel.m */; };
+		868A0EF518B3621E00C2875F /* XCJFindMMView.m in Sources */ = {isa = PBXBuildFile; fileRef = 868A0EF418B3621E00C2875F /* XCJFindMMView.m */; };
+		868A0EF818B3624300C2875F /* XCJFindMMView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 868A0EF718B3624300C2875F /* XCJFindMMView.xib */; };
 		868B5D3918922FE4004D1743 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3818922FE4004D1743 /* EGOCache.m */; };
 		868B5D3B18924E53004D1743 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D3A18924E53004D1743 /* Default-568h@2x.png */; };
 		868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3E189284C6004D1743 /* UIImage+Blur.m */; };
@@ -722,6 +725,11 @@
 		86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJGroupUsersTableViewController.m; path = viewcontroller/XCJGroupUsersTableViewController.m; sourceTree = "<group>"; };
 		86893DB4187FCCC500DC0CB8 /* XCJCreateChatNaviController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateChatNaviController.h; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.h; sourceTree = SOURCE_ROOT; };
 		86893DB5187FCCC500DC0CB8 /* XCJCreateChatNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateChatNaviController.m; path = xianchangjia/viewcontroller/XCJCreateChatNaviController.m; sourceTree = SOURCE_ROOT; };
+		868A0EF018B3608000C2875F /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
+		868A0EF118B3608000C2875F /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		868A0EF318B3621E00C2875F /* XCJFindMMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindMMView.h; path = viewcontroller/views/XCJFindMMView.h; sourceTree = "<group>"; };
+		868A0EF418B3621E00C2875F /* XCJFindMMView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindMMView.m; path = viewcontroller/views/XCJFindMMView.m; sourceTree = "<group>"; };
+		868A0EF718B3624300C2875F /* XCJFindMMView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJFindMMView.xib; path = viewcontroller/views/XCJFindMMView.xib; sourceTree = "<group>"; };
 		868B5D3718922FE4004D1743 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		868B5D3818922FE4004D1743 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
 		868B5D3A18924E53004D1743 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1225,6 +1233,7 @@
 		86045FBD18B1F8B00002581E /* FindYouMM */ = {
 			isa = PBXGroup;
 			children = (
+				868A0EF618B3622200C2875F /* view */,
 				86045FBE18B1F8C80002581E /* XCJFindYouMMViewcontr.h */,
 				86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */,
 				86045FC118B21D3D0002581E /* XCJRecommendLSFriendViewcontr.h */,
@@ -1829,6 +1838,25 @@
 				86893DB2187FB9E700DC0CB8 /* XCJGroupUsersTableViewController.m */,
 			);
 			name = groupInfo;
+			sourceTree = "<group>";
+		};
+		868A0EEF18B3608000C2875F /* iCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				868A0EF018B3608000C2875F /* iCarousel.h */,
+				868A0EF118B3608000C2875F /* iCarousel.m */,
+			);
+			path = iCarousel;
+			sourceTree = "<group>";
+		};
+		868A0EF618B3622200C2875F /* view */ = {
+			isa = PBXGroup;
+			children = (
+				868A0EF318B3621E00C2875F /* XCJFindMMView.h */,
+				868A0EF418B3621E00C2875F /* XCJFindMMView.m */,
+				868A0EF718B3624300C2875F /* XCJFindMMView.xib */,
+			);
+			name = view;
 			sourceTree = "<group>";
 		};
 		868B5D3C189284C6004D1743 /* UIImage-Helpers */ = {
@@ -2454,6 +2482,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				868A0EEF18B3608000C2875F /* iCarousel */,
 				86045FC718B2F7E70002581E /* AOtag */,
 				866C153F18ADE75F0054F686 /* PhotoBrowerClasses */,
 				8626559918ADADB700F05B81 /* UINavigationController+SGProgress */,
@@ -3109,6 +3138,7 @@
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
 				86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */,
 				8668E47D187540DB00D20C9E /* like_comment_bg@2x.png in Resources */,
+				868A0EF818B3624300C2875F /* XCJFindMMView.xib in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
 				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
 				866618A718951B07000228FC /* ChatVoiceRecorderVC.xib in Resources */,
@@ -3242,6 +3272,7 @@
 				862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */,
 				86EB76C8185AA6CC00836947 /* DataHelper.m in Sources */,
 				86F9B9B218728AFE00ED768B /* XCJUserInfoController.m in Sources */,
+				868A0EF518B3621E00C2875F /* XCJFindMMView.m in Sources */,
 				86EB76DC185AA6CC00836947 /* UIProgressView+AFNetworking.m in Sources */,
 				86EB76C0185AA6CC00836947 /* ModelArray.m in Sources */,
 				86EB76E2185AA6CC00836947 /* TTTAttributedLabel.m in Sources */,
@@ -3275,6 +3306,7 @@
 				8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */,
 				869CE4AB18698D3F0004C1EC /* AsyncImageView.m in Sources */,
 				866618A018951B07000228FC /* wav.mm in Sources */,
+				868A0EF218B3608000C2875F /* iCarousel.m in Sources */,
 				8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */,
 				86D182921834AED30005901D /* UIImageView+Exetension.m in Sources */,
 				8666189D18951B07000228FC /* CustomWindow.m in Sources */,
