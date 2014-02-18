@@ -11,7 +11,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yE5-ql-IIr">
-                    <rect key="frame" x="10" y="10" width="300" height="394"/>
+                    <rect key="frame" x="10" y="10" width="300" height="356"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oSg-hk-mLn">
@@ -25,7 +25,7 @@
                             <color key="backgroundColor" red="0.83563855229591844" green="0.83563855229591844" blue="0.83563855229591844" alpha="1" colorSpace="calibratedRGB"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="==========" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="290" translatesAutoresizingMaskIntoConstraints="NO" id="Gu2-7n-3JB">
-                            <rect key="frame" x="5" y="318" width="290" height="40"/>
+                            <rect key="frame" x="5" y="308" width="290" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -39,15 +39,20 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pictureHeartLike_0" translatesAutoresizingMaskIntoConstraints="NO" id="NfG-8D-14f">
-                            <rect key="frame" x="8" y="371" width="15" height="15"/>
+                            <rect key="frame" x="278" y="8" width="15" height="15"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gDh-JJ-cHA">
-                            <rect key="frame" x="29" y="368" width="98" height="21"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gDh-JJ-cHA">
+                            <rect key="frame" x="230" y="5" width="42" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lH3-3m-PQk">
+                            <rect key="frame" x="2" y="274" width="300" height="26"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>
@@ -61,6 +66,7 @@
                 <outlet property="label_des" destination="Gu2-7n-3JB" id="hiC-CY-taU"/>
                 <outlet property="label_like" destination="gDh-JJ-cHA" id="0W9-cV-fnN"/>
                 <outlet property="view_bg" destination="yE5-ql-IIr" id="fga-F6-CWG"/>
+                <outlet property="view_label" destination="lH3-3m-PQk" id="VAY-Jv-P5p"/>
             </connections>
         </view>
     </objects>

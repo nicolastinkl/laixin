@@ -133,8 +133,8 @@
         
     }else{
         
-        if(self.tag.tags.count > 5){
-            [UIAlertView showAlertViewWithMessage:@"最多添加6个标签,可以通过点击可删除已添加标签"];
+        if(self.tag.tags.count >= 4){
+            [UIAlertView showAlertViewWithMessage:@"最多添加4个标签,可以通过点击可删除已添加标签"];
         }else{
             //添加
             NSString * string = labelArray[button.tag];

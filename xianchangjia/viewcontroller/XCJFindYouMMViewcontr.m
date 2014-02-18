@@ -53,13 +53,15 @@ enum actionTag {
     UIView * viewSub = [self.view subviewWithTag:1];
     if (!IS_4_INCH) {
         [viewSub setTop:APP_SCREEN_HEIGHT-44];
+        [self.carousel setTop:(20)];
+    }else{
+        [self.carousel setTop:(64)];
     }
 
     self.carousel.decelerationRate = 0.5;
     self.carousel.type = iCarouselTypeLinear;
     self.carousel.delegate = self;
     self.carousel.dataSource = self; 
-    [self.carousel setTop:(64)];
     
     buttonChnageMenu = (UIButton *)  [viewSub subviewWithTag:1];
     buttonChnagePhoto = (UIButton *)  [viewSub subviewWithTag:2];
@@ -81,6 +83,7 @@ enum actionTag {
     [self findWithCity:@"四川 成都"];
     
 }
+
 -(void) findWithCity:(NSString*) address
 {
     double delayInSeconds = 0.1f;
@@ -96,7 +99,9 @@ enum actionTag {
                 NSArray * array =  dict[@"recommends"];
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     XCJFindMM_list * findmm = [XCJFindMM_list turnObject:obj];
-                    [datasource addObject:findmm];
+                    if (findmm.media_count > 0) {
+                        [datasource addObject:findmm];
+                    }
                 }];
                 [self.view hideIndicatorViewBlueOrGary];
                 [self.carousel reloadData];
@@ -211,6 +216,7 @@ enum actionTag {
         findView.view_bg.layer.cornerRadius = 4;
         findView.view_bg.layer.masksToBounds = YES;
 		[view addSubview:label];
+        
 	}
 	else
 	{
@@ -257,6 +263,12 @@ enum actionTag {
 - (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view
 {
 	return nil;
+}
+
+
+-(void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
+{
+    
 }
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel

@@ -8,7 +8,7 @@
 
 #import "XCJFindMMView.h"
 #import "XCAlbumAdditions.h"
-
+#define  BUTTONCOLL 2
 @implementation XCJFindMMView
 
 - (id)initWithFrame:(CGRect)frame
@@ -22,8 +22,8 @@
 
 -(void) setupThisData:(XCJFindMM_list*) findmmData
 {
-    self.label_des.textColor = [tools colorWithIndex:0];
-        self.label_like.textColor = [tools colorWithIndex:0];
+    self.label_des.textColor = [UIColor grayColor];//[tools colorWithIndex:0];
+    self.label_like.textColor = [tools colorWithIndex:0];
     
     self.label_des.text  = findmmData.recommend_word;
     
@@ -44,6 +44,35 @@
         self.label_like = 0;
     }
     
+    
+    NSArray * array = @[@"玉女心境",@"口味偏重",@"爱狗达人",@"爱电影"];
+    //self.view_label
+    __block float prewith;
+    __block float preLeft;
+    __block float row = 0;
+    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString * str = obj;
+        float buttonWeidth = 25 + str.length*10;
+        UILabel *iv;
+        if ((prewith+buttonWeidth+preLeft+BUTTONCOLL) < 300) {
+            iv = [[UILabel alloc] initWithFrame:CGRectMake(prewith+preLeft+BUTTONCOLL, (20+BUTTONCOLL) * row, buttonWeidth, 20)];
+        }else{
+            row ++;
+            preLeft = 0;
+            prewith = 0;
+            iv = [[UILabel alloc] initWithFrame:CGRectMake(prewith+preLeft+BUTTONCOLL, (20+BUTTONCOLL) * row, buttonWeidth, 20)];
+        }
+        prewith = buttonWeidth;
+        preLeft = iv.left;
+        [iv setFont:[UIFont systemFontOfSize:14.0f]];
+        [iv setTextColor:[UIColor whiteColor]];
+        iv.text = str;
+        iv.textAlignment = NSTextAlignmentCenter;
+        int ramd =  arc4random() % 9;
+        iv.backgroundColor = [tools colorWithIndex:ramd];
+        
+        [self.view_label addSubview:iv];
+    }];
 }
 /*
 // Only override drawRect: if you perform custom drawing.

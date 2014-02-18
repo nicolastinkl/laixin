@@ -221,7 +221,6 @@
     }];
 }
 
-
 -(void) uploadError
 {
     [UIAlertView showAlertViewWithMessage:@"网络请求失败,请检查网络设置"];

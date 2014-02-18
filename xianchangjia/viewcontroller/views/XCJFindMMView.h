@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_age;
 @property (weak, nonatomic) IBOutlet UIView *view_bg;
 @property (weak, nonatomic) IBOutlet UILabel *label_like;
+@property (weak, nonatomic) IBOutlet UIView *view_label;
 @property ( nonatomic,assign) Boolean  isrequestMedia;
 @end
