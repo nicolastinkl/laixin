@@ -10,4 +10,6 @@
 
 @interface SCJChooseSignOrDesViewControl : UITableViewController
 
+-(void) fillDescription:(NSString * ) string withArray:(NSArray * ) array;
+
 @end

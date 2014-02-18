@@ -9,6 +9,8 @@
 #import "XCJFindYouMMViewcontr.h"
 #import "XCAlbumAdditions.h"
 #import "XCJRecommendLSFriendViewcontr.h"
+#import "XCJGroupPost_list.h"
+
 
 @interface XCJFindYouMMViewcontr ()<UIActionSheetDelegate>
 {
@@ -16,6 +18,8 @@
     UIButton * buttonChnageMenu ;
     UIView * viewSubMenu;
     UIView * viewSubPhoto ;
+    
+    NSMutableArray * datasource;
 }
 
 @end
@@ -59,7 +63,40 @@ enum actionTag {
     
     [((UIButton *)  [viewSub subviewWithTag:3]) setHeight:0.7];
 
+    NSMutableArray * array = [[NSMutableArray alloc] init];
+    datasource = array;
 	// Do any additional setup after loading the view.
+    
+    [self.view showIndicatorViewLargeBlue];
+    
+    [self findWithCity:@"四川 成都"];
+    
+}
+
+
+-(void) findWithCity:(NSString*) address
+{
+    double delayInSeconds = 0.1f;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        /*   {"func":"recommend.search",
+         "parm":{
+         "city":"四川 成都",
+         "sex":1} }   */
+        [[MLNetworkingManager sharedManager] sendWithAction:@"recommend.search" parameters:@{@"city":address,@"sex":@"1"} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = responseObject[@"result"];
+                NSArray * array =  dict[@"recommends"];
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    XCJFindMM_list * findmm = [XCJFindMM_list turnObject:obj];
+                    [datasource addObject:findmm];
+                }];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            [self.view hideIndicatorViewBlueOrGary];
+
+        }];
+    });
 }
 
 -(IBAction)ChnagePhotoClick:(id)sender
@@ -79,7 +116,6 @@ enum actionTag {
     viewSubMenu.hidden = NO;
     viewSubPhoto.hidden = YES;
 }
-
 
 //发MM
 - (IBAction)PutMMClick:(id)sender {

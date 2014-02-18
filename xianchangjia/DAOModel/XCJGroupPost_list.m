@@ -13,23 +13,6 @@
 
 @implementation XCJGroupPost_list
 
-
-/**
- *  “postid”:
- “uid”:
- “group_id”:
- “content”:
- “picture”:
- “video”:
- “voice”:
- “width”:200
- “height”:100
- “length”:344555
- “like”:12,
- “time”:
- “ilike”:true
- */
-
 + (instancetype)turnObject:(NSDictionary*)dict
 {
     XCJGroupPost_list *result = [[self alloc]init];
@@ -95,7 +78,29 @@
 
 
 
+@implementation XCJFindMM_list
 
++ (instancetype)turnObject:(NSDictionary*)dict
+{
+    XCJFindMM_list *result = [[self alloc]init];
+    result.uid = [DataHelper getStringValue:dict[@"uid"] defaultValue:@""];
+    result.city = [DataHelper getStringValue:dict[@"city"] defaultValue:@""];
+    result.age = [DataHelper getStringValue:dict[@"age"] defaultValue:@""];
+    result.contact = [DataHelper getStringValue:dict[@"contact"] defaultValue:@""];
+    result.recommend_uid = [DataHelper getStringValue:dict[@"recommend_uid"] defaultValue:@""];
+    result.sex = [DataHelper getIntegerValue:dict[@"sex"] defaultValue:0];
+    result.message_count = [DataHelper getIntegerValue:dict[@"message_count"] defaultValue:0];
+    result.like_count = [DataHelper getIntegerValue:dict[@"like_count"] defaultValue:0];
+    result.sex_want = [DataHelper getIntegerValue:dict[@"sex_want"] defaultValue:0];
+    result.media_count = [DataHelper getIntegerValue:dict[@"media_count"] defaultValue:0];
+    result.buy_count = [DataHelper getIntegerValue:dict[@"buy_count"] defaultValue:0];
+    NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"create_time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
+    result.time = timeinter;
+    result.timeText = [tools timeLabelTextOfTime:timeinter];
+    return result;
+}
+
+@end
 
 
 

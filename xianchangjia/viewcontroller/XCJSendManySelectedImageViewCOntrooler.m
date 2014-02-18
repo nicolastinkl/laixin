@@ -17,6 +17,7 @@
 #import "XCJGroupPost_list.h"
 #import "MinroadOperation.h"
 #import "UINavigationController+SGProgress.h"
+
 #define DISTANCE_BETWEEN_ITEMS  5.0
 #define LEFT_PADDING            5.0
 #define ITEM_WIDTH              65.0
@@ -269,7 +270,7 @@
                 [self.scrollPhotos addSubview:imageview];
             }
         }];
-        self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [self.array count], pageSize.height);
+        self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) *  ([self.array count] +1), pageSize.height);
     }
 }
 

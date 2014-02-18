@@ -80,7 +80,7 @@
             NSString * str = obj;
             float buttonWeidth = 36 + str.length*10;
             UIButton *iv;
-            if ((prewith+buttonWeidth+preLeft+BUTTONCOLL) < APP_SCREEN_WIDTH) {
+            if ((prewith+buttonWeidth+preLeft+BUTTONCOLL) < 300) {
                 iv = [[UIButton alloc] initWithFrame:CGRectMake(prewith+preLeft+BUTTONCOLL, (30+BUTTONCOLL) * row, buttonWeidth, 30)];
             }else{
                 row ++;
@@ -99,6 +99,18 @@
         }];
     }
 }
+
+-(void) fillDescription:(NSString * ) string withArray:(NSArray * ) array
+{
+    if (self.textview) {
+        
+        self.textview.text = string;
+        self.labelnumber.textColor = [tools colorWithIndex:0];
+        self.labelnumber.text = [NSString stringWithFormat:@"%d",self.textview.text.length];
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }
+}
+
 
 -(IBAction)selectTagClick:(id)sender
 {
@@ -137,7 +149,24 @@
 
 -(IBAction)SureSendPutMMClick:(id)sender
 {
-
+    
+//    NSString * string = dict[@"description"];
+//    NSArray * array = dict[@"labelArray"];
+    if (self.tag.tags.count <=0) {
+        if ( [self.textview isFirstResponder]) {
+            [self.textview resignFirstResponder];
+        }
+        [UIAlertView showAlertViewWithMessage:@"请选择至少1个性标签"];
+    }else{
+        NSMutableArray * ar = [[NSMutableArray alloc] init];
+        [self.tag.tags enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            AOTag * tag = obj;
+            [ar addObject:tag.tTitle];
+        }];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"changeLaixinDesLabel" object:@{@"description":self.textview.text,@"labelArray":ar}];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView

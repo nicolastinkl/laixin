@@ -357,7 +357,7 @@
     NSMutableDictionary *parameters=[[NSMutableDictionary alloc] init];
     [parameters setValue:token forKey:@"token"];
     
-     NSData * imagedata = [UIImage imageToWebP:filePath quality:75];
+    NSData * imagedata = [UIImage imageToWebP:filePath quality:75];
     operation  = [manager POST:@"http://up.qiniu.com" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         [formData appendPartWithFileData:imagedata name:@"file" fileName:@"file" mimeType:@"image/jpeg"];

@@ -13,6 +13,7 @@
 		86045FCA18B2F7EF0002581E /* AOTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC918B2F7EF0002581E /* AOTag.m */; };
 		86045FCD18B2FF9F0002581E /* NSData+crc32.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCC18B2FF9F0002581E /* NSData+crc32.m */; };
 		86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */; };
+		86045FD318B346290002581E /* XCJSelectAgeModefilViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
@@ -456,6 +457,8 @@
 		86045FCC18B2FF9F0002581E /* NSData+crc32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+crc32.m"; sourceTree = "<group>"; };
 		86045FCE18B31A910002581E /* XCJSelectLaixinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectLaixinViewController.h; path = viewcontroller/XCJSelectLaixinViewController.h; sourceTree = "<group>"; };
 		86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectLaixinViewController.m; path = viewcontroller/XCJSelectLaixinViewController.m; sourceTree = "<group>"; };
+		86045FD118B346290002581E /* XCJSelectAgeModefilViewContr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectAgeModefilViewContr.h; path = viewcontroller/XCJSelectAgeModefilViewContr.h; sourceTree = "<group>"; };
+		86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectAgeModefilViewContr.m; path = viewcontroller/XCJSelectAgeModefilViewContr.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
@@ -1230,6 +1233,8 @@
 				86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */,
 				86045FCE18B31A910002581E /* XCJSelectLaixinViewController.h */,
 				86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */,
+				86045FD118B346290002581E /* XCJSelectAgeModefilViewContr.h */,
+				86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */,
 			);
 			name = FindYouMM;
 			sourceTree = "<group>";
@@ -3315,6 +3320,7 @@
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,
 				86D1828E1834AED30005901D /* UIImage+Resize.m in Sources */,
 				86FB20F0186D5B90006BDE32 /* LXChatDBStoreManager.m in Sources */,
+				86045FD318B346290002581E /* XCJSelectAgeModefilViewContr.m in Sources */,
 				869CE545186BE3A00004C1EC /* DDXMLDocument.m in Sources */,
 				8666189F18951B07000228FC /* amrFileCodec.mm in Sources */,
 				86D182F01834AF540005901D /* FMDatabaseAdditions.m in Sources */,

@@ -58,6 +58,44 @@
 
 
 
+/**
+ *  抢你妹推荐数据
+ */
+@interface XCJFindMM_list : Model
+/*
+ "uid":14,
+ "sex":1,
+ "message_count":0,
+ "like_count":0,
+ "sex_want":1,
+ "recommend_uid":1,
+ "city":"四川 成都",
+ "media_count":0,
+ "age":"少有韵味",
+ "buy_count":0,
+ "contact":"[phone]13067575126",
+ "create_time":1392711681,
+ "recommend_word"
+ */
+@property (strong, nonatomic) NSString *uid;
+@property (strong, nonatomic) NSString *city;
+@property (assign, nonatomic) NSInteger sex;
+@property (assign, nonatomic) NSInteger message_count;
+@property (assign, nonatomic) NSInteger like_count;
+@property (assign, nonatomic) NSInteger sex_want;
+@property (assign, nonatomic) NSInteger media_count;
+@property (assign, nonatomic) NSInteger buy_count;
+@property (strong, nonatomic) NSString  *contact;
+@property (strong, nonatomic) NSString  *recommend_word;
+@property (strong, nonatomic) NSString  *recommend_uid;
+@property (strong, nonatomic) NSString  *age;
+@property (assign, nonatomic) NSTimeInterval time;
+@property (strong, nonatomic) NSString * timeText;
+
+@end
+
+
+
 
 
 
