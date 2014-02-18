@@ -13,7 +13,7 @@
 #import "iCarousel.h"
 #import "XCJFindMMView.h"
 #import "UIView+Shadow.h"
-
+#import "XCJFindMMFirtStupViewcontr.h"
 
 @interface XCJFindYouMMViewcontr ()<UIActionSheetDelegate,iCarouselDataSource, iCarouselDelegate>
 {
@@ -235,7 +235,7 @@ enum actionTag {
                     NSArray * array = dict[@"exdata"];
                     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                         if (idx == 0) {
-                            [label.image setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""]]];
+                            [label.image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""] Size:320]]];
                         }
                         [findmm.medias addObject:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""]];
                     }];
@@ -267,8 +267,11 @@ enum actionTag {
 
 
 -(void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index
-{
-    
+{    
+    XCJFindMMFirtStupViewcontr * viewcon = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindMMFirtStupViewcontr"];
+    XCJFindMM_list * findmmData = datasource[index];
+    viewcon.data = findmmData;
+    [self.navigationController pushViewController:viewcon animated:YES];
 }
 
 - (CGFloat)carouselItemWidth:(iCarousel *)carousel

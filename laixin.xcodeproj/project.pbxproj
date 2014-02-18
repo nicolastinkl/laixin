@@ -45,6 +45,7 @@
 		86494CC31881511800C22B14 /* FCReplyMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CC21881511800C22B14 /* FCReplyMessage.m */; };
 		86494CC618815E9B00C22B14 /* XCJAddNearByUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CC518815E9B00C22B14 /* XCJAddNearByUsersViewController.m */; };
 		86494CC918838C3C00C22B14 /* FCContactsPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CC818838C3C00C22B14 /* FCContactsPhone.m */; };
+		864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 864E57A318B394DB000989CB /* XCJFindMMFirtStupViewcontr.m */; };
 		86536F6E18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86536F6D18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m */; };
 		86536F7118AB33260059E9C7 /* MinroadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86536F7018AB33260059E9C7 /* MinroadOperation.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
@@ -520,6 +521,8 @@
 		86494CC518815E9B00C22B14 /* XCJAddNearByUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddNearByUsersViewController.m; path = viewcontroller/XCJAddNearByUsersViewController.m; sourceTree = "<group>"; };
 		86494CC718838C3C00C22B14 /* FCContactsPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCContactsPhone.h; path = DAOModel/coredata/FCContactsPhone.h; sourceTree = "<group>"; };
 		86494CC818838C3C00C22B14 /* FCContactsPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCContactsPhone.m; path = DAOModel/coredata/FCContactsPhone.m; sourceTree = "<group>"; };
+		864E57A218B394DB000989CB /* XCJFindMMFirtStupViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindMMFirtStupViewcontr.h; path = viewcontroller/XCJFindMMFirtStupViewcontr.h; sourceTree = "<group>"; };
+		864E57A318B394DB000989CB /* XCJFindMMFirtStupViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindMMFirtStupViewcontr.m; path = viewcontroller/XCJFindMMFirtStupViewcontr.m; sourceTree = "<group>"; };
 		86536F6C18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendManySelectedImageViewCOntrooler.h; path = viewcontroller/XCJSendManySelectedImageViewCOntrooler.h; sourceTree = "<group>"; };
 		86536F6D18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendManySelectedImageViewCOntrooler.m; path = viewcontroller/XCJSendManySelectedImageViewCOntrooler.m; sourceTree = "<group>"; };
 		86536F6F18AB33260059E9C7 /* MinroadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinroadOperation.h; sourceTree = "<group>"; };
@@ -1244,6 +1247,8 @@
 				86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */,
 				86045FD118B346290002581E /* XCJSelectAgeModefilViewContr.h */,
 				86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */,
+				864E57A218B394DB000989CB /* XCJFindMMFirtStupViewcontr.h */,
+				864E57A318B394DB000989CB /* XCJFindMMFirtStupViewcontr.m */,
 			);
 			name = FindYouMM;
 			sourceTree = "<group>";
@@ -3227,6 +3232,7 @@
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
+				864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				86ADDA361894E73F000A0C22 /* UIImage+WebP.m in Sources */,
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
