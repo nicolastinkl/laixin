@@ -18,4 +18,5 @@
 -(void)warningStyle;
 -(void)dangerStyle;
 -(void)sendMessageStyle;
+-(void)labelphotoStyle;
 @end

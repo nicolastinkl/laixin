@@ -9,16 +9,20 @@
 #import "XCJRecommendLSFriendViewcontr.h"
 #import "XCAlbumAdditions.h"
 #import "UIButton+Bootstrap.h"
+#import "FCUserDescription.h"
+#import "HZAreaPickerView.h"
 
-
-@interface XCJRecommendLSFriendViewcontr ()
+@interface XCJRecommendLSFriendViewcontr ()<HZAreaPickerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *text_nick;
 @property (weak, nonatomic) IBOutlet UILabel *text_age;
 @property (weak, nonatomic) IBOutlet UILabel *text_address;
 @property (weak, nonatomic) IBOutlet UILabel *text_laixinID;
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollview;
+@property (weak, nonatomic) IBOutlet UIView *laixinView;
 
+@property (strong, nonatomic) HZAreaPickerView *locatePicker;
+@property (strong, nonatomic) NSString *areaValue, *cityValue;
 @end
 
 @implementation XCJRecommendLSFriendViewcontr
@@ -43,8 +47,38 @@
     
     UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStyleDone target:self action:@selector(SureSendPutMMClick:)];
     self.navigationItem.rightBarButtonItem = item;
+    [self.button setHeight:44];
+    [self.button infoStyle];
     
-    [self.button sendMessageStyle];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeLaixin:) name:@"changeLaixinMMID" object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"changeLaixinMMID" object:nil];
+    
+    
+}
+
+-(void) changeLaixin:(NSNotification * ) notify
+{
+    if (notify.object) {
+        NSString * userid = notify.object;
+        FCUserDescription * user = [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:userid];
+        UIImageView * image_icon  = (UIImageView *) [self.laixinView subviewWithTag:1];
+        NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+        [image_icon setImageWithURL:[NSURL URLWithString:Urlstring]];
+        self.laixinView.hidden = NO;
+        self.text_laixinID.text = @"";
+    }
 }
 
 -(IBAction)SureSendPutMMClick:(id)sender
@@ -89,10 +123,8 @@
             break;
         case 1:
         {
+          
             if (indexPath.row == 0) {
-                //性别
-            }else
-            if (indexPath.row == 1) {
                 //年龄
                 UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"请输入妹妹的年龄:"
                                                                  message:@""
@@ -108,8 +140,10 @@
                 prompt.tag = 2; // change name or nick
                 [prompt show];
             }else
-            if (indexPath.row == 2) {
+            if (indexPath.row == 1) {
                 //居住地
+                self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCity delegate:self];
+                [self.locatePicker showInView:self.view];
             }
         }
             break;
@@ -172,6 +206,35 @@
             break;
     }
     
+}
+
+
+-(void)cancelLocatePicker
+{
+    [self.locatePicker cancelPicker];
+    self.locatePicker.delegate = nil;
+    self.locatePicker = nil;
+}
+
+
+#pragma mark - HZAreaPicker delegate
+-(void)pickerDidChaneStatus:(HZAreaPickerView *)picker
+{
+    self.cityValue = [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
+    self.text_address.text = self.cityValue;
+    self.text_address.textColor = [tools colorWithIndex:0];
+}
+
+- (void) cancel
+{
+    [self cancelLocatePicker];
+}
+
+- (void) complate
+{
+    [self cancelLocatePicker];
+    self.text_address.text = self.cityValue;
+    self.text_address.textColor = [tools colorWithIndex:0];
 }
 
 /*

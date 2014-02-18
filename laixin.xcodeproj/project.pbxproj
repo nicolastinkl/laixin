@@ -10,6 +10,9 @@
 		86045FC018B1F8C80002581E /* XCJFindYouMMViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */; };
 		86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */; };
 		86045FC618B254DA0002581E /* SCJChooseSignOrDesViewControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */; };
+		86045FCA18B2F7EF0002581E /* AOTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FC918B2F7EF0002581E /* AOTag.m */; };
+		86045FCD18B2FF9F0002581E /* NSData+crc32.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCC18B2FF9F0002581E /* NSData+crc32.m */; };
+		86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
@@ -447,6 +450,12 @@
 		86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRecommendLSFriendViewcontr.m; path = viewcontroller/XCJRecommendLSFriendViewcontr.m; sourceTree = "<group>"; };
 		86045FC418B254DA0002581E /* SCJChooseSignOrDesViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCJChooseSignOrDesViewControl.h; path = viewcontroller/SCJChooseSignOrDesViewControl.h; sourceTree = "<group>"; };
 		86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCJChooseSignOrDesViewControl.m; path = viewcontroller/SCJChooseSignOrDesViewControl.m; sourceTree = "<group>"; };
+		86045FC818B2F7EF0002581E /* AOTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOTag.h; sourceTree = "<group>"; };
+		86045FC918B2F7EF0002581E /* AOTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOTag.m; sourceTree = "<group>"; };
+		86045FCB18B2FF9F0002581E /* NSData+crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+crc32.h"; sourceTree = "<group>"; };
+		86045FCC18B2FF9F0002581E /* NSData+crc32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+crc32.m"; sourceTree = "<group>"; };
+		86045FCE18B31A910002581E /* XCJSelectLaixinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelectLaixinViewController.h; path = viewcontroller/XCJSelectLaixinViewController.h; sourceTree = "<group>"; };
+		86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectLaixinViewController.m; path = viewcontroller/XCJSelectLaixinViewController.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
@@ -1219,8 +1228,19 @@
 				86045FC218B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m */,
 				86045FC418B254DA0002581E /* SCJChooseSignOrDesViewControl.h */,
 				86045FC518B254DA0002581E /* SCJChooseSignOrDesViewControl.m */,
+				86045FCE18B31A910002581E /* XCJSelectLaixinViewController.h */,
+				86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */,
 			);
 			name = FindYouMM;
+			sourceTree = "<group>";
+		};
+		86045FC718B2F7E70002581E /* AOtag */ = {
+			isa = PBXGroup;
+			children = (
+				86045FC818B2F7EF0002581E /* AOTag.h */,
+				86045FC918B2F7EF0002581E /* AOTag.m */,
+			);
+			name = AOtag;
 			sourceTree = "<group>";
 		};
 		8622C875187D192100776A38 /* POHorizontalList */ = {
@@ -2388,6 +2408,8 @@
 				86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */,
 				8607385218AB4BFC003830DE /* SJAvatarBrowser.h */,
 				8607385318AB4BFC003830DE /* SJAvatarBrowser.m */,
+				86045FCB18B2FF9F0002581E /* NSData+crc32.h */,
+				86045FCC18B2FF9F0002581E /* NSData+crc32.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -2427,6 +2449,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				86045FC718B2F7E70002581E /* AOtag */,
 				866C153F18ADE75F0054F686 /* PhotoBrowerClasses */,
 				8626559918ADADB700F05B81 /* UINavigationController+SGProgress */,
 				863FCCA118A9F0BE00422DEB /* coyLabel */,
@@ -3127,6 +3150,7 @@
 				8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */,
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				869CE4BE186A73880004C1EC /* CustomMethod.m in Sources */,
+				86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */,
 				868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				86D56C60189BFF44005CFD85 /* RemoteImgListOperator.m in Sources */,
@@ -3176,6 +3200,7 @@
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
 				863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */,
 				8622C87B187D192100776A38 /* ListItem.m in Sources */,
+				86045FCA18B2F7EF0002581E /* AOTag.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,
 				86EB76CA185AA6CC00836947 /* UIColor+Expanded.m in Sources */,
@@ -3195,6 +3220,7 @@
 				86D1830A1834AFD90005901D /* DAHttpClient.m in Sources */,
 				866C156118ADE75F0054F686 /* DCStatusBarOverlay.m in Sources */,
 				86D1830E1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
+				86045FCD18B2FF9F0002581E /* NSData+crc32.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
 				86D182961834AED30005901D /* UIView+Indicator.m in Sources */,

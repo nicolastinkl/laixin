@@ -8,6 +8,7 @@
 #import "UIButton+Bootstrap.h"
 #import <QuartzCore/QuartzCore.h>
 #import "XCAlbumDefines.h"
+#import "tools.h"
 
 @implementation UIButton (Bootstrap)
 -(void)sendMessageStyle
@@ -20,6 +21,20 @@
     self.backgroundColor = [UIColor clearColor];
     [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
 
+}
+
+/**
+ *  用户标签选择
+ */
+-(void)labelphotoStyle
+{
+    self.layer.borderWidth = 0.5;
+    self.layer.masksToBounds = YES;
+//    [self setAdjustsImageWhenHighlighted:NO];
+    self.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    self.backgroundColor = [UIColor whiteColor];
+    [self setTitleColor:[tools colorWithIndex:0] forState:UIControlStateNormal];
+    
 }
 
 -(void)bootstrapStyle{

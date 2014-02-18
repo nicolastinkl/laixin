@@ -107,6 +107,10 @@
  12.2 如本协议的任何条款被视作无效或无法执行，则上述条款可被分离，其余部份则仍具有法律效力；
  12.3 莱福思来信于用户过失或违约时放弃本协议规定的权利的，不得视为其对用户的其他或以后同类之过失或违约行为弃权；12.4 本协议应取代双方此前就本协议任何事项达成的全部口头和书面协议、安排、谅解和通信；
  12.5 莱福思有权根据业务调整情况将本协议项下的全部权利义务一并转移给其关联公司，转让将以本协议规定的方式通知，用户承诺对此不持有异议。</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>mmLabel</key>
+	<string>[&quot;高&quot;,&quot;富&quot;,&quot;帅&quot;,&quot;白&quot;,&quot;美&quot;,&quot;宅&quot;,&quot;清纯&quot;,&quot;可爱&quot;,&quot;孝顺&quot;,&quot;温顺&quot;,&quot;学妹&quot;,&quot;气质&quot;,&quot;成熟&quot;,&quot;性感&quot;,&quot;知性&quot;,&quot;潮&quot;,&quot;洋气&quot;,&quot;理性&quot;,&quot;感性&quot;,&quot;有爱心&quot;,&quot;有宠物&quot;,&quot;喵星人&quot;,&quot;汪星人&quot;,&quot;顾家型&quot;,&quot;顾家型&quot;,&quot;钢琴手&quot;,&quot;我是歌手&quot;,&quot;吉他手&quot;,&quot;会按摩&quot;,&quot;烹饪达人&quot;,&quot;狂热吃货&quot;,&quot;吃货&quot;,&quot;皮肤好&quot;,&quot;脾气好&quot;,&quot;安静&quot;,&quot;幽默&quot;,&quot;可爱&quot;,&quot;运动达人&quot;,&quot;天爱呆&quot;,&quot;表情帝&quot;,&quot;文艺&quot;,&quot;小清新&quot;,&quot;积极分子&quot;,&quot;工作狂&quot;,&quot;事业狂&quot;,&quot;有才&quot;,&quot;有财&quot;,&quot;富二代&quot;,&quot;小萝莉&quot;,&quot;购物狂&quot;,&quot;电视剧&quot;,&quot;乐观&quot;]</string>
 	<key>private</key>
 	<string>莱福思来信非常重视用户的隐私权，以下是我们对您信息收集、使用和保护的政策，请您认真阅读，对于文中加粗字体显示的内容，莱福思来信督促您应重点阅读。随着服务范围的扩大和调整，我们可能随时更新我们的隐私政策，恕不另行通知，更新后的隐私政策一旦在网页上公布即有效取代原有隐私政策。
  

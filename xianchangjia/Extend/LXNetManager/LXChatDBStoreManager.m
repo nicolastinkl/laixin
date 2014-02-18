@@ -120,11 +120,7 @@
 //    [fetch setEntity:entity];
     
     NSPredicate * qcmd = [NSPredicate predicateWithFormat:@"uid = %@ ",UserID];
-    NSArray * obs = [FCUserDescription MR_findAllWithPredicate:qcmd];//[localContext executeFetchRequest:fetch error:nil];
-    if (obs && obs.count > 0) {
-        return (FCUserDescription * )obs[0];
-    }
-    return nil;
+    return [FCUserDescription MR_findFirstWithPredicate:qcmd];
 }
 
 /**

@@ -7,9 +7,20 @@
 //
 
 #import "SCJChooseSignOrDesViewControl.h"
+#import "XCAlbumAdditions.h"
+#import "AOTag.h" 
+#import "UIButton+Bootstrap.h"
+#define BUTTONCOLL  5
 
-@interface SCJChooseSignOrDesViewControl ()
-
+@interface SCJChooseSignOrDesViewControl ()<UITextViewDelegate,AOTagDelegate>
+{
+    NSMutableArray * labelArray;
+}
+@property (weak, nonatomic) IBOutlet UITextView *textview;
+@property (weak, nonatomic) IBOutlet UILabel *labelnumber;
+@property (weak, nonatomic) IBOutlet UITableViewCell *choosedCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *labelCell;
+@property (retain) AOTagList *tag;
 @end
 
 @implementation SCJChooseSignOrDesViewControl
@@ -33,16 +44,168 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    
+    self.choosedCell.height = 80.0f;
     UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"确定" style:UIBarButtonItemStyleDone target:self action:@selector(SureSendPutMMClick:)];
     self.navigationItem.rightBarButtonItem = item;
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    self.textview.textColor = [UIColor lightGrayColor];
+    
+    
+    self.tag = [[AOTagList alloc] initWithFrame:CGRectMake(0.0f,
+                                                           7.0f,
+                                                           320.0f,
+                                                           70.0f)];
+    
+    [self.tag setDelegate:self];
+    [self.choosedCell.contentView addSubview:self.tag];
+    
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
+    //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+    
+    NSString * strJson =  [dictionary valueForKey:@"mmLabel"];
+    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray * responseObject =[datajson  objectFromJSONData] ;
+
+    labelArray = [NSMutableArray arrayWithArray:responseObject];
+//    NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
+//    SLog(@"%@",[data CRC32]);
+    __block float prewith;
+    __block float preLeft;
+    __block float row = 0;
+    
+    UIView * viewLabel = [self.labelCell.contentView subviewWithTag:1];
+    if (responseObject && responseObject.count > 0) {
+        [responseObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSString * str = obj;
+            float buttonWeidth = 36 + str.length*10;
+            UIButton *iv;
+            if ((prewith+buttonWeidth+preLeft+BUTTONCOLL) < APP_SCREEN_WIDTH) {
+                iv = [[UIButton alloc] initWithFrame:CGRectMake(prewith+preLeft+BUTTONCOLL, (30+BUTTONCOLL) * row, buttonWeidth, 30)];
+            }else{
+                row ++;
+                preLeft = 0;
+                prewith = 0;
+                iv = [[UIButton alloc] initWithFrame:CGRectMake(prewith+preLeft+BUTTONCOLL, (30+BUTTONCOLL) * row, buttonWeidth, 30)];
+            }
+            prewith = buttonWeidth;
+            preLeft = iv.left;
+            [iv labelphotoStyle];
+            [iv.titleLabel setFont:[UIFont systemFontOfSize:14.0f]];
+            [iv setTitle:str forState:UIControlStateNormal];
+            [iv addTarget:self action:@selector(selectTagClick:) forControlEvents:UIControlEventTouchUpInside];
+            iv.tag = idx;
+            [viewLabel addSubview:iv];
+        }];
+    }
+}
+
+-(IBAction)selectTagClick:(id)sender
+{
+    
+    UIButton * button =  (UIButton *) sender;
+    if (button.backgroundColor == [UIColor lightGrayColor]) {
+        //移除
+        button.backgroundColor = [UIColor whiteColor];
+        NSString * string = labelArray[button.tag];        
+        if(self.tag.tags)
+        {
+            
+            for (AOTag * tag in self.tag.tags) {
+                if ([tag.tTitle isEqualToString:string]) {
+                    [self.tag removeTag:tag];
+                    break;
+                }
+            } 
+        }
+        
+    }else{
+        
+        if(self.tag.tags.count > 5){
+            [UIAlertView showAlertViewWithMessage:@"最多添加6个标签,可以通过点击可删除已添加标签"];
+        }else{
+            //添加
+            NSString * string = labelArray[button.tag];
+            [self.tag  addTag:string];
+            [button setBackgroundColor:[UIColor lightGrayColor]];
+        }
+        
+    }
+    
+    
 }
 
 -(IBAction)SureSendPutMMClick:(id)sender
 {
 
 }
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"一句话描述MM"]) {
+        textView.text = @"";
+        self.textview.textColor = [tools colorWithIndex:0];
+    }
+    return YES;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.text.length <= 100) {
+        self.labelnumber.textColor = [tools colorWithIndex:0];
+        self.labelnumber.text = [NSString stringWithFormat:@"%d",textView.text.length];
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+    }else{
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.labelnumber.textColor = [UIColor redColor];
+        self.labelnumber.text = [NSString stringWithFormat:@"-%d",textView.text.length-100];
+
+    }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"]) {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
+#pragma mark - Tag delegate
+
+- (void)tagDidAddTag:(AOTag *)tag
+{
+    NSLog(@"Tag > %@ has been added", tag);
+}
+
+- (void)tagDidRemoveTag:(AOTag *)tag
+{
+    NSLog(@"Tag > %@ has been removed", tag);
+    int indextitle = [labelArray indexOfObject:tag.tTitle];
+    UIView * viewLabel = [self.labelCell.contentView subviewWithTag:1];
+    UIButton * button =  (UIButton *)viewLabel.subviews[indextitle];
+    //移除
+    button.backgroundColor = [UIColor whiteColor];
+}
+
+- (void)tagDidSelectTag:(AOTag *)tag
+{
+    NSLog(@"Tag > %@ has been selected", tag);
+}
+
+#pragma mark - Tag delegate
+
+- (void)tagDistantImageDidLoad:(AOTag *)tag
+{
+    NSLog(@"Distant image has been downloaded for tag > %@", tag);
+}
+
+- (void)tagDistantImageDidFailLoad:(AOTag *)tag withError:(NSError *)error
+{
+    NSLog(@"Distant image has failed to download > %@ for tag > %@", error, tag);
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -132,8 +132,8 @@
 #pragma mark - HZAreaPicker delegate
 -(void)pickerDidChaneStatus:(HZAreaPickerView *)picker
 {
-    if (picker.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
-        self.areaValue = [NSString stringWithFormat:@"%@ %@ %@", picker.locate.state, picker.locate.city, picker.locate.district];
+    if (picker.pickerStyle == HZAreaPickerWithStateAndCity) {
+        self.areaValue = [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
     }
 }
 
@@ -154,7 +154,7 @@
     if (self.locatePicker) {
         [self.locatePicker cancelPicker];
     }
-    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCityAndDistrict delegate:self];
+    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCity delegate:self];
    [self.locatePicker showInView:self.view];
 
 }
