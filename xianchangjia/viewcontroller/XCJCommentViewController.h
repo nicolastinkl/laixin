@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJCommentViewController : UITableViewController
+
 @property (assign,nonatomic) unsigned long long  talk_id;
 @property (assign,nonatomic) NSInteger scene_id;
 @property (assign,nonatomic) NSInteger touserid;
+
 @end

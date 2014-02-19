@@ -99,14 +99,16 @@
     NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"create_time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
     result.time = timeinter;
     result.timeText = [tools timeLabelTextOfTime:timeinter];
-    
+   
     {
         NSMutableArray * array = [[NSMutableArray alloc] init];
-        result.labels = array;
+//        result.labels = array;
+        result.labels= [DataHelper getArrayValue:dict[@"tags"] defaultValue:array];
     }
     {
         NSMutableArray * array = [[NSMutableArray alloc] init];
         result.medias = array;
+
     }
     return result;
 }

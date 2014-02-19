@@ -8,7 +8,7 @@
 
 #import "UIImageView+Addtion.h"
 #import "UIImageView+WebCache.h"
-
+#import "UIView+Indicator.h"
 @implementation UIImageView (Addtion)
 
 - (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage*)placeholderImage displayProgress:(BOOL)displayProgress
@@ -49,5 +49,6 @@
         [activityIndicator removeFromSuperview];
     }];
 }
+
 
 @end

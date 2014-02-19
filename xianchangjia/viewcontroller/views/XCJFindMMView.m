@@ -41,16 +41,14 @@
     if (findmmData.like_count > 0) {
         self.label_like.text = [NSString stringWithFormat:@"%d",findmmData.like_count];
     }else{
-        self.label_like = 0;
+        self.label_like.text = @"0";
     }
     
-    
-    NSArray * array = @[@"玉女心境",@"口味偏重",@"爱狗达人",@"爱电影"];
     //self.view_label
     __block float prewith;
     __block float preLeft;
     __block float row = 0;
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [findmmData.labels enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSString * str = obj;
         float buttonWeidth = 25 + str.length*10;
         UILabel *iv;

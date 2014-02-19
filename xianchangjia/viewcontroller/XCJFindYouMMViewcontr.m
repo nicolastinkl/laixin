@@ -78,10 +78,21 @@ enum actionTag {
     datasource = array;
 	// Do any additional setup after loading the view.
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition  object:nil];
+    
     [self.view showIndicatorViewLargeBlue];
     
     [self findWithCity:@"四川 成都"];
     
+}
+
+-(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
+{
+    [self hiddeErrorInfoWithRetry];
+    // start retry
+    
+    [self.view showIndicatorViewLargeBlue];
+    [self findWithCity:@"四川 成都"];
 }
 
 -(void) findWithCity:(NSString*) address
@@ -108,6 +119,8 @@ enum actionTag {
             }
         } failure:^(MLRequest *request, NSError *error) {
             [self.view hideIndicatorViewBlueOrGary];
+            [self showErrorInfoWithRetry] ;//]showErrorText:@"请求失败,请检查网络设置"];
+            
         }];
     });
 }
@@ -139,6 +152,7 @@ enum actionTag {
 
 //抢M
 - (IBAction)FindMMClick:(id)sender {
+    [UIAlertView showAlertViewWithMessage:@"暂无抢妹记录"];
 //    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"查看抢妹历史记录", nil];
 //    sheet.tag = findMM;
 //    [sheet showInView:self.view];
@@ -153,7 +167,7 @@ enum actionTag {
 
 // *  换一换
 - (IBAction)ChangeClick:(id)sender {
-    
+    [UIAlertView showAlertViewWithMessage:@"抱歉,您的等级不够,不能换一换"];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -166,9 +180,14 @@ enum actionTag {
                 viewTr.title = @"发妹妹";
                 [self.navigationController pushViewController:viewTr animated:YES];
             }else if (buttonIndex == 1) {
-                XCJRecommendLSFriendViewcontr * viewTr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJRecommendLSFriendViewcontr"];
-                viewTr.title = @"发自己";
-                [self.navigationController pushViewController:viewTr animated:YES];
+                
+                [UIAlertView showAlertViewWithMessage:@"抱歉,等级不够,不能发自己"];
+                
+                /*
+                 XCJRecommendLSFriendViewcontr * viewTr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJRecommendLSFriendViewcontr"];
+                 viewTr.title = @"发自己";
+                 [self.navigationController pushViewController:viewTr animated:YES];
+                 */
             }
         }
             break;
@@ -235,7 +254,7 @@ enum actionTag {
                     NSArray * array = dict[@"exdata"];
                     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                         if (idx == 0) {
-                            [label.image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""] Size:320]]];
+                            [label.image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""] Size:640]]];
                         }
                         [findmm.medias addObject:[DataHelper getStringValue:obj[@"picture"] defaultValue:@""]];
                     }];

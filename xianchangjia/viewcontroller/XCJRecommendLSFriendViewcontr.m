@@ -28,6 +28,7 @@
     UIImageView * removeImageview;
     NSString * TokenAPP;
     UIImage *ImageFile;
+    NSArray * tagsArray;
 }
 @property (weak, nonatomic) IBOutlet UILabel *text_nick;
 @property (weak, nonatomic) IBOutlet UILabel *text_age;
@@ -123,7 +124,7 @@
     }
     
     [SVProgressHUD showWithStatus:@"正在提交资料..."];
-    [[MLNetworkingManager sharedManager] sendWithAction:@"recommend.new" parameters:@{@"uid":self.CurrentUserid,@"recommend_word":self.label_des.text,@"sex":@"1",@"sex_want":@"1",@"contact":[NSString stringWithFormat:@"[phone]%@",self.text_phoneNumber.text],@"city":self.text_address.text,@"age":self.text_age.text} success:^(MLRequest *request, id responseObject) {
+    [[MLNetworkingManager sharedManager] sendWithAction:@"recommend.new" parameters:@{@"uid":self.CurrentUserid,@"recommend_word":self.label_des.text,@"sex":@"1",@"sex_want":@"1",@"contact":[NSString stringWithFormat:@"[phone]%@",self.text_phoneNumber.text],@"city":self.text_address.text,@"age":self.text_age.text,@"tags":tagsArray} success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             //上传图片
            int recomdID =  [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
@@ -233,6 +234,7 @@
         NSDictionary * dict = notify.object;
         NSString * string = dict[@"description"];
         NSArray * array = dict[@"labelArray"];
+        tagsArray = array;
         self.label_des.text = string;
         self.label_des.textColor =[tools colorWithIndex:0];
         self.label_sign.text = @"";

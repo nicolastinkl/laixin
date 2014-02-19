@@ -12,4 +12,5 @@
 
 - (void)setImageWithURL:(NSURL *)url placeholderImage:(UIImage*)placeholderImage displayProgress:(BOOL)displayProgress;
 
+
 @end

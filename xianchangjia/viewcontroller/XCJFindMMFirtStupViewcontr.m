@@ -8,8 +8,9 @@
 
 #import "XCJFindMMFirtStupViewcontr.h"
 #import "XCAlbumAdditions.h"
+#import "UIButton+Bootstrap.h"
 #import "UIButton+AFNetworking.h" 
-
+#import "UIImageView+Addtion.h"
 #define BUTTONCOLL 3
 
 @interface XCJFindMMFirtStupViewcontr ()
@@ -21,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *button_Lists;
 @property (weak, nonatomic) IBOutlet UILabel *label_pay;
 @property (weak, nonatomic) IBOutlet UILabel *label_content;
+
+@property (weak, nonatomic) IBOutlet UIButton *button_qiang;
 
 @end
 
@@ -38,6 +41,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -47,9 +52,9 @@
     
     self.title = @"抢(1/3)";
     
-    UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"抢" style:UIBarButtonItemStyleDone target:self action:@selector(SureSendPutMMClick:)];
+    UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithTitle:@"抢一抢" style:UIBarButtonItemStyleDone target:self action:@selector(SureSendPutMMClick:)];
     self.navigationItem.rightBarButtonItem = item;
-    
+    [self.button_qiang infoStyle];
     
     self.label_content.textColor = [UIColor grayColor];//[tools colorWithIndex:0];
     self.label_like.textColor = [tools colorWithIndex:0];
@@ -60,7 +65,14 @@
     [self.label_content sizeToFit];
     [self.label_content setWidth:290.0f];
     
-    self.label_pay.text = [NSString stringWithFormat:@"已经被%d人抢过",self.data.buy_count];
+    [self.tableView.tableHeaderView setHeight:(self.label_content.top + self.label_content.height + 5)];
+    
+    if (self.data.buy_count == 0) {
+        self.label_pay.text = @"还没有被抢过";
+    }else{
+        self.label_pay.text = [NSString stringWithFormat:@"已被%d人抢过",self.data.buy_count];
+    }
+    
     self.label_pay.textColor =[tools colorWithIndex:0];
     //290
     if (self.data.age.length > 0) {
@@ -77,17 +89,16 @@
     if (self.data.like_count > 0) {
         self.label_like.text = [NSString stringWithFormat:@"%d",self.data.like_count];
     }else{
-        self.label_like = 0;
+        self.label_like.text = @"0";
     }
     self.view_bg.layer.cornerRadius = 4;
     self.view_bg.layer.masksToBounds = YES;
-    
-    NSArray * array = @[@"玉女心境",@"口味偏重",@"爱狗达人",@"爱电影"];
+
     //self.view_label
     __block float prewith;
     __block float preLeft;
     __block float row = 0;
-    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self.data.labels enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSString * str = obj;
         float buttonWeidth = 25 + str.length*10;
         UILabel *iv;
@@ -116,7 +127,7 @@
     
     [self.data.medias enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if (idx == 0) {
-            [self.image_big setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:obj Size:320]]];
+            [self.image_big setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:obj Size:640]]];
         }
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setFrame:CGRectMake((50 + BUTTONCOLL)*idx + BUTTONCOLL, self.button_Lists.top, 50, 50)];
@@ -131,7 +142,7 @@
 {
     UIButton * button = (UIButton*)sender;
     NSString *url = self.data.medias[button.tag];
-    [self.image_big setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:320]]];
+    [self.image_big setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:url Size:320]] placeholderImage:[UIImage imageNamed:@"photo_browser_no_photo"] displayProgress:YES];
     
 }
 
@@ -145,7 +156,7 @@
 
 -(IBAction)SureSendPutMMClick:(id)sender
 {
-    
+    [UIAlertView showAlertViewWithMessage:@"抱歉,您的等级不够,不能抢她"];
 }
 
 
@@ -159,14 +170,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return 0;
 }
