@@ -414,6 +414,7 @@
     
     XCJGroupUsersTableViewController * groupView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJGroupUsersTableViewController"];
     groupView.gid = self.Currentgid;
+    
     [self.navigationController pushViewController:groupView animated:YES];
     
 }

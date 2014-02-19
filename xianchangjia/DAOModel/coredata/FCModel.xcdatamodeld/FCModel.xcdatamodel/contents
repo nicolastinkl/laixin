@@ -43,6 +43,7 @@
         <attribute name="groupID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="groupJson" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasAdd" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="fcBeinviteGroupInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCHomeGroupMsg" inverseName="newRelationship" inverseEntity="FCHomeGroupMsg" syncable="YES"/>
         <relationship name="fcBeinviteGroupShips" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCUserDescription" inverseName="newRelationship1" inverseEntity="FCUserDescription" syncable="YES"/>
     </entity>

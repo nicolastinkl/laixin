@@ -46,7 +46,7 @@
     NSMutableArray  * array = [[NSMutableArray alloc] init];
     _datasource = array;
     
-    [SVProgressHUD showWithStatus:@"正在查找附近的人..."];
+    [self.view showIndicatorViewLargeBlue];
     double delayInSeconds = .5;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -64,7 +64,7 @@
         [self hiddeErrorText];
         [_datasource removeAllObjects];
         [self.tableView reloadData];
-        [SVProgressHUD showWithStatus:@"正在查找附近的人..."];        
+        [self.view showIndicatorViewLargeBlue];        
         [self setupLocationManager];
     }
 }
@@ -91,7 +91,7 @@
          locationManager.desiredAccuracy = kCLLocationAccuracyBest;
          [self.locationManager startUpdatingLocation];*/
         
-        [SVProgressHUD dismiss];
+        [self.view hideIndicatorViewBlueOrGary];
         [self showErrorText:@"请开启位置信息"];
     }
 }
@@ -129,7 +129,7 @@
                         
                     }];
                     if(uidArray.count <= 0){
-                        [SVProgressHUD dismiss];
+                        [self.view hideIndicatorViewBlueOrGary];
                         [self showErrorText:@"没有找到附近用户"];
                         return ;
                     }
@@ -146,15 +146,15 @@
                                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
                                 }];
                             }];
+                            [self.view hideIndicatorViewBlueOrGary];
                             [self.tableView reloadData];
                         }
                     } failure:^(MLRequest *request, NSError *error) {
+                        [self.view hideIndicatorViewBlueOrGary];
+                        [self showErrorText:@"网络请求失败"];
                     }];
-                    
-                    
-                   
                 }
-                [SVProgressHUD dismiss];
+                
             } failure:^(MLRequest *request, NSError *error) {
                 [SVProgressHUD dismiss];
                 [self showErrorText:@"网络请求失败"];

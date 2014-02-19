@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString * groupJson;
 @property (nonatomic, retain) NSString * groupName;
 @property (nonatomic, retain) NSString * eid;
+@property (nonatomic, retain) NSNumber * hasAdd;
 @property (nonatomic, retain) FCUserDescription *fcBeinviteGroupShips;
 @property (nonatomic, retain) FCHomeGroupMsg *fcBeinviteGroupInfo;
 

@@ -14,6 +14,7 @@
 #import "tools.h"
 #import "MTAnimatedLabel.h"
 #import "XCJHomeDynamicViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface XCJNewAddGroupTabViewController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate>
 
@@ -199,27 +200,78 @@
     UIButton *button = (UIButton *)[cell.contentView viewWithTag:5];
     UILabel *labelSign = (UILabel *)[cell.contentView viewWithTag:6];
     [imgView setImage:[UIImage imageNamed:@"o_weiguan"]];
-    {
-//        [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:info.beAddFriendShips.headpic Size:160]]];
+    { 
         labelnick.text = info.groupName;
         
         labelLiyou.text = [NSString stringWithFormat:@"%@ 被邀请加入",[tools FormatStringForDate:info.beaddTime]];
     }
-    if (YES) {
+    
+    if ([info.hasAdd boolValue]) {
         button.hidden = YES;
         imgViewbuttonBG.hidden = YES;
         labelSign.text = @"已添加";
     }else{
+        labelSign.hidden = NO;
+        button.hidden = NO;
+        [button setTitle:@"通过" forState:UIControlStateNormal];
         [button addTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
     }
-//    [labelnick stopAnimating];
-//    [labelnick startAnimating];
 }
 
 -(IBAction)addFriendClick:(id)sender
 {
+    UIButton * button = (UIButton*)sender;
+    
+    UITableViewCell * cell = (UITableViewCell *)button.superview.superview.superview;
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+    FCBeInviteGroup *list = (FCBeInviteGroup *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+//    button.enabled = NO;
+//    [button showIndicatorViewBlue];
+    if (list) {
+        
+        [SVProgressHUD showWithStatus:@"正在加入"];
+        
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":list.groupID} success:^(MLRequest *requestsd, id responseObjectsd) {
+            if (responseObjectsd) {
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                // create new
+                
+                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.groupID]];
+                Conversation * conversation =  [Conversation MR_findFirstWithPredicate:pre];
+                if (conversation == nil) {
+                    conversation =  [Conversation MR_createInContext:localContext];
+                    conversation.lastMessage = @"我加入了群组";
+                    conversation.lastMessageDate = [NSDate date];
+                    conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                    conversation.messageStutes = @(messageStutes_incoming);
+                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                    conversation.facebookName = list.groupName;
+                    conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.groupID];
+                    conversation.badgeNumber = @1;
+                    [localContext MR_saveOnlySelfAndWait];
+                    SystemSoundID id = 1007; //声音
+                    AudioServicesPlaySystemSound(id);
+                    
+                }
+                
+                [SVProgressHUD  dismiss];
+                
+                {
+                    list.hasAdd = @(YES);
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                    button.hidden = YES;
+                }
+                
+            }
+        } failure:^(MLRequest *requestsd, NSError *errorsd) {
+            [SVProgressHUD  dismiss];
+            [UIAlertView showAlertViewWithMessage:@"加入群组失败"];
+            
+        }];
+    }
     
 }
+
 
 #pragma mark - Table view data source
 

@@ -44,7 +44,8 @@
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.editButtonItem.title = @"踢人";
+     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 
@@ -59,8 +60,7 @@
 
 -(void)reloadData
 {
-    [self.tableView showIndicatorViewLargeBlue];
-    
+    [self.tableView showIndicatorViewLargeBlue];    
     {
         // request  data from net working
         //        group.members(gid) 群成员列表
@@ -162,28 +162,48 @@
     
 }
 
-/*
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
-*/
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        {
+            LXUser * currentUser =  _datasource[indexPath.row];
+            if (currentUser) {
+                [SVProgressHUD showWithStatus:@"正在移出..."];
+                [[MLNetworkingManager sharedManager] sendWithAction:@"group.remove_member" parameters:@{@"gid":self.gid,@"uid":@[currentUser.uid]} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        [SVProgressHUD dismiss];
+                        //group.remove_member(gid,uid) 群创建者踢人,uid可以是数组
+                        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                    [UIAlertView showAlertViewWithMessage:@"移出失败,请检查网络设置"];
+                    [SVProgressHUD dismiss];
+                }];
+            }
+        }
+        
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"移出群组";
+}
+
 
 /*
 // Override to support rearranging the table view.

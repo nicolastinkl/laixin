@@ -20,5 +20,5 @@
 @dynamic eid;
 @dynamic fcBeinviteGroupShips;
 @dynamic fcBeinviteGroupInfo;
-
+@dynamic hasAdd;
 @end

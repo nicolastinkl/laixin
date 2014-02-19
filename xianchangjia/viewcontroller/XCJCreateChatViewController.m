@@ -77,7 +77,6 @@
 //    [self.view insertSubview:self.tableView belowSubview:self.contactPickerView];
     self.tableView.top = self.contactPickerView.height + 44;
     
-    
     self.contacts = [FCFriends MR_findAll];
     self.selectedContacts = [NSMutableArray array];
     self.filteredContacts = self.contacts;

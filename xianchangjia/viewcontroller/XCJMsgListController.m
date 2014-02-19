@@ -959,21 +959,88 @@
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    
+    Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    switch ([conver.messageType intValue]) {
+        case XCMessageActivity_UserPrivateMessage:
+        {
+            return YES;
+        }
+            break;
+        case XCMessageActivity_UserGroupMessage:
+        {
+            return YES;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    return NO;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    switch ([conver.messageType intValue]) {
+        case XCMessageActivity_UserPrivateMessage:
+        {
+            return @"删除";
+        }
+            break;
+        case XCMessageActivity_UserGroupMessage:
+        {
+            return @"退出群组";
+        }
+            break;
+            
+        default:
+            break;
+    }
     return @"删除";
 }
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [managedObject MR_deleteEntity];
-        [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+        
+        Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+        switch ([conver.messageType intValue]) {
+            case XCMessageActivity_UserPrivateMessage:
+            {
+                id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+                [managedObject MR_deleteEntity];
+                [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+            }
+                break;
+            case XCMessageActivity_UserGroupMessage:
+            {
+                // 退出群聊
+                if ([conver.facebookId containString:XCMessageActivity_User_GroupMessage]) {
+                    NSString * gid = conver.facebookId;
+                    gid = [gid stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
+                    [SVProgressHUD showWithStatus:@"正在退出..."];
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.delete" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                        if (responseObject) {
+                            id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+                            [managedObject MR_deleteEntity];
+                            [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+                            [SVProgressHUD dismiss];
+                        }
+                    } failure:^(MLRequest *request, NSError *error) {
+                        [SVProgressHUD dismiss];
+                        [SVProgressHUD showErrorWithStatus:@"退出失败"];
+                    }];
+                }
+                
+               
+            }
+                break;
+                
+            default:
+                break;
+        }
+
          //[[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
 	}
 }
