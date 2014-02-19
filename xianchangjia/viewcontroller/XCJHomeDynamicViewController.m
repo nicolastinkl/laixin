@@ -503,7 +503,7 @@
                 double delayInSeconds = 1.0;
                 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.delete" parameters:@{@"gid":self.Currentgid} success:^(MLRequest *request, id responseObject) {
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.leave" parameters:@{@"gid":self.Currentgid} success:^(MLRequest *request, id responseObject) {
                         if (responseObject) {
                             [self.groupInfo MR_deleteEntity];
                             [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];

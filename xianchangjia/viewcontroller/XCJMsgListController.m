@@ -1020,7 +1020,7 @@
                     NSString * gid = conver.facebookId;
                     gid = [gid stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
                     [SVProgressHUD showWithStatus:@"正在退出..."];
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.delete" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.leave" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
                         if (responseObject) {
                             id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
                             [managedObject MR_deleteEntity];
