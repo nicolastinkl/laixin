@@ -22,7 +22,6 @@
 - (BOOL) isValidPhone;
 
 
-
 - (CGFloat)heightForWidth:(CGFloat)width
                      font:(UIFont *)font;
 

@@ -16,6 +16,8 @@
 #import "FCUserDescription.h"
 #import "XCJAddUserTableViewController.h"
 #import "UIAlertViewAddition.h"
+#import "XCJSearchUsersViewController.h"
+
 
 @interface XCJAddFriendTableController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nickNameText;
@@ -57,36 +59,7 @@
     if (![self.nickNameText.text isNilOrEmpty]) {
         
         [self.nickNameText resignFirstResponder];
-        [SVProgressHUD showWithStatus:@"正在查找..."];
-        NSDictionary * paramess = @{@"nick":self.nickNameText.text};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
-            NSDictionary * groupsss = responseObjects[@"result"];
-            NSArray * array = groupsss[@"users"];
-            if(array.count  <= 0)
-            {
-                [SVProgressHUD dismiss];
-                [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
-                return ;
-            }
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if (idx == 0) {
-                    LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
-                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
-                        if (response) {
-                            //FCUserDescription
-                            [SVProgressHUD dismiss];
-                            XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                            addUser.UserInfo = response;
-//                            addUser.UserInfoJson = currentUser;
-                            [self.navigationController pushViewController:addUser animated:YES];
-                        }
-                    }];
-                }
-            }];
-            
-        } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
-        }];
+        [self searchUserByNick];
     }
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -95,37 +68,7 @@
         if (![self.nickNameText.text isNilOrEmpty]) {
             
             [self.nickNameText resignFirstResponder];
-            [SVProgressHUD showWithStatus:@"正在查找..."];
-            NSDictionary * paramess = @{@"nick":self.nickNameText.text};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"   parameters:paramess success:^(MLRequest *request, id responseObjects) {
-                NSDictionary * groupsss = responseObjects[@"result"];
-                NSArray * array = groupsss[@"users"];
-                if(array.count  <= 0)
-                {
-                    [SVProgressHUD dismiss];
-                    [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
-                    return ;
-                }
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    if (idx == 0) {
-                        LXUser *currentUser = [[LXUser alloc] initWithDict:obj];
-                        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
-                            if (response) {
-                                //FCUserDescription
-                                [SVProgressHUD dismiss];
-                                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                                addUser.UserInfo = response;
-                                [self.navigationController pushViewController:addUser animated:YES];
-                            }
-                        }];
-
-                    }
-                    
-                }];
-                
-            } failure:^(MLRequest *request, NSError *error) {
-                [SVProgressHUD dismiss];
-            }];
+            [self searchClick:nil];
         }
         else{
             return NO;
@@ -133,6 +76,34 @@
     }
     return  YES;
 }
+
+
+-(void) searchUserByNick
+{
+    [SVProgressHUD showWithStatus:@"正在查找..."];
+    NSDictionary * paramess = @{@"nick":self.nickNameText.text};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.search"   parameters:paramess success:^(MLRequest *request, id responseObjects) {
+        NSDictionary * groupsss = responseObjects[@"result"];
+        NSArray * array = groupsss[@"users"];
+        [SVProgressHUD dismiss];
+        if(array.count  <= 0)
+        {
+            [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
+            return ;
+        }        
+        XCJSearchUsersViewController  *vewtrol = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSearchUsersViewController"];
+        vewtrol.arrayUsers = array;
+        vewtrol.navigationItem.backBarButtonItem.title = @"返回";
+        vewtrol.title = [NSString stringWithFormat:@"搜索'%@'的结果",self.nickNameText.text];
+        [self.navigationController pushViewController:vewtrol animated:YES];
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"网络请求失败"];
+    }];
+}
+
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

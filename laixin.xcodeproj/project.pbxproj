@@ -32,6 +32,7 @@
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
 		862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B318A87A00005DFD6C /* XCJIWantViewController.m */; };
 		862F54B818A87ED6005DFD6C /* LKBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B718A87ED6005DFD6C /* LKBadgeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8630C54318B5EBC600A11084 /* XCJSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8630C54218B5EBC600A11084 /* XCJSearchUsersViewController.m */; };
 		863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86467A97188F8763004AC59C /* XCJJIhuoViewController.m */; };
@@ -497,6 +498,8 @@
 		862F54B318A87A00005DFD6C /* XCJIWantViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJIWantViewController.m; path = viewcontroller/XCJIWantViewController.m; sourceTree = "<group>"; };
 		862F54B618A87ED6005DFD6C /* LKBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LKBadgeView.h; sourceTree = "<group>"; };
 		862F54B718A87ED6005DFD6C /* LKBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LKBadgeView.m; sourceTree = "<group>"; };
+		8630C54118B5EBC600A11084 /* XCJSearchUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSearchUsersViewController.h; path = viewcontroller/XCJSearchUsersViewController.h; sourceTree = "<group>"; };
+		8630C54218B5EBC600A11084 /* XCJSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSearchUsersViewController.m; path = viewcontroller/XCJSearchUsersViewController.m; sourceTree = "<group>"; };
 		863FCCA218A9F0C700422DEB /* HTCopyableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCopyableLabel.h; sourceTree = "<group>"; };
 		863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCopyableLabel.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -1502,6 +1505,8 @@
 				86494CC518815E9B00C22B14 /* XCJAddNearByUsersViewController.m */,
 				86AC093B1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.h */,
 				86AC093C1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m */,
+				8630C54118B5EBC600A11084 /* XCJSearchUsersViewController.h */,
+				8630C54218B5EBC600A11084 /* XCJSearchUsersViewController.m */,
 			);
 			name = AddFriend;
 			sourceTree = "<group>";
@@ -3424,6 +3429,7 @@
 				86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				866C156518ADE75F0054F686 /* IDMPhotoBrowser.m in Sources */,
+				8630C54318B5EBC600A11084 /* XCJSearchUsersViewController.m in Sources */,
 				8622C87C187D192100776A38 /* POHorizontalList.m in Sources */,
 				866516A5187BF276001F05F6 /* qrspec.c in Sources */,
 				86608407188FBBF300F4870B /* XCJActiveViewController.m in Sources */,
