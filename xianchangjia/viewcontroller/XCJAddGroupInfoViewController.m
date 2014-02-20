@@ -13,7 +13,10 @@
 #import "FCHomeGroupMsg.h"
 #import "CoreData+MagicalRecord.h"
 #import "QRCodeGenerator.h"
-
+#import "Conversation.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import "UIButton+Bootstrap.h"
+#import "FCUserDescription.h"
 @interface XCJAddGroupInfoViewController ()
 {
     XCJGroup_list * currentGroup;
@@ -38,6 +41,7 @@
 	// Do any additional setup after loading the view.
     UIButton * button = ((UIButton * ) [self.view subviewWithTag:4]);
     [button addTarget:self action:@selector(AddGroupClick:) forControlEvents:UIControlEventTouchUpInside];
+    [button infoStyle];
     
     NSString * newCode = [NSString stringWithFormat:@"[group]-%@",self.gid];
     ((UIImageView * ) [self.view subviewWithTag:6]).image  = [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
@@ -58,7 +62,16 @@
                     currentGroup = list;
                     ((UILabel * ) [self.view subviewWithTag:1]).text = list.group_name;
                     ((UILabel * ) [self.view subviewWithTag:3]).text = list.group_board;
-                    ((UILabel * ) [self.view subviewWithTag:2]).text = list.creator;
+                    ((UILabel * ) [self.view subviewWithTag:2]).text = @"正在获取...";
+                    ((UILabel * ) [self.view subviewWithTag:1]).textColor = [tools colorWithIndex:0];
+                    ((UILabel * ) [self.view subviewWithTag:2]).textColor = [tools colorWithIndex:0];
+                    ((UILabel * ) [self.view subviewWithTag:3]).textColor = [tools colorWithIndex:0];
+                    
+                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                        FCUserDescription * localdespObject   = response;
+                         ((UILabel * ) [self.view subviewWithTag:2]).text = localdespObject.nick;
+                    } withuid:list.creator];
+                   
                 }
             }];
             [SVProgressHUD dismiss];
@@ -72,20 +85,49 @@
 {
     if(currentGroup)
     {
+        
+        [SVProgressHUD showWithStatus:@"正在加入...."];
+        // 处理加入请求
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":self.gid} success:^(MLRequest *request, id responseObject) {
+            if(responseObject){
+                // Build the predicate to find the person sought
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                // create new
+                
+                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid]];
+                Conversation * conversation =  [Conversation MR_findFirstWithPredicate:pre];
+                if (conversation == nil) {
+                    conversation =  [Conversation MR_createInContext:localContext];
+                    conversation.lastMessage = @"我加入了群组";
+                    conversation.lastMessageDate = [NSDate date];
+                    conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                    conversation.messageStutes = @(messageStutes_incoming);
+                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                    conversation.facebookName = currentGroup.group_name;
+                    conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,self.gid];
+                    conversation.badgeNumber = @1;
+                    [localContext MR_saveOnlySelfAndWait];
+                    SystemSoundID id = 1007; //声音
+                    AudioServicesPlaySystemSound(id);
+                    [UIAlertView showAlertViewWithMessage:@"加入成功"];
+                }else{
+
+                    [UIAlertView showAlertViewWithMessage:@"请勿重复加入"];
+                }
+                [SVProgressHUD dismiss];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+                [SVProgressHUD dismiss];
+                [UIAlertView showAlertViewWithMessage:@"加入失败,请检查网络设置"];
+        }];
+        
+        return;
          NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
         NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", self.gid];
         FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
         if(msg == nil)
         {
-            // 处理加入请求
-            [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":self.gid} success:^(MLRequest *request, id responseObject) {
-                if(responseObject){
-                    // Build the predicate to find the person sought
-                    
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-                
-            }];
+           
             msg = [FCHomeGroupMsg MR_createInContext:localContext];
         }
         msg.gid = currentGroup.gid;

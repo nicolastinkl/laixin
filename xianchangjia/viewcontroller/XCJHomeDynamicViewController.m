@@ -757,6 +757,9 @@
                 // delete ok
                  [SVProgressHUD dismiss];
                 @try {
+                    
+                    [[EGOCache globalCache] removeCacheForKey:@"MyPhotoCache"];
+                    
                     int index = [self.activities indexOfObject:activity];
                     [self.cellHeights removeObjectAtIndex:index];
                     [self.activities removeObject:activity];

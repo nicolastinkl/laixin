@@ -358,7 +358,7 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
-            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@100};
+            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@1000};
             [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 NSArray * friends = responseObject[@"result"][@"friend_id"];
@@ -366,6 +366,10 @@
                 [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
                 }];
+                
+                if (![arrayIDS containsObject:@"24"]) {
+                    [arrayIDS addObject:@"24"];
+                }
                 if (arrayIDS.count > 0) {
                     NSDictionary * parameIDS = @{@"uid":arrayIDS};
                     [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {

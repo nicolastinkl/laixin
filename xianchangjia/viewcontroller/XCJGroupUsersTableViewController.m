@@ -182,9 +182,19 @@
                 [SVProgressHUD showWithStatus:@"正在移出..."];
                 [[MLNetworkingManager sharedManager] sendWithAction:@"group.remove_member" parameters:@{@"gid":self.gid,@"uid":@[currentUser.uid]} success:^(MLRequest *request, id responseObject) {
                     if (responseObject) {
-                        [SVProgressHUD dismiss];
-                        //group.remove_member(gid,uid) 群创建者踢人,uid可以是数组
-                        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                        int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+                        if (errnoMesg == 0) {
+                            
+                            [SVProgressHUD dismiss];
+                            //group.remove_member(gid,uid) 群创建者踢人,uid可以是数组
+                            //                        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                            [_datasource removeObject:currentUser];
+                            [self.tableView reloadData];
+                        }
+                        else{
+                            [UIAlertView showAlertViewWithMessage:@"移出失败,您不是群创建者"];
+                            [SVProgressHUD dismiss];
+                        }
                     }
                 } failure:^(MLRequest *request, NSError *error) {
                     [UIAlertView showAlertViewWithMessage:@"移出失败,请检查网络设置"];
