@@ -1781,12 +1781,58 @@
     [label.layer display];
 }
 
+-(float) heightforsystem14:(NSString * ) text withWidth:(float) width
+{
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return   fmaxf(20.0f, sizeToFit.height + 15 );
+}
+
+-(float) widthforsystem14:(NSString * ) text withWidth:(float) width
+{
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return   fmaxf(20.0f, sizeToFit.width + 10 );
+}
+
+#pragma mark  cellfor
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /**
+     *  两种信息, 1: 用户间聊天信息
+                 2: 系统公告
+     */
+    FCMessage *message = self.messageList[indexPath.row];
+    if ([message.messageType intValue] == messageType_SystemAD) {
+        //系统公告
+        static NSString *CellIdentifier = @"SystemCell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        UILabel * label_text =  (UILabel * )[cell.contentView subviewWithTag:1];
+        label_text.text = message.text;
+        label_text.layer.cornerRadius = 4.0;
+        label_text.layer.masksToBounds = YES;
+        float width =  APP_SCREEN_WIDTH * .7;
+        float widthtext = [self widthforsystem14:message.text withWidth:width];
+        float height = [self heightforsystem14:message.text withWidth:width];
+        [label_text sizeToFit];
+        [label_text setHeight:height];
+        [label_text setWidth:widthtext];
+        [label_text setLeft:(APP_SCREEN_WIDTH/2-widthtext/2)];
+        return cell;
+    }
+    
+    
     //MESSAGE_GUID
     static NSString *CellIdentifier = @"XCJChatMessageCell";
     XCJChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    FCMessage *message = self.messageList[indexPath.row];
     [cell setCurrentMessage:message];
     [cell setConversation:self.conversation];
     UIImageView * imageview = (UIImageView *) [cell.contentView subviewWithTag:1];
@@ -2246,9 +2292,19 @@
     }
 }
 
+#pragma mark  heigth for cell
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FCMessage *message = self.messageList[indexPath.row];
+    
+    if ([message.messageType intValue] == messageType_SystemAD) {
+        //系统公告
+        float width =  APP_SCREEN_WIDTH * .7;
+        float height = [self heightforsystem14:message.text withWidth:width];
+        return  height + 10.0f;
+    }
+    
     if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj ) {
         return 148.0f;
     }
@@ -2483,7 +2539,17 @@
     if (self.messageList.count<=0) {
         return;
     }
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animation];
+    
+    
+    NSInteger rows = [self.tableView numberOfRowsInSection:0];
+    
+    if (rows > 0) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionBottom
+                                      animated:animation];
+    }
+    
+//    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animation];
 }
 
 - (IBAction)EmjViewShow:(id)sender {

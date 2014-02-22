@@ -21,6 +21,7 @@
 #import "XCJGroupPost_list.h"
 #import "SJAvatarBrowser.h"
 #import "XCJSelfPhotoViewController.h"
+#import "FCMessage.h"
 
 @interface XCJAddUserTableViewController ()
 {
@@ -167,7 +168,7 @@
     }else{
         // create new
         Conversation * conversation =  [Conversation MR_createInContext:localContext];
-        conversation.lastMessage = @"";
+        
         conversation.lastMessageDate = [NSDate date];
         conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
         conversation.messageStutes = @(messageStutes_incoming);
@@ -175,6 +176,22 @@
         conversation.facebookName = self.UserInfo.nick;
         conversation.facebookId = self.UserInfo.uid;
         conversation.badgeNumber = @0;
+        {
+            //系统消息公告
+            FCMessage * msg = [FCMessage MR_createInContext:localContext];
+            msg.messageType = @(messageType_SystemAD);
+            msg.text = [NSString stringWithFormat:@"您邀请%@开始私聊啦",self.UserInfo.nick];
+            msg.sentDate = [NSDate date];
+            msg.audioUrl = @"";
+            // message did not come, this will be on rigth
+            msg.messageStatus = @(NO);
+            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+            msg.messageguid = @"";
+            msg.messageSendStatus = @0;
+            msg.read = @YES;
+            conversation.lastMessage = msg.text;
+            [conversation addMessagesObject:msg];
+        }
         [localContext MR_saveOnlySelfAndWait];
         chatview.conversation = conversation;
     }
@@ -194,6 +211,13 @@
             if (responseObject) {
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:self.UserInfo];
                 [SVProgressHUD showSuccessWithStatus:@"添加成功"];
+                [self.Button_Sendmsg removeTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchDragInside];
+                // send message
+                [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateNormal];
+                [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateHighlighted];
+                [self.Button_Sendmsg sendMessageStyle];
+                [self.Button_Sendmsg addTarget:self action:@selector(sendMessageClick:) forControlEvents:UIControlEventTouchUpInside];
+                
                 //[self.navigationController popViewControllerAnimated:YES];
             }
         } failure:^(MLRequest *request, NSError *error) {

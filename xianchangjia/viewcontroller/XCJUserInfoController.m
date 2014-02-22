@@ -19,6 +19,7 @@
 #import "XCJGroupPost_list.h"
 #import "SJAvatarBrowser.h"
 #import "XCJSelfPhotoViewController.h"
+#import "FCMessage.h"
 
 @interface XCJUserInfoController ()
 {
@@ -162,6 +163,24 @@
         conversation.facebookName = self.UserInfo.nick;
         conversation.facebookId = self.UserInfo.uid;
         conversation.badgeNumber = @0;
+        
+        {
+            //系统消息公告
+            FCMessage * msg = [FCMessage MR_createInContext:localContext];
+            msg.messageType = @(messageType_SystemAD);
+            msg.text = [NSString stringWithFormat:@"您邀请%@开始私聊啦",self.UserInfo.nick];
+            msg.sentDate = [NSDate date];
+            msg.audioUrl = @"";
+            // message did not come, this will be on rigth
+            msg.messageStatus = @(NO);
+            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+            msg.messageguid = @"";
+            msg.messageSendStatus = @0;
+            msg.read = @YES;
+            conversation.lastMessage = msg.text;
+            [conversation addMessagesObject:msg];
+        }
+        
         [localContext MR_saveOnlySelfAndWait];
          chatview.conversation = conversation;
      }

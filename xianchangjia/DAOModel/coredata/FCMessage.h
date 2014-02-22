@@ -19,6 +19,7 @@ enum messageTypeEnum {
     messageType_audio = 5,
     messageType_contacts = 6,
     messageType_video = 7,
+    messageType_SystemAD = 100, //系统公告 包括个人信息修改,开始聊天 然后====
     };
 
 @interface FCMessage : NSManagedObject
