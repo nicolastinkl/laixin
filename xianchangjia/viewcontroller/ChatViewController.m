@@ -51,6 +51,7 @@
 #define  keyboardHeight 216
 #define  facialViewWidth 300
 #define facialViewHeight 180
+#define  audioLengthDefine  1050
 
 @interface ChatViewController () <UITableViewDataSource,UITableViewDelegate, UIGestureRecognizerDelegate,UITextViewDelegate,UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,UIAlertViewDelegate,XCJChatSendImgViewControllerdelegate,UIScrollViewDelegate,facialViewDelegate,XCJChatSendInfoViewDelegate,VoiceRecorderBaseVCDelegate>
 {
@@ -264,7 +265,7 @@
         msg.messageType = @(messageType_audio);
         msg.audioUrl = filePath;
         int leg = [self getFileSize:filePath];
-        msg.audioLength = @(leg/1024);
+        msg.audioLength = @(leg/audioLengthDefine);
         // message did not come, this will be on rigth
         msg.messageStatus = @(NO);
         msg.messageId =  @"";
@@ -632,7 +633,7 @@
                         msg.audioUrl = audiourl;
                         msg.messageType = @(messageType_audio);
                         int length  = [dicMessage[@"length"] intValue];
-                        msg.audioLength = @(length/1024);
+                        msg.audioLength = @(length/audioLengthDefine);
                     }else if ([typeMessage isEqualToString:@"map"]) {
                         self.conversation.lastMessage = @"[位置信息]";
                         msg.imageUrl = imageurl;
@@ -1564,7 +1565,7 @@
     
     NSData *imageDatasss  =  [UIImage imageToWebP:filePath quality:75.0];
     //NSData * imageDatasss = UIImageJPEGRepresentation(imageSend, 0.5);
-    SLog(@"imageDatasss : %.2f KB ",(double)imageDatasss.length/1024);
+    SLog(@"imageDatasss : %.2f KB ",(double)imageDatasss.length/audioLengthDefine);
     operation  = [manager POST:@"http://up.qiniu.com/" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         [formData appendPartWithFileData:imageDatasss name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
@@ -2054,12 +2055,12 @@
         audioButton.left = 50.0f;
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         if ([message.audioLength intValue] > 1000) {
-            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/1024] forState:UIControlStateNormal];
+            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/audioLengthDefine] forState:UIControlStateNormal];
         }else{
             if ([message.audioLength intValue] < 0) {
                 int leng = [message.audioLength intValue];
                 leng = -leng;
-                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
+                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/audioLengthDefine] forState:UIControlStateNormal];
             }else{
                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
             }
@@ -2210,7 +2211,7 @@
                 player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
                 [player prepareToPlay];
                 [player play];
-                [self ShowPlayingimgArray:cell withTime:(int) leng/1024];
+                [self ShowPlayingimgArray:cell withTime:(int) leng/audioLengthDefine];
             }
             
         }else

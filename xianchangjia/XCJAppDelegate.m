@@ -34,6 +34,8 @@
 #import "FCUserDescription.h"
 #import "FCMessage.h"
 
+#define audioLengthDefine 1050
+
 static NSString * const kLaixinStoreName = @"Laixins";
 
 #define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
@@ -461,7 +463,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.audioUrl = audiourl;
                 msg.messageType = @(messageType_audio);
                 int length  = [dicMessage[@"length"] intValue];
-                msg.audioLength = @(length/1024);
+                msg.audioLength = @(length/audioLengthDefine);
             }else if ([typeMessage isEqualToString:@"map"]) {
                 conversation.lastMessage = @"[位置信息]";
                 msg.imageUrl = imageurl;
@@ -1028,7 +1030,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                     msg.audioUrl = audiourl;
                                     msg.messageType = @(messageType_audio);
                                     int length  = [obj[@"length"] intValue];
-                                    msg.audioLength = @(length/1024);
+                                    msg.audioLength = @(length/audioLengthDefine);
                                 }else if ([typeMessage isEqualToString:@"map"]) {
                                     conversation.lastMessage = @"[位置信息]";
                                     msg.imageUrl = imageurl;
