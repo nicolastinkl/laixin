@@ -146,12 +146,14 @@
 }
 
 - (IBAction)seeUserIconClick:(id)sender {
-    
-    if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:self.UserInfo.uid]) {
-        [SJAvatarBrowser showImage:self.Image_user withURL:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]];
-    }else{
-        [SJAvatarBrowser showImage:self.Image_user withURL:self.UserInfo.headpic];
+    if (self.Image_user.image) {
+        if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:self.UserInfo.uid]) {
+            [SJAvatarBrowser showImage:self.Image_user withURL:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic]];
+        }else{
+            [SJAvatarBrowser showImage:self.Image_user withURL:self.UserInfo.headpic];
+        }
     }
+    
 }
 
 

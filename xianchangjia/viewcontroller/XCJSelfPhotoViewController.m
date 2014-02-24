@@ -14,6 +14,7 @@
 #import "XCJMessageReplyInfoViewController.h"
 #import "FCUserDescription.h"
 #import "UIImage+WebP.h"
+#import "MLTapGrayView.h"
 
 @interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -295,6 +296,12 @@
         [labelimage_text sizeToFit];
         [labelimage_text setWidth:177];
         label_photoNumber.text = [NSString stringWithFormat:@"共%d张",post.excount];
+        
+//        MLTapGrayView *cellBG = [[MLTapGrayView alloc]init];
+//        cellBG.frame = labelimage_text.frame;
+//        [cellBG addSubview:labelimage_text];
+//        [cell.contentView addSubview:cellBG];
+        
     }else{
         label_photoNumber.text  = @"";
         if (post.imageURL.length > 5) {
