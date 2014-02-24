@@ -29,6 +29,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Foundation/Foundation.h>
+#import "XCJSendMapViewController.h"
 #import "FDStatusBarNotifierView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "XCJSettingGroupViewController.h"
@@ -2289,6 +2290,17 @@
              action.tag = 1;
               PasteboardStr = message.text;
               [action showInView:self.view];
+        }else if([message.messageType intValue] == messageType_map)
+        {
+            XCJSendMapViewController *mapview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendMapViewController"];
+            CLLocationCoordinate2D mylocation = CLLocationCoordinate2DMake([message.latitude doubleValue], [message.longitude doubleValue]) ;
+            mapview.isSeeTaMap = YES;
+            mapview.TCoordinate = mylocation;
+            mapview.title = message.text;
+            mapview.subtitle = @"";
+
+            [self.navigationController pushViewController:mapview animated:YES];
+            
         }
     }
 }

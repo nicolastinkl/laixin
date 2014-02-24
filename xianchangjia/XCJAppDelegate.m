@@ -1112,15 +1112,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
                 }
-
                 
             } failure:^(MLRequest *request, NSError *error) {
             }];
-      
-            
     }
     });
-
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

@@ -20,7 +20,7 @@
     NSString * strAddresss;
     double lat;
     double log;
-    
+    MKMapView * CurrentMapview;
 }
 @end
 
@@ -38,34 +38,50 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     MKMapView * mapview = (MKMapView *)[self.view subviewWithTag:1];
+    CurrentMapview = mapview;
+    if (self.isSeeTaMap) {
+        CurrentMapview.showsUserLocation = YES;
+        CurrentMapview.zoomEnabled  = YES;
+        self.navigationItem.rightBarButtonItem = Nil;
+        [self SetMapPoint:self.TCoordinate whitTitle:self.title subTitle:self.subtitle];
+        
+        self.navigationItem.leftBarButtonItem = nil;
+        UIBarButtonItem *leftBar = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(dismissThis:)];
+        self.navigationItem.leftBarButtonItem = leftBar;
+    }else{
+        double delayInSeconds = .1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            __block NSString *string;
+            //    __block __weak XCJSendMapViewController *wself = self;
+            [[MMLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D locationCorrrdinate) {
+                log =locationCorrrdinate.longitude;
+                
+                lat = locationCorrrdinate.latitude;
+                string = [NSString stringWithFormat:@"%f %f",locationCorrrdinate.latitude,locationCorrrdinate.longitude];
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+                SLog(@"string :%@",string);
+                [mapview setCenterCoordinate:locationCorrrdinate zoomLevel:30 animated:YES];
+                mapview.zoomEnabled  = YES;
+            } withAddress:^(NSString *addressString) {
+                strAddresss = addressString;
+                //[NSString stringWithFormat:@"%@\n%@",string,addressString];
+                SLog(@"string :%@",string);
+                self.navigationItem.rightBarButtonItem.enabled = YES;
+            }];
+            
+        });
+    }
     
-    double delayInSeconds = .30;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        __block NSString *string;
-        //    __block __weak XCJSendMapViewController *wself = self;
-        [[MMLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D locationCorrrdinate) {
-            log =locationCorrrdinate.longitude;
-            
-            lat = locationCorrrdinate.latitude;
-            string = [NSString stringWithFormat:@"%f %f",locationCorrrdinate.latitude,locationCorrrdinate.longitude];
-            self.navigationItem.rightBarButtonItem.enabled = YES;
-            SLog(@"string :%@",string);
-            [mapview setCenterCoordinate:locationCorrrdinate zoomLevel:30 animated:YES];
-            mapview.zoomEnabled  = YES;
-        } withAddress:^(NSString *addressString) {
-            strAddresss = addressString;
-            //[NSString stringWithFormat:@"%@\n%@",string,addressString];
-            
-            SLog(@"string :%@",string);
-            
-            self.navigationItem.rightBarButtonItem.enabled = YES;
-        }];
+    
+    
+}
 
-    });
-	// Do any additional setup after loading the view.
+-(IBAction)dismissThis:(id)sender
+{
+    CurrentMapview  = nil;
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 //截图
@@ -98,10 +114,27 @@
 
 -(IBAction)cancelClick:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
+
+
+-(void)SetMapPoint:(CLLocationCoordinate2D)myLocation whitTitle:(NSString*) title subTitle:(NSString *) subtitle
+{
+    
+    POI* m_poi = [[POI alloc]initWithCoords:myLocation];
+    m_poi.title = title;
+    m_poi.subtitle = subtitle;
+    [CurrentMapview addAnnotation:m_poi];
+    
+    MKCoordinateRegion theRegion = { {0.0, 0.0 }, { 0.0, 0.0 } };
+    theRegion.center=myLocation;
+    [CurrentMapview setZoomEnabled:YES];
+    [CurrentMapview setScrollEnabled:YES];
+    theRegion.span.longitudeDelta = 0.01f;
+    theRegion.span.latitudeDelta = 0.01f;
+    [CurrentMapview setRegion:theRegion animated:YES];
+}
+
 
 -(IBAction)SureClick:(id)sender
 {
@@ -127,3 +160,35 @@
 }
 
 @end
+
+
+
+
+@implementation POI
+
+@synthesize coordinate,subtitle,title;
+
+- (id) initWithCoords:(CLLocationCoordinate2D) coords{
+    
+    self = [super init];
+    
+    if (self != nil) {
+        
+        coordinate = coords;
+        
+    }
+    
+    return self;
+    
+}
+
+//- (void) dealloc
+//
+//{
+//    [title release];
+//    [subtitle release];
+//    [super dealloc];
+//}
+
+@end
+
