@@ -406,7 +406,7 @@
         NSInteger timeAgoMinute = timeAgo / 60;
         text = [NSString stringWithFormat:@"%ld分钟前", (long)timeAgoMinute];
     }else if (timeAgo >= 3600 && timeAgo < 86400) {
-        [dateFormatter setDateFormat:@"今天HH:mm"];
+        [dateFormatter setDateFormat:@"昨天HH:mm"];
         text = [dateFormatter stringFromDate:date];
     }else if (timeAgo >= 86400 && timeAgo < 86400*2) {
         [dateFormatter setDateFormat:@"昨天HH:mm"];

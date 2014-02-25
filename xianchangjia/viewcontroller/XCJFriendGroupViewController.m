@@ -98,7 +98,6 @@
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     }
     
-    
     double delayInSeconds = .1;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -124,11 +123,10 @@
     UILabel * label_name = (UILabel *) [tablehead subviewWithTag:1];
     UIImageView * label_bg = (UIImageView *) [tablehead subviewWithTag:2];
     UIImageView * label_icon = (UIImageView *) [tablehead subviewWithTag:3];
-     button = (UIButton *) [tablehead subviewWithTag:4];
-     newIcon = (UIImageView *) [tablehead subviewWithTag:5];
-     newIcon_sign = (UIImageView *) [tablehead subviewWithTag:7];
+    button = (UIButton *) [tablehead subviewWithTag:4];
+    newIcon = (UIImageView *) [tablehead subviewWithTag:5];
+    newIcon_sign = (UIImageView *) [tablehead subviewWithTag:7];
     label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
-
     
     UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
     if (chacheImage) {

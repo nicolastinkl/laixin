@@ -298,7 +298,7 @@
     }
     
     
-    _timeLabel.text = [self timeLabelTextOfTime:_activity.time];
+    _timeLabel.text = [tools timeLabelTextOfTime:_activity.time];
     _contentLabel.text = _activity.content;
     
     //重置下
