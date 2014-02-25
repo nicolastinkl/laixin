@@ -44,6 +44,9 @@
 	// Do any additional setup after loading the view.
     [self.imageview setImage:_imageviewSource];
     
+    self.imageview.contentMode = UIViewContentModeScaleAspectFill;
+    
+    self.imageview.clipsToBounds = YES;
     UIView * view =  [self.view subviewWithTag:1];
     view.top = self.view.height - view.height;
     

@@ -28,9 +28,10 @@ enum messageStutes_type {
 @property (nonatomic, retain) NSString * messageId;
 @property (nonatomic, retain) NSNumber * messageStutes;
 @property (nonatomic, retain) NSNumber * messageType;
-@property (nonatomic, retain) FCAccount *account;
 @property (nonatomic, retain) NSSet *messages;
 @property (nonatomic, retain) NSNumber * isMute;
+@property (nonatomic, retain) FCAccount *account;
+
 @end
 
 @interface Conversation (CoreDataGeneratedAccessors)

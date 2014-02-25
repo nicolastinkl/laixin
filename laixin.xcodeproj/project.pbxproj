@@ -2295,7 +2295,6 @@
 				8692E3C118642E6F00F9E1DD /* laixin.entitlements */,
 				86EB770B185AB0A200836947 /* DBCommon */,
 				86EB76E3185AA72F00836947 /* CustomCell */,
-				86EB76E8185AA72F00836947 /* CustomView */,
 				86EB764B185AA6CC00836947 /* DAOModel */,
 				86EB7654185AA6CC00836947 /* Extend */,
 				862D25B818585D4B005208C8 /* Appicon */,
@@ -2961,6 +2960,7 @@
 		86EB76E3185AA72F00836947 /* CustomCell */ = {
 			isa = PBXGroup;
 			children = (
+				86EB76E8185AA72F00836947 /* CustomView */,
 				86EB76E4185AA72F00836947 /* ChatUserCell.h */,
 				86EB76E5185AA72F00836947 /* ChatUserCell.m */,
 				86EB76E6185AA72F00836947 /* MessageCell.h */,
@@ -2977,7 +2977,8 @@
 				86EB76E9185AA72F00836947 /* MLTextView.h */,
 				86EB76EA185AA72F00836947 /* MLTextView.m */,
 			);
-			path = CustomView;
+			name = CustomView;
+			path = ../CustomView;
 			sourceTree = "<group>";
 		};
 		86EB76F9185AACE400836947 /* SDWebImage */ = {

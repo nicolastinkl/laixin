@@ -1781,12 +1781,13 @@
         retryButton.hidden = YES;
     }else if ([message.messageSendStatus intValue] == 2)
     {
+        [indictorView stopAnimating];
         indictorView.hidden = YES;
-       
         retryButton.hidden = NO;
     }
     else  if ([message.messageSendStatus intValue] == 0){
     {
+            [indictorView stopAnimating];
             indictorView.hidden = YES;
             retryButton.hidden = YES;
     }
