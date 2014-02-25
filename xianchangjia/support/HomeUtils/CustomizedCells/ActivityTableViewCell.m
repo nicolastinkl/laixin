@@ -28,7 +28,14 @@
 #import "BaseDetailViewController.h"
 #import "IDMPhotoBrowser.h"
 
-@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>
+#import <OHAttributedLabel/OHAttributedLabel.h>
+#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+#import <OHAttributedLabel/OHASBasicMarkupParser.h>
+
+static NSInteger const kAttributedLabelTag = 100;
+
+
+@interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>//OHAttributedLabelDelegate
 
 //用户头像View
 @property (nonatomic, strong) UIButton *avatarButton;
@@ -110,11 +117,17 @@
         [self addSubview:_lineCell];
                 
         //正文
-        self.contentLabel = [[HTCopyableLabel alloc] init];
-        _contentLabel.font = [UIFont systemFontOfSize:14];
+        self.contentLabel = [[HTCopyableLabel alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+        _contentLabel.font = [UIFont systemFontOfSize:15];
         _contentLabel.numberOfLines = 0;
         _contentLabel.backgroundColor = [UIColor clearColor];
         _contentLabel.textAlignment = NSTextAlignmentLeft;
+////        _contentLabel.centerVertically = YES;
+//        _contentLabel.automaticallyAddLinksForType = NSTextCheckingAllTypes;
+//        _contentLabel.delegate = self;
+//        _contentLabel.tag = kAttributedLabelTag;
+//        _contentLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        
         [self addSubview:_contentLabel];
         
         //图片
@@ -299,6 +312,13 @@
     
     
     _timeLabel.text = [tools timeLabelTextOfTime:_activity.time];
+    
+//    NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",_activity.content]];
+//    [mas setFont:[UIFont systemFontOfSize: 14]];
+//    [mas setTextColor:[tools colorWithIndex:0]];
+//    [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
+//    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+//    SLog(@"mas :%@",mas.string);
     _contentLabel.text = _activity.content;
     
     //重置下
@@ -707,6 +727,23 @@
     }
     return text;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////
+#pragma mark - OHAttributedLabel Delegate Method
+/////////////////////////////////////////////////////////////////////////////
+
+-(BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
+{
+    [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"Should open link: %@", linkInfo.extendedURL]];
+    return NO;
+    
+//    if ([[UIApplication sharedApplication] canOpenURL:linkInfo.extendedURL])
+//    {
+//        return YES;
+//    }
+}
+
 
 #pragma mark - IDMPhotoBrowser Delegate
 

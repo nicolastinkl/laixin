@@ -621,7 +621,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			UIView *view = self.currentView;
 			view.tag = view.tag;	// suppress the xcode warning about an unused variable.
 			NSLog(@"DCIntrospect: access current view using local 'view' variable.");
-			DEBUGGER;
+//			DEBUGGER;
 			return NO;
 		}
 		

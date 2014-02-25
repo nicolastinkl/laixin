@@ -1052,8 +1052,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
                                 [conversation addMessagesObject:msg];
                                 [localContext MR_saveToPersistentStoreAndWait];
-                                SystemSoundID id = 1007; //声音
-                                AudioServicesPlaySystemSound(id);
+                         
                             }
                             
                             // update tabbar item  badge

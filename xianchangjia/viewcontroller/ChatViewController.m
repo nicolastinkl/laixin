@@ -12,9 +12,6 @@
 #import "XCAlbumAdditions.h"
 #import "XCJChatMessageCell.h"
 #import "XCAlbumAdditions.h"
-#import "CustomMethod.h"
-#import "MarkupParser.h"
-#import "OHAttributedLabel.h"
 #import "UIButton+Bootstrap.h"
 #import "Conversation.h"
 #import "LXAPIController.h"
@@ -1308,31 +1305,7 @@
 - (void)moreClick
 {
 }
-
-- (BOOL)attributedLabel:(OHAttributedLabel *)attributedLabel shouldFollowLink:(NSTextCheckingResult *)linkInfo
-{
-    NSString *requestString = [linkInfo.URL absoluteString];
-    if (requestString && requestString.length > 5) {
-        //        NSString * number = [attributedLabel.attributedText.string substringWithRange:linkInfo.range];
-        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"Safari打开",@"复制", nil];
-        [sheet showInView:self.view];
-    }else
-    {
-        NSString * number = [attributedLabel.attributedText.string substringWithRange:linkInfo.range];
-        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:number delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:[NSString stringWithFormat:@"呼叫 %@",number],@"添加至联系人",@"复制", nil];
-        [sheet showInView:self.view];
-    }
-    
-    //    NSLog(@"%@    .....   %@",    [attributedLabel.attributedText.string substringWithRange:linkInfo.range],attributedLabel.attributedText.string);
-    //NSRegularExpression regularExpression
-    
-    //    NSString *requestString = [linkInfo.URL absoluteString];
-    //    if ([[UIApplication sharedApplication]canOpenURL:linkInfo.URL]) {
-    //        [[UIApplication sharedApplication]openURL:linkInfo.URL];
-    //    }
-    
-    return NO;
-}
+ 
 
 #pragma mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -1737,51 +1710,6 @@
     return self.messageList.count;
 }
 
-- (void)creatAttributedLabel:(NSString *)o_text Label:(OHAttributedLabel *)label
-{
-    o_text = [CustomMethod escapedString:o_text];
-    [label setNeedsDisplay];
-    NSMutableArray *httpArr = [CustomMethod addHttpArr:o_text];
-    NSMutableArray *phoneNumArr = [CustomMethod addPhoneNumArr:o_text];
-    NSMutableArray *emailArr = [CustomMethod addEmailArr:o_text];
-    
-//    NSString *text = [CustomMethod transformString:o_text emojiDic:self.m_emojiDic];
-//    text = [NSString stringWithFormat:@"<font color='black' strokeColor='gray' face='Palatino-Roman'>%@",text];
-//    
-//    MarkupParser *wk_markupParser = [[MarkupParser alloc] init];
-//    NSMutableAttributedString* attString = [wk_markupParser attrStringFromMarkup: text];
-////    [attString setFont:[UIFont systemFontOfSize:16]];
-//    [label setBackgroundColor:[UIColor clearColor]];
-//    [label setAttString:attString withImages:wk_markupParser.images];
-    
-    NSString *string = o_text;// attString.string;
-    
-    if ([emailArr count]) {
-        for (NSString *emailStr in emailArr) {
-            [label addCustomLink:[NSURL URLWithString:emailStr] inRange:[string rangeOfString:emailStr]];
-        }
-    }
-    
-    if ([phoneNumArr count]) {
-        for (NSString *phoneNum in phoneNumArr) {
-            [label addCustomLink:[NSURL URLWithString:phoneNum] inRange:[string rangeOfString:phoneNum]];
-        }
-    }
-    
-    if ([httpArr count]) {
-        for (NSString *httpStr in httpArr) {
-            [label addCustomLink:[NSURL URLWithString:httpStr] inRange:[string rangeOfString:httpStr]];
-        }
-    }
-    
-//    label.delegate = self;
-    CGRect labelRect = label.frame;
-    labelRect.size.width = [label sizeThatFits:CGSizeMake(222, CGFLOAT_MAX)].width;
-    labelRect.size.height = [label sizeThatFits:CGSizeMake(222, CGFLOAT_MAX)].height;
-    label.frame = labelRect;
-    label.underlineLinks = YES;//链接是否带下划线
-    [label.layer display];
-}
 
 -(float) heightforsystem14:(NSString * ) text withWidth:(float) width
 {

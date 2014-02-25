@@ -65,7 +65,7 @@
         {
 //            NSAssert([self becomeFirstResponder], @"Sorry, UIMenuController will not work with %@ since it cannot become first responder", self);
             
-             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             NSString *stringToCopy;
             if ([self.copyableLabelDelegate respondsToSelector:@selector(stringToCopyForCopyableLabel:)])
             {
