@@ -264,11 +264,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "339"
-            endingLineNumber = "339"
+            startingLineNumber = "347"
+            endingLineNumber = "347"
             landmarkName = "-_addContactToAddressBook:"
             landmarkType = "5">
          </BreakpointContent>
@@ -280,11 +280,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "-_addContactToAddressBook:"
             landmarkType = "5">
          </BreakpointContent>
@@ -296,11 +296,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "338"
-            endingLineNumber = "338"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
             landmarkName = "-_addContactToAddressBook:"
             landmarkType = "5">
             <Locations>
@@ -468,11 +468,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "-reload:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1682,11 +1682,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
+            startingLineNumber = "493"
+            endingLineNumber = "493"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1698,11 +1698,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "450"
-            endingLineNumber = "450"
+            startingLineNumber = "458"
+            endingLineNumber = "458"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1714,11 +1714,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "452"
-            endingLineNumber = "452"
+            startingLineNumber = "460"
+            endingLineNumber = "460"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1730,11 +1730,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJFriendViewController.m"
-            timestampString = "414481196.733298"
+            timestampString = "415077343.399013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "-fetchedResultsController"
             landmarkType = "5">
          </BreakpointContent>

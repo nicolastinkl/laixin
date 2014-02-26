@@ -1188,6 +1188,16 @@
                             <rect key="frame" x="0.0" y="64" width="320" height="96"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <view contentMode="scaleToFill" id="CcZ-ay-q8z" customClass="MLTapGrayView">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </view>
+                                <view contentMode="scaleToFill" id="ZRw-tC-vVL" customClass="MLTapGrayView">
+                                    <rect key="frame" x="0.0" y="49" width="320" height="49"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </view>
                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="notifications-tag" id="agS-KD-dje">
                                     <rect key="frame" x="20" y="4" width="40" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
@@ -1232,7 +1242,7 @@
                                     <rect key="frame" x="292" y="66" width="7" height="11"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </imageView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M86-B9-TVf">
+                                <button opaque="NO" tag="31" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M86-B9-TVf">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="48"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal">
@@ -1242,7 +1252,7 @@
                                         <segue destination="gQa-Uw-EV7" kind="push" id="7xg-JR-P8b"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VUU-cC-cql">
+                                <button opaque="NO" tag="32" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VUU-cC-cql">
                                     <rect key="frame" x="0.0" y="48" width="320" height="48"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal">
@@ -2153,7 +2163,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="朋友圈" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DOK-dr-bSw">
-                                            <rect key="frame" x="15" y="11" width="85" height="21"/>
+                                            <rect key="frame" x="50" y="11" width="85" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -2164,10 +2174,14 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                         <view tag="2" contentMode="scaleToFill" id="p0f-nD-HMz" customClass="LKBadgeView">
-                                            <rect key="frame" x="77" y="12" width="71" height="20"/>
+                                            <rect key="frame" x="105" y="12" width="71" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <imageView userInteractionEnabled="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="file_icon_history" id="LuY-hb-mSa">
+                                            <rect key="frame" x="10" y="7" width="30" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -5861,7 +5875,7 @@
             <objects>
                 <viewController restorationIdentifier="XCJActiveViewController" storyboardIdentifier="XCJActiveViewController" hidesBottomBarWhenPushed="YES" id="vvD-82-ccm" customClass="XCJActiveViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Quc-mH-HN3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568.00000000000011"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wPF-ho-Oak">
@@ -5950,6 +5964,7 @@
         <image name="fbc_primarybutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="fbc_promobutton_28_3_3_3_3_normal_ios7" width="11" height="32"/>
         <image name="feedbackReplyBackground" width="254" height="306"/>
+        <image name="file_icon_history" width="30" height="30"/>
         <image name="free-sms-invite" width="280" height="80"/>
         <image name="groupMask" width="60" height="60"/>
         <image name="groupMaskPressed" width="60" height="60"/>

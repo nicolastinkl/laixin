@@ -81,7 +81,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -98,15 +98,20 @@
     LKBadgeView  * badage = (LKBadgeView *)[cell.contentView subviewWithTag:2];
     UIImageView * imageSign = (UIImageView *)[cell.contentView subviewWithTag:3];
     UIImageView * image_New = (UIImageView *)[cell.contentView subviewWithTag:4];
+    UIImageView * image_bgSign = (UIImageView *)[cell.contentView subviewWithTag:6];
     badage.widthMode = LKBadgeViewWidthModeSmall;
     badage.horizontalAlignment = LKBadgeViewHorizontalAlignmentLeft;
     badage.badgeColor = [UIColor redColor];
     badage.textColor = [UIColor whiteColor];
     
+    image_bgSign.layer.cornerRadius = 15;
+    image_bgSign.layer.masksToBounds = YES;
     // Configure the cell...
     switch (indexPath.section) {
         case 0:
         {
+            image_bgSign.image = [UIImage imageNamed:@"file_icon_history"];
+            
            label_name.text = @"朋友圈";
             NSPredicate * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
             
@@ -139,6 +144,7 @@
             break;
         case 1:
         {
+            image_bgSign.image = [UIImage imageNamed:@"file_icon_cloud"];
             label_name.text = @"抢你妹";
             badage.hidden = YES;
             image_New.hidden = YES;
@@ -146,6 +152,13 @@
         }
             break;
             
+        case 2:
+            image_bgSign.image = [UIImage imageNamed:@"found_icons_location"];
+            label_name.text = @"附近活动";
+            badage.hidden = YES;
+            image_New.hidden = NO;
+            [image_New setFrame:CGRectMake(273, 17, 10, 10)];
+            break;
         default:
             break;
     }

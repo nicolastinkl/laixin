@@ -119,8 +119,16 @@
     ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:11]).hidden = YES;
     ((UIImageView * )[self.tableView.tableHeaderView subviewWithTag:12]).hidden = YES;
     
-//    [self reload:nil];
-//    [self reloadContacts];
+    
+    UIButton  * topbtn = ((UIButton * )[self.tableView.tableHeaderView subviewWithTag:31]);
+    UIButton  * twobtn = ((UIButton * )[self.tableView.tableHeaderView subviewWithTag:32]);
+    
+    
+    UIImage *originalImage = [UIImage imageNamed:@"fbc_actionbar_52_rightbutton_0_1_0_3_highlighted"];
+    UIEdgeInsets insets = UIEdgeInsetsMake(0,1,0,3);
+    UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
+    [topbtn setBackgroundImage:stretchableImage forState:UIControlStateHighlighted];
+    [twobtn setBackgroundImage:stretchableImage forState:UIControlStateHighlighted];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(add_friend_Notify:) name:@"add_friend_Notify" object:[[UIApplication sharedApplication] delegate]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(group_invite_Notify:) name:@"group_invite_Notify" object:[[UIApplication sharedApplication] delegate]];

@@ -32,8 +32,7 @@
     [self.delegate SendImageURL:self.imageviewSource withKey:self.key];
 }
 - (IBAction)cancelClick:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
+    [self dismissViewControllerAnimated:YES completion:^{        
     }];
 }
 
