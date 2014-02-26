@@ -67,7 +67,16 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ChangeNick:) name:@"changeSlefNick" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeSlefHeadpic:) name:@"changeSlefHeadpic" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadMyLevel:) name:@"uploadMyLevel" object:nil];
+    
 }
+
+-(void) uploadMyLevel:(NSNotification *) notify
+{
+     self.image_level_number.image  = [UIImage imageNamed:[NSString stringWithFormat:@"mqz_widget_vip_lv%d",[LXAPIController sharedLXAPIController].currentUser.actor_level]];
+}
+
 
 -(void) changeSlefHeadpic:(NSNotification *) notify
 {

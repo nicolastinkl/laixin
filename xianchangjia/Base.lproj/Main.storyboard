@@ -5875,7 +5875,7 @@
             <objects>
                 <viewController restorationIdentifier="XCJActiveViewController" storyboardIdentifier="XCJActiveViewController" hidesBottomBarWhenPushed="YES" id="vvD-82-ccm" customClass="XCJActiveViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Quc-mH-HN3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568.00000000000011"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wPF-ho-Oak">
@@ -5885,7 +5885,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="messages_textview_background_os7" id="3k3-MP-ifM">
-                                <rect key="frame" x="88" y="81" width="194" height="39"/>
+                                <rect key="frame" x="88" y="81" width="194" height="32"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <rect key="contentStretch" x="0.39999999999999997" y="0.49999999999999994" width="0.14999999999999969" height="0.20000000000000001"/>
                             </imageView>
@@ -5903,6 +5903,28 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <view hidden="YES" tag="9" contentMode="scaleToFill" id="bhW-Fu-MOE">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" image="cameraBigFocus" id="meq-8m-3AL">
+                                        <rect key="frame" x="102" y="181" width="116" height="116"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pim-hW-RFR">
+                                        <rect key="frame" x="256" y="65" width="76" height="54"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" image="eventMinusIcon">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeCamera:" destination="VPs-Cc-gML" eventType="touchUpInside" id="gbl-d4-SDD"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.65000000000000002" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.97620376275510201" green="0.97620376275510201" blue="0.97620376275510201" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>

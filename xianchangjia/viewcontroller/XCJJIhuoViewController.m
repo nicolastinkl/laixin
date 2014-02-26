@@ -49,7 +49,7 @@
         double delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            [[MLNetworkingManager sharedManager] sendWithAction:@"active.generate_code" parameters:@{@"level":@(activeCode)} success:^(MLRequest *request, id responseObject) {
+            [[MLNetworkingManager sharedManager] sendWithAction:@"active.generate_code" parameters:@{@"level":@(activeCode)} success:^(MLRequest *request, id responseObject) {  
                 //Result={"active_code":"wD9IECBQRxUyFvo","level":1}
                 [SVProgressHUD dismiss];
                 if (responseObject) {
