@@ -16,6 +16,7 @@
 #import "XCAlbumAdditions.h"
 #import "XCJGroupPost_list.h"
 #import "MinroadOperation.h"
+#import "MMLocationManager.h"
 #import "UINavigationController+SGProgress.h"
 
 #define DISTANCE_BETWEEN_ITEMS  5.0
@@ -24,7 +25,9 @@
 #define TITLE_HEIGHT            40.0
 
 @interface XCJSendManySelectedImageViewCOntrooler ()<UIScrollViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,CTAssetsPickerControllerDelegate,UITextViewDelegate>
-
+{
+    UIImageView * removeImageview;
+}
 @end
 
 @implementation XCJSendManySelectedImageViewCOntrooler
@@ -61,17 +64,74 @@
             
             [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
             
+            imageview.userInteractionEnabled = YES;
+            UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+            [recognizer setNumberOfTapsRequired:1];
+            [recognizer setNumberOfTouchesRequired:1];
+            [imageview addGestureRecognizer:recognizer];
+            imageview.tag = idx;
+            
             [self.scrollPhotos addSubview:imageview];
             
         }
     }];
     
-    self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * [self.array count ], pageSize.height);
+    self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([self.array count] + 1), pageSize.height);
     [self.button sendMessageStyle];
     
     [self.button addTarget:self action:@selector(locationClick:) forControlEvents:UIControlEventTouchUpInside];
     self.TextMsg.delegate = self;
 }
+
+
+-(void) tagSelected:(UITapGestureRecognizer * ) tap
+{
+    UIView * view = tap.view;
+    removeImageview = (UIImageView *) view;
+    UIActionSheet * alertalertss= [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"移除图片" otherButtonTitles:nil, nil];
+    alertalertss.tag = 1;
+    [alertalertss showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        if (removeImageview) {
+            [self.array removeObjectAtIndex:(removeImageview.tag)];
+            for (UIView * view in self.scrollPhotos.subviews) {
+                if ([view isKindOfClass:[UIImageView class]]) {
+                    [view removeAllSubViews];
+                    [view removeFromSuperview];
+                }
+            }
+            //add
+            [self.scrollPhotos reloadInputViews];
+            self.scrollPhotos.contentSize = CGSizeMake(0, 0);
+            
+            __block NSUInteger page =  1;
+            // add view
+            CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollPhotos.frame.size.height);
+            [self.array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                ALAsset *asset =  obj;
+                if (asset) {
+                    UIImage * image  = [UIImage imageWithCGImage:asset.thumbnail];
+                    UIImageView * imageview = [[UIImageView alloc] initWithImage:image];
+                    
+                    [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
+                    imageview.userInteractionEnabled = YES;
+                    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+                    [recognizer setNumberOfTapsRequired:1];
+                    [recognizer setNumberOfTouchesRequired:1];
+                    [imageview addGestureRecognizer:recognizer];
+                    imageview.tag = idx;
+                    [self.scrollPhotos addSubview:imageview];
+                }
+            }];
+            self.scrollPhotos.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([self.array count] +1), pageSize.height);
+        }
+    }
+}
+
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     if ([textView.text isEqualToString:@"说点什么吧"]) {
@@ -84,10 +144,45 @@
 -(IBAction)locationClick:(id)sender
 {
     [self.button setImage:[UIImage imageNamed:@"ComposerLocationOn-flat"] forState:UIControlStateNormal];
-    [self.button setTitle:@"成都市武侯区锦绣路" forState:UIControlStateNormal];
-    [self.button setWidth:170.0f];
+    [self.button showIndicatorViewBlue];
+    self.button.enabled = NO;
+    
+    [self.button setTitle:@"正在获取..." forState:UIControlStateNormal];
+    [self.button setWidth:120.0f];
+    
+    [[MMLocationManager shareLocation] getLocationCoordinate:^(CLLocationCoordinate2D locationCorrrdinate) {
+       NSString *  string = [NSString stringWithFormat:@"%f %f",locationCorrrdinate.latitude,locationCorrrdinate.longitude];
+        self.button.enabled = YES;
+        SLog(@"string :%@",string);
+        
+        if (string.length > 20) {
+            NSString * straddress = [string substringToIndex:20];
+            [self.button setTitle:straddress forState:UIControlStateNormal];
+              [self.button setWidth:( straddress.length * 10.0f)];
+        }else{
+            [self.button setTitle:string forState:UIControlStateNormal];
+              [self.button setWidth:( string.length * 10.0f)];
+        }
+      
+        [self.button hideIndicatorViewBlueOrGary];
+    } withAddress:^(NSString *addressString) {
+        SLog(@"addressString :%@",addressString);
+        self.button.enabled = YES;
+        
+        if (addressString.length > 29) {
+            NSString * straddress = [addressString substringToIndex:29];
+            [self.button setTitle:[NSString stringWithFormat:@"%@...",straddress] forState:UIControlStateNormal];
+            [self.button setWidth:( straddress.length * 10.0f)];
+        }else{
+            [self.button setTitle:addressString forState:UIControlStateNormal];
+            [self.button setWidth:( addressString.length * 10.0f)];
+        }
+        [self.button hideIndicatorViewBlueOrGary];
+    }];
     
 }
+
+
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -202,10 +297,10 @@
 //    [sheet showInView:self.view];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+/*- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (self.array.count >= 20) {
-        [UIAlertView showAlertViewWithMessage:@"最多只能选20张照片"];
+    if (self.array.count >= 21) {
+        [UIAlertView showAlertViewWithMessage:@"最多只能选21张照片"];
         return;
     }
     switch (buttonIndex) {
@@ -250,7 +345,7 @@
         default:
             break;
     }
-}
+}*/
 
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
@@ -267,6 +362,14 @@
                 UIImageView * imageview = [[UIImageView alloc] initWithImage:image];
                 
                 [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, 65, 65)];
+                
+                imageview.userInteractionEnabled = YES;
+                UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+                [recognizer setNumberOfTapsRequired:1];
+                [recognizer setNumberOfTouchesRequired:1];
+                [imageview addGestureRecognizer:recognizer];
+                imageview.tag = idx;
+                
                 [self.scrollPhotos addSubview:imageview];
             }
         }];

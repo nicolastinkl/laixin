@@ -31,6 +31,7 @@
 #import <OHAttributedLabel/OHAttributedLabel.h>
 #import <OHAttributedLabel/NSAttributedString+Attributes.h>
 #import <OHAttributedLabel/OHASBasicMarkupParser.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 static NSInteger const kAttributedLabelTag = 100;
 
@@ -460,6 +461,27 @@ static NSInteger const kAttributedLabelTag = 100;
                 {
                     //系统图片
                     [iv setImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    
+                    ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+                    [library assetForURL:[NSURL URLWithString:stringurl]
+                             resultBlock:^(ALAsset *asset) {
+                                 
+                                 // Here, we have the asset, let's retrieve the image from it
+                                 
+                                 CGImageRef imgRef = asset.thumbnail;// [[asset defaultRepresentation] fullResolutionImage];
+                                 
+                                 /* Instead of the full res image, you can ask for an image that fits the screen
+                                  CGImageRef imgRef  = [[asset defaultRepresentation] fullScreenImage];
+                                  */
+                                 // From the CGImage, let's build an UIImage
+                                UIImage *  imatgetemporal = [UIImage imageWithCGImage:imgRef];
+                                [iv setImage:imatgetemporal];
+                                 
+                             } failureBlock:^(NSError *error) {
+                                 
+                                 // Something wrong happened.
+                                 
+                             }];
                 }else {
                     [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
                 }

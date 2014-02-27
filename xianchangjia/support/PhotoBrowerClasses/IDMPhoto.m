@@ -8,7 +8,8 @@
 
 #import "IDMPhoto.h"
 #import "IDMPhotoBrowser.h"
-
+#import "NSString+Addition.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 // Private
 @interface IDMPhoto () {
     // Image Sources
@@ -135,26 +136,57 @@ caption = _caption;
             // Load async from file
             [self performSelectorInBackground:@selector(loadImageFromFileAsync) withObject:nil];
         } else if (_photoURL) {
-            // Load async from web (using AFNetworking)
-            NSURLRequest *request = [NSURLRequest requestWithURL:_photoURL];
+            NSString * TKUrlCache = [NSString stringWithFormat:@"%@",_photoURL];
+            if([TKUrlCache containString:@"assets-library://asset/"])
+            {
+                //系统图片                
+                ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+                [library assetForURL:[NSURL URLWithString:TKUrlCache]
+                         resultBlock:^(ALAsset *asset) {
+                             
+                             // Here, we have the asset, let's retrieve the image from it
+                             
+                             CGImageRef imgRef =   [[asset defaultRepresentation] fullResolutionImage];
+                             
+                             /* Instead of the full res image, you can ask for an image that fits the screen
+                              CGImageRef imgRef  = [[asset defaultRepresentation] fullScreenImage];
+                              */
+                             // From the CGImage, let's build an UIImage
+                             UIImage *  imatgetemporal = [UIImage imageWithCGImage:imgRef];
+                             UIImage *image = imatgetemporal;
+                             self.underlyingImage = image;
+                             [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
+                             
+                         } failureBlock:^(NSError *error) {
+                             
+                             // Something wrong happened.
+                             
+                         }];
+            }else{
+                
+                
+                // Load async from web (using AFNetworking)
+                NSURLRequest *request = [NSURLRequest requestWithURL:_photoURL];
+                
+                AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+                op.responseSerializer = [AFImageResponseSerializer serializer];
+                
+                [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    UIImage *image = responseObject;
+                    self.underlyingImage = image;
+                    [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) { }];
+                
+                [op setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+                    CGFloat progress = ((CGFloat)totalBytesRead)/((CGFloat)totalBytesExpectedToRead);
+                    if (self.progressUpdateBlock) {
+                        self.progressUpdateBlock(progress);
+                    }
+                }];
+                
+                [[NSOperationQueue mainQueue] addOperation:op];
+            }
             
-            AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-            op.responseSerializer = [AFImageResponseSerializer serializer];
-
-            [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                UIImage *image = responseObject;
-                self.underlyingImage = image;
-                [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) { }];
-            
-            [op setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-                CGFloat progress = ((CGFloat)totalBytesRead)/((CGFloat)totalBytesExpectedToRead);
-                if (self.progressUpdateBlock) {
-                    self.progressUpdateBlock(progress);
-                }
-            }];
-            
-            [[NSOperationQueue mainQueue] addOperation:op];
         } else {
             // Failed - no source
             self.underlyingImage = nil;

@@ -1840,7 +1840,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="gb3-Bg-czM">
-                                    <rect key="frame" x="8" y="18" width="119" height="33"/>
+                                    <rect key="frame" x="8" y="18" width="120" height="33"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <state key="normal" title="显示当前位置" image="ComposerLocationOff-flat">
