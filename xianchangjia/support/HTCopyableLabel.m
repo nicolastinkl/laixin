@@ -8,6 +8,7 @@
 
 #import "HTCopyableLabel.h"
 #import "SVProgressHUD.h"
+#import "UIAlertViewAddition.h"
 
 @interface HTCopyableLabel ()
 
@@ -76,9 +77,8 @@
                 stringToCopy = self.text;
             }
             [pasteboard setString:stringToCopy];
-            [SVProgressHUD showSuccessWithStatus:@"成功复制到剪切板"];
-            
-
+            //[SVProgressHUD showSuccessWithStatus:@"成功复制到剪切板"];
+            [UIAlertView showAlertViewWithMessage:@"成功复制到剪切板"];
 //            UIMenuController *copyMenu = [UIMenuController sharedMenuController];
 //            if ([self.copyableLabelDelegate respondsToSelector:@selector(copyMenuTargetRectInCopyableLabelCoordinates:)])
 //            {

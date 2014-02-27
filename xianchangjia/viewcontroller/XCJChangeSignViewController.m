@@ -63,7 +63,7 @@
             [self  dismissThisNavi:nil];
 
         } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD showErrorWithStatus:@"修改失败"];
+            [UIAlertView showAlertViewWithMessage:@"修改失败"];
         }];
     }
 }

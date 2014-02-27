@@ -2146,7 +2146,7 @@
             
         }else
         {
-            [SVProgressHUD showErrorWithStatus:@"播放失败,录音文件不存在"];
+            [UIAlertView showAlertViewWithMessage:@"播放失败,录音文件不存在"];
         }
     }
     

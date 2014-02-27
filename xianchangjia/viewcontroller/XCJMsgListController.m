@@ -1032,8 +1032,7 @@
                             [SVProgressHUD dismiss];
                         }
                     } failure:^(MLRequest *request, NSError *error) {
-                        [SVProgressHUD dismiss];
-                        [SVProgressHUD showErrorWithStatus:@"退出失败"];
+                        [UIAlertView showAlertViewWithMessage:@"退出失败"];
                     }];
                 }
                 

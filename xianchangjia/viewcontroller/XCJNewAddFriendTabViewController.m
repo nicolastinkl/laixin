@@ -238,15 +238,15 @@
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:userinfo.beAddFriendShips];
                 userinfo.hasAdd = @YES;
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-                [SVProgressHUD showSuccessWithStatus:@"添加成功"];
+                [UIAlertView showAlertViewWithMessage:@"添加成功"];
                 // reload this cell
                 [self configureCell:(UITableViewCell *)superView atIndexPath:indexPath];
             }
         } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD showErrorWithStatus:@"添加失败"];
+            [UIAlertView showAlertViewWithMessage:@"添加失败"];
         }];
     }else{
-      [SVProgressHUD showErrorWithStatus:@"添加失败"];
+      [UIAlertView showAlertViewWithMessage:@"添加失败"];
     }
   
     

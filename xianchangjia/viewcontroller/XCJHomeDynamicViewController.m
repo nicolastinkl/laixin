@@ -511,8 +511,7 @@
                             [self.navigationController popViewControllerAnimated:YES];
                         }
                     } failure:^(MLRequest *request, NSError *error) {
-                        [SVProgressHUD dismiss];
-                        [SVProgressHUD showErrorWithStatus:@"退出失败"];
+                        [UIAlertView showAlertViewWithMessage:@"退出失败"];
                     }];
                 });
             }
@@ -563,7 +562,7 @@
                     menuView.muteImageview.image = [UIImage imageNamed:@"threadInfoUnmute"];
                     [menuView.muteButton setTitle:@"取消静音" forState:UIControlStateNormal];
                 } failure:^(MLRequest *request, NSError *error) {
-                    [SVProgressHUD showErrorWithStatus:@"设置失败"];
+                    [UIAlertView showAlertViewWithMessage:@"设置失败"];
                 }];
             }
             else{
@@ -577,7 +576,7 @@
                     menuView.muteImageview.image = [UIImage imageNamed:@"threadInfoMute"];
                     [menuView.muteButton setTitle:@"静音" forState:UIControlStateNormal];
                 } failure:^(MLRequest *request, NSError *error) {
-                    [SVProgressHUD showErrorWithStatus:@"设置失败"];
+                    [UIAlertView showAlertViewWithMessage:@"设置失败"];
                 }];
                 
             }

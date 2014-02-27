@@ -165,21 +165,15 @@
             //	Result={"active_level":1,"active_by":1}
             if (responseObject) {
                 NSDictionary * result = responseObject[@"result"];
-                //返回激活等级和激活者的id
-                NSInteger level = [DataHelper getIntegerValue:result[@"active_level"] defaultValue:0];
-                if (level > 0) {
-                    
-                }
-                
+//                返回激活等级和激活者的id
+//                NSInteger level = [DataHelper getIntegerValue:result[@"active_level"] defaultValue:0];
                 [SVProgressHUD dismiss];
-                NSString * activeByUID =  [DataHelper getStringValue:result[@"active_by"]  defaultValue:@""];
+                NSString * activeByUID = [DataHelper getStringValue:result[@"active_by"]  defaultValue:@""];
                 if (activeByUID.length > 0) {
                     // check this uid is my friends???
                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
                         [[[LXAPIController sharedLXAPIController]  chatDataStoreManager] setFriendsUserDescription:response];
                     } withuid:activeByUID];
-                    
-                    //                    [UIAlertView showAlertViewWithMessage:@"激活成功"];
                     [self closethisView];
                 }else{
                     [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
@@ -187,7 +181,6 @@
             }
             
         } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
             [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
         }];
     }else{

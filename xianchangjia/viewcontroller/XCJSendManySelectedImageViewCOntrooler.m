@@ -250,12 +250,12 @@
                
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
-                [SVProgressHUD showErrorWithStatus:@"发送失败"];
+                [UIAlertView showAlertViewWithMessage:@"发送失败"];
 
             }
         }
     } failure:^(MLRequest *request, NSError *error) {
-        [SVProgressHUD showErrorWithStatus:@"发送失败"];
+        [UIAlertView showAlertViewWithMessage:@"发送失败"];
     }];
 }
 

@@ -58,7 +58,7 @@
                 [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
 
             } failure:^(MLRequest *request, NSError *error) {
-                [SVProgressHUD showErrorWithStatus:@"注销失败"];
+                [UIAlertView showAlertViewWithMessage:@"注销失败"];
             }];
         });
     }
@@ -77,7 +77,7 @@
         
         if (indexPath.row == 1) {
             // check out update sdk
-            [SVProgressHUD showSuccessWithStatus:@"清理完成"];
+             [UIAlertView showAlertViewWithMessage:@"清理完成"];
         }
         
         

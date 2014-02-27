@@ -139,10 +139,10 @@
         msg.gType = [NSString stringWithFormat:@"%d",currentGroup.type];
         [localContext MR_saveToPersistentStoreAndWait];
         
-        [SVProgressHUD showSuccessWithStatus:@"加入成功"];
+        [UIAlertView showAlertViewWithMessage:@"加入成功"];
     }
     else{
-        [SVProgressHUD showErrorWithStatus:@"加入失败"];
+        [UIAlertView showAlertViewWithMessage:@"加入失败"];
     }
 }
 

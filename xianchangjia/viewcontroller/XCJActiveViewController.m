@@ -62,13 +62,6 @@
     
     text.text = self.code;
 //    text.text = @"ItDCMJnB3TeuW09";
-    if (!self.code) {
-        double delayInSeconds = 1.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-             [text becomeFirstResponder];
-        });
-    }
     
     rightBar = [[UIBarButtonItem alloc] initWithTitle:@"扫一扫" style:UIBarButtonItemStyleBordered target:self action:@selector(scanClick:)];
     self.navigationItem.rightBarButtonItem = rightBar;
@@ -188,6 +181,11 @@
         [[MLNetworkingManager sharedManager] sendWithAction:@"active.do" parameters:@{@"active_code":CurrentCode} success:^(MLRequest *request, id responseObject) {
             //	Result={"active_level":1,"active_by":1}
             if (responseObject) {
+                int errnovv = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+                if (errnovv != 0) {
+                    [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
+                    return ;
+                }
                 NSDictionary * result = responseObject[@"result"];
                 if(result && result.allKeys.count > 0)
                 {
@@ -222,7 +220,6 @@
             }
             
         } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
             [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
         }];
     }else{

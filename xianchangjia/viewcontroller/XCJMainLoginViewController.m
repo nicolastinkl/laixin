@@ -248,11 +248,11 @@
                      
                  }else{
                      self.button_yanzhengCode.enabled = YES;
-                     [SVProgressHUD showErrorWithStatus:@"获取验证码失败"];
+                     [UIAlertView showAlertViewWithMessage:@"获取验证码失败"];
                  }
              }else{
-                     self.button_yanzhengCode.enabled = YES;
-                 [SVProgressHUD showErrorWithStatus:@"获取验证码失败"];
+                 self.button_yanzhengCode.enabled = YES;
+                 [UIAlertView showAlertViewWithMessage:@"获取验证码失败"];
              }
         } withParems:[NSString stringWithFormat:@"getcode?phone=%@",phone]];
     }];

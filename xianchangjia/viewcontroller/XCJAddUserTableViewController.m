@@ -212,7 +212,7 @@
             // setFriendsObject
             if (responseObject) {
                 [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsUserDescription:self.UserInfo];
-                [SVProgressHUD showSuccessWithStatus:@"添加成功"];
+                [UIAlertView showAlertViewWithMessage:@"添加成功"];
                 [self.Button_Sendmsg removeTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchDragInside];
                 // send message
                 [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateNormal];
@@ -223,7 +223,7 @@
                 //[self.navigationController popViewControllerAnimated:YES];
             }
         } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD showErrorWithStatus:@"添加失败"];
+            [UIAlertView showAlertViewWithMessage:@"添加失败"];
         }];
     }
 

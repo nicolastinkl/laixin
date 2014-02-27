@@ -227,7 +227,7 @@
         NSArray * array = groupsss[@"users"];
         if(array.count  <= 0)
         {
-            [SVProgressHUD showErrorWithStatus:@"无法找到该用户,请检查您填写的昵称是否正常"];
+            [UIAlertView showAlertViewWithMessage:@"无法找到该用户,请检查您填写的昵称是否正常"];
             [_session startRunning];
             return ;
         }
@@ -270,7 +270,7 @@
     } failure:^(MLRequest *request, NSError *error) {
         stringValueNew = nil;
         [_session startRunning];
-        [SVProgressHUD showErrorWithStatus:@"请求失败,请检查网络"];
+        [UIAlertView showAlertViewWithMessage:@"请求失败,请检查网络"];
     }];
 }
 
@@ -296,7 +296,7 @@
                         if(array.count  <= 0)
                         {
 //                            [UIAlertView showAlertViewWithTitle:@"该用户不存在" message:@"无法找到该用户,请检查您填写的昵称是否正常"];
-                            [SVProgressHUD showErrorWithStatus:@"无法找到该用户,请检查您填写的昵称是否正常"];
+                            [UIAlertView showAlertViewWithMessage:@"无法找到该用户,请检查您填写的昵称是否正常"];
                             [_session startRunning];
                             return ;
                         }
@@ -315,7 +315,7 @@
                         }];
                         
                     } failure:^(MLRequest *request, NSError *error) {
-                        [SVProgressHUD showErrorWithStatus:@"请求失败,请检查网络"];
+                        [UIAlertView showAlertViewWithMessage:@"请求失败,请检查网络"];
                         [_session startRunning];
                     }];
                 }

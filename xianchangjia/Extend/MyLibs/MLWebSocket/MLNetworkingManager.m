@@ -242,7 +242,7 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
     NSString *requestKey = [tools getStringValue:response[kRequestKeyName] defaultValue:nil];
     
     int errnoMesg = [DataHelper getIntegerValue:response[@"errno"] defaultValue:0];
-    if (errnoMesg == 0 || errnoMesg == 2) {
+    if (errnoMesg == 0 || errnoMesg >= 2) {
         SLog(@"requestKey ======  %@",requestKey);
         if (!requestKey) {
             //        说明此条是服务器直接推过来的数据,想得到的话就注册此通知

@@ -139,7 +139,7 @@ caption = _caption;
             NSString * TKUrlCache = [NSString stringWithFormat:@"%@",_photoURL];
             if([TKUrlCache containString:@"assets-library://asset/"])
             {
-                //系统图片                
+                //系统图片
                 ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
                 [library assetForURL:[NSURL URLWithString:TKUrlCache]
                          resultBlock:^(ALAsset *asset) {
@@ -160,7 +160,9 @@ caption = _caption;
                          } failureBlock:^(NSError *error) {
                              
                              // Something wrong happened.
-                             
+                             UIImage *image = [UIImage imageNamed:@"aio_ogactivity_default"];
+                             self.underlyingImage = image;
+                             [self performSelectorOnMainThread:@selector(imageLoadingComplete) withObject:nil waitUntilDone:NO];
                          }];
             }else{
                 
