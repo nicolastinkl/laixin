@@ -1826,6 +1826,7 @@
 //        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
     
+    
     UIImageView * imageview_Img = (UIImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
     
