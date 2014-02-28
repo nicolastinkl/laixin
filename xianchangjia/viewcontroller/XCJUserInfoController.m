@@ -97,7 +97,7 @@
     }
     
     if (![self.UserInfo.marriage isNilOrEmpty]) {
-        UserDict[@"婚姻状态"] = self.UserInfo.marriage;
+//        UserDict[@"婚姻状态"] = self.UserInfo.marriage;
     }
     if (![[DataHelper getStringValue:self.UserInfo.position defaultValue:@""] isNilOrEmpty]) {
         UserDict[@"地区"] = self.UserInfo.position;
@@ -129,7 +129,7 @@
         [self.Button_Sendmsg sendMessageStyle];
     }     
     [self.tableView reloadData];
-        
+    
     UIBarButtonItem * rightitem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(delmyfriendClick:)];
     self.navigationItem.rightBarButtonItem  = rightitem;
 }
@@ -148,6 +148,7 @@
             [SVProgressHUD dismiss];
             NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
             [self.frend MR_deleteInContext:localContext];
+            [localContext MR_saveOnlySelfAndWait];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(MLRequest *request, NSError *error) {
             [SVProgressHUD dismiss];

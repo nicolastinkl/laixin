@@ -85,7 +85,7 @@
         }
         
         if (![self.UserInfo.marriage isNilOrEmpty]) {
-            UserDict[@"婚姻状态"] = self.UserInfo.marriage;
+//            UserDict[@"婚姻状态"] = self.UserInfo.marriage;
         }
         if (self.UserInfo.position) {
             if (![self.UserInfo.position isNilOrEmpty]) {
