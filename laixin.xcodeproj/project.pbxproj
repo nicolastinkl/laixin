@@ -27,6 +27,8 @@
 		8622C89A187D8F6400776A38 /* XCJNewAddGroupTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C899187D8F6400776A38 /* XCJNewAddGroupTabViewController.m */; };
 		8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */; };
 		8626559C18ADADB700F05B81 /* UINavigationController+SGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */; };
+		86268A3118C06466000F0A48 /* XCJNearbyInviteViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */; };
+		86268A3418C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
@@ -494,6 +496,10 @@
 		8622C89C187E3F7A00776A38 /* FCHomeGroupMsg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCHomeGroupMsg.m; path = DAOModel/coredata/FCHomeGroupMsg.m; sourceTree = "<group>"; };
 		8626559A18ADADB700F05B81 /* UINavigationController+SGProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+SGProgress.h"; sourceTree = "<group>"; };
 		8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+SGProgress.m"; sourceTree = "<group>"; };
+		86268A2F18C06466000F0A48 /* XCJNearbyInviteViewContr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJNearbyInviteViewContr.h; path = viewcontroller/XCJNearbyInviteViewContr.h; sourceTree = "<group>"; };
+		86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNearbyInviteViewContr.m; path = viewcontroller/XCJNearbyInviteViewContr.m; sourceTree = "<group>"; };
+		86268A3218C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateNearInviteViewcontr.h; path = viewcontroller/XCJCreateNearInviteViewcontr.h; sourceTree = "<group>"; };
+		86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateNearInviteViewcontr.m; path = viewcontroller/XCJCreateNearInviteViewcontr.m; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		862EC4CB188E0FE5006F4D43 /* XCJChatSendImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendImgViewController.h; path = viewcontroller/XCJChatSendImgViewController.h; sourceTree = "<group>"; };
@@ -1321,6 +1327,17 @@
 				8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */,
 			);
 			path = "UINavigationController+SGProgress";
+			sourceTree = "<group>";
+		};
+		86268A2D18C0644A000F0A48 /* NearbyInvite */ = {
+			isa = PBXGroup;
+			children = (
+				86268A2F18C06466000F0A48 /* XCJNearbyInviteViewContr.h */,
+				86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */,
+				86268A3218C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.h */,
+				86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */,
+			);
+			name = NearbyInvite;
 			sourceTree = "<group>";
 		};
 		862D25B818585D4B005208C8 /* Appicon */ = {
@@ -2374,6 +2391,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86268A2D18C0644A000F0A48 /* NearbyInvite */,
 				86045FBD18B1F8B00002581E /* FindYouMM */,
 				86E392B318A8B44800FFD8C7 /* FriendGroup */,
 				862F54B118A879EA005DFD6C /* WantView */,
@@ -3219,6 +3237,7 @@
 				86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */,
 				8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */,
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
+				86268A3118C06466000F0A48 /* XCJNearbyInviteViewContr.m in Sources */,
 				86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */,
 				868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
@@ -3250,6 +3269,7 @@
 				86EB76BC185AA6CC00836947 /* ChatList.m in Sources */,
 				86EB76D6185AA6CC00836947 /* AFURLSessionManager.m in Sources */,
 				86D182AC1834AED30005901D /* LKDB+Manager.m in Sources */,
+				86268A3418C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m in Sources */,
 				865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */,
 				86EB76CB185AA6CC00836947 /* UIImage+Addition.m in Sources */,
 				869CE536186BE38D0004C1EC /* MagicalRecord.m in Sources */,

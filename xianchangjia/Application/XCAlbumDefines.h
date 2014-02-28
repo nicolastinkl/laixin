@@ -144,6 +144,14 @@ typedef enum {
 #define  XCMessageActivity_str_SceneBusniessMessage @"SceneBusniessMessage-added"
 #define  XCMessageActivity_str_NotityUserUseXC @"NotityUserUseXC-added"
 
+
+
+typedef enum{
+    groupsGroupChat = 0,
+    groupsGroupTextImgShare = 1,
+    groupsGroupNearbyInvite = 2,
+}groupsTypes;
+
 #define IMAGE_CACHE					[SDImageCache sharedImageCache]
 #define NOTIFICATION_CENTER         [NSNotificationCenter defaultCenter]
 

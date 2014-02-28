@@ -86,22 +86,8 @@
             list.gid = gid;
             list.group_name = self.GroupName.text;
             list.group_board = self.textType.text;
-            list.type  = 0;
+            list.type  = groupsGroupTextImgShare;
             [SVProgressHUD dismiss];
-            
-            // Build the predicate to find the person sought
-           /* NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            FCHomeGroupMsg * msg = [FCHomeGroupMsg MR_createInContext:localContext];
-            msg.gid = list.gid;
-            msg.gCreatorUid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-            msg.gName = list.group_name;
-            msg.gBoard = self.Label_address.text;
-            msg.gDate = [NSDate date];
-            msg.gbadgeNumber = @1;
-            msg.gType = @"1";
-            [localContext MR_saveToPersistentStoreAndWait];
-            */
-//            [[NSNotificationCenter defaultCenter] postNotificationName:@"Notify_changeDomainID" object:msg];
             
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             // target to chat view
@@ -110,7 +96,7 @@
             if (!array) {
                 // create new
                 Conversation * conversation =  [Conversation MR_createInContext:localContext];
-                conversation.lastMessage = list.group_board;
+                conversation.lastMessage = @"您创建了新群组";
                 conversation.lastMessageDate = [NSDate date];
                 conversation.messageType = @(XCMessageActivity_UserGroupMessage);
                 conversation.messageStutes = @(messageStutes_incoming);

@@ -307,28 +307,30 @@
                         NSArray * groupsDicts =  groupsss[@"groups"];
                         [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             XCJGroup_list * list = [XCJGroup_list turnObject:obj];
-                            // Build the predicate to find the person sought
-                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                            // target to chat view
-                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
-                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
-                            if (!array) {
-                                // create new
-                                Conversation * conversation =  [Conversation MR_createInContext:localContext];
-                                conversation.lastMessage = list.group_board;
-                                conversation.lastMessageDate = [NSDate date];
-                                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
-                                conversation.messageStutes = @(messageStutes_incoming);
-                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
-                                conversation.facebookName = list.group_name;
-                                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
-                                conversation.badgeNumber = @0;
-                                [localContext MR_saveOnlySelfAndWait];
-                            }else{
-                                //更新群信息
-                                if (![array.facebookName isEqualToString:list.group_name]) {
-                                    array.facebookName = list.group_name;
+                            if(list.type == groupsGroupTextImgShare){
+                                // Build the predicate to find the person sought
+                                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                                // target to chat view
+                                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+                                Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+                                if (!array) {
+                                    // create new
+                                    Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                    conversation.lastMessage = list.group_board;
+                                    conversation.lastMessageDate = [NSDate date];
+                                    conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                    conversation.messageStutes = @(messageStutes_incoming);
+                                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                    conversation.facebookName = list.group_name;
+                                    conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                                    conversation.badgeNumber = @0;
                                     [localContext MR_saveOnlySelfAndWait];
+                                }else{
+                                    //更新群信息
+                                    if (![array.facebookName isEqualToString:list.group_name]) {
+                                        array.facebookName = list.group_name;
+                                        [localContext MR_saveOnlySelfAndWait];
+                                    }
                                 }
                             }
                             

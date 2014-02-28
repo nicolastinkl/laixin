@@ -17,6 +17,7 @@
 #import "UIAlertViewAddition.h"
 #import "XCJFriendGroupViewController.h"
 #import "XCJFindYouMMViewcontr.h"
+#import "XCJNearbyInviteViewContr.h"
 
 @interface XCJIWantViewController ()
 
@@ -103,9 +104,9 @@
     badage.horizontalAlignment = LKBadgeViewHorizontalAlignmentLeft;
     badage.badgeColor = [UIColor redColor];
     badage.textColor = [UIColor whiteColor];
-    
     image_bgSign.layer.cornerRadius = 15;
     image_bgSign.layer.masksToBounds = YES;
+
     // Configure the cell...
     switch (indexPath.section) {
         case 0:
@@ -154,10 +155,11 @@
             
         case 2:
             image_bgSign.image = [UIImage imageNamed:@"found_icons_location"];
-            label_name.text = @"附近活动";
+            label_name.text = @"来活动";
             badage.hidden = YES;
-            image_New.hidden = NO;
+            image_New.hidden = YES;
             [image_New setFrame:CGRectMake(273, 17, 10, 10)];
+         
             break;
         default:
             break;
@@ -190,7 +192,9 @@
             break;
         case 2:
         {
-            [UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
+            XCJNearbyInviteViewContr*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJNearbyInviteViewContr"];
+            viewcontr.title = @"来活动";
+            [self.navigationController pushViewController:viewcontr animated:YES];
         }
             break;
         default:

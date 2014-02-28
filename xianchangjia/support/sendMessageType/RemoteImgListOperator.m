@@ -2,8 +2,8 @@
 //  RemoteImgListOperator.m
 //  RemoteImgListOperatorDemo
 //
-//  Created by jimple on 14-1-7.
-//  Copyright (c) 2014年 Jimple Chen. All rights reserved.
+//  Created by tinkl on 14-1-7.
+//  Copyright (c) 2014年 tinkl. All rights reserved.
 //
 
 #import "RemoteImgListOperator.h"
