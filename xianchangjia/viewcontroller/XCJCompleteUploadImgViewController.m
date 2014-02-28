@@ -351,6 +351,11 @@
     [parameters setValue:token forKey:@"token"];
     
     NSData * imagedata = [UIImage imageToWebP:filePath quality:75];
+    if (!imagedata) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"头像上传失败.请重新选择	"];
+        return;
+    }
     operation  = [manager POST:@"http://up.qiniu.com" parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 //        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"file" fileName:@"file" mimeType:@"image/jpeg" error:nil ];
         [formData appendPartWithFileData:imagedata name:@"file" fileName:@"file" mimeType:@"image/jpeg"];
@@ -359,8 +364,6 @@
         SLLog(@"responseObject %@",responseObject);
         if (responseObject) {
             NSString * stringURL =  [tools getStringValue:[responseObject objectForKey:@"url"] defaultValue:@""];
-            
-            
             
             [USER_DEFAULT setValue:stringURL forKey:KeyChain_Laixin_account_user_headpic];
             [UIView animateWithDuration:0.3 animations:^{

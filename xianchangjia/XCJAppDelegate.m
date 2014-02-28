@@ -163,7 +163,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 } withuid:uid];
                 
             }else if ([requestKey isEqualToString:@"group_invite"])
-            { /*	"gid":49,
+            { /*
+               "gid":49,
                "create_time":1389322217,
                "type":"group_invite",
                "eid":41,
@@ -174,7 +175,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
                     FCUserDescription *newFcObj = response;
-                    
+                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
                     NSDictionary * paramess = @{@"gid":@[gid]};
                     [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
                         NSDictionary * groupsss = responseObjects[@"result"];

@@ -108,7 +108,7 @@
 -(void) StartPostUploadimages:(NSNotification * ) notify
 {
     if (notify.object) {
-          [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:[UIColor redColor] andTitle:@"发送中..." ];
+          [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:[UIColor redColor]];
     }
 }
 

@@ -21,7 +21,7 @@
 #import "XCJSelfPhotoViewController.h"
 #import "FCMessage.h"
 
-@interface XCJUserInfoController ()
+@interface XCJUserInfoController ()<UIActionSheetDelegate>
 {
         NSMutableDictionary * UserDict;
 }
@@ -120,8 +120,6 @@
         
     }];
     
-   
-    
     if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
         self.Button_Sendmsg.hidden = YES;
         self.Image_btnBG.hidden = YES;
@@ -131,6 +129,31 @@
         [self.Button_Sendmsg sendMessageStyle];
     }     
     [self.tableView reloadData];
+        
+    UIBarButtonItem * rightitem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(delmyfriendClick:)];
+    self.navigationItem.rightBarButtonItem  = rightitem;
+}
+
+-(IBAction)delmyfriendClick:(id)sender
+{
+    UIActionSheet * actionsh = [[UIActionSheet alloc] initWithTitle:@"删除好友将不会看到该好友动态信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除好友" otherButtonTitles:nil, nil];
+    [actionsh showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+         [SVProgressHUD showWithStatus:@"正在删除..."];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.del_friend" parameters:@{@"uid":@[self.frend.friendID]} success:^(MLRequest *request, id responseObject) {
+            [SVProgressHUD dismiss];
+            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+            [self.frend MR_deleteInContext:localContext];
+            [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD dismiss];
+            [UIAlertView showAlertViewWithMessage:@"删除失败,请检查网络设置"];
+        }];
+    }
 }
 
 - (IBAction)seeUsericonclick:(id)sender {

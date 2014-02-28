@@ -17,6 +17,7 @@
 #import "XCJRegisterViewController.h"
 #import "XCJAppDelegate.h"
 #import "FCAccount.h"
+#import "XCJCompleteUserInfoViewController.h"
 #import "CoreData+MagicalRecord.h"
 
 @interface XCJMainLoginViewController ()<UITextFieldDelegate>
@@ -277,22 +278,49 @@
             
             if (sessionID.length > 1) {
                 
+                
                 [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                 [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
-                [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
                 [USER_DEFAULT synchronize];
                 
-                SRWebSocket * websocket =  [[MLNetworkingManager sharedManager] webSocket];
-                if ( [websocket readyState] > SR_OPEN ) {
-                    [websocket open];
-                }
-                SLLog(@"state : %d", [websocket readyState]);
-                // connection of websocket server
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
-                 
-                [SVProgressHUD dismiss];
-                [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                [[MLNetworkingManager sharedManager] webSocket];  // connection
+                NSDictionary * parames = @{@"sessionid":sessionID};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                   
+                    [SVProgressHUD dismiss];
+                    NSDictionary * dict = responseObject[@"result"];
+                    LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                    if (currentUser) {
+                        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                        
+                        [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+                        
+                    }
+                    if (currentUser.nick.length == 0 || currentUser.headpic.length == 0)
+                    {
+                        
+                        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                        XCJCompleteUserInfoViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCompleteUserInfoViewController"];
+                        [self.navigationController pushViewController:viewContr animated:YES];
+                    }else{
+                        
+                        [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
+                        [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
+                        [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
+                        [USER_DEFAULT synchronize];
+                        // connection of websocket server
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
+                        
+                        [SVProgressHUD dismiss];
+                        [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                        }];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                    [self loginError];
                 }];
+                
+                
+                
             }else{
                 [self loginError];   
             }

@@ -344,7 +344,6 @@
     });
 }
 
-
 -(void) runSequucer
 {
     //    Sequencer *sequencer = [[Sequencer alloc] init];

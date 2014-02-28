@@ -178,7 +178,6 @@
             viewcontr.conversation = contr;
             [viewcontr hasNewPostInfo];
             [self.navigationController pushViewController:viewcontr animated:YES];
-            
         }
            break;
         case 1:
@@ -187,6 +186,11 @@
             viewcontr.title = @"抢你妹";
             [self.navigationController pushViewController:viewcontr animated:YES];
             //[UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
+        }
+            break;
+        case 2:
+        {
+            [UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
         }
             break;
         default:
