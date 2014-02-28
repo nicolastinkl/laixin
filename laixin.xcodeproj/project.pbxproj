@@ -29,6 +29,7 @@
 		8626559C18ADADB700F05B81 /* UINavigationController+SGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8626559B18ADADB700F05B81 /* UINavigationController+SGProgress.m */; };
 		86268A3118C06466000F0A48 /* XCJNearbyInviteViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */; };
 		86268A3418C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */; };
+		86268A3718C08DEF000F0A48 /* XCJNearbyInfoViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86268A3618C08DEF000F0A48 /* XCJNearbyInfoViewContr.m */; };
 		862D31961855B52C00C2D252 /* UIViewController+Indicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 862D31951855B52C00C2D252 /* UIViewController+Indicator.m */; };
 		862EC4CD188E0FE5006F4D43 /* XCJChatSendImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4CC188E0FE5006F4D43 /* XCJChatSendImgViewController.m */; };
 		862EC4D1188E2A8B006F4D43 /* MTAnimatedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 862EC4D0188E2A8B006F4D43 /* MTAnimatedLabel.m */; };
@@ -500,6 +501,8 @@
 		86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNearbyInviteViewContr.m; path = viewcontroller/XCJNearbyInviteViewContr.m; sourceTree = "<group>"; };
 		86268A3218C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateNearInviteViewcontr.h; path = viewcontroller/XCJCreateNearInviteViewcontr.h; sourceTree = "<group>"; };
 		86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateNearInviteViewcontr.m; path = viewcontroller/XCJCreateNearInviteViewcontr.m; sourceTree = "<group>"; };
+		86268A3518C08DEF000F0A48 /* XCJNearbyInfoViewContr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJNearbyInfoViewContr.h; path = viewcontroller/XCJNearbyInfoViewContr.h; sourceTree = "<group>"; };
+		86268A3618C08DEF000F0A48 /* XCJNearbyInfoViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJNearbyInfoViewContr.m; path = viewcontroller/XCJNearbyInfoViewContr.m; sourceTree = "<group>"; };
 		862D31941855B52C00C2D252 /* UIViewController+Indicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Indicator.h"; sourceTree = "<group>"; };
 		862D31951855B52C00C2D252 /* UIViewController+Indicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Indicator.m"; sourceTree = "<group>"; };
 		862EC4CB188E0FE5006F4D43 /* XCJChatSendImgViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendImgViewController.h; path = viewcontroller/XCJChatSendImgViewController.h; sourceTree = "<group>"; };
@@ -1336,6 +1339,8 @@
 				86268A3018C06466000F0A48 /* XCJNearbyInviteViewContr.m */,
 				86268A3218C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.h */,
 				86268A3318C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m */,
+				86268A3518C08DEF000F0A48 /* XCJNearbyInfoViewContr.h */,
+				86268A3618C08DEF000F0A48 /* XCJNearbyInfoViewContr.m */,
 			);
 			name = NearbyInvite;
 			sourceTree = "<group>";
@@ -3486,6 +3491,7 @@
 				869D15131839BDBB00B14A02 /* JSONKit.m in Sources */,
 				86045FC018B1F8C80002581E /* XCJFindYouMMViewcontr.m in Sources */,
 				869CE4E0186BE37B0004C1EC /* Sequencer.m in Sources */,
+				86268A3718C08DEF000F0A48 /* XCJNearbyInfoViewContr.m in Sources */,
 				869CE544186BE3A00004C1EC /* NSString+DDXML.m in Sources */,
 				8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */,
 				86494CC918838C3C00C22B14 /* FCContactsPhone.m in Sources */,

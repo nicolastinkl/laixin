@@ -48,6 +48,7 @@
 @property (assign, nonatomic) NSInteger type;
 @property (assign, nonatomic) NSTimeInterval time;
 @property (strong, nonatomic) NSString * timeText;
+@property (strong, nonatomic) NSString * position;
 @end
 
 

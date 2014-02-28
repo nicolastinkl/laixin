@@ -67,6 +67,7 @@
     result.creator = [DataHelper getStringValue:dict[@"creator"] defaultValue:@""];
     result.group_board = [DataHelper getStringValue:dict[@"board"] defaultValue:@""];
     result.group_name = [DataHelper getStringValue:dict[@"name"] defaultValue:@""];
+    result.position = [DataHelper getStringValue:dict[@"position"] defaultValue:@""];
     result.type = [DataHelper getIntegerValue:dict[@"type"] defaultValue:0];
     NSTimeInterval timeinter = [DataHelper getDoubleValue:dict[@"time"] defaultValue:[[NSDate date]timeIntervalSince1970]];
     result.time = timeinter;

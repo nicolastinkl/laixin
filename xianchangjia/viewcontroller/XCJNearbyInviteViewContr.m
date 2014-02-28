@@ -10,6 +10,7 @@
 #import "XCAlbumAdditions.h"
 #import "XCJGroupPost_list.h"
 #import "FCUserDescription.h"
+#import "XCJNearbyInfoViewContr.h"
 #import "XCJCreateNearInviteViewcontr.h"
 
 @interface XCJNearbyInviteViewContr ()
@@ -77,7 +78,10 @@
                         NSArray * groupsDicts =  groupsss[@"groups"];
                         [groupsDicts enumerateObjectsUsingBlock:^(id objss, NSUInteger idx, BOOL *stop) {
                             XCJGroup_list * list = [XCJGroup_list turnObject:objss];
-                            [_datasource addObject:list];
+                            if(list.type == groupsGroupNearbyInvite && list.position.length > 0){
+                                [_datasource addObject:list];
+                                
+                            }
                         }];
                         [self.tableView reloadData];
                         [self.view hideIndicatorViewBlueOrGary];
@@ -123,7 +127,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -144,9 +148,12 @@
 
     // Configure the cell...
     labelgroupName.text = list.group_name;
-    labelgroupAddress.text = list.group_board;
+    labelgroupAddress.text = list.position;
     labelgroupBoard.text = list.group_board;
-    labelgorupTime.text = list.timeText;
+     int index = 1 + random()%5;
+    labelgroupBoard.textColor = [tools colorWithIndex:index];
+    labelgorupTime.text = @"今               天";
+    labelgorupTime.textColor =  [tools colorWithIndex:0];
     return cell;
 }
 
@@ -172,6 +179,26 @@
         }
         labelName.text = user.nick;
     } withuid:list.creator];
+}
+
+
+#pragma mark - Navigation
+
+// In a story board-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // Get the new view controller using
+    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"XCJNearbyInfoViewContr"]) {
+        
+        UITableViewCell * cell = (UITableViewCell *)sender;
+         XCJGroup_list * list  = _datasource[[self.tableView indexPathForCell:cell].row];
+        XCJNearbyInfoViewContr * view = [segue destinationViewController];
+        [view initallContr:list];
+        
+    }
+
+    
 }
 
 /*
@@ -214,14 +241,7 @@
 */
 
 /*
-#pragma mark - Navigation
 
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
 
  */
 
