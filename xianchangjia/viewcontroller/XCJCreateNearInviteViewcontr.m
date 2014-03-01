@@ -32,6 +32,8 @@
     UIImage *ImageFile;
     NSArray * tagsArray;
     NSString * postIDCurrent;
+    
+    NSString * copyText;
 }
 @property (weak, nonatomic) IBOutlet UILabel *text_nick;
 @property (weak, nonatomic) IBOutlet UILabel *text_age;
@@ -376,13 +378,18 @@
         case 1:
         {
             UITextField *tf = [alertView textFieldAtIndex:0];
+            copyText = tf.text;
             // NICK
             if (tf.text.length > 0 && tf.text.length <= 15) {
                 self.title = tf.text;
                 self.text_nick.text = tf.text;
                 self.text_nick.textColor = [tools colorWithIndex:0];
             }else{
-                [UIAlertView showAlertViewWithMessage:@"标题不能超过15位"];
+
+                if (tf.text.length > 15) {
+                    [UIAlertView showAlertViewWithMessage:@"标题不能超过15位"];
+                }
+
             }
         }
             break;
@@ -427,7 +434,9 @@
                 UITextField *tf = [prompt textFieldAtIndex:0];
                 tf.keyboardType = UIKeyboardTypeDefault;
                 tf.clearButtonMode = UITextFieldViewModeWhileEditing;
-                
+                if (copyText) {
+                    tf.text = copyText;
+                }
                 prompt.tag = 1; // change name or nick
                 [prompt show];
             }
@@ -465,6 +474,7 @@
             if (indexPath.row == 0) {
                 //类型
                 XCJSelectCroupTypeViewController * viewtype = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectCroupTypeViewController"];
+                viewtype.title = @"选择活动类型";
                 [self.navigationController pushViewController:viewtype animated:YES];
             }
             

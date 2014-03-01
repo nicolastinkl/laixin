@@ -10,7 +10,10 @@
 #import "XCAlbumAdditions.h"
 
 @interface XCJSelectCroupTypeViewController ()
+{
 
+    NSMutableArray * labelArray;
+}
 @end
 
 @implementation XCJSelectCroupTypeViewController
@@ -33,12 +36,38 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
+    //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+    
+    NSString * strJson =  [dictionary valueForKey:@"grouptypeArray"];
+    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray * responseObject =[datajson  objectFromJSONData] ;
+    
+    labelArray = [NSMutableArray arrayWithArray:responseObject];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return labelArray.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *LoadMoreCellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadMoreCellIdentifier];
+    UILabel * label = (UILabel *) [cell.contentView subviewWithTag:1];
+    label.text =  labelArray[indexPath.row];
+    label.textColor = [tools colorWithIndex:0];
+    return cell;
+    
 }
 
 #pragma mark - Table view data source

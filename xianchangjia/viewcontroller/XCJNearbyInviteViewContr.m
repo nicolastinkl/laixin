@@ -52,6 +52,8 @@
    
     [self refershNearbyinvite];
     
+    self.title = @"活动列表";
+    
 }
 
 -(void) refershNearbyinvite
@@ -85,6 +87,12 @@
                         }];
                         [self.tableView reloadData];
                         [self.view hideIndicatorViewBlueOrGary];
+                        
+                        
+                        int index = 1 + random()%5; 
+                        ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).backgroundColor = [tools colorWithIndex:index];
+                        ((UILabel *) [self.tableView.tableFooterView subviewWithTag:1]).backgroundColor = [tools colorWithIndex:index];
+                        
                     } failure:^(MLRequest *request, NSError *error) {
                         [self.view hideIndicatorViewBlueOrGary];
                     }];
@@ -145,13 +153,18 @@
     UILabel * labelgroupAddress = (UILabel *)[cell.contentView subviewWithTag:4];
     UILabel * labelgroupBoard = (UILabel *)[cell.contentView subviewWithTag:5];
     UILabel * labelgorupTime = (UILabel *)[cell.contentView subviewWithTag:6];
+    UILabel * labelsignBg = (UILabel *)[cell.contentView subviewWithTag:12];
 
+    UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
+    imageview.layer.cornerRadius = imageview.height/2;
+    imageview.layer.masksToBounds = YES;
     // Configure the cell...
     labelgroupName.text = list.group_name;
     labelgroupAddress.text = list.position;
     labelgroupBoard.text = list.group_board;
      int index = 1 + random()%5;
     labelgroupBoard.textColor = [tools colorWithIndex:index];
+    labelsignBg.backgroundColor = [tools colorWithIndex:index];
     labelgorupTime.text = @"今               天";
     labelgorupTime.textColor =  [tools colorWithIndex:0];
     return cell;
@@ -160,7 +173,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100.0f;
+    return 120.0f;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -194,7 +207,9 @@
         UITableViewCell * cell = (UITableViewCell *)sender;
          XCJGroup_list * list  = _datasource[[self.tableView indexPathForCell:cell].row];
         XCJNearbyInfoViewContr * view = [segue destinationViewController];
-        [view initallContr:list];
+        view.title = @"活动详情";
+        view.groupinfo = list;
+//        [view initallContr:list];
         
     }
 

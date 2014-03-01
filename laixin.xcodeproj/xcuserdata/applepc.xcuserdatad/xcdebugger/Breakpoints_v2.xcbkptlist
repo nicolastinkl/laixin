@@ -1586,11 +1586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJSelectCroupTypeViewController.m"
-            timestampString = "410951500.277377"
+            timestampString = "415347053.652355"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4502,11 +4502,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415272580.955896"
+            timestampString = "415347376.039592"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
             landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4518,11 +4518,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415272580.955896"
+            timestampString = "415347376.039592"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4534,11 +4534,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415272580.955896"
+            timestampString = "415347376.039592"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4550,23 +4550,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415272580.955896"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "-refershNearbyinvite"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415272580.955896"
+            timestampString = "415346256.005559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
@@ -4582,12 +4566,108 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
-            timestampString = "415277794.067815"
+            timestampString = "415346256.005559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "-refershNearbyinvite"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
+            timestampString = "415347376.039592"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
+            timestampString = "415342649.714978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJNearbyInviteViewContr.m"
+            timestampString = "415347376.039592"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
+            landmarkName = "-prepareForSegue:sender:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
+            timestampString = "415342649.714978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
+            timestampString = "415342649.714978"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "233"
+            endingLineNumber = "233"
+            landmarkName = "-tableView:heightForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "xianchangjia/viewcontroller/XCJCreateNearInviteViewcontr.m"
+            timestampString = "415347634.892105"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "383"
+            endingLineNumber = "383"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

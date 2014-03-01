@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "XCJGroupPost_list.h"
 
-@interface XCJNearbyInfoViewContr : UIViewController
+@interface XCJNearbyInfoViewContr : UITableViewController
 
 @property (nonatomic,strong)  XCJGroup_list * groupinfo;
 -(void) initallContr:( XCJGroup_list * ) groupinfo;
