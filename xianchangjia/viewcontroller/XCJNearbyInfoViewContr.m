@@ -144,62 +144,73 @@
                 if (user) {
                     [SVProgressHUD dismiss];
                     
-                    // target to chat view
-                    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",self.groupinfo.creator];
-                    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
-                    ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
-                    if (array) {
-                        chatview.conversation = array;
-                        
-                        {
-                            //系统消息公告
-                            FCMessage * msg = [FCMessage MR_createInContext:localContext];
-                            msg.messageType = @(messageType_SystemAD);
-                            msg.text = [NSString stringWithFormat:@"我现场加您发起的活动(%@),有什么变化麻烦告诉我.",self.groupinfo.group_name],
-                            msg.sentDate = [NSDate date];
-                            msg.audioUrl = @"";
-                            // message did not come, this will be on rigth
-                            msg.messageStatus = @(NO);
-                            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-                            msg.messageguid = @"";
-                            msg.messageSendStatus = @0;
-                            msg.read = @YES;
-                            array.lastMessage = msg.text;
-                            [array addMessagesObject:msg];
+                    NSString * name = [NSString stringWithFormat:@"我想参加您发起的活动(%@),有什么变化麻烦告诉我噢.",self.groupinfo.group_name];
+                    NSDictionary * parames = @{@"uid":user.uid,@"content":name};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+                        if (responseObject) {
+                            
+                            // target to chat view
+                            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",self.groupinfo.creator];
+                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
+                            ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
+                            if (array) {
+                                chatview.conversation = array;
+                                
+                                {
+                                    //系统消息公告
+                                    FCMessage * msg = [FCMessage MR_createInContext:localContext];
+                                    msg.messageType = @(messageType_SystemAD);
+                                    msg.text =name;
+                                    msg.sentDate = [NSDate date];
+                                    msg.audioUrl = @"";
+                                    // message did not come, this will be on rigth
+                                    msg.messageStatus = @(NO);
+                                    msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+                                    msg.messageguid = @"";
+                                    msg.messageSendStatus = @0;
+                                    msg.read = @YES;
+                                    array.lastMessage = msg.text;
+                                    [array addMessagesObject:msg];
+                                }
+                            }else{
+                                // create new
+                                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                conversation.lastMessageDate = [NSDate date];
+                                conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+                                conversation.messageStutes = @(messageStutes_incoming);
+                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+                                conversation.facebookName = user.nick;
+                                conversation.facebookId = user.uid;
+                                conversation.badgeNumber = @0;
+                                {
+                                    //系统消息公告
+                                    FCMessage * msg = [FCMessage MR_createInContext:localContext];
+                                    msg.messageType = @(messageType_SystemAD);
+                                    msg.text = [NSString stringWithFormat:@"我想参加您发起的活动(%@),有什么变化麻烦告诉我噢.",self.groupinfo.group_name],
+                                    msg.sentDate = [NSDate date];
+                                    msg.audioUrl = @"";
+                                    // message did not come, this will be on rigth
+                                    msg.messageStatus = @(NO);
+                                    msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+                                    msg.messageguid = @"";
+                                    msg.messageSendStatus = @0;
+                                    msg.read = @YES;
+                                    conversation.lastMessage = msg.text;
+                                    [conversation addMessagesObject:msg];
+                                }
+                                [localContext MR_saveOnlySelfAndWait];
+                                chatview.conversation = conversation;
+                            }
+                            chatview.userinfo = user;
+                            chatview.title = user.nick;
+                            [self.navigationController pushViewController:chatview animated:YES];
                         }
-                    }else{
-                        // create new
-                        Conversation * conversation =  [Conversation MR_createInContext:localContext];
-                        conversation.lastMessageDate = [NSDate date];
-                        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
-                        conversation.messageStutes = @(messageStutes_incoming);
-                        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-                        conversation.facebookName = user.nick;
-                        conversation.facebookId = user.uid;
-                        conversation.badgeNumber = @0;
-                        {
-                            //系统消息公告
-                            FCMessage * msg = [FCMessage MR_createInContext:localContext];
-                            msg.messageType = @(messageType_SystemAD);
-                            msg.text = [NSString stringWithFormat:@"我现场加您发起的活动(%@),有什么变化麻烦告诉我.",self.groupinfo.group_name],
-                            msg.sentDate = [NSDate date];
-                            msg.audioUrl = @"";
-                            // message did not come, this will be on rigth
-                            msg.messageStatus = @(NO);
-                            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-                            msg.messageguid = @"";
-                            msg.messageSendStatus = @0;
-                            msg.read = @YES;
-                            conversation.lastMessage = msg.text;
-                            [conversation addMessagesObject:msg];
-                        }
-                        [localContext MR_saveOnlySelfAndWait];
-                        chatview.conversation = conversation;
-                    }
-                    chatview.userinfo = user;
-                    chatview.title = user.nick;
-                    [self.navigationController pushViewController:chatview animated:YES];
+                    } failure:^(MLRequest *request, NSError *error) {
+                        [SVProgressHUD dismiss];
+                        [UIAlertView showAlertViewWithMessage:@"参加活动失败,请检查网络设置"];
+                    }];
+                    
                 }else{
                     [SVProgressHUD dismiss];
                     [UIAlertView showAlertViewWithMessage:@"用户不存在!"];

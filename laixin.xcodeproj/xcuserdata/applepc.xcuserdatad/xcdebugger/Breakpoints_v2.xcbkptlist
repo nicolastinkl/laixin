@@ -4598,11 +4598,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
-            timestampString = "415342649.714978"
+            timestampString = "415354777.045368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
+            startingLineNumber = "266"
+            endingLineNumber = "266"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4630,11 +4630,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
-            timestampString = "415342649.714978"
+            timestampString = "415354777.045368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -4646,11 +4646,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJNearbyInfoViewContr.m"
-            timestampString = "415342649.714978"
+            timestampString = "415354777.045368"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "244"
+            endingLineNumber = "244"
             landmarkName = "-tableView:heightForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>

@@ -170,7 +170,6 @@
     return cell;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 120.0f;
@@ -181,7 +180,7 @@
     XCJGroup_list * list = _datasource[indexPath.row];
     UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
     UILabel * labelName = (UILabel *)[cell.contentView subviewWithTag:2];
-    
+//    labelName.textAlignment = NSTextAlignmentCenter;
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
         FCUserDescription * user = response;
         //内容
