@@ -145,6 +145,7 @@
 		86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */; };
 		86740A9A1839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */; };
 		867AF35C18A623A400121DCF /* XCJSelfPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */; };
+		867B054018C41D3B00A562FA /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 867B053D18C41D3B00A562FA /* libWeChatSDK.a */; };
 		8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */; };
 		8681BDBC1834B2A300521D36 /* DirectionsJson.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */; };
 		8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8681BDBF1834B34D00521D36 /* XCJSceneInfo.m */; };
@@ -717,6 +718,9 @@
 		86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+MHDismissModalView.m"; sourceTree = "<group>"; };
 		867AF35A18A623A400121DCF /* XCJSelfPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelfPhotoViewController.h; path = viewcontroller/XCJSelfPhotoViewController.h; sourceTree = "<group>"; };
 		867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelfPhotoViewController.m; path = viewcontroller/XCJSelfPhotoViewController.m; sourceTree = "<group>"; };
+		867B053D18C41D3B00A562FA /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		867B053E18C41D3B00A562FA /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		867B053F18C41D3B00A562FA /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
 		8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DirectionsJson.geojson; sourceTree = "<group>"; };
 		8681BDBE1834B34D00521D36 /* XCJSceneInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJSceneInfo.h; sourceTree = "<group>"; };
 		8681BDBF1834B34D00521D36 /* XCJSceneInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJSceneInfo.m; sourceTree = "<group>"; };
@@ -1200,6 +1204,7 @@
 			files = (
 				86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */,
 				86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */,
+				867B054018C41D3B00A562FA /* libWeChatSDK.a in Frameworks */,
 				8622C893187D866300776A38 /* MessageUI.framework in Frameworks */,
 				86D183171834B0950005901D /* libiconv.dylib in Frameworks */,
 				8669982518792BF700233C47 /* CoreVideo.framework in Frameworks */,
@@ -1826,6 +1831,16 @@
 				86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */,
 			);
 			name = UIViewContr;
+			sourceTree = "<group>";
+		};
+		867B053C18C41D3B00A562FA /* WeChatSDK_1.4.2.1 */ = {
+			isa = PBXGroup;
+			children = (
+				867B053D18C41D3B00A562FA /* libWeChatSDK.a */,
+				867B053E18C41D3B00A562FA /* WXApi.h */,
+				867B053F18C41D3B00A562FA /* WXApiObject.h */,
+			);
+			path = WeChatSDK_1.4.2.1;
 			sourceTree = "<group>";
 		};
 		8681BDBD1834B33700521D36 /* Models */ = {
@@ -2522,6 +2537,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				867B053C18C41D3B00A562FA /* WeChatSDK_1.4.2.1 */,
 				868A0EEF18B3608000C2875F /* iCarousel */,
 				86045FC718B2F7E70002581E /* AOtag */,
 				866C153F18ADE75F0054F686 /* PhotoBrowerClasses */,
@@ -3744,6 +3760,7 @@
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/WeChatSDK_1.4.2.1,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
@@ -3781,6 +3798,7 @@
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
 					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib,
+					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/WeChatSDK_1.4.2.1,
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;

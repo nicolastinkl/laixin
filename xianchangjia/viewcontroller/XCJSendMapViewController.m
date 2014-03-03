@@ -14,7 +14,7 @@
 #import "MKMapView+ZoomLevel.h"
 #import "UIImage+Screenshot.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "UIView+Additon.h"
 @interface XCJSendMapViewController ()
 {
     NSString * strAddresss;
@@ -87,7 +87,6 @@
 //截图
 - (UIImage *)viewToImage:(UIView *)view
 {
-    
     //支持retina高分的关键
     if(UIGraphicsBeginImageContextWithOptions != NULL)
     {

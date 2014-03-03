@@ -4543,7 +4543,7 @@
                                         </state>
                                         <state key="highlighted" title="登录"/>
                                     </button>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="laichat_logo100x100" id="RJE-0F-ip9">
+                                    <imageView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="RJE-0F-ip9">
                                         <rect key="frame" x="110" y="9" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                     </imageView>
@@ -4557,6 +4557,13 @@
                                             <action selector="getyanzhengCode:" destination="X5V-NU-KD0" eventType="touchUpInside" id="rf9-bJ-g3v"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="来信" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZgM-wb-ZgU">
+                                        <rect key="frame" x="118" y="20" width="84" height="79"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -6003,7 +6010,7 @@
             <objects>
                 <viewController restorationIdentifier="XCJActiveViewController" storyboardIdentifier="XCJActiveViewController" hidesBottomBarWhenPushed="YES" id="vvD-82-ccm" customClass="XCJActiveViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Quc-mH-HN3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568.00000000000011"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="激活码:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wPF-ho-Oak">
@@ -6295,7 +6302,7 @@
         <image name="BG_mask" width="1" height="854"/>
         <image name="ComposerLocationOff-flat" width="19" height="19"/>
         <image name="ComposerLocationOn-flat" width="19" height="19"/>
-        <image name="IMG_1811" width="640" height="960"/>
+        <image name="IMG_1811" width="640" height="1136"/>
         <image name="Titlebar_settings" width="32" height="32"/>
         <image name="Titlebar_signout" width="32" height="32"/>
         <image name="aio_sendimage_lastmark" width="79" height="79"/>

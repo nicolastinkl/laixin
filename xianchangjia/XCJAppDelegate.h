@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomWindow.h"
-
+#import "WXApi.h"
 @class SinaWeibo,XCJLoginNaviController;
 @interface XCJAppDelegate : UIResponder <UIApplicationDelegate>
 {
     SinaWeibo *sinaweiboMain;
+    enum WXScene _scene;
 }
 
 @property (strong, nonatomic) CustomWindow                  *window;
@@ -23,7 +24,7 @@
 
 -(void) initWeiboView;
 +(BOOL) hasLogin;
-
+- (void) sendImageContent:(int ) type withImageData:(NSData * ) imagedata;
 @end
 
 

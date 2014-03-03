@@ -32,7 +32,7 @@
 #import "CoreData+MagicalRecord.h"
 #import "FCContactsPhone.h"
 #import "FCUserDescription.h"
-#import "FCMessage.h"
+#import "FCMessage.h" 
 
 #define audioLengthDefine 1050
 
@@ -668,6 +668,34 @@ static NSString * const kLaixinStoreName = @"Laixins";
     [[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
 }
 
+- (void) sendImageContent:(int ) type withImageData:(NSData * ) imagedata
+{
+    if (type == 0) {
+         _scene = WXSceneSession;
+    }else if(type == 1){
+        _scene = WXSceneTimeline;
+    }else{
+        _scene = WXSceneFavorite;
+    }
+    WXMediaMessage *message = [WXMediaMessage message];
+//    [message setThumbImage:[UIImage imageNamed:@"res5thumb.png"]];
+    WXImageObject *ext = [WXImageObject object];
+    ext.imageData =imagedata;
+    
+    //UIImage* image = [UIImage imageWithContentsOfFile:filePath];
+    UIImage* image = [UIImage imageWithData:ext.imageData];
+    ext.imageData = UIImagePNGRepresentation(image);
+    
+    message.mediaObject = ext;
+    
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = _scene;
+    
+    [WXApi sendReq:req];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
@@ -678,6 +706,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
     
     self.launchingWithAps=[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     [self initAllControlos];
+    
+    //向微信注册
+    [WXApi registerApp:kAppkeyForWeChat withDescription:@"来信 1.1.1"];
     
     //注册推送通知
     [[UIApplication sharedApplication]
@@ -727,6 +758,12 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // Override point for customization after application launch.
     return YES;
 }
+
+-(void) changeScene:(NSInteger)scene
+{
+    _scene = scene;
+}
+
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {

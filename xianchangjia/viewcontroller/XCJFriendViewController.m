@@ -90,9 +90,10 @@
     _dataSource = array;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+     self.title = @"通讯录";
     {
         
-        //    self.title = @"好友";
+        //
         //    UIActivityIndicatorView *activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
         //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(reloadContacts)];

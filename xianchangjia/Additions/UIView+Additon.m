@@ -188,6 +188,26 @@
     return nil;
 }
 
+//截图
+- (UIImage *)viewToImage:(UIView *)view
+{
+    //支持retina高分的关键
+    if(UIGraphicsBeginImageContextWithOptions != NULL)
+    {
+        UIGraphicsBeginImageContextWithOptions(view.frame.size, NO, 0.0);
+    } else {
+        UIGraphicsBeginImageContext(view.frame.size);
+    }
+    
+    //获取图像
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+
 - (void) viewBackgroundShadow
 {
 	// Background shadow

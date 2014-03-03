@@ -74,4 +74,12 @@
 /*like unlike */
 - (void) showAnimatingLayer;
 
+/**
+ *  截图 
+ *
+ *  @param view <#view description#>
+ *
+ *  @return <#return value description#>
+ */
+- (UIImage *)viewToImage:(UIView *)view;
 @end

@@ -46,7 +46,8 @@ typedef enum {
 #define FromMe								@1
 #define KBMapAPIKEY							@"4EFD73542AA0452489B5297EF4420994DCEF8CA4"
 #define kAppkeyForYoumeng					@"52d604b156240b23f2081557"
-#define kAPpkeyForWeiChat					@"wx3c91c9881ed7d8ef"
+#define kAppkeyForWeChat					@"wx8ce7b6fd349b8a69" // 微信
+#define kAppkeyForWeChatKey					@"d8b857e645816b7de5c385d2c380870b"
 #define kAppKey								@"2824743419"
 #define kAppSecret							@"9c152c876ec980df305d54196539773f"
 #define kAppRedirectURI						@"http://1.livep.sinaapp.com/api/weibo_manager_impl/sina_weibo/callback.php"

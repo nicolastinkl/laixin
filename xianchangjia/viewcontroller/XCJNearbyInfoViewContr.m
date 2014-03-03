@@ -16,6 +16,9 @@
 #import "CoreData+MagicalRecord.h"
 #import "XCJAddUserTableViewController.h"
 #import "FCMessage.h"
+#import "UIView+Additon.h"
+#import "XCJAppDelegate.h"
+
 
 #define BUTTONCOLL  0
 #define DISTANCE_BETWEEN_ITEMS  0.0
@@ -121,12 +124,151 @@
     self.scrollview.delegate = self;
     
     self.scrollview.pagingEnabled = YES;
+
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoAddPeople"] style:UIBarButtonItemStyleBordered target:self action:@selector(jsonInviteClick:)];
     
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"参加" style:UIBarButtonItemStyleBordered target:self action:@selector(jsonInviteClick:)];
+    UIBarButtonItem *rightBarButtonItem2 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareClick:)];
     
-    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    self.navigationItem.rightBarButtonItems = @[rightBarButtonItem,rightBarButtonItem2];
     
 }
+
+-(IBAction)shareClick:(id)sender
+{
+    
+    if (postinfo) {
+        
+        //私信ta
+        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"分享到微信" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友", @"朋友圈",@"微信收藏",nil];
+        sheet.tag = 2;
+        [sheet showInView:self.view];
+        
+    }else{
+        //check networking
+        
+        [SVProgressHUD show];
+        
+        NSDictionary * parames = @{@"gid":self.groupinfo.gid,@"pos":@0,@"count":@"1"};
+        
+        [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //    postid = 12;
+            /*
+             Result={
+             “posts”:[*/
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"posts"];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if (idx == 0) {
+                        
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        postinfo = post;
+                        self.label_likeCount.text = [NSString stringWithFormat:@"%d",post.like];
+                        
+                        if(post.ilike)
+                        {
+                            [self.button_like setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+                        }else{
+                            [self.button_like setImage:[UIImage imageNamed:@"pictureHeartLike_0"] forState:UIControlStateNormal];
+                        }
+                        
+                        self.label_comment.text = [NSString stringWithFormat:@"评论(%d)",post.replycount];
+                        self.label_info.text = post.content;
+                        [self.tableview reloadData];
+                        CGFloat height =  [self heightForCellWithPost: post.content];
+                        [self.label_info setHeight:height];
+                        
+                        if (post.postid) {
+                            // get photo list
+                            UIView *view =  [self.tableView.tableHeaderView subviewWithTag:1];
+                            [view showIndicatorViewLargeBlue];
+                            
+                            
+                            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":post.postid} success:^(MLRequest *request, id responseObject) {
+                                if (responseObject) {
+                                    NSDictionary  * result = responseObject[@"result"];
+                                    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollview.frame.size.height);
+                                    NSArray * array = result[@"exdata"];
+                                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                                    __block NSUInteger page = 0;
+                                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                                        [arrayURLS addObject:stringurl];
+                                        
+                                        UIImageView * imageview = [[UIImageView alloc] init];
+                                        [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:320]] placeholderImage:[UIImage imageNamed:@"photo_loading"] displayProgress:YES];
+                                        [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, ITEM_WIDTH, ITEM_WIDTH)];
+                                        imageview.userInteractionEnabled = YES;
+                                        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+                                        //                                        [recognizer setNumberOfTapsRequired:1];
+                                        [recognizer setNumberOfTouchesRequired:1];
+                                        [imageview addGestureRecognizer:recognizer];
+                                        imageview.tag = idx;
+                                        [self.scrollview addSubview:imageview];
+                                        
+                                    }];
+                                    photoArray = arrayURLS;
+                                    self.pagecontrl.numberOfPages = photoArray.count;
+                                    self.pagecontrl.currentPageIndicatorTintColor = ios7BlueColor;
+                                    
+                                    self.scrollview.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([photoArray count] ), pageSize.height);
+                                    
+                                    //私信ta
+                                    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"分享到微信" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友", @"朋友圈",@"微信收藏",nil];
+                                    sheet.tag = 2;
+                                    [sheet showInView:self.view];
+                                }
+                                [view hideIndicatorViewBlueOrGary];
+                            } failure:^(MLRequest *request, NSError *error) {
+                                [view hideIndicatorViewBlueOrGary];
+                                [self showErrorText:@"图片加载错误"];
+                            }];
+                        }
+                    }
+                }];
+            }else{
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+        }];
+        
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+     if (actionSheet.tag == 2) {
+         //1  朋友圈
+         //0   好友
+         
+         XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+         UIImage * image = [self.tableView viewToImage:self.tableView];
+         NSData * data = UIImageJPEGRepresentation(image, .5);
+         switch (buttonIndex) {
+             case 0:
+             {
+                 [delegate sendImageContent:0 withImageData:data];
+             }
+                 break;
+             case 1:
+             {
+                 [delegate sendImageContent:1 withImageData:data];
+             }
+                 break;
+             case 2:
+             {
+                 [delegate sendImageContent:2 withImageData:data];
+             }
+                 break;
+                 
+             default:
+                 break;
+         }
+
+     }
+}
+
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -138,7 +280,7 @@
                 return;
             }
             
-            [SVProgressHUD showSuccessWithStatus:@"正在处理..."];
+            [SVProgressHUD showWithStatus:@"正在处理..."];
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
                 FCUserDescription * user = response;
                 if (user) {
@@ -219,7 +361,9 @@
             
             
         }
-    }
+    }else if(actionSheet.tag == 2)
+    {
+           }
 }
 
 -(IBAction)jsonInviteClick:(id)sender
