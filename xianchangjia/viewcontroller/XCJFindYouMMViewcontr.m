@@ -20,8 +20,9 @@
 #import "FCUserDescription.h"
 #import "XCJFindMMFirtStupViewcontr.h"
 #import "CRFAQTableViewController.h"
+#import "HZAreaPickerView.h"
 
-@interface XCJFindYouMMViewcontr ()<UIActionSheetDelegate,iCarouselDataSource, iCarouselDelegate>
+@interface XCJFindYouMMViewcontr ()<UIActionSheetDelegate,iCarouselDataSource, iCarouselDelegate,HZAreaPickerDelegate>
 {
     UIButton * buttonChnagePhoto;
     UIButton * buttonChnageMenu ;
@@ -30,6 +31,9 @@
     
     NSMutableArray * datasource;
 }
+
+@property (strong, nonatomic) HZAreaPickerView *locatePicker;
+@property (strong, nonatomic) NSString *areaValue, *cityValue,*CurrentUserid;
 @property (nonatomic, retain) IBOutlet iCarousel *carousel;
 @end
 
@@ -86,10 +90,57 @@ enum actionTag {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition  object:nil];
     
-    [self.view showIndicatorViewLargeBlue];
+   
     
-    [self findWithCity:@"四川 成都"];
     
+    NSString * location =  [USER_DEFAULT stringForKey:@"FINDMMLOCATION"];
+    if (!location) {
+        location = @"四川 成都";
+        [USER_DEFAULT setValue:@"四川 成都" forKey:@"FINDMMLOCATION"];
+    }
+    
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:location style:UIBarButtonItemStyleDone target:self action:@selector(changeLocationClick:)];
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    [self findWithCity:location];
+    
+}
+
+-(IBAction)changeLocationClick:(id)sender
+{
+    //居住地
+    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCity delegate:self];
+    [self.locatePicker showInView:self.view];
+}
+
+
+-(void)cancelLocatePicker
+{
+    [self.locatePicker cancelPicker];
+    self.locatePicker.delegate = nil;
+    self.locatePicker = nil;
+}
+
+#pragma mark - HZAreaPicker delegate
+-(void)pickerDidChaneStatus:(HZAreaPickerView *)picker
+{
+    self.cityValue = [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
+
+}
+
+- (void) cancel
+{
+    [self cancelLocatePicker];
+}
+
+- (void) complate
+{
+    [self cancelLocatePicker];
+    self.navigationItem.rightBarButtonItem.title = self.cityValue;
+    [USER_DEFAULT setValue:self.cityValue forKey:@"FINDMMLOCATION"];
+    [USER_DEFAULT synchronize];
+    [datasource removeAllObjects];
+    [self.carousel reloadData];
+    [self findWithCity:self.cityValue];
 }
 
 -(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
@@ -97,12 +148,18 @@ enum actionTag {
     [self hiddeErrorInfoWithRetry];
     // start retry
     
-    [self.view showIndicatorViewLargeBlue];
-    [self findWithCity:@"四川 成都"];
+    NSString * location =  [USER_DEFAULT stringForKey:@"FINDMMLOCATION"];
+    if (!location) {
+        location = @"四川 成都";
+        [USER_DEFAULT setValue:@"四川 成都" forKey:@"FINDMMLOCATION"];
+    }
+    [self findWithCity:location];
 }
 
 -(void) findWithCity:(NSString*) address
 {
+    [self hiddeErrorText]; 
+    [self.view showIndicatorViewLargeBlue];
     double delayInSeconds = 0.1f;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -117,9 +174,15 @@ enum actionTag {
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     XCJFindMM_list * findmm = [XCJFindMM_list turnObject:obj];
                     if (findmm.media_count > 0) {
+                    
                         [datasource addObject:findmm];
                     }
                 }];
+                if (array.count <= 0) {
+                    [self showErrorText:@"没有数据"];
+                }else{
+                    [self hiddeErrorText];
+                }
                 [self.view hideIndicatorViewBlueOrGary];
                 [self.carousel reloadData];
             }
@@ -202,14 +265,9 @@ enum actionTag {
             if (buttonIndex == 0) {
                 //常见问题
                 // custom initializer
-                CRFAQTableViewController *faqViewController = [[CRFAQTableViewController alloc] initWithQuestions:@[@[@"Does it cost money to use Facebook? Is it true that Facebook is going to charge to use the site?", @"Facebook is a free site and will never require that you pay to continue using the site. You do, however, have the option of making purchases related to games, apps and gifts. In addition, if you choose to use Facebook from your mobile phone, keep in mind that you will be responsible for any fees associated with internet usage and/or text messaging as determined by your mobile carrier."],@[@"How old do you have to be to sign up for Facebook?", @"In order to be eligible to sign up for Facebook, you must be at least 13 years old."],@[@"Can I create a joint Facebook account or share a Facebook account with someone else?", @"Facebook accounts are for individual use. This means that we don't allow joint accounts. Additionally, you can only sign up for one Facebook account per email address.\n\nSince each account belongs to one person, we require everyone to use their real name on their account. This way, you always know who you're connecting with. Learn more about our name policies.\n\nAfter you create an account, you can use Friendship Pages to see your interactions with any friend, all in one place."]]];
-                
-                // adding questions after initialization
-                [faqViewController addQuestion:@"Why am I getting a Facebook invitation email from a friend?" withAnswer:@"You received this email because a Facebook member is inviting you to join Facebook. Facebook allows people to send invitations to their contacts by entering an email address or by uploading their contacts.\n\nIf you're already registered for Facebook, your friend may have used an email address of yours that isn't currently linked to your Facebook account. If you'd like, you can add this email address to your existing Facebook account to ensure that you won't get Facebook invitations sent to that address in the future.\n\nIf you don't have a Facebook account and would like to create one, you can use this email to start the registration process.\n\nIf you don't want to receive invites from your friends, you can use the unsubscribe link in the footer of the email."];
-                [faqViewController addQuestion:@"How do I sign up for Facebook?" withAnswer:@"If you don't have a Facebook account, you can sign up for one in a few easy steps. To sign up for a new account, enter your name, birthday, gender and email address into the form at www.facebook.com. Then pick a password.\n\nAfter you complete the sign up form, we'll send an email to the address you provided. Just click the confirmation link to complete the sign up process."];
-                
+                CRFAQTableViewController *faqViewController = [[CRFAQTableViewController alloc] initWithQuestions:@[@[@"Q : 来信也能抢你妹?", @"A : 是的,我们正在努力打造一款有趣好玩的抢你妹插件应用,你可以带上好奇的心来参加抢你妹,目前beta版本,还有很多不完善,欢迎小伙伴们吐槽哦~"],@[@"Q : 在哪里可以体验到抢你妹?", @"A : 在来信->想要->'抢你妹'点击成功之后即可体验抢你妹功能."],@[@"Q : 怎么样分享抢你妹给好友?", @"A : 直接按住电源键+home按键即可截图分享给好友."],@[@"Q : 怎么样才能抢到妹?", @"A : 只要是来信资深用户,都有50%几率抢到妹."],@[@"Q : 抢到妹妹之后怎么办?", @"A : 抢到妹之后来信团队会在一个工作日之类给您电话回访."]]];
+                [faqViewController addQuestion:@"Q : 怎么样才能得到妹?" withAnswer:@"A : 来信团队会通知您并告知得到方式."];
                 faqViewController.title = @"常见问题";
-                
                 [self.navigationController pushViewController:faqViewController animated:YES];
             }else if (buttonIndex == 1) {
                 //我要吐槽

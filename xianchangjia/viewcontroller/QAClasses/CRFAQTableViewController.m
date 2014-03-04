@@ -6,6 +6,7 @@
 //
 
 #import "CRFAQTableViewController.h"
+#import "tools.h"
 
 typedef enum kCRQuestion {
 	kCRQuestionQuestion,
@@ -50,7 +51,7 @@ static NSString *kCellIdentifierForAnswer			= @"AnswerCell";
 		_highlightedQuestionDuration = 0.75;
 		_indexTitle = @"";
 		_questionsAreUppercase = YES;
-		_fontForAnswers = [UIFont fontWithName:@"HelveticaNeue-Light" size:18.0];
+		_fontForAnswers = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
 		_fontForQuestions = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
 	}
 	
@@ -191,7 +192,8 @@ static NSString *kCellIdentifierForAnswer			= @"AnswerCell";
 	cell.textLabel.backgroundColor = [UIColor clearColor];
 	cell.textLabel.numberOfLines = 0;
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	
+//	cell.textLabel.textColor = [tools colorWithIndex:0];
+    
 	return cell;
 }
 

@@ -24,7 +24,7 @@
 
 @interface XCJRecommendLSFriendViewcontr ()<HZAreaPickerDelegate,CTAssetsPickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
-        AFHTTPRequestOperation *  operation;
+    AFHTTPRequestOperation *  operation;
     UIImageView * removeImageview;
     NSString * TokenAPP;
     UIImage *ImageFile;
