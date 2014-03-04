@@ -23,8 +23,7 @@ static const CGFloat labelPadding = 10;
 
 - (id)initWithPhoto:(id<IDMPhoto>)photo {
     CGRect screenBound = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenBound.size.width;
-    
+    CGFloat screenWidth = screenBound.size.width;    
     if ([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeLeft ||
         [[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
         screenWidth = screenBound.size.height;

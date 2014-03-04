@@ -165,9 +165,36 @@
      int index = 1 + random()%5;
     labelgroupBoard.textColor = [tools colorWithIndex:index];
     labelsignBg.backgroundColor = [tools colorWithIndex:index];
-    labelgorupTime.text = @"今               天";
-    labelgorupTime.textColor =  [tools colorWithIndex:0];
+//    list.time
+    NSString * str =[self timeLabelTextOfTime:list.time];
+    labelgorupTime.text = str;
+    if ([str isEqualToString:@"过               期"]) {
+        labelgorupTime.textColor =  [UIColor redColor];
+    }else{
+        labelgorupTime.textColor =  [tools colorWithIndex:0];
+    }
+    
     return cell;
+}
+
+- (NSString*) timeLabelTextOfTime:(NSTimeInterval)time
+{
+    if (time<=0) {
+        return @"";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSString *text = [dateFormatter stringFromDate:date];
+    //最近时间处理
+    NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
+    SLog(@"timeAgo  %d",timeAgo);
+    if (timeAgo > 0 && timeAgo < 86400) {
+        return @"今               天";
+    }else if (timeAgo >= 86400) {
+        return @"过               期";
+    }
+    return text;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

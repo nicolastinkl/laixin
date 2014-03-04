@@ -54,10 +54,8 @@ static NSInteger const kAttributedLabelTag = 100;
 @property (nonatomic, strong) UIButton *likeButton;
 //举报按钮
 @property (nonatomic, strong) UIButton *ReportButton;
-
 //多图提示
 @property (nonatomic, strong) UIView * imageListScroll;
-
 //赞和评论的背景View，主要就是为了带箭头
 @property (nonatomic, strong) UIImageView *likeCommentBackView;
 //赞的背景View

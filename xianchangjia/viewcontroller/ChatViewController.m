@@ -193,7 +193,7 @@
         }
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStyleDone  target:self action:@selector(SeeGroupInfoClick:)];
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Ta的资料" style:UIBarButtonItemStyleDone target:self action:@selector(SeeUserInfoClick:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoTimeline"] style:UIBarButtonItemStyleDone target:self action:@selector(SeeUserInfoClick:)];
         if (!self.userinfo) {
             // from db or networking
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {

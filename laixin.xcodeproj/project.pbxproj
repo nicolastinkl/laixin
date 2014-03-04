@@ -255,6 +255,8 @@
 		86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C642311887A3D200E0CDDB /* NSDate+TimeInterval.m */; };
 		86C72DDE184330F9001B6CA0 /* XCModelAllEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */; };
 		86C72DE118433109001B6CA0 /* MessageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C72DE018433109001B6CA0 /* MessageManager.m */; };
+		86CA79ED18C5C7BA00348185 /* CRFAQTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CA79EB18C5C7BA00348185 /* CRFAQTableViewController.m */; };
+		86CA79EE18C5C7BA00348185 /* CRFAQTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CA79EC18C5C7BA00348185 /* CRFAQTableViewController.xib */; };
 		86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CA8EF618A25E3000AFB15D /* XCJApplication.m */; };
 		86D181CE1834822C0005901D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CD1834822C0005901D /* Foundation.framework */; };
 		86D181D01834822C0005901D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D181CF1834822C0005901D /* CoreGraphics.framework */; };
@@ -917,6 +919,9 @@
 		86C72DDD184330F9001B6CA0 /* XCModelAllEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCModelAllEntity.m; sourceTree = "<group>"; };
 		86C72DDF18433109001B6CA0 /* MessageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageManager.h; path = Application/MessageManager.h; sourceTree = "<group>"; };
 		86C72DE018433109001B6CA0 /* MessageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageManager.m; path = Application/MessageManager.m; sourceTree = "<group>"; };
+		86CA79EA18C5C7BA00348185 /* CRFAQTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFAQTableViewController.h; sourceTree = "<group>"; };
+		86CA79EB18C5C7BA00348185 /* CRFAQTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFAQTableViewController.m; sourceTree = "<group>"; };
+		86CA79EC18C5C7BA00348185 /* CRFAQTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CRFAQTableViewController.xib; sourceTree = "<group>"; };
 		86CA8EF518A25E3000AFB15D /* XCJApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCJApplication.h; sourceTree = "<group>"; };
 		86CA8EF618A25E3000AFB15D /* XCJApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCJApplication.m; sourceTree = "<group>"; };
 		86D181CA1834822C0005901D /* laixin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = laixin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1257,6 +1262,7 @@
 		86045FBD18B1F8B00002581E /* FindYouMM */ = {
 			isa = PBXGroup;
 			children = (
+				86CA79E918C5C7BA00348185 /* QAClasses */,
 				868A0EF618B3622200C2875F /* view */,
 				86045FBE18B1F8C80002581E /* XCJFindYouMMViewcontr.h */,
 				86045FBF18B1F8C80002581E /* XCJFindYouMMViewcontr.m */,
@@ -2266,6 +2272,17 @@
 			path = support/CTAssetsPickerController;
 			sourceTree = "<group>";
 		};
+		86CA79E918C5C7BA00348185 /* QAClasses */ = {
+			isa = PBXGroup;
+			children = (
+				86CA79EA18C5C7BA00348185 /* CRFAQTableViewController.h */,
+				86CA79EB18C5C7BA00348185 /* CRFAQTableViewController.m */,
+				86CA79EC18C5C7BA00348185 /* CRFAQTableViewController.xib */,
+			);
+			name = QAClasses;
+			path = viewcontroller/QAClasses;
+			sourceTree = "<group>";
+		};
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
@@ -2341,7 +2358,7 @@
 				86D1825C1834AED30005901D /* support */,
 				86D182121834AE130005901D /* TestDataJson */,
 				86D1820A1834AC1B0005901D /* ViewController */,
-				86D1820518349B0A0005901D /* Support */,
+				86D1820518349B0A0005901D /* SupportView */,
 				86D181DC1834822C0005901D /* XCJAppDelegate.h */,
 				86D181DD1834822C0005901D /* XCJAppDelegate.m */,
 				86CA8EF518A25E3000AFB15D /* XCJApplication.h */,
@@ -2384,7 +2401,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		86D1820518349B0A0005901D /* Support */ = {
+		86D1820518349B0A0005901D /* SupportView */ = {
 			isa = PBXGroup;
 			children = (
 				862EC4CE188E2A80006F4D43 /* AnimationLabel */,
@@ -2396,7 +2413,7 @@
 				8646F8C1187AA00D004A8696 /* FDStatusBarNotifierView */,
 				86D1820618349B150005901D /* CRGradientNavigationBar */,
 			);
-			name = Support;
+			name = SupportView;
 			sourceTree = "<group>";
 		};
 		86D1820618349B150005901D /* CRGradientNavigationBar */ = {
@@ -2548,7 +2565,6 @@
 				868B5D471893B068004D1743 /* PinYin4Objc */,
 				8646FDD118863CD2007CE6F4 /* UMAnalytics_Sdk_2.2.1.OpenUDID */,
 				8668E4511875403D00D20C9E /* HomeUtils */,
-				86EB96BF18726A25002834EE /* QiniuPhotoTools */,
 				866F0617185724EE007A57CF /* SinaWeibo */,
 				869D15111839BDBB00B14A02 /* JSONKit.h */,
 				869D15121839BDBB00B14A02 /* JSONKit.m */,
@@ -3050,13 +3066,6 @@
 			name = DBCommon;
 			sourceTree = "<group>";
 		};
-		86EB96BF18726A25002834EE /* QiniuPhotoTools */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = QiniuPhotoTools;
-			sourceTree = "<group>";
-		};
 		86F9B9AF18728ADA00ED768B /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -3223,6 +3232,7 @@
 				8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */,
 				867014A9185185F100518B6D /* JsonImageurls.json in Resources */,
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
+				86CA79EE18C5C7BA00348185 /* CRFAQTableViewController.xib in Resources */,
 				86893DAF187FA7CA00DC0CB8 /* XCJGroupMenuView.xib in Resources */,
 				86C642331887A3D200E0CDDB /* Images.xcassets in Resources */,
 				866C156418ADE75F0054F686 /* IDMPhotoBrowser.bundle in Resources */,
@@ -3311,6 +3321,7 @@
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
 				863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */,
 				8622C87B187D192100776A38 /* ListItem.m in Sources */,
+				86CA79ED18C5C7BA00348185 /* CRFAQTableViewController.m in Sources */,
 				86045FCA18B2F7EF0002581E /* AOTag.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,

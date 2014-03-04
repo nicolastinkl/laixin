@@ -113,7 +113,7 @@
         {
             image_bgSign.image = [UIImage imageNamed:@"file_icon_history"];
             
-           label_name.text = @"朋友圈";
+           label_name.text = @"群组动态";
             NSPredicate * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
             
             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];

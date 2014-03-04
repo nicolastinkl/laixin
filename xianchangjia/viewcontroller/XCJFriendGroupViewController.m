@@ -81,7 +81,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"朋友圈";
+    self.title = @"群组动态";
     tablehead = [[NSBundle mainBundle] loadNibNamed:@"XCJFriendGroupNewmsg" owner:self options:nil][0];
     
     if ([self.conversation.badgeNumber intValue] > 0) {

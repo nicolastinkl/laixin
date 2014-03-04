@@ -195,10 +195,12 @@
     
     XCJGroupPost_list* activity = _activities[indexPath.row];
     ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
+
     
     if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
+       
         NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //    postid = 12;
@@ -219,6 +221,7 @@
                 [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
             }
             cell.HasLoad = YES;
+
         } failure:^(MLRequest *request, NSError *error) {
             cell.HasLoad = NO;
         }];
@@ -228,6 +231,7 @@
         if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
             //check from networking
             cell.isloadingphotos = YES;
+//             [cell.imageListScroll showIndicatorViewBlue];
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
                     NSDictionary  * result = responseObject[@"result"];
@@ -243,8 +247,10 @@
                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 }
                 cell.isloadingphotos = NO;
+//                [cell.imageListScroll hideIndicatorViewBlueOrGary];
             } failure:^(MLRequest *request, NSError *error) {
                 cell.isloadingphotos = NO;
+//                [cell.imageListScroll hideIndicatorViewBlueOrGary];
             }];
         }
         
