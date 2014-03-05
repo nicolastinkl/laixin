@@ -40,11 +40,16 @@
 #import "XCJAddFriendNaviController.h"
 #import "XCJScanViewController.h"
 
-@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate>
+@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate,UISearchDisplayDelegate,UISearchBarDelegate>
 {
- int tryCatchCount;
-        XCJHomeMenuView * menuView;
+    int tryCatchCount;
+    XCJHomeMenuView * menuView;
+    NSArray *allItems;
+    
 }
+
+@property (nonatomic, copy) NSArray *allReslutItems;
+
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated;
@@ -53,7 +58,7 @@
 @end
 
 @implementation XCJMsgListController
-
+@synthesize allReslutItems;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -99,6 +104,8 @@
   
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+ 
+    self.allReslutItems = @[];
     
     // observe the app delegate telling us when it's finished asynchronously setting up the persistent store
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadFetchedResults:) name:@"RefetchAllDatabaseDataConver" object:[[UIApplication sharedApplication] delegate]];
@@ -120,26 +127,62 @@
     }else{
         [self hiddeErrorText];
     }
-    
-    
+    // The search bar is hidden when the view becomes visible the first time
+    self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(self.searchDisplayController.searchBar.bounds));
     // title消息 切换
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidFailWithError:) name:@"webSocketdidFailWithError" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketDidOpen:) name:@"webSocketDidOpen" object:nil];
-    
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
     
     
     if (![XCJAppDelegate hasLogin]) {
         [self OpenLoginview:nil];
-    }else{
-//        [self.tableView showIndicatorViewLargeBlue];
-        
+    }else{        
         [self initHomeData];
     }
 }
 
+- (void)scrollTableViewToSearchBarAnimated:(BOOL)animated
+{
+    [self.tableView scrollRectToVisible:self.searchDisplayController.searchBar.frame animated:animated];
+}
+
+#pragma mark – UISearchDisplayController delegate methods
+- (void)filterContentForSearchText:(NSString*)searchText {
+//    NSMutableArray * array = [[NSMutableArray alloc] init];
+    self.allReslutItems = [Conversation MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"lastMessage  like[cd] '%@'",[NSString localizedStringWithFormat:@"*%@*",searchText]]];
+//     self.allReslutItems = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText]];
+    //[self.tableView reloadData];
+}
+
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+     [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                  ];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller  shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    
+    [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                 ];
+    
+    return YES;
+    
+}
+
+- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{
+    
+}
+- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+
+}
+- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+
+}
 
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
@@ -787,7 +830,6 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
-    
     UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
     UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
     ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
@@ -913,6 +955,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    
+    if ([self.tableView isEqual:self.searchDisplayController.searchResultsTableView]){
+        return 1;
+    }
+    
     NSInteger count = [[self.fetchedResultsController sections] count];
     
 	if (count == 0) {
@@ -924,6 +971,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([self.tableView isEqual:self.searchDisplayController.searchResultsTableView]){
+        return self.allReslutItems.count;
+    }
+    
     NSInteger numberOfRows = 0;
     // Return the number of rows in the section.
     if ([[self.fetchedResultsController sections] count] > 0) {
@@ -936,6 +987,21 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableView * tableviewSearch = self.searchDisplayController.searchResultsTableView;
+    if ([tableView isEqual:tableviewSearch]){
+         NSString * const kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier = @"kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier];
+        }
+        if (self.allReslutItems && self.allReslutItems.count > 0) {
+            Conversation * conver =  self.allReslutItems[indexPath.row];
+            
+            cell.textLabel.text  = conver.facebookName;
+            cell.detailTextLabel.text = conver.lastMessage;
+        }
+        return  cell;
+    }
     static NSString *CellIdentifier = @"ChatUserCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];

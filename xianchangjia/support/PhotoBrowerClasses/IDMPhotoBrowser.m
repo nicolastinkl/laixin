@@ -526,14 +526,14 @@
     
     if(!_doneButtonImage)
     {
-        [_doneButton setTitleColor:[UIColor colorWithWhite:0.9 alpha:0.9] forState:UIControlStateNormal|UIControlStateHighlighted];
+//        [_doneButton setTitleColor:[UIColor colorWithWhite:0.9 alpha:0.9] forState:UIControlStateNormal|UIControlStateHighlighted];
         [_doneButton setTitle:NSLocalizedString(@"关闭", nil) forState:UIControlStateNormal];
         [_doneButton.titleLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
 ////        [_doneButton setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:0.5]];
 //        _doneButton.layer.cornerRadius = 3.0f;
 //        _doneButton.layer.borderColor = ios7BlueColor.CGColor;//[UIColor colorWithWhite:0.9 alpha:0.9].CGColor;
 //        _doneButton.layer.borderWidth = 1.0f;
-        [_doneButton sendMessageStyle];
+        [_doneButton infoStyle];
     }
     else
     {

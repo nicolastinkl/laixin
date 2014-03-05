@@ -36,6 +36,7 @@
 {
     NSMutableArray * _dataSource;
 }
+@property (nonatomic, copy) NSArray *allReslutItems;
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 - (void)showRecipe:(FCFriends *) friend animated:(BOOL)animated;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
@@ -43,7 +44,7 @@
 @end
 
 @implementation XCJFriendViewController
-
+@synthesize allReslutItems;
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -465,12 +466,27 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
+        return [[NSArray arrayWithObject:UITableViewIndexSearch] arrayByAddingObjectsFromArray:[[UILocalizedIndexedCollation currentCollation] sectionIndexTitles]];
       return [self.fetchedResultsController sectionIndexTitles];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
+    if ([title isEqualToString:UITableViewIndexSearch]) {
+        [self scrollTableViewToSearchBarAnimated:NO];
+        return NSNotFound;
+    } else {
+        return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index] - 1; // -1 because we add the search symbol
+    }
+    //return [[UILocalizedIndexedCollation currentCollation] sectionForSectionIndexTitleAtIndex:index];
+//    return [self.fetchedResultsController sectionForSectionIndexTitle:title atIndex:index];
+}
+
+
+- (void)scrollTableViewToSearchBarAnimated:(BOOL)animated
+{
+    // The search bar is always visible, so just scroll to the first section
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:animated];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -479,6 +495,7 @@
     // Return the number of rows in the section.
     if ([[self.fetchedResultsController sections] count] > 0) {
         id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:section];
+        
         FCFriends *userdesp = [[sectionInfo objects] firstObject];
         
         return  [self.fetchedResultsController sectionIndexTitleForSectionName:userdesp.friendRelation.nick_pinyin];
@@ -500,6 +517,20 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableView * tableviewSearch = self.searchDisplayController.searchResultsTableView;
+    if ([tableView isEqual:tableviewSearch]){
+        NSString * const kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier = @"kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kFKRSearchBarTableViewControllerDefaultTableViewCellIdentifier];
+        }
+        if (self.allReslutItems && self.allReslutItems.count > 0) {
+            FCFriends * conver =  self.allReslutItems[indexPath.row];
+            
+            cell.textLabel.text  = conver.friendRelation.nick;
+        }
+        return  cell;
+    }
     static NSString *CellIdentifier = @"XCJFriendCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
@@ -541,5 +572,38 @@
 	}
 }
 
+#pragma mark – UISearchDisplayController delegate methods
+- (void)filterContentForSearchText:(NSString*)searchText {
+    //    NSMutableArray * array = [[NSMutableArray alloc] init];
+    self.allReslutItems = [FCFriends MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"friendRelation.nick  like[cd] '%@'",[NSString localizedStringWithFormat:@"*%@*",searchText]]];
+    //     self.allReslutItems = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText]];
+    //[self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                  ];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller  shouldReloadTableForSearchScope:(NSInteger)searchOption {
+    
+    [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                 ];
+    
+    return YES;
+    
+}
+
+- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{
+    
+}
+- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    
+}
+- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    
+}
 
 @end

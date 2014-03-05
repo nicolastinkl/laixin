@@ -168,7 +168,7 @@
 //    list.time
     NSString * str =[self timeLabelTextOfTime:list.time];
     labelgorupTime.text = str;
-    if ([str isEqualToString:@"过               期"]) {
+    if ([str isEqualToString:@"失               效"]) {
         labelgorupTime.textColor =  [UIColor redColor];
     }else{
         labelgorupTime.textColor =  [tools colorWithIndex:0];
@@ -192,7 +192,7 @@
     if (timeAgo > 0 && timeAgo < 86400) {
         return @"今               天";
     }else if (timeAgo >= 86400) {
-        return @"过               期";
+        return @"失               效";
     }
     return text;
 }
