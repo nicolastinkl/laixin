@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class roomInfo,LocationInfo;
 @interface XCJRoomInfoViewcontroller : UIViewController
+
+
+@property (nonatomic,strong) roomInfo * rominfo;
+@property (nonatomic,strong) LocationInfo * locatinfo;
 
 @end

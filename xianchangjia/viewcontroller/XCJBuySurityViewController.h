@@ -10,4 +10,6 @@
 
 @interface XCJBuySurityViewController : UIViewController
 
+@property (nonatomic,strong) NSURL * BuyUrl;
+
 @end

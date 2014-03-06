@@ -288,12 +288,12 @@
         labelimage_text.hidden = NO;
         labelimage_text.text = post.content;
         [imageview setImage:nil];
-        CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
-        if (height > 77) {
-            height = 75;
-        }
-        [labelimage_text setHeight:height];
-        [labelimage_text sizeToFit];
+//        CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
+//        if (height > 47) {
+//            height = 35;
+//        }
+        [labelimage_text setHeight:60];
+//        [labelimage_text sizeToFit];
         [labelimage_text setWidth:177];
         label_photoNumber.text = [NSString stringWithFormat:@"共%d张",post.excount];
         
@@ -324,7 +324,7 @@
             
             CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
             if (height > 97) {
-                height = 95;
+                height = 75;
             }
             [label_text setHeight:height];
             [label_text sizeToFit];
@@ -377,7 +377,7 @@
     }
     CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
     if (height > 97) {
-        height = 95;
+        height = 75;
     }
     return height-12;
 }

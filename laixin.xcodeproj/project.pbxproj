@@ -183,6 +183,25 @@
 		868B5D5B1893B068004D1743 /* unicode_to_hanyu_pinyin.txt in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D551893B068004D1743 /* unicode_to_hanyu_pinyin.txt */; };
 		868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D5D1893D065004D1743 /* XCJChatSendInfoView.m */; };
 		868B5D601893D07C004D1743 /* XCJChatSendInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D5F1893D07C004D1743 /* XCJChatSendInfoView.xib */; };
+		8690DE8C18C872C900A14A51 /* room0001.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8418C872C900A14A51 /* room0001.jpg */; };
+		8690DE8D18C872C900A14A51 /* room0002.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8518C872C900A14A51 /* room0002.jpg */; };
+		8690DE8E18C872C900A14A51 /* room0003.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8618C872C900A14A51 /* room0003.jpg */; };
+		8690DE8F18C872C900A14A51 /* room0004.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8718C872C900A14A51 /* room0004.jpg */; };
+		8690DE9018C872C900A14A51 /* room0005.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8818C872C900A14A51 /* room0005.jpg */; };
+		8690DE9118C872C900A14A51 /* room0006.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8918C872C900A14A51 /* room0006.jpg */; };
+		8690DE9218C872C900A14A51 /* room0007.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8A18C872C900A14A51 /* room0007.jpg */; };
+		8690DE9318C872C900A14A51 /* room0008.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DE8B18C872C900A14A51 /* room0008.jpg */; };
+		8690DE9618C875DA00A14A51 /* XCJBuySurityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DE9518C875DA00A14A51 /* XCJBuySurityViewController.m */; };
+		8690DEC418C8891900A14A51 /* default-controls.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8690DEAE18C8891900A14A51 /* default-controls.bundle */; };
+		8690DEC618C8891900A14A51 /* DZWebBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEB118C8891900A14A51 /* DZWebBrowser.m */; };
+		8690DEC718C8891900A14A51 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEB518C8891900A14A51 /* NJKWebViewProgress.m */; };
+		8690DEC818C8891900A14A51 /* NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEB718C8891900A14A51 /* NJKWebViewProgressView.m */; };
+		8690DEC918C8891900A14A51 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEBA18C8891900A14A51 /* Reachability.m */; };
+		8690DECA18C8891900A14A51 /* SDCachedURLResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEBD18C8891900A14A51 /* SDCachedURLResponse.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8690DECB18C8891900A14A51 /* SDURLCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEBF18C8891900A14A51 /* SDURLCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		8690DECD18C8891900A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEC318C8891900A14A51 /* script.js */; };
+		8690DECF18C8895000A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DECE18C8895000A14A51 /* script.js */; };
+		8690DED218C88ABA00A14A51 /* UINavigationSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED118C88ABA00A14A51 /* UINavigationSample.m */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
@@ -369,6 +388,7 @@
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
 		86DEA2F918C8382F0003694C /* XCJFindRoomViewControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */; };
+		86DEA2FC18C852180003694C /* XCJRoomInfoViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DEA2FB18C852180003694C /* XCJRoomInfoViewcontroller.m */; };
 		86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */; };
 		86E392BA18A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */; };
 		86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */; };
@@ -783,6 +803,33 @@
 		868B5D5C1893D065004D1743 /* XCJChatSendInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJChatSendInfoView.h; path = viewcontroller/views/XCJChatSendInfoView.h; sourceTree = "<group>"; };
 		868B5D5D1893D065004D1743 /* XCJChatSendInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJChatSendInfoView.m; path = viewcontroller/views/XCJChatSendInfoView.m; sourceTree = "<group>"; };
 		868B5D5F1893D07C004D1743 /* XCJChatSendInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJChatSendInfoView.xib; path = viewcontroller/views/XCJChatSendInfoView.xib; sourceTree = "<group>"; };
+		8690DE8418C872C900A14A51 /* room0001.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0001.jpg; sourceTree = "<group>"; };
+		8690DE8518C872C900A14A51 /* room0002.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0002.jpg; sourceTree = "<group>"; };
+		8690DE8618C872C900A14A51 /* room0003.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0003.jpg; sourceTree = "<group>"; };
+		8690DE8718C872C900A14A51 /* room0004.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0004.jpg; sourceTree = "<group>"; };
+		8690DE8818C872C900A14A51 /* room0005.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0005.jpg; sourceTree = "<group>"; };
+		8690DE8918C872C900A14A51 /* room0006.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0006.jpg; sourceTree = "<group>"; };
+		8690DE8A18C872C900A14A51 /* room0007.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0007.jpg; sourceTree = "<group>"; };
+		8690DE8B18C872C900A14A51 /* room0008.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = room0008.jpg; sourceTree = "<group>"; };
+		8690DE9418C875DA00A14A51 /* XCJBuySurityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJBuySurityViewController.h; path = viewcontroller/XCJBuySurityViewController.h; sourceTree = "<group>"; };
+		8690DE9518C875DA00A14A51 /* XCJBuySurityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJBuySurityViewController.m; path = viewcontroller/XCJBuySurityViewController.m; sourceTree = "<group>"; };
+		8690DEAE18C8891900A14A51 /* default-controls.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "default-controls.bundle"; sourceTree = "<group>"; };
+		8690DEB018C8891900A14A51 /* DZWebBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZWebBrowser.h; sourceTree = "<group>"; };
+		8690DEB118C8891900A14A51 /* DZWebBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZWebBrowser.m; sourceTree = "<group>"; };
+		8690DEB418C8891900A14A51 /* NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgress.h; sourceTree = "<group>"; };
+		8690DEB518C8891900A14A51 /* NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgress.m; sourceTree = "<group>"; };
+		8690DEB618C8891900A14A51 /* NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgressView.h; sourceTree = "<group>"; };
+		8690DEB718C8891900A14A51 /* NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgressView.m; sourceTree = "<group>"; };
+		8690DEB918C8891900A14A51 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		8690DEBA18C8891900A14A51 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		8690DEBC18C8891900A14A51 /* SDCachedURLResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCachedURLResponse.h; sourceTree = "<group>"; };
+		8690DEBD18C8891900A14A51 /* SDCachedURLResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCachedURLResponse.m; sourceTree = "<group>"; };
+		8690DEBE18C8891900A14A51 /* SDURLCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDURLCache.h; sourceTree = "<group>"; };
+		8690DEBF18C8891900A14A51 /* SDURLCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDURLCache.m; sourceTree = "<group>"; };
+		8690DEC318C8891900A14A51 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
+		8690DECE18C8895000A14A51 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
+		8690DED018C88ABA00A14A51 /* UINavigationSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UINavigationSample.h; path = viewcontroller/UINavigationSample.h; sourceTree = "<group>"; };
+		8690DED118C88ABA00A14A51 /* UINavigationSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UINavigationSample.m; path = viewcontroller/UINavigationSample.m; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
@@ -1053,6 +1100,8 @@
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
 		86DEA2F718C8382F0003694C /* XCJFindRoomViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindRoomViewControl.h; path = viewcontroller/XCJFindRoomViewControl.h; sourceTree = "<group>"; };
 		86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindRoomViewControl.m; path = viewcontroller/XCJFindRoomViewControl.m; sourceTree = "<group>"; };
+		86DEA2FA18C852180003694C /* XCJRoomInfoViewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRoomInfoViewcontroller.h; path = viewcontroller/XCJRoomInfoViewcontroller.h; sourceTree = "<group>"; };
+		86DEA2FB18C852180003694C /* XCJRoomInfoViewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRoomInfoViewcontroller.m; path = viewcontroller/XCJRoomInfoViewcontroller.m; sourceTree = "<group>"; };
 		86E392B418A8B46500FFD8C7 /* XCJFriendGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupViewController.h; path = viewcontroller/XCJFriendGroupViewController.h; sourceTree = "<group>"; };
 		86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFriendGroupViewController.m; path = viewcontroller/XCJFriendGroupViewController.m; sourceTree = "<group>"; };
 		86E392B818A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupNewmsg.h; path = viewcontroller/views/XCJFriendGroupNewmsg.h; sourceTree = "<group>"; };
@@ -1290,6 +1339,21 @@
 				86045FC918B2F7EF0002581E /* AOTag.m */,
 			);
 			name = AOtag;
+			sourceTree = "<group>";
+		};
+		861E7CDF18C8679F0082B3DE /* RoomJPG */ = {
+			isa = PBXGroup;
+			children = (
+				8690DE8418C872C900A14A51 /* room0001.jpg */,
+				8690DE8518C872C900A14A51 /* room0002.jpg */,
+				8690DE8618C872C900A14A51 /* room0003.jpg */,
+				8690DE8718C872C900A14A51 /* room0004.jpg */,
+				8690DE8818C872C900A14A51 /* room0005.jpg */,
+				8690DE8918C872C900A14A51 /* room0006.jpg */,
+				8690DE8A18C872C900A14A51 /* room0007.jpg */,
+				8690DE8B18C872C900A14A51 /* room0008.jpg */,
+			);
+			path = RoomJPG;
 			sourceTree = "<group>";
 		};
 		8622C875187D192100776A38 /* POHorizontalList */ = {
@@ -1968,6 +2032,60 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		8690DEAD18C8891900A14A51 /* WebSource */ = {
+			isa = PBXGroup;
+			children = (
+				8690DEAE18C8891900A14A51 /* default-controls.bundle */,
+				8690DEB018C8891900A14A51 /* DZWebBrowser.h */,
+				8690DEB118C8891900A14A51 /* DZWebBrowser.m */,
+				8690DECE18C8895000A14A51 /* script.js */,
+				8690DEB218C8891900A14A51 /* External */,
+				8690DEC318C8891900A14A51 /* script.js */,
+			);
+			path = WebSource;
+			sourceTree = "<group>";
+		};
+		8690DEB218C8891900A14A51 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				8690DEB318C8891900A14A51 /* NJKWebViewProgress */,
+				8690DEB818C8891900A14A51 /* Reachability */,
+				8690DEBB18C8891900A14A51 /* SDURLCache */,
+			);
+			path = External;
+			sourceTree = "<group>";
+		};
+		8690DEB318C8891900A14A51 /* NJKWebViewProgress */ = {
+			isa = PBXGroup;
+			children = (
+				8690DEB418C8891900A14A51 /* NJKWebViewProgress.h */,
+				8690DEB518C8891900A14A51 /* NJKWebViewProgress.m */,
+				8690DEB618C8891900A14A51 /* NJKWebViewProgressView.h */,
+				8690DEB718C8891900A14A51 /* NJKWebViewProgressView.m */,
+			);
+			path = NJKWebViewProgress;
+			sourceTree = "<group>";
+		};
+		8690DEB818C8891900A14A51 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				8690DEB918C8891900A14A51 /* Reachability.h */,
+				8690DEBA18C8891900A14A51 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
+		8690DEBB18C8891900A14A51 /* SDURLCache */ = {
+			isa = PBXGroup;
+			children = (
+				8690DEBC18C8891900A14A51 /* SDCachedURLResponse.h */,
+				8690DEBD18C8891900A14A51 /* SDCachedURLResponse.m */,
+				8690DEBE18C8891900A14A51 /* SDURLCache.h */,
+				8690DEBF18C8891900A14A51 /* SDURLCache.m */,
+			);
+			path = SDURLCache;
+			sourceTree = "<group>";
+		};
 		869CE4A7186957C30004C1EC /* iPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -2366,6 +2484,7 @@
 				86D181DD1834822C0005901D /* XCJAppDelegate.m */,
 				86CA8EF518A25E3000AFB15D /* XCJApplication.h */,
 				86CA8EF618A25E3000AFB15D /* XCJApplication.m */,
+				861E7CDF18C8679F0082B3DE /* RoomJPG */,
 				86D181DF1834822C0005901D /* Main.storyboard */,
 				86D181E81834822D0005901D /* Images.xcassets */,
 				86D181D41834822C0005901D /* Supporting Files */,
@@ -2558,6 +2677,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				8690DEAD18C8891900A14A51 /* WebSource */,
 				867B053C18C41D3B00A562FA /* WeChatSDK_1.4.2.1 */,
 				868A0EEF18B3608000C2875F /* iCarousel */,
 				86045FC718B2F7E70002581E /* AOtag */,
@@ -2704,6 +2824,12 @@
 			children = (
 				86DEA2F718C8382F0003694C /* XCJFindRoomViewControl.h */,
 				86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */,
+				86DEA2FA18C852180003694C /* XCJRoomInfoViewcontroller.h */,
+				86DEA2FB18C852180003694C /* XCJRoomInfoViewcontroller.m */,
+				8690DE9418C875DA00A14A51 /* XCJBuySurityViewController.h */,
+				8690DE9518C875DA00A14A51 /* XCJBuySurityViewController.m */,
+				8690DED018C88ABA00A14A51 /* UINavigationSample.h */,
+				8690DED118C88ABA00A14A51 /* UINavigationSample.m */,
 			);
 			name = FindRoom;
 			sourceTree = "<group>";
@@ -3222,7 +3348,9 @@
 			files = (
 				868B5D5B1893B068004D1743 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */,
+				8690DE9318C872C900A14A51 /* room0008.jpg in Resources */,
 				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
+				8690DE9018C872C900A14A51 /* room0005.jpg in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86E57CEE18795CC900978AFA /* area.plist in Resources */,
 				8697EDE61880E2B300743FE2 /* like_comment_bg_two@2x.png in Resources */,
@@ -3233,13 +3361,19 @@
 				86E57CEF18795CC900978AFA /* city.plist in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
 				86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */,
+				8690DE9118C872C900A14A51 /* room0006.jpg in Resources */,
 				8668E47D187540DB00D20C9E /* like_comment_bg@2x.png in Resources */,
 				868A0EF818B3624300C2875F /* XCJFindMMView.xib in Resources */,
 				8681BDBB1834B2A300521D36 /* DirectionsJson.geojson in Resources */,
 				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
 				866618A718951B07000228FC /* ChatVoiceRecorderVC.xib in Resources */,
+				8690DE8E18C872C900A14A51 /* room0003.jpg in Resources */,
+				8690DE8D18C872C900A14A51 /* room0002.jpg in Resources */,
 				86EB76441859A66800836947 /* logo80x80.png in Resources */,
+				8690DEC418C8891900A14A51 /* default-controls.bundle in Resources */,
+				8690DE9218C872C900A14A51 /* room0007.jpg in Resources */,
 				8668E47B187540DB00D20C9E /* btn_unlike@2x.png in Resources */,
+				8690DE8C18C872C900A14A51 /* room0001.jpg in Resources */,
 				86EB76451859A66800836947 /* logo120x120.png in Resources */,
 				868B5D3B18924E53004D1743 /* Default-568h@2x.png in Resources */,
 				8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */,
@@ -3255,6 +3389,7 @@
 				86EB76431859A66800836947 /* logo58x58.png in Resources */,
 				8668E47C187540DB00D20C9E /* edit_text_bg@2x.png in Resources */,
 				8668E479187540DB00D20C9E /* btn_like@2x.png in Resources */,
+				8690DE8F18C872C900A14A51 /* room0004.jpg in Resources */,
 				8692E3BF18642DB700F9E1DD /* Default.png in Resources */,
 				868B5D601893D07C004D1743 /* XCJChatSendInfoView.xib in Resources */,
 				8668E47A187540DB00D20C9E /* btn_like_disable@2x.png in Resources */,
@@ -3280,6 +3415,7 @@
 				8681BDC01834B34D00521D36 /* XCJSceneInfo.m in Sources */,
 				86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */,
 				8668E495187545B900D20C9E /* XCJHomeDynamicViewController.m in Sources */,
+				86DEA2FC18C852180003694C /* XCJRoomInfoViewcontroller.m in Sources */,
 				86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */,
 				86268A3118C06466000F0A48 /* XCJNearbyInviteViewContr.m in Sources */,
 				86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */,
@@ -3325,6 +3461,7 @@
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
+				8690DEC818C8891900A14A51 /* NJKWebViewProgressView.m in Sources */,
 				864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */,
 				869CE4D7186BDD430004C1EC /* LXAPIController.m in Sources */,
 				86ADDA361894E73F000A0C22 /* UIImage+WebP.m in Sources */,
@@ -3338,6 +3475,7 @@
 				86045FCA18B2F7EF0002581E /* AOTag.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,
+				8690DED218C88ABA00A14A51 /* UINavigationSample.m in Sources */,
 				86EB76CA185AA6CC00836947 /* UIColor+Expanded.m in Sources */,
 				865632E6185FFDDA00E9903C /* XCJDyScenceViewController.m in Sources */,
 				869CE4CC186AB9270004C1EC /* NSString+FontAwesome.m in Sources */,
@@ -3357,6 +3495,7 @@
 				86045FCD18B2FF9F0002581E /* NSData+crc32.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
+				8690DECB18C8891900A14A51 /* SDURLCache.m in Sources */,
 				86D182961834AED30005901D /* UIView+Indicator.m in Sources */,
 				8688CCCC188E513F002CD2C8 /* FacialView.m in Sources */,
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
@@ -3379,6 +3518,7 @@
 				86EB76C3185AA6CC00836947 /* MLCanPopUpImageView.m in Sources */,
 				86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */,
 				869CE52E186BE38D0004C1EC /* NSPersistentStore+MagicalRecord.m in Sources */,
+				8690DECF18C8895000A14A51 /* script.js in Sources */,
 				86FB20F6186D8215006BDE32 /* FCFriends.m in Sources */,
 				865632E9185FFDDA00E9903C /* XCJMessageCenterViewController.m in Sources */,
 				865632E8185FFDDA00E9903C /* XCJLoginViewController.m in Sources */,
@@ -3488,6 +3628,7 @@
 				868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				869CE533186BE38D0004C1EC /* MagicalRecord+Options.m in Sources */,
+				8690DECA18C8891900A14A51 /* SDCachedURLResponse.m in Sources */,
 				86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */,
 				866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */,
 				865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */,
@@ -3509,6 +3650,7 @@
 				86E57CD818794DF600978AFA /* XCJChangeNickNaviController.m in Sources */,
 				869CE547186BE3A00004C1EC /* DDXMLNode.m in Sources */,
 				86EB76BF185AA6CC00836947 /* Model.m in Sources */,
+				8690DEC618C8891900A14A51 /* DZWebBrowser.m in Sources */,
 				8668E47F187540DB00D20C9E /* InterceptTouchView.m in Sources */,
 				8668E482187540DB00D20C9E /* MLScrollRefreshHeader.m in Sources */,
 				865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */,
@@ -3565,10 +3707,12 @@
 				8683FA98187FE38400CEFA45 /* XCJPostTextNaviController.m in Sources */,
 				86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
+				8690DE9618C875DA00A14A51 /* XCJBuySurityViewController.m in Sources */,
 				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
 				866618A818951B07000228FC /* VoiceRecorderBaseVC.m in Sources */,
 				86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */,
+				8690DECD18C8891900A14A51 /* script.js in Sources */,
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				8666189E18951B07000228FC /* UIView+Animation.m in Sources */,
 				86D182AE1834AED30005901D /* LKDB+Mapping.m in Sources */,
@@ -3577,6 +3721,7 @@
 				86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */,
 				866C155F18ADE75F0054F686 /* DCFrameView.m in Sources */,
 				86D182781834AED30005901D /* BTSAnchorPointLayer.m in Sources */,
+				8690DEC918C8891900A14A51 /* Reachability.m in Sources */,
 				869CE51D186BE38D0004C1EC /* MagicalImportFunctions.m in Sources */,
 				8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */,
 				866995EC1879130400233C47 /* XCJScanViewController.m in Sources */,
@@ -3584,6 +3729,7 @@
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
 				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
+				8690DEC718C8891900A14A51 /* NJKWebViewProgress.m in Sources */,
 				86EB76D0185AA6CC00836947 /* AFHTTPSessionManager.m in Sources */,
 				862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */,
 			);

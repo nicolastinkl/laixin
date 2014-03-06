@@ -121,9 +121,8 @@ NSString * const kNewAttachmentKey = @"kNewAttachmentKey";
 - (void)loadView
 {
     [super loadView];
-    
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     [self.navigationController.toolbar setTintColor:[UIColor blackColor]];
     [self setToolbarItems:self.items animated:NO];
     

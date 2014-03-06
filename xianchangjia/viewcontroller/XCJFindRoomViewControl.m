@@ -8,7 +8,7 @@
 
 #import "XCJFindRoomViewControl.h"
 #import "XCAlbumAdditions.h"
-
+#import "XCJRoomInfoViewcontroller.h"
 
 @interface XCJFindRoomViewControl ()<UIActionSheetDelegate>
 {
@@ -154,6 +154,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    XCJRoomInfoViewcontroller * rominfoView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJRoomInfoViewcontroller"];
+    roomInfo * rom = datasources[indexPath.row];
+    rominfoView.rominfo  = rom;
+    rominfoView.locatinfo = locationinfo;
+    [self.navigationController pushViewController:rominfoView animated:YES];
+    
 }
 
 /*
