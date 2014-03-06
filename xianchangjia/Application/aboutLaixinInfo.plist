@@ -113,6 +113,37 @@
 	<string>[&quot;高&quot;,&quot;富&quot;,&quot;帅&quot;,&quot;白&quot;,&quot;美&quot;,&quot;宅&quot;,&quot;清纯&quot;,&quot;可爱&quot;,&quot;孝顺&quot;,&quot;温顺&quot;,&quot;学妹&quot;,&quot;气质&quot;,&quot;成熟&quot;,&quot;性感&quot;,&quot;知性&quot;,&quot;潮&quot;,&quot;洋气&quot;,&quot;理性&quot;,&quot;感性&quot;,&quot;有爱心&quot;,&quot;有宠物&quot;,&quot;喵星人&quot;,&quot;汪星人&quot;,&quot;顾家型&quot;,&quot;顾家型&quot;,&quot;钢琴手&quot;,&quot;我是歌手&quot;,&quot;吉他手&quot;,&quot;会按摩&quot;,&quot;烹饪达人&quot;,&quot;狂热吃货&quot;,&quot;吃货&quot;,&quot;皮肤好&quot;,&quot;脾气好&quot;,&quot;安静&quot;,&quot;幽默&quot;,&quot;可爱&quot;,&quot;运动达人&quot;,&quot;天爱呆&quot;,&quot;表情帝&quot;,&quot;文艺&quot;,&quot;小清新&quot;,&quot;积极分子&quot;,&quot;工作狂&quot;,&quot;事业狂&quot;,&quot;有才&quot;,&quot;有财&quot;,&quot;富二代&quot;,&quot;小萝莉&quot;,&quot;购物狂&quot;,&quot;电视剧&quot;,&quot;乐观&quot;]</string>
 	<key>grouptypeArray</key>
 	<string>[&quot;群聊&quot;,&quot;聊天&quot;,&quot;娱乐&quot;,&quot;音乐&quot;,&quot;美食&quot;,&quot;笑话&quot;,&quot;情感&quot;,&quot;电影&quot;,&quot;星座&quot;,&quot;运动&quot;,&quot;玩耍&quot;,&quot;唧唧歪歪&quot;,&quot;QQ&quot;,&quot;微信&quot;,&quot;电话&quot;,&quot;爱&quot;,&quot;诉苦&quot;,&quot;聊秘密&quot;,&quot;聊八卦&quot;,&quot;约会&quot;,&quot;秘密&quot;]</string>
+	<key>lebaihuibaolizhongxin</key>
+	<string>
+{&quot;list&quot;:[{&quot;name&quot;:&quot;至尊公爵&quot;,&quot;type&quot;:&quot;vip&quot;,&quot;lowprice&quot;:&quot;3900&quot;,&quot;parensNumber&quot;:&quot;15-18&quot;},
+
+{&quot;name&quot;:&quot;至尊伯爵&quot;,&quot;type&quot;:&quot;豪包&quot;,&quot;lowprice&quot;:&quot;3690&quot;,&quot;parensNumber&quot;:&quot;15-18&quot;},
+
+{&quot;name&quot;:&quot;枫丹白露&quot;,&quot;type&quot;:&quot;豪包&quot;,&quot;lowprice&quot;:&quot;2900&quot;,&quot;parensNumber&quot;:&quot;12-15&quot;},
+{&quot;name&quot;:&quot;白金汉宫&quot;,&quot;type&quot;:&quot;豪包&quot;,&quot;lowprice&quot;:&quot;2900&quot;,&quot;parensNumber&quot;:&quot;12-15&quot;},
+{&quot;name&quot;:&quot;布鲁塞尔&quot;,&quot;type&quot;:&quot;豪包&quot;,&quot;lowprice&quot;:&quot;2900&quot;,&quot;parensNumber&quot;:&quot;12-15&quot;},
+
+{&quot;name&quot;:&quot;爱丁堡&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;2590&quot;,&quot;parensNumber&quot;:&quot;8-12&quot;},
+{&quot;name&quot;:&quot;哥德堡&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;2590&quot;,&quot;parensNumber&quot;:&quot;8-12&quot;},
+{&quot;name&quot;:&quot;温莎堡&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;2590&quot;,&quot;parensNumber&quot;:&quot;18-12&quot;},
+
+{&quot;name&quot;:&quot;景福宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;无忧宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;卢浮宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;凯旋门&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;凡尔赛宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;美泉宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;紫金宫&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+{&quot;name&quot;:&quot;索菲亚&quot;,&quot;type&quot;:&quot;大包&quot;,&quot;lowprice&quot;:&quot;1890&quot;,&quot;parensNumber&quot;:&quot;7-8&quot;},
+
+{&quot;name&quot;:&quot;爱丽舍&quot;,&quot;type&quot;:&quot;中包&quot;,&quot;lowprice&quot;:&quot;1290&quot;,&quot;parensNumber&quot;:&quot;4-6&quot;},
+{&quot;name&quot;:&quot;布拉格&quot;,&quot;type&quot;:&quot;中包&quot;,&quot;lowprice&quot;:&quot;1290&quot;,&quot;parensNumber&quot;:&quot;4-6&quot;},
+{&quot;name&quot;:&quot;威尼斯&quot;,&quot;type&quot;:&quot;中包&quot;,&quot;lowprice&quot;:&quot;1290&quot;,&quot;parensNumber&quot;:&quot;4-6&quot;},
+{&quot;name&quot;:&quot;维也纳&quot;,&quot;type&quot;:&quot;中包&quot;,&quot;lowprice&quot;:&quot;1290&quot;,&quot;parensNumber&quot;:&quot;4-6&quot;},
+{&quot;name&quot;:&quot;奥尔堡&quot;,&quot;type&quot;:&quot;中包&quot;,&quot;lowprice&quot;:&quot;1290&quot;,&quot;parensNumber&quot;:&quot;4-6&quot;},
+
+{&quot;name&quot;:&quot;波尔多&quot;,&quot;type&quot;:&quot;小包&quot;,&quot;lowprice&quot;:&quot;990&quot;,&quot;parensNumber&quot;:&quot;1-3&quot;}],
+&quot;ktvName&quot;:&quot;乐佰汇&quot;,&quot;location&quot;:&quot;保利店&quot;,&quot;lng&quot;:&quot;1231231&quot;,&quot;log&quot;:&quot;123213131&quot;,&quot;addressName&quot;:&quot;成都市武侯区锦绣路保利中心C座&quot;,&quot;phone&quot;:[&quot;028-66553333&quot;,&quot;028-65886666&quot;]}</string>
 	<key>private</key>
 	<string>莱福思来信非常重视用户的隐私权，以下是我们对您信息收集、使用和保护的政策，请您认真阅读，对于文中加粗字体显示的内容，莱福思来信督促您应重点阅读。随着服务范围的扩大和调整，我们可能随时更新我们的隐私政策，恕不另行通知，更新后的隐私政策一旦在网页上公布即有效取代原有隐私政策。
  

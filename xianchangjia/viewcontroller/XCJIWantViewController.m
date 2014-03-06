@@ -18,6 +18,7 @@
 #import "XCJFriendGroupViewController.h"
 #import "XCJFindYouMMViewcontr.h"
 #import "XCJNearbyInviteViewContr.h"
+#import "XCJFindRoomViewControl.h"
 
 @interface XCJIWantViewController ()
 
@@ -146,7 +147,7 @@
         case 1:
         {
             image_bgSign.image = [UIImage imageNamed:@"file_icon_cloud"];
-            label_name.text = @"抢你妹";
+            label_name.text = @"来抢";
             badage.hidden = YES;
             image_New.hidden = YES;
             [image_New setFrame:CGRectMake(273, 17, 10, 10)];
@@ -184,8 +185,8 @@
            break;
         case 1:
         {
-            XCJFindYouMMViewcontr*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindYouMMViewcontr"];
-            viewcontr.title = @"抢你妹";
+            XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
+            viewcontr.title = @"来抢";
             [self.navigationController pushViewController:viewcontr animated:YES];
             //[UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
         }

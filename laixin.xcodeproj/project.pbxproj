@@ -368,6 +368,7 @@
 		86D9A886186D294600147631 /* LXUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A885186D294600147631 /* LXUser.m */; };
 		86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89B186D30C700147631 /* FCConversationModel.m */; };
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
+		86DEA2F918C8382F0003694C /* XCJFindRoomViewControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */; };
 		86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */; };
 		86E392BA18A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */; };
 		86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */; };
@@ -1050,6 +1051,8 @@
 		86D9A89A186D30C700147631 /* FCConversationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCConversationModel.h; path = DAOModel/coredata/FCConversationModel.h; sourceTree = "<group>"; };
 		86D9A89B186D30C700147631 /* FCConversationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCConversationModel.m; path = DAOModel/coredata/FCConversationModel.m; sourceTree = "<group>"; };
 		86D9A89D186D30C700147631 /* FCModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FCModel.xcdatamodel; sourceTree = "<group>"; };
+		86DEA2F718C8382F0003694C /* XCJFindRoomViewControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindRoomViewControl.h; path = viewcontroller/XCJFindRoomViewControl.h; sourceTree = "<group>"; };
+		86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindRoomViewControl.m; path = viewcontroller/XCJFindRoomViewControl.m; sourceTree = "<group>"; };
 		86E392B418A8B46500FFD8C7 /* XCJFriendGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupViewController.h; path = viewcontroller/XCJFriendGroupViewController.h; sourceTree = "<group>"; };
 		86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFriendGroupViewController.m; path = viewcontroller/XCJFriendGroupViewController.m; sourceTree = "<group>"; };
 		86E392B818A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupNewmsg.h; path = viewcontroller/views/XCJFriendGroupNewmsg.h; sourceTree = "<group>"; };
@@ -2428,6 +2431,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				86DEA2F518C8381C0003694C /* FindRoom */,
 				86268A2D18C0644A000F0A48 /* NearbyInvite */,
 				86045FBD18B1F8B00002581E /* FindYouMM */,
 				86E392B318A8B44800FFD8C7 /* FriendGroup */,
@@ -2693,6 +2697,15 @@
 				86FB20EF186D5B90006BDE32 /* LXChatDBStoreManager.m */,
 			);
 			name = LXDatabaseManager;
+			sourceTree = "<group>";
+		};
+		86DEA2F518C8381C0003694C /* FindRoom */ = {
+			isa = PBXGroup;
+			children = (
+				86DEA2F718C8382F0003694C /* XCJFindRoomViewControl.h */,
+				86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */,
+			);
+			name = FindRoom;
 			sourceTree = "<group>";
 		};
 		86E392B318A8B44800FFD8C7 /* FriendGroup */ = {
@@ -3412,6 +3425,7 @@
 				868B5D46189284C6004D1743 /* UIImage+Screenshot.m in Sources */,
 				869CE52D186BE38D0004C1EC /* NSManagedObjectModel+MagicalRecord.m in Sources */,
 				8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */,
+				86DEA2F918C8382F0003694C /* XCJFindRoomViewControl.m in Sources */,
 				8681BE3B1839AABA00521D36 /* TalkData.m in Sources */,
 				86EB76D1185AA6CC00836947 /* AFNetworkReachabilityManager.m in Sources */,
 				86D182B01834AED30005901D /* LKDBHelper.m in Sources */,
