@@ -16,6 +16,7 @@
 #import "UIImage+WebP.h"
 #import "MLTapGrayView.h"
 #import "UITableViewCell+TKCategory.h"
+#import "DAImageResizedImageView.h"
 
 @interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -164,7 +165,7 @@
                 SLog(@"plistKeyName :%@",plistKeyName);
                 if ([[EGOCache globalCache] plistForKey:plistKeyName] == nil) {
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
-                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName];
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*5];
                      SLog(@"not  arr     %d" ,arr.count);
                 }
                 else {
@@ -173,7 +174,7 @@
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
                     [arr addObjectsFromArray:array];
                      SLog(@" have  arr    %d" ,arr.count);
-                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName];
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*5];
                 }
             }
         }
@@ -504,7 +505,7 @@
             NSString * stringurl = obj;
             if (idx <= 5) {
                 int row = idx/2;
-                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, 27, 28)];
+                DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, 27, 28)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                 iv.tag = idx;
@@ -525,7 +526,7 @@
                     else
                         width = 27;
                         
-                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, width, 28)];
+                    DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, width, 28)];
                     iv.contentMode = UIViewContentModeScaleAspectFill;
                     iv.clipsToBounds = YES;
                     iv.tag = idx;
@@ -539,7 +540,7 @@
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     NSString * stringurl = obj;
                     int row = idx/2;
-                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, 27, 42)];
+                    DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, 27, 42)];
                     iv.contentMode = UIViewContentModeScaleAspectFill;
                     iv.clipsToBounds = YES;
                     iv.tag = idx;
@@ -560,7 +561,7 @@
                     else
                         width = 27;
                     
-                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, width, 42)];
+                    DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, width, 42)];
                     iv.contentMode = UIViewContentModeScaleAspectFill;
                     iv.clipsToBounds = YES;
                     iv.tag = idx;
@@ -574,7 +575,7 @@
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     NSString * stringurl = obj;
                     int row = idx/1;
-                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%1), (42+TITLE_jianxi) * row, 54, 42)];
+                    DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(27*(idx%1), (42+TITLE_jianxi) * row, 54, 42)];
                     iv.contentMode = UIViewContentModeScaleAspectFill;
                     iv.clipsToBounds = YES;
                     iv.tag = idx;
@@ -587,7 +588,7 @@
             {
                 [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     NSString * stringurl = obj;
-                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0  ,0,54,84)];
+                    DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(0  ,0,54,84)];
                     iv.contentMode = UIViewContentModeScaleAspectFill;
                     iv.clipsToBounds = YES;
                     iv.tag = idx;

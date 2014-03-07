@@ -205,6 +205,27 @@
                     }
                     
                     
+                }else if([stringValueNew containString:@"[usertag]-"])
+                {
+                    stringValueNew = [stringValueNew stringByReplacingOccurrencesOfString:@"[usertag]-" withString:@""];
+                    
+                    NSArray * array =self.navigationController.viewControllers ;
+                    UIViewController * viewCon =  [array firstObject];
+                    [self.navigationController popViewControllerAnimated:NO];
+//                    XCJActiveViewController  *con = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJActiveViewController"];
+//                    con.code = stringValueNew;
+//                    if (self.preController) {
+//                        [self.preController.navigationController pushViewController:con animated:YES];
+//                    }else{
+//                        [viewCon.navigationController pushViewController:con animated:YES];
+//                    }
+                    [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"是否添加标签:%@",stringValueNew]];
+                }else{
+                
+//                    NSArray * array =self.navigationController.viewControllers ;
+                    [self.navigationController popViewControllerAnimated:NO];
+                    
+                    [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"%@",stringValueNew]];
                 }
                 
             }

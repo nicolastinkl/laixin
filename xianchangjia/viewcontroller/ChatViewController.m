@@ -205,10 +205,10 @@
         }
     }
     
-    
     //初始化播放器
     player = [[AVAudioPlayer alloc]init];
-}
+    
+} 
 
 -(IBAction)ShowkeyboardButtonClick:(id)sender
 {
@@ -2487,10 +2487,14 @@
     NSInteger rows = [self.tableView numberOfRowsInSection:0];
     
     if (rows > 0) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows - 1 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom
+        id lastOject = [self.messageList lastObject];
+        int indexOfLastRow = [self.messageList indexOfObject:lastOject];
+        
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexOfLastRow inSection:0]  atScrollPosition:UITableViewScrollPositionBottom
                                       animated:animation];
     }
+    
+ 
     
 //    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageList.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animation];
 }

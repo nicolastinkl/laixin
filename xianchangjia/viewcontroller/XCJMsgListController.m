@@ -857,10 +857,10 @@
             
             switch ([conver.messageStutes intValue]) {
                 case messageStutes_incoming:
-                    [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
+                    [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
                     break;
                 case messageStutes_outcoming:
-                    [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
+                    [imageStuts setImage:[UIImage imageNamed:@"inboxSeenIcon"]];
                     break;
                 case messageStutes_error:
                     [imageStuts setImage:[UIImage imageNamed:@"inboxErrorIcon"]];
