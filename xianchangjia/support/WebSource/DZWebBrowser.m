@@ -12,6 +12,13 @@
 #import "SDURLCache.h"
 #import "SDCachedURLResponse.h"
 #import <objc/runtime.h>
+#import "XCJAppDelegate.h"
+#import "AFNetworking.h"
+#import "SVProgressHUD.h"
+#import "XCAlbumDefines.h"
+#import "DataHelper.h"
+#import "UIView+Animation.h"
+#import "UIAlertViewAddition.h"
 
 #define kWebLoadingTimout          10.0
 #define kDefaultControlsBundleName @"default-controls"
@@ -500,47 +507,71 @@ NSString * const kNewAttachmentKey = @"kNewAttachmentKey";
 
 - (void)presentActionSheetFromView:(UIView *)view withUserInfo:(NSMutableDictionary *)userInfo
 {
-    NSString *type = [userInfo objectForKey:kTypeKey];
-    NSString *title = [userInfo objectForKey:kTitleKey];
-    NSString *url = [userInfo objectForKey:kUrlKey];
-    
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:textForKey(TXT_ACTIONSHEET_TWITTER), textForKey(TXT_ACTIONSHEET_FACEBOOK),nil];
-    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
-    actionSheet.userInfo = userInfo;
-    
-    if ([type isEqualToString:kImageTypeKey]) {
-        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_COPYIMG)];
-        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_SAVEIMG)];
+//    NSString *type = [userInfo objectForKey:kTypeKey];
+//    NSString *title = [userInfo objectForKey:kTitleKey];
+//    NSString *url = [userInfo objectForKey:kUrlKey];
+    [SVProgressHUD show];
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = @{@"key": @"4025aae8679d4ac4b2ad241afbfe1878",@"longUrl":[NSString stringWithFormat:@"%@",self.currentURL]};//,@"userShort":[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]
+    [manager POST:@"http://126.am/api!shorten.action" parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        [SVProgressHUD dismiss];
+        int statuscode =  [DataHelper getIntegerValue:responseObject[@"status_code"] defaultValue:0];
+        if (statuscode == 200) {
+
+            NSString * stringShortUrl = [DataHelper getStringValue:responseObject[@"url"] defaultValue:@""];
+              NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:stringShortUrl,kUrlKey,nil];
+            
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"分享支付地址给朋友" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"发送给微信好友",@"复制支付地址",nil];
+            actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+            actionSheet.userInfo = dict;
+            if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+                if ([view isKindOfClass:[UIBarButtonItem class]]) {
+                    [actionSheet showFromBarButtonItem:(UIBarButtonItem *)view animated:YES];
+                }
+                else if ([view isEqual:_webView]) {
+                    CGPoint point = view.accessibilityActivationPoint;
+                    [actionSheet showFromRect:CGRectMake(point.x, point.y, 1, 1) inView:self.view animated:YES];
+                }
+                else {
+                    [actionSheet showFromRect:view.frame inView:self.view animated:YES];
+                }
+            }
+            else {
+                [actionSheet showFromToolbar:self.navigationController.toolbar];
+            }
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"获取支付链接出错,请重新获取"];
+        }
         
-        [actionSheet addButtonWithTitle:textForKey(TXT_CANCEL)];
-        actionSheet.cancelButtonIndex = 4;
-    }
-    else {
-        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_COPYLINK)];
-        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_MAIL)];
-        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_SAFARI)];
         
-        [actionSheet addButtonWithTitle:textForKey(TXT_CANCEL)];
-        actionSheet.cancelButtonIndex = 5;
-    }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"获取支付链接出错,请重新获取"];
+    }];
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        if ([view isKindOfClass:[UIBarButtonItem class]]) {
-            [actionSheet showFromBarButtonItem:(UIBarButtonItem *)view animated:YES];
-        }
-        else if ([view isEqual:_webView]) {
-            CGPoint point = view.accessibilityActivationPoint;
-            [actionSheet showFromRect:CGRectMake(point.x, point.y, 1, 1) inView:self.view animated:YES];
-        }
-        else {
-            [actionSheet showFromRect:view.frame inView:self.view animated:YES];
-        }
-    }
-    else {
-        [actionSheet showFromToolbar:self.navigationController.toolbar];
-    }
     
-    if ([type isEqualToString:kImageTypeKey]) {
+    
+//    if ([type isEqualToString:kImageTypeKey]) {
+//        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_COPYIMG)];
+//        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_SAVEIMG)];
+//        
+//        [actionSheet addButtonWithTitle:textForKey(TXT_CANCEL)];
+//        actionSheet.cancelButtonIndex = 4;
+//    }
+//    else {
+//        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_COPYLINK)];
+//        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_MAIL)];
+//        [actionSheet addButtonWithTitle:textForKey(TXT_ACTIONSHEET_SAFARI)];
+//        
+//        [actionSheet addButtonWithTitle:textForKey(TXT_CANCEL)];
+//        actionSheet.cancelButtonIndex = 5;
+//    }
+    
+    
+    
+   /* if ([type isEqualToString:kImageTypeKey]) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
         
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0ul);
@@ -552,7 +583,7 @@ NSString * const kNewAttachmentKey = @"kNewAttachmentKey";
                 [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             });
         });
-    }
+    }*/
 }
 
 
@@ -630,6 +661,22 @@ NSString * const kNewAttachmentKey = @"kNewAttachmentKey";
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    NSString *urlshort = [actionSheet.userInfo objectForKey:kUrlKey];
+    if (buttonIndex == 0) {
+        // 微信
+       XCJAppDelegate* delegate = (XCJAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [delegate sendImageContentURLData:urlshort];
+        
+    }else if (buttonIndex ==1)
+    {
+        //copy
+        UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
+        [pasteBoard setString:urlshort];
+        [UIAlertView showAlertViewWithMessage:@"已经成功复制"];
+    }
+    
+    
+    return;
     UIImage *attachment = [actionSheet.userInfo objectForKey:kImageTypeKey];
     NSString *title = [actionSheet.userInfo objectForKey:kTitleKey];
     NSString *url = [actionSheet.userInfo objectForKey:kUrlKey];

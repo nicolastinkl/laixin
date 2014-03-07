@@ -668,6 +668,35 @@ static NSString * const kLaixinStoreName = @"Laixins";
     [[CRGradientNavigationBar appearance] setBarTintGradientColors:colors];
 }
 
+/**
+ *  分享链接给好友
+ *
+ *  @param url <#url description#>
+ */
+- (void) sendImageContentURLData:(NSString * ) url
+{
+    _scene = WXSceneSession;
+    
+    
+    WXMediaMessage *message = [WXMediaMessage message];
+    message.title = [NSString stringWithFormat:@"%@邀请您支付",[USER_DEFAULT  stringForKey:KeyChain_Laixin_account_user_nick]];
+    message.description = @"来信易宝支付,100%放心";
+    [message setThumbImage:[UIImage imageNamed:@"易宝支付Logo.jpg"]];
+    
+    WXWebpageObject *ext = [WXWebpageObject object];
+    ext.webpageUrl = url;
+    
+    message.mediaObject = ext;
+    
+    SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
+    req.bText = NO;
+    req.message = message;
+    req.scene = _scene;
+    
+    [WXApi sendReq:req];
+    
+}
+
 - (void) sendImageContent:(int ) type withImageData:(NSData * ) imagedata
 {
     if (type == 0) {

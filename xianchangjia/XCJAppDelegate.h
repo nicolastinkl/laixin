@@ -24,7 +24,10 @@
 
 -(void) initWeiboView;
 +(BOOL) hasLogin;
+
 - (void) sendImageContent:(int ) type withImageData:(NSData * ) imagedata;
+- (void) sendImageContentURLData:(NSString * ) url;
+
 @end
 
 

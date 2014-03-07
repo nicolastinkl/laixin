@@ -180,7 +180,7 @@
                 NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
                 DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
                 webBrowser.showProgress = YES;
-                webBrowser.allowSharing = NO;
+                webBrowser.allowSharing = YES;
                 //
                 UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
                 [webBrowserNC pushViewController:webBrowser animated:NO];

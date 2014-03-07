@@ -202,6 +202,9 @@
 		8690DECD18C8891900A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEC318C8891900A14A51 /* script.js */; };
 		8690DECF18C8895000A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DECE18C8895000A14A51 /* script.js */; };
 		8690DED218C88ABA00A14A51 /* UINavigationSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED118C88ABA00A14A51 /* UINavigationSample.m */; };
+		8690DED418C96E0C00A14A51 /* 易宝支付Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */; };
+		8690DED718C974C500A14A51 /* PayPellog.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED618C974C500A14A51 /* PayPellog.m */; };
+		8690DEDA18C97BD000A14A51 /* XCJOrderAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
@@ -830,6 +833,11 @@
 		8690DECE18C8895000A14A51 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
 		8690DED018C88ABA00A14A51 /* UINavigationSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UINavigationSample.h; path = viewcontroller/UINavigationSample.h; sourceTree = "<group>"; };
 		8690DED118C88ABA00A14A51 /* UINavigationSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UINavigationSample.m; path = viewcontroller/UINavigationSample.m; sourceTree = "<group>"; };
+		8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "易宝支付Logo.jpg"; sourceTree = "<group>"; };
+		8690DED518C974C500A14A51 /* PayPellog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PayPellog.h; path = DAOModel/PayPellog.h; sourceTree = "<group>"; };
+		8690DED618C974C500A14A51 /* PayPellog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PayPellog.m; path = DAOModel/PayPellog.m; sourceTree = "<group>"; };
+		8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJOrderAllViewController.h; path = viewcontroller/XCJOrderAllViewController.h; sourceTree = "<group>"; };
+		8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJOrderAllViewController.m; path = viewcontroller/XCJOrderAllViewController.m; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
@@ -1344,6 +1352,7 @@
 		861E7CDF18C8679F0082B3DE /* RoomJPG */ = {
 			isa = PBXGroup;
 			children = (
+				8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */,
 				8690DE8418C872C900A14A51 /* room0001.jpg */,
 				8690DE8518C872C900A14A51 /* room0002.jpg */,
 				8690DE8618C872C900A14A51 /* room0003.jpg */,
@@ -1932,6 +1941,8 @@
 				8681BDBF1834B34D00521D36 /* XCJSceneInfo.m */,
 				8681BDDF18361A0800521D36 /* XCJReskitModel.h */,
 				8681BDE018361A0800521D36 /* XCJReskitModel.m */,
+				8690DED518C974C500A14A51 /* PayPellog.h */,
+				8690DED618C974C500A14A51 /* PayPellog.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -2830,6 +2841,8 @@
 				8690DE9518C875DA00A14A51 /* XCJBuySurityViewController.m */,
 				8690DED018C88ABA00A14A51 /* UINavigationSample.h */,
 				8690DED118C88ABA00A14A51 /* UINavigationSample.m */,
+				8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */,
+				8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */,
 			);
 			name = FindRoom;
 			sourceTree = "<group>";
@@ -3349,6 +3362,7 @@
 				868B5D5B1893B068004D1743 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */,
 				8690DE9318C872C900A14A51 /* room0008.jpg in Resources */,
+				8690DED418C96E0C00A14A51 /* 易宝支付Logo.jpg in Resources */,
 				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
 				8690DE9018C872C900A14A51 /* room0005.jpg in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
@@ -3603,6 +3617,7 @@
 				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
 				86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */,
+				8690DED718C974C500A14A51 /* PayPellog.m in Sources */,
 				86AC094018893AC100C3BE30 /* XCJMessageReplyInfoViewController.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
@@ -3610,6 +3625,7 @@
 				869CE526186BE38D0004C1EC /* NSManagedObject+MagicalFinders.m in Sources */,
 				86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
+				8690DEDA18C97BD000A14A51 /* XCJOrderAllViewController.m in Sources */,
 				8683FA95187FE26100CEFA45 /* XCJPostTextViewController.m in Sources */,
 				86D56C61189BFF44005CFD85 /* RemoteImgOperator.m in Sources */,
 				86D1827A1834AED30005901D /* BTSCoreGraphics.m in Sources */,
