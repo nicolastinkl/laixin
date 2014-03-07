@@ -15,8 +15,11 @@
 #import "XCJBuySurityViewController.h"
 #import "DZWebBrowser.h"
 #import "UINavigationSample.h"
+#import "XCJSendMapViewController.h"
+#import "XCJPayInfo.h"
 
-@interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate>
+
+@interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_1;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_2;
@@ -60,14 +63,25 @@
     
     [self.button_buy infoStyle];
     
-    self.label_one.layer.cornerRadius = 5.0f;
-    self.label_two.layer.cornerRadius = 5.0f;
+    self.label_one.layer.cornerRadius = 3.0f;
+    self.label_two.layer.cornerRadius = 3.0f;
     self.label_one.layer.masksToBounds = YES;
     self.label_two.layer.masksToBounds = YES; 
     
-    [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0001.jpg"] forState:UIControlStateNormal];
+    if ([self.rominfo.type containString:@"豪"]) {
+        [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0002.jpg"] forState:UIControlStateNormal];
+    }else   if ([self.rominfo.type containString:@"大"]) {
+        [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0003.jpg"] forState:UIControlStateNormal];
+    }else   if ([self.rominfo.type containString:@"中"]) {
+        [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0004.jpg"] forState:UIControlStateNormal];
+    }else   if ([self.rominfo.type containString:@"小"]) {
+        [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0005.jpg"] forState:UIControlStateNormal];
+    }else{
+        [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0001.jpg"] forState:UIControlStateNormal];
+    }
+    
     int lowPrice = [self.rominfo.lowprice intValue]*.9;
-    self.label_price.text = [NSString stringWithFormat:@"￥%d",lowPrice];
+    self.label_price.text = [NSString stringWithFormat:@"￥%d.00",lowPrice];
 
     self.label_name.text = self.rominfo.name;
     
@@ -87,7 +101,7 @@
                 if (errnoMesg == 0) {
                     int price =  [num intValue] * 500;
                     int lowPrice = [self.rominfo.lowprice intValue]*.9;
-                    self.label_price.text = [NSString stringWithFormat:@"￥%d",lowPrice + price];
+                    self.label_price.text = [NSString stringWithFormat:@"￥%d.00",lowPrice + price];
                     
                     self.label_serCount.text = num;
                     [SVProgressHUD dismiss];
@@ -117,7 +131,7 @@
                     
                     int price = thiscount * 500;
                     int lowPrice = [self.rominfo.lowprice intValue]*.9;
-                    self.label_price.text = [NSString stringWithFormat:@"￥%d",lowPrice + price];
+                    self.label_price.text = [NSString stringWithFormat:@"￥%d.00",lowPrice + price];
                     
                     
                     [SVProgressHUD dismiss];
@@ -220,7 +234,7 @@
         return 151;
     }else if(indexPath.section == 2)
     {
-        return 130;
+        return 50;
     }
     return 0;
 }
@@ -230,7 +244,6 @@
     // Return the number of sections.
     return 3;
 }
-
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -244,7 +257,44 @@
         return 1;
     }
     return 0;
+}
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 0) {
+        if (indexPath.row == 1) {
+            //    self.label_phone.text = self.locatinfo.phone[0];
+            UIActionSheet * sheet = [[UIActionSheet alloc ] initWithTitle:@"拨打商家客服电话" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil, nil];
+            
+             [self.locatinfo.phone enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                 [sheet addButtonWithTitle:obj];
+             }];
+            [sheet addButtonWithTitle:@"取消"];
+            sheet.cancelButtonIndex = 2;
+            [sheet showInView:self.view];
+        }else if(indexPath.row == 2)
+        {
+            return;
+            XCJSendMapViewController *mapview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendMapViewController"];
+            CLLocationCoordinate2D mylocation = CLLocationCoordinate2DMake([self.locatinfo.lng doubleValue], [self.locatinfo.log doubleValue]) ;
+            mapview.isSeeTaMap = YES;
+            mapview.TCoordinate = mylocation;
+            mapview.title = self.locatinfo.addressName;
+            mapview.subtitle = @"";
+            
+            [self.navigationController pushViewController:mapview animated:YES];
+        }
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString * str = [actionSheet buttonTitleAtIndex:buttonIndex];
+    if (![str isEqualToString:@"取消"]) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",str]]];
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

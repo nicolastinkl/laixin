@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class roomInfo,LocationInfo;
+
 @interface XCJRoomInfoViewcontroller : UIViewController
 
 

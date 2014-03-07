@@ -205,6 +205,8 @@
 		8690DED418C96E0C00A14A51 /* 易宝支付Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */; };
 		8690DED718C974C500A14A51 /* PayPellog.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED618C974C500A14A51 /* PayPellog.m */; };
 		8690DEDA18C97BD000A14A51 /* XCJOrderAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */; };
+		8690DEDD18C9A1C000A14A51 /* XCJPayInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEDC18C9A1C000A14A51 /* XCJPayInfo.m */; };
+		8690DEE018C9CE6E00A14A51 /* UITableViewCell+TKCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEDF18C9CE6E00A14A51 /* UITableViewCell+TKCategory.m */; };
 		8692E3BF18642DB700F9E1DD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BC18642DB700F9E1DD /* Default.png */; };
 		8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8692E3BD18642DB700F9E1DD /* Default@2x.png */; };
 		8692E3C61864364F00F9E1DD /* XCJAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8692E3C51864364F00F9E1DD /* XCJAddressBook.m */; };
@@ -838,6 +840,10 @@
 		8690DED618C974C500A14A51 /* PayPellog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PayPellog.m; path = DAOModel/PayPellog.m; sourceTree = "<group>"; };
 		8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJOrderAllViewController.h; path = viewcontroller/XCJOrderAllViewController.h; sourceTree = "<group>"; };
 		8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJOrderAllViewController.m; path = viewcontroller/XCJOrderAllViewController.m; sourceTree = "<group>"; };
+		8690DEDB18C9A1C000A14A51 /* XCJPayInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPayInfo.h; path = DAOModel/XCJPayInfo.h; sourceTree = "<group>"; };
+		8690DEDC18C9A1C000A14A51 /* XCJPayInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayInfo.m; path = DAOModel/XCJPayInfo.m; sourceTree = "<group>"; };
+		8690DEDE18C9CE6E00A14A51 /* UITableViewCell+TKCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+TKCategory.h"; sourceTree = "<group>"; };
+		8690DEDF18C9CE6E00A14A51 /* UITableViewCell+TKCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+TKCategory.m"; sourceTree = "<group>"; };
 		8692E3BC18642DB700F9E1DD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = defaultPng/Default.png; sourceTree = "<group>"; };
 		8692E3BD18642DB700F9E1DD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "defaultPng/Default@2x.png"; sourceTree = "<group>"; };
 		8692E3C118642E6F00F9E1DD /* laixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = laixin.entitlements; sourceTree = SOURCE_ROOT; };
@@ -1943,6 +1949,8 @@
 				8681BDE018361A0800521D36 /* XCJReskitModel.m */,
 				8690DED518C974C500A14A51 /* PayPellog.h */,
 				8690DED618C974C500A14A51 /* PayPellog.m */,
+				8690DEDB18C9A1C000A14A51 /* XCJPayInfo.h */,
+				8690DEDC18C9A1C000A14A51 /* XCJPayInfo.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -2649,6 +2657,8 @@
 				8607385318AB4BFC003830DE /* SJAvatarBrowser.m */,
 				86045FCB18B2FF9F0002581E /* NSData+crc32.h */,
 				86045FCC18B2FF9F0002581E /* NSData+crc32.m */,
+				8690DEDE18C9CE6E00A14A51 /* UITableViewCell+TKCategory.h */,
+				8690DEDF18C9CE6E00A14A51 /* UITableViewCell+TKCategory.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -3474,6 +3484,7 @@
 				868B5D45189284C6004D1743 /* UIImage+ImageWithColor.m in Sources */,
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
+				8690DEE018C9CE6E00A14A51 /* UITableViewCell+TKCategory.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				8690DEC818C8891900A14A51 /* NJKWebViewProgressView.m in Sources */,
 				864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */,
@@ -3695,6 +3706,7 @@
 				8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */,
 				86494CC918838C3C00C22B14 /* FCContactsPhone.m in Sources */,
 				86D182F61834AF540005901D /* FMResultSet.m in Sources */,
+				8690DEDD18C9A1C000A14A51 /* XCJPayInfo.m in Sources */,
 				8668E483187540DB00D20C9E /* UItitleView.m in Sources */,
 				8681BDE118361A0800521D36 /* XCJReskitModel.m in Sources */,
 				86C72DE118433109001B6CA0 /* MessageManager.m in Sources */,

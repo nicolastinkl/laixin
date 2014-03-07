@@ -9,6 +9,7 @@
 #import "XCJFindRoomViewControl.h"
 #import "XCAlbumAdditions.h"
 #import "XCJRoomInfoViewcontroller.h"
+#import "XCJPayInfo.h"
 
 @interface XCJFindRoomViewControl ()<UIActionSheetDelegate>
 {
@@ -41,23 +42,22 @@
     NSMutableArray * array = [[NSMutableArray alloc] init];
     datasources = array;
     
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
-    //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
-    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+//    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
+//    //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+//    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+//    
+//    NSString * strJson =  [dictionary valueForKey:@"lebaihuibaolizhongxin"];
+//    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+//    NSDictionary * responseObject =[datajson  objectFromJSONData] ;
+//    NSArray * arrays = responseObject[@"list"];
+//    [arrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        roomInfo * rom = [roomInfo turnObject:obj];
+//        if (rom) {
+//            [datasources addObject:rom];
+//        }
+//    }];
     
-    NSString * strJson =  [dictionary valueForKey:@"lebaihuibaolizhongxin"];
-    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary * responseObject =[datajson  objectFromJSONData] ;
-    NSArray * arrays = responseObject[@"list"];
-    [arrays enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        roomInfo * rom = [roomInfo turnObject:obj];
-        if (rom) {
-            [datasources addObject:rom];
-        }
-    }];
-    
-    LocationInfo * locaot = [LocationInfo turnObject:responseObject];
-    locationinfo = locaot;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition  object:nil];
     
     
     UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];//allocate titleView
@@ -84,7 +84,9 @@
 //    [btnNormal addTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
 //    [btnNormal setTitle:@"Normal" forState:UIControlStateNormal];
 //    [titleView addSubview:btnNormal];
+   
     
+    [self initdata];
     
     //Set to titleView
     self.navigationItem.titleView = titleView;
@@ -93,6 +95,62 @@
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保利店" style:UIBarButtonItemStyleDone target:self action:@selector(chooseRoomClick:)];
     self.navigationItem.rightBarButtonItem =  rightBarButtonItem;
 }
+
+
+
+-(void) showErrorInfoWithRetryNot:(NSNotification * ) notify
+{
+    [self hiddeErrorInfoWithRetry];
+    // start retry
+    
+    [self initdata];
+}
+
+/**
+ *  init 数据
+ */
+-(void) initdata
+{
+    [self.view showIndicatorViewLargeBlue];
+    
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.groups" parameters:@{} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * dict = responseObject[@"result"];
+            NSArray * GpArray = dict[@"groups"];
+            [GpArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if (idx == 0) {
+                    LocationInfo * locaot = [[LocationInfo alloc]initWithJSONObject:obj];
+                    locationinfo = locaot;
+                    
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.list" parameters:@{@"gid":locaot.gid} success:^(MLRequest *request, id responseOj) {
+                        if (responseOj) {
+                            NSDictionary * dictob = responseOj[@"result"];
+                            NSArray * obArray = dictob[@"merchandises"];
+                            [obArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                roomInfo * rominfo = [[roomInfo alloc] initWithJSONObject:obj];
+                                if (rominfo) {
+                                    [datasources addObject:rominfo];
+                                }
+                            }];
+                            [self.tableView reloadData];
+                            [self.view hideIndicatorViewBlueOrGary];
+                        }
+                    } failure:^(MLRequest *request, NSError *error) {
+                        [self.view hideIndicatorViewBlueOrGary];
+                        [self showErrorInfoWithRetry] ;                        
+                    }];
+                }
+            }];
+            
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        
+        [self showErrorInfoWithRetry] ;
+        
+        [self.view hideIndicatorViewBlueOrGary];
+    }];
+}
+
 
 -(IBAction)chooseRoomClick:(id)sender
 {
@@ -217,12 +275,4 @@
 
 @end
 
-@implementation LocationInfo
 
-
-@end
-
-@implementation roomInfo
-
-
-@end

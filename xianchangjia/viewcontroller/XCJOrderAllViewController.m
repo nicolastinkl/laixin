@@ -146,8 +146,8 @@
         button_play.hidden = NO;
     }
     
-    [button_pay primaryStyle];
-    [button_play sendMessageStyle];
+    [button_play primaryStyle];
+    [button_pay sendMessageStyle];
     return cell;
 }
 

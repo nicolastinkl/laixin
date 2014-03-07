@@ -15,6 +15,7 @@
 #import "FCUserDescription.h"
 #import "UIImage+WebP.h"
 #import "MLTapGrayView.h"
+#import "UITableViewCell+TKCategory.h"
 
 @interface XCJSelfPhotoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -52,12 +53,15 @@
     UILabel * label_sign = (UILabel *)[self.tableView.tableHeaderView viewWithTag:2];
     UIImageView * imageIcon = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:3];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
+
+    
+    
     if (!self.userID || [self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
-        self.userID = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-        label_name.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
+        self.userID           = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+        label_name.text       = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
         //[LXAPIController sharedLXAPIController].currentUser.nick;
-        label_sign.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
-        
+        label_sign.text       = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
+
         UIImage  *chacheImage = [[EGOCache globalCache] imageForKey:@"myphotoBgImage"];
         if (chacheImage) {
             [imagebg setImage:chacheImage];
@@ -71,25 +75,38 @@
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-        
-        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
-        if (jsonData.length > 150) {
-            // parse
-            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+        NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
+//        [[EGOCache globalCache] removeCacheForKey:plistKeyName];
+        if ([[EGOCache globalCache] plistForKey:plistKeyName] != nil) {
+            NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
             
-            NSDictionary * responseObject =[data  objectFromJSONData] ;
-            NSDictionary * dicreult = responseObject[@"result"];
-            NSArray * array = dicreult[@"posts"];
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                 //是当前用户
                 [dataSource addObject:post];
             }];
-            
-        }else{
+
+        } else{
             // get json data from networking
             [self initDataSourcewithBeforeID:@""];
         }
+        
+//        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
+//        if (jsonData.length > 150) {
+//            // parse
+//            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+//            
+//            NSDictionary * responseObject =[data  objectFromJSONData] ;
+//            NSDictionary * dicreult = responseObject[@"result"];
+//            NSArray * array = dicreult[@"posts"];
+//            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+//                //是当前用户
+//                [dataSource addObject:post];
+//            }];
+//            
+//        }
+   
     }
     else{
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id userdes, NSError *error) {
@@ -99,17 +116,29 @@
             [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:localdespObject.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
              [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:160]]];
         } withuid:self.userID];
-        
-        [self initDataSourcewithBeforeID:@""];
-       
+        NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
+
+        if ([[EGOCache globalCache] plistForKey:plistKeyName] != nil) {
+            NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
+            
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                //是当前用户
+                [dataSource addObject:post];
+            }];
+
+        }else
+            [self initDataSourcewithBeforeID:@""];
     }
 }
 
 -(void) initDataSourcewithBeforeID:(NSString *) beforeid
 {
+    __block Boolean ISNewData = NO;
     NSDictionary * parems = @{@"uid":self.userID,@"count":@"50",@"before":beforeid};
     if (beforeid.length <=0) {
         parems = @{@"uid":self.userID,@"count":@"50"};
+        ISNewData = YES;
     }
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:parems success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
@@ -129,6 +158,22 @@
                     if(beforeid.length <= 0)
                         [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache" withTimeoutInterval:60 ];
                     // init with that...
+                }
+                
+                NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
+                SLog(@"plistKeyName :%@",plistKeyName);
+                if ([[EGOCache globalCache] plistForKey:plistKeyName] == nil) {
+                    NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName];
+                     SLog(@"not  arr     %d" ,arr.count);
+                }
+                else {
+                    NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
+
+                    NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
+                    [arr addObjectsFromArray:array];
+                     SLog(@" have  arr    %d" ,arr.count);
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName];
                 }
             }
         }
@@ -309,7 +354,7 @@
             imageview.hidden = NO;
             labelimage_text.hidden = NO;
             labelimage_text.text = post.content;
-            SLog(@"%@",[tools getUrlByImageUrl:post.imageURL width:60 height:100]);
+//            SLog(@"%@",[tools getUrlByImageUrl:post.imageURL width:60 height:100]);
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:post.imageURL width:60 height:100]]]; //placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]
             CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
             
@@ -382,9 +427,57 @@
     return height-12;
 }
 
-
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString * CellKey  = @"isloadingphotos";
+    XCJGroupPost_list * activity = dataSource[indexPath.row];
+    UIView * bgview =  [cell.contentView subviewWithTag:10];
+    UIImageView * imageview = (UIImageView *) [cell.contentView subviewWithTag:1];
+    if (activity.excount > 0) {
+        
+        
+        [bgview.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            ((UIView *)obj).hidden = YES;
+        }];
+        
+       bgview.hidden = NO;
+        Boolean bol = [cell.userInfo[@"CellKey"] boolValue];
+        if (activity.excountImages.count <= 0 && !bol) {
+            //check from networking
+            cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil];
+            [imageview showIndicatorViewBlue];
+            //             [cell.imageListScroll showIndicatorViewBlue];
+         
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary  * result = responseObject[@"result"];
+                    NSArray * array = result[@"exdata"];
+                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                        [arrayURLS addObject:stringurl];
+                        
+                    }];
+                    [activity.excountImages removeAllObjects];
+                    [activity.excountImages addObjectsFromArray:arrayURLS];
+                    [self fillImagewithArray:arrayURLS withView:bgview];
+                    //54 84   23 23
+                    //23 23 23 
+                }
+                cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+                [imageview hideIndicatorViewBlueOrGary];
+            } failure:^(MLRequest *request, NSError *error) {
+                cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+                [imageview hideIndicatorViewBlueOrGary];
+            }];
+        }else{
+            [self fillImagewithArray:activity.excountImages withView:bgview];
+        }
+    }else{
+        bgview.hidden = YES;
+    }
+    
+    
     if (dataSource.count < 50) {
         return;
     }
@@ -398,6 +491,118 @@
             [self initDataSourcewithBeforeID:post.postid];
         }
     }
+    
+    
+}
+
+
+-(void) fillImagewithArray:(NSArray * ) array withView:(UIView*) bgview
+{
+    __block int TITLE_jianxi = 0;
+    if (array.count >= 6) {
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSString * stringurl = obj;
+            if (idx <= 5) {
+                int row = idx/2;
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, 27, 28)];
+                iv.contentMode = UIViewContentModeScaleAspectFill;
+                iv.clipsToBounds = YES;
+                iv.tag = idx;
+                [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                [bgview addSubview:iv];
+            }
+        }];
+    }else{
+        switch (array.count) {
+            case 5:
+            {
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    int row = idx/2;
+                    int width;
+                    if(idx == 4)
+                        width =  54;
+                    else
+                        width = 27;
+                        
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (28+TITLE_jianxi) * row, width, 28)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    [bgview addSubview:iv];
+                }];
+            }
+                break;
+            case 4:
+            {
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    int row = idx/2;
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, 27, 42)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    [bgview addSubview:iv];
+                }];
+            }
+                break;
+            case 3:
+            {
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    int row = idx/2;
+                    
+                    int width;
+                    if(idx == 2)
+                        width = 54;
+                    else
+                        width = 27;
+                    
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%2), (42+TITLE_jianxi) * row, width, 42)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    [bgview addSubview:iv];
+                }];
+            }
+                break;
+            case 2:
+            {
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    int row = idx/1;
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(27*(idx%1), (42+TITLE_jianxi) * row, 54, 42)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    [bgview addSubview:iv];
+                }];
+            }
+                break;
+            case 1:
+            {
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = obj;
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0  ,0,54,84)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    [bgview addSubview:iv];
+                }];
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
+
 }
 
 

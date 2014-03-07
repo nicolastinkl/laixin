@@ -831,6 +831,7 @@
 {
     Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
     UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
+    imageIcon.backgroundColor = [UIColor lightGrayColor];
     UIImageView * imageStuts = (UIImageView *)[cell.contentView viewWithTag:5];  //status
     ((UILabel *)[cell.contentView viewWithTag:2]).text  = conver.lastMessage;  // description
     ((UILabel *)[cell.contentView viewWithTag:3]).text  = [tools FormatStringForDate:conver.lastMessageDate];  //time

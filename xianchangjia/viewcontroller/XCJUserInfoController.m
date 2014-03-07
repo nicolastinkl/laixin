@@ -21,7 +21,7 @@
 #import "XCJSelfPhotoViewController.h"
 #import "FCMessage.h"
 
-@interface XCJUserInfoController ()<UIActionSheetDelegate>
+@interface XCJUserInfoController ()<UIActionSheetDelegate,UIAlertViewDelegate>
 {
         NSMutableDictionary * UserDict;
 }
@@ -136,7 +136,7 @@
 
 -(IBAction)delmyfriendClick:(id)sender
 {
-    UIActionSheet * actionsh = [[UIActionSheet alloc] initWithTitle:@"删除好友将不会看到该好友动态信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除好友" otherButtonTitles:nil, nil];
+    UIActionSheet * actionsh = [[UIActionSheet alloc] initWithTitle:@"删除好友将不会看到该好友动态信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除好友" otherButtonTitles:@"设置备注名", nil];
     [actionsh showInView:self.view];
 }
 
@@ -154,7 +154,37 @@
             [SVProgressHUD dismiss];
             [UIAlertView showAlertViewWithMessage:@"删除失败,请检查网络设置"];
         }];
+    }else if(buttonIndex == 1)
+    {
+        UIAlertView *prompt = [[UIAlertView alloc] initWithTitle:@"请输入好友备注名:"
+                                                         message:@""
+                                                        delegate:self
+                                               cancelButtonTitle:@"取消"
+                                               otherButtonTitles:@"确定", nil];
+        
+        
+        prompt.alertViewStyle = UIAlertViewStylePlainTextInput;
+        UITextField *tf = [prompt textFieldAtIndex:0];
+        tf.keyboardType = UIKeyboardTypeDefault;
+        tf.clearButtonMode = UITextFieldViewModeWhileEditing;
+        prompt.tag = 1; // change name or nick
+        [prompt show];
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+   if(buttonIndex == 1) {
+        UITextField *tf = [alertView textFieldAtIndex:0];
+        // NICK
+        if (tf.text.length > 0) {
+            NSString * strName = tf.text;
+            self.UserInfo.nick = strName;
+            self.Label_nick.text = strName;
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+            
+        }
+   }
 }
 
 - (IBAction)seeUsericonclick:(id)sender {

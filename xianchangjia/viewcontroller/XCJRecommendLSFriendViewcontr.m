@@ -538,7 +538,7 @@
             if (tf.text.length > 0) {
                 int age = [tf.text intValue];
                 if (age > 100) {
-                    [UIAlertView showAlertViewWithMessage:@"你个老逼,这么老了还玩App 赶紧滚回去睡觉."];
+                    [UIAlertView showAlertViewWithMessage:@"这么老了还玩App 赶紧滚回去睡觉."];
                 }else if(age < 18){
                     [UIAlertView showAlertViewWithMessage:@"你太小了,不适合用这么高档的App."];
                 }else{
