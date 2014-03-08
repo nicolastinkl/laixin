@@ -40,6 +40,7 @@
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 - (void)showRecipe:(FCFriends *) friend animated:(BOOL)animated;
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 @end
 
@@ -77,6 +78,7 @@
         [self.tableView reloadData];
     }
 }
+
 
 - (void)viewDidLoad
 {
@@ -572,8 +574,15 @@
 	}
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.searchbar isFirstResponder]) {
+        [self.searchbar resignFirstResponder];
+    }
+    
+}
 #pragma mark – UISearchDisplayController delegate methods
-- (void)filterContentForSearchText:(NSString*)searchText {
+/*- (void)filterContentForSearchText:(NSString*)searchText {
     //    NSMutableArray * array = [[NSMutableArray alloc] init];
     self.allReslutItems = [FCFriends MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"friendRelation.nick  like[cd] '%@'",[NSString localizedStringWithFormat:@"*%@*",searchText]]];
     //     self.allReslutItems = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText]];
@@ -592,18 +601,5 @@
     return YES;
     
 }
-
-- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{
-    
-}
-- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-    
-}
-- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    
-}
-
+*/
 @end

@@ -1847,8 +1847,10 @@
         }
         imageview_BG.image = [UIImage imageNamed:@"bubbleLeftTail"];
         labelContent.textColor = [UIColor blackColor];
+        cell.backgroundColor = [UIColor clearColor];
     }else{
         //Outcoming
+        cell.backgroundColor = [UIColor whiteColorWithAlpha:.1];
         imageview_BG.image = [UIImage imageNamed:@"bubbleRightTail-1"];
         [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]]];
         labelName.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];

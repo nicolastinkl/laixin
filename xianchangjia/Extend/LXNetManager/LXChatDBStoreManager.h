@@ -25,6 +25,8 @@ typedef void (^CompletionBlockTinkl)(id, NSError *);
 
 - (NSMutableArray *)fetchAllMessagesInConversation:(Conversation *)conversation;
 
+- (NSMutableArray *)fetchMessagesInConversation:(Conversation *)conversation;
+
 - (FCUserDescription *)fetchFCUserDescriptionByUID:(NSString * ) UserID;
 
 /**

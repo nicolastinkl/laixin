@@ -1122,14 +1122,6 @@
                             <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="搜索" id="mSy-N9-DjR">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="Vc6-7g-lYm" id="0sH-b4-oym"/>
-                                    </connections>
-                                </searchBar>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dCm-qC-s1F">
                                     <rect key="frame" x="0.0" y="43" width="320" height="1"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1138,6 +1130,14 @@
                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="搜索" id="dfh-9P-onm">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <outlet property="delegate" destination="Vc6-7g-lYm" id="3bW-vi-fdH"/>
+                                    </connections>
+                                </searchBar>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
@@ -1221,28 +1221,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchDisplayController" destination="21x-lY-aXt" id="LoU-pW-Gyp"/>
+                        <outlet property="searchbar" destination="dfh-9P-onm" id="u2f-YT-OId"/>
                         <segue destination="PQ7-1p-COo" kind="push" identifier="Chat" id="SAs-SO-s91"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbS-3D-fEG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="O1k-tf-kJT">
-                    <connections>
-                        <outlet property="delegate" destination="Vc6-7g-lYm" id="L4R-uY-UC5"/>
-                        <outlet property="searchContentsController" destination="Vc6-7g-lYm" id="i97-2q-ulZ"/>
-                        <outlet property="searchResultsDataSource" destination="Vc6-7g-lYm" id="fbL-ST-7Jv"/>
-                        <outlet property="searchResultsDelegate" destination="Vc6-7g-lYm" id="o4W-7Y-vGe"/>
-                    </connections>
-                </searchDisplayController>
-                <searchDisplayController id="21x-lY-aXt">
-                    <connections>
-                        <outlet property="delegate" destination="Vc6-7g-lYm" id="czS-ND-Gmi"/>
-                        <outlet property="searchBar" destination="mSy-N9-DjR" id="R51-6a-lXy"/>
-                        <outlet property="searchContentsController" destination="Vc6-7g-lYm" id="IWa-fu-rmU"/>
-                        <outlet property="searchResultsDataSource" destination="Vc6-7g-lYm" id="SyD-Pn-Bqg"/>
-                        <outlet property="searchResultsDelegate" destination="Vc6-7g-lYm" id="aDq-fZ-SdS"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1335" y="72"/>
         </scene>
@@ -1413,19 +1396,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchDisplayController" destination="qHL-JH-yww" id="7h3-mr-jhv"/>
+                        <outlet property="searchbar" destination="Ag3-2N-te6" id="VWx-sm-5Xg"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oGu-ys-FJT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="qHL-JH-yww">
-                    <connections>
-                        <outlet property="delegate" destination="fwg-X3-bd4" id="KZU-IO-LFv"/>
-                        <outlet property="searchBar" destination="Ag3-2N-te6" id="QAx-Az-yBS"/>
-                        <outlet property="searchContentsController" destination="fwg-X3-bd4" id="bp7-zx-odB"/>
-                        <outlet property="searchResultsDataSource" destination="fwg-X3-bd4" id="SXb-aJ-Qht"/>
-                        <outlet property="searchResultsDelegate" destination="fwg-X3-bd4" id="LsS-IM-d82"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1343" y="790"/>
         </scene>

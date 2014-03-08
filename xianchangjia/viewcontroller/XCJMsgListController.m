@@ -40,7 +40,7 @@
 #import "XCJAddFriendNaviController.h"
 #import "XCJScanViewController.h"
 
-@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate,UISearchDisplayDelegate,UISearchBarDelegate>
+@interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate>//,UISearchDisplayDelegate,UISearchBarDelegate
 {
     int tryCatchCount;
     XCJHomeMenuView * menuView;
@@ -50,6 +50,7 @@
 
 @property (nonatomic, copy) NSArray *allReslutItems;
 
+@property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
 
 @property (nonatomic, retain) NSFetchedResultsController *fetchedResultsController;
 - (void)showRecipe:(Conversation *) friend animated:(BOOL)animated;
@@ -149,40 +150,35 @@
     [self.tableView scrollRectToVisible:self.searchDisplayController.searchBar.frame animated:animated];
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.searchbar isFirstResponder]) {
+        [self.searchbar resignFirstResponder];
+    }
+
+}
 #pragma mark – UISearchDisplayController delegate methods
-- (void)filterContentForSearchText:(NSString*)searchText {
-//    NSMutableArray * array = [[NSMutableArray alloc] init];
-    self.allReslutItems = [Conversation MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"lastMessage  like[cd] '%@'",[NSString localizedStringWithFormat:@"*%@*",searchText]]];
-//     self.allReslutItems = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText]];
-    //[self.tableView reloadData];
-}
+//- (void)filterContentForSearchText:(NSString*)searchText {
+////    NSMutableArray * array = [[NSMutableArray alloc] init];
+//    self.allReslutItems = [Conversation MR_findAllWithPredicate:[NSPredicate predicateWithFormat:@"lastMessage  like[cd] '%@'",[NSString localizedStringWithFormat:@"*%@*",searchText]]];
+////     self.allReslutItems = [array filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchText]];
+//    //[self.tableView reloadData];
+//}
+//
+//
+//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+//{
+//     [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                  ];
+//}
+//
+//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller  shouldReloadTableForSearchScope:(NSInteger)searchOption {
+//    
+//    [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                 ];
+//    
+//    return YES;
+//    
+//}
 
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
-{
-     [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                  ];
-}
-
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller  shouldReloadTableForSearchScope:(NSInteger)searchOption {
-    
-    [self filterContentForSearchText:[self.searchDisplayController.searchBar text]                                 ];
-    
-    return YES;
-    
-}
-
-- (void) searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{
-    
-}
-- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-
-}
-- (void) searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-
-}
 
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {

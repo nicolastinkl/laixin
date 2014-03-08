@@ -100,15 +100,45 @@
     }];
 }
 
-
 - (NSMutableArray *)fetchAllMessagesInConversation:(Conversation *)conversation
 {
+    
+    /*
+    NSFetchRequest *request = [[NSFetchRequest  alloc] init];
+    
+    NSEntityDescription  *entity = [NSEntityDescription  entityForName:@"RSSEntryModel"
+          inManagedObjectContext:_managedObjectContext];
+    
+    [request  setEntity:entity];
+    
+    NSSortDescriptor  *sortDescriptor = [[NSSortDescriptor  alloc]  initWithKey:@"articleDate"    ascending:NO];
+    
+    NSArray   *sortDescriptors = [[NSArray  alloc] initWithObjects:sortDescriptor, nil];
+    
+    [request   setSortDescriptors:sortDescriptors];
+    
+    [request setFetchLimit:21];
+    
+    [request    setFetchOffset:_currentPage * 21];
+    
+    NSArray  *rssTemp = [_managedObjectContext executeFetchRequest:request error:&error];
+    */
+    
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"sentDate" ascending:YES];
+//    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"messageId" ascending:NO];
+//    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor,sortDescriptor2, nil];
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sortDescriptor count:1];
 	NSMutableArray *sortedMessages = [[NSMutableArray alloc] initWithArray:[conversation.messages allObjects]];
 	[sortedMessages sortUsingDescriptors:sortDescriptors];
     return [NSMutableArray arrayWithArray:sortedMessages];
 }
+
+
+- (NSMutableArray *)fetchMessagesInConversation:(Conversation *)conversation withPage:(NSInteger) currentPage
+{
+    return nil;
+}
+
 
 -(FCUserDescription *)fetchFCUserDescriptionByUID:(NSString * ) UserID
 {
