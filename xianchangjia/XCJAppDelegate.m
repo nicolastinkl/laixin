@@ -33,6 +33,7 @@
 #import "FCContactsPhone.h"
 #import "FCUserDescription.h"
 #import "FCMessage.h" 
+#import <AVFoundation/AVFoundation.h>
 
 #define audioLengthDefine 1050
 
@@ -757,6 +758,17 @@ static NSString * const kLaixinStoreName = @"Laixins";
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
     
+    //第一次调用这个方法的时候，系统会提示用户让他同意你的app获取麦克风的数据
+    // 其他时候调用方法的时候，则不会提醒用户
+    // 而会传递之前的值来要求用户同意
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        if (granted) {
+            // 用户同意获取数据
+        } else {
+            // 可以显示一个提示框告诉用户这个app没有得到允许？
+        } 
+    }];
+    
     /* receive websocket message*/
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(webSocketDidReceivePushMessage:)
@@ -1026,6 +1038,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                         NSDictionary * resultDict = responseObject[@"result"];
                         NSArray * array = resultDict[@"message"];
                         
+                        
+                        
                         [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             /*
                              “msgid”:
@@ -1038,7 +1052,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 [USER_DEFAULT setInteger:messageIndex forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
                                 [USER_DEFAULT synchronize];
                             }
-                            
+                           
                             {
                                 //MARK THIS
                                 NSString *facebookID = [tools getStringValue:obj[@"fromid"] defaultValue:@""];
@@ -1119,7 +1133,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
                                 [conversation addMessagesObject:msg];
                                 [localContext MR_saveToPersistentStoreAndWait];
-                         
+                                
+                                [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceiveForcegroundMessageNotification object:@{@"message":msg,@"fromid":facebookID}];
                             }
                             
                             // update tabbar item  badge

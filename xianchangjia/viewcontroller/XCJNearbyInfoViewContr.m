@@ -18,7 +18,7 @@
 #import "FCMessage.h"
 #import "UIView+Additon.h"
 #import "XCJAppDelegate.h"
-
+#import "XCJInviteCommentViewController.h"
 
 #define BUTTONCOLL  0
 #define DISTANCE_BETWEEN_ITEMS  0.0
@@ -231,8 +231,7 @@
             }
         } failure:^(MLRequest *request, NSError *error) {
             [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-        }];
-        
+        }];        
     }
 }
 
@@ -412,6 +411,11 @@
     if (indexPath.section == 1) {
         if (indexPath.row == 2) {
             //评论
+            if (postinfo.postid) {                
+                XCJInviteCommentViewController * viewCon = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJInviteCommentViewController"];
+                viewCon.postid = postinfo.postid;
+                [self.navigationController pushViewController:viewCon animated:YES];
+            }
         }
     }else if (indexPath.section == 2) {
         if (indexPath.row == 0) {

@@ -11,6 +11,8 @@
 #import "SRWebSocket.h"
 
 extern NSString * const MLNetworkingManagerDidReceivePushMessageNotification;
+extern NSString * const MLNetworkingManagerDidReceiveForcegroundMessageNotification;
+
 
 @interface MLNetworkingManager : NSObject
 

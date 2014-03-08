@@ -85,6 +85,13 @@
                                 
                             }
                         }];
+                        
+                        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:NO];
+                        //一个临时副本
+                        NSMutableArray *array = [_datasource mutableCopy];
+                    
+                        [array sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+                        _datasource = array;
                         [self.tableView reloadData];
                         [self.view hideIndicatorViewBlueOrGary];
                         

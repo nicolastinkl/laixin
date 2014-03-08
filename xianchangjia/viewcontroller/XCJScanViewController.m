@@ -17,7 +17,7 @@
 #import "XCJAppDelegate.h"
 #import "XCJAddGroupInfoViewController.h"
 #import "XCJActiveViewController.h"
-
+#import "XCJUserTAGViewController.h"
 
 @interface XCJScanViewController ()<UIAlertViewDelegate>
 {
@@ -212,14 +212,14 @@
                     NSArray * array =self.navigationController.viewControllers ;
                     UIViewController * viewCon =  [array firstObject];
                     [self.navigationController popViewControllerAnimated:NO];
-//                    XCJActiveViewController  *con = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJActiveViewController"];
-//                    con.code = stringValueNew;
-//                    if (self.preController) {
-//                        [self.preController.navigationController pushViewController:con animated:YES];
-//                    }else{
-//                        [viewCon.navigationController pushViewController:con animated:YES];
-//                    }
-                    [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"是否添加标签:%@",stringValueNew]];
+                    XCJUserTAGViewController  *con = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserTAGViewController"];
+                    con.tags = stringValueNew;
+                    if (self.preController) {
+                        [self.preController.navigationController pushViewController:con animated:YES];
+                    }else{
+                        [viewCon.navigationController pushViewController:con animated:YES];
+                    }
+                   // [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"是否添加标签:%@",stringValueNew]];
                 }else{
                 
 //                    NSArray * array =self.navigationController.viewControllers ;

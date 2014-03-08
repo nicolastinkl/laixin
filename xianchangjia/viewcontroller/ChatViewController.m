@@ -493,6 +493,7 @@
 
 - (void) setUpSequencer
 {
+    
     __weak ChatViewController *self_ = self;
      Sequencer *sequencer = [[Sequencer alloc] init];
     [sequencer enqueueStep:^(id result, SequencerCompletion completion) {
@@ -531,16 +532,47 @@
     
     /* receive websocket message
      */
-     [[NSNotificationCenter defaultCenter] addObserver:self
-     selector:@selector(webSocketDidReceivePushMessage:)
-     name:MLNetworkingManagerDidReceivePushMessageNotification
-     object:nil];
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:)name: MLNetworkingManagerDidReceivePushMessageNotification   object:nil];
     
+    /**
+     *  从后台切换到前台收取数据
+     *
+     *  @param webSocketDidReceivePushMessage: <#webSocketDidReceivePushMessage: description#>
+     *
+     *  @return <#return value description#>
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceiveForceMessage:)name: MLNetworkingManagerDidReceiveForcegroundMessageNotification   object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
     
     [self.tableView reloadData];
 }
+
+
+-(void) webSocketDidReceiveForceMessage:(NSNotification * ) notify
+{
+    if (notify.object) {
+        
+//         [self fillDatawithType:@"newmsg" Dicty:notify.object];
+        NSDictionary * dict =  notify.object;
+        if (dict) {
+            
+            FCMessage * message = dict[@"message"];
+            NSString * facebookid =  dict[@"fromid"];
+            
+            if ([self.conversation.facebookId isEqualToString:facebookid]) {
+                if ([self.conversation.badgeNumber intValue] > 0) {
+                    self.conversation.badgeNumber = @(0);
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                }
+                [self.messageList addObject:message]; //table reload
+                [self insertTableRow];
+                
+            }
+        }
+    }
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -558,15 +590,121 @@
     SLLog(@"MsgContent :%@",MsgContent);
     if ([MsgContent[@"push"] intValue] == 1) {
         NSString *requestKey = [tools getStringValue:MsgContent[@"type"] defaultValue:nil];
-        if ([requestKey isEqualToString:@"newmsg"]) {
-            /*
-             {"push": true, "data": {"message": {"toid": 14, "msgid": 5, "content": "\u6211\u6765\u4e86sss", "fromid": 2, "time": 1388477804.0}}, "type": "newmsg"}
-             */
+        [self fillDatawithType:requestKey Dicty:MsgContent ];
+    }
+}
+
+/**
+ *  插入数据
+ *
+ *  @param requestKey requestKey description
+ *  @param MsgContent MsgContent description
+ */
+-(void) fillDatawithType:(NSString * ) requestKey Dicty:(NSDictionary* ) MsgContent
+{
+    if ([requestKey isEqualToString:@"newmsg"]) {
+        /*
+         
+           {"push":false,"errno":0,"result":{"message":[{"content":"露是呢","msgid":2220,"toid":1,"time":1394264178.0,"fromid":2,"type":"txt"}]},"cdata":"PGUVBCBWSQ","error":"no error"}  
+         
+         {"push": true, "data": {"message": {"toid": 14, "msgid": 5, "content": "\u6211\u6765\u4e86sss", "fromid": 2, "time": 1388477804.0}}, "type": "newmsg"}
+         */
+      
+        
+        NSDictionary * dicResult = MsgContent[@"data"];
+        
+        NSDictionary *  dicMessage = dicResult[@"message"];
+        
+        // update lastmessage id index
+        NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
+        
+        NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+        if (messageIndex < indexMsgID) {
+            [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+            [USER_DEFAULT synchronize];
+        }
+        
+        NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
+        if ([self.conversation.facebookId isEqualToString:facebookID]) {
+            // int view
+            NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+            NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+            //                FCMessage  find this infomation
+            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+            FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+            if (message) {
+                // change by tinkl   ....MARK:  has this record
+                [self.messageList addObject:message]; //table reload
+                self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                [localContext MR_saveToPersistentStoreAndWait];
+                
+            }else{
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                
+                msg.sentDate = date;
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                if ([typeMessage isEqualToString:@"txt"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"emj"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"pic"]) {
+                    //image
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"vic"]) {
+                    //audio
+                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
+                    self.conversation.lastMessage = @"[语音]";
+                    msg.audioUrl = audiourl;
+                    msg.messageType = @(messageType_audio);
+                    int length  = [dicMessage[@"length"] intValue];
+                    msg.audioLength = @(length/audioLengthDefine);
+                }else if ([typeMessage isEqualToString:@"map"]) {
+                    self.conversation.lastMessage = @"[位置信息]";
+                    msg.imageUrl = imageurl;
+                    msg.messageType = @(messageType_map);
+                }else if ([typeMessage isEqualToString:@"video"]) {
+                    self.conversation.lastMessage = @"[视频]";
+                    msg.videoUrl = imageurl;
+                    msg.messageType = @(messageType_video);
+                }
+                
+                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                
+                self.conversation.lastMessageDate = date;
+                self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg]; //table reload
+                [localContext MR_saveToPersistentStoreAndWait];
+            }
+            [self insertTableRow];
             
-            NSDictionary * dicResult = MsgContent[@"data"];
-            
-            NSDictionary * dicMessage = dicResult[@"message"];
-            
+        }else if(![self.conversation.facebookId isEqualToString:facebookID]){
+            //out view
+            NSString * content = dicMessage[@"content"];
+            NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
+            NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
             
             // update lastmessage id index
             NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
@@ -577,270 +715,175 @@
                 [USER_DEFAULT synchronize];
             }
             
-            NSString *facebookID = [tools getStringValue:dicMessage[@"fromid"] defaultValue:@""];
+            NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
+            FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
+            if (message) {
+                // change by tinkl   ....MARK:  has this record
+            }else{
+                
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                if ([typeMessage isEqualToString:@"txt"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"emj"]) {
+                    if ([content containString:@"sticker_"]) {
+                        msg.messageType = @(messageType_emj);
+                        self.conversation.lastMessage = @"[表情]";
+                    }else{
+                        msg.messageType = @(messageType_text);
+                        self.conversation.lastMessage = content;
+                    }
+                }else if ([typeMessage isEqualToString:@"pic"]) {
+                    //image
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
+                    msg.imageUrl = imageurl;
+                }else if ([typeMessage isEqualToString:@"vic"]) {
+                    //audio
+                    NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
+                    self.conversation.lastMessage = @"[语音]";
+                    msg.audioUrl = audiourl;
+                    msg.messageType = @(messageType_audio);
+                }else if ([typeMessage isEqualToString:@"map"]) {
+                    self.conversation.lastMessage = @"[位置信息]";
+                    msg.imageUrl = imageurl;
+                    msg.messageType = @(messageType_map);
+                }else if ([typeMessage isEqualToString:@"video"]) {
+                    self.conversation.lastMessage = @"[视频]";
+                    msg.videoUrl = imageurl;
+                    msg.messageType = @(messageType_video);
+                }
+                
+                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                self.conversation.lastMessage = content;
+                self.conversation.lastMessageDate = date;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                // increase badge number.
+                int badgeNumber = [self.conversation.badgeNumber intValue];
+                badgeNumber ++;
+                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                
+                [self.conversation addMessagesObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
+            }
+        }
+    }else if ([requestKey isEqualToString:@"newpost_error"]){
+        // group new msg
+        /*
+         “data”:{
+         “post”:{
+         “postid”:
+         “uid”:
+         “group_id”:
+         “content”:
+         */
+        NSDictionary * dicResult = MsgContent[@"data"];
+        
+        NSDictionary * dicMessage = dicResult[@"post"];
+        NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
+        
+        //获取群组消息类型 然后做相关写入操作
+        NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"gid == %@ ",gid];
+        FCHomeGroupMsg * groupMessage = [FCHomeGroupMsg MR_findFirstWithPredicate:parCMDss];
+        if ([groupMessage.gType isEqualToString: @"2"]) {
+            
+            NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
+            if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+            {
+                return;
+            }
+            
+            
+            NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
             if ([self.conversation.facebookId isEqualToString:facebookID]) {
                 // int view
                 NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
                 NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                //                FCMessage  find this infomation
-                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
-                FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
-                if (message) {
-                    // change by tinkl   ....MARK:  has this record
-                    [self.messageList addObject:message]; //table reload
-                    self.conversation.badgeNumber = @0;
-                    self.conversation.messageStutes = @(messageStutes_incoming);
-                    [localContext MR_saveToPersistentStoreAndWait];
-                    
-                }else{
-                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                    msg.text = content;
-                    
-                    msg.sentDate = date;
-                    // message did come, this will be on left
-                    msg.messageStatus = @(YES);
-                    if ([typeMessage isEqualToString:@"txt"]) {
-                        if ([content containString:@"sticker_"]) {
-                            msg.messageType = @(messageType_emj);
-                            self.conversation.lastMessage = @"[表情]";
-                        }else{
-                            msg.messageType = @(messageType_text);
-                            self.conversation.lastMessage = content;
-                        }
-                    }else if ([typeMessage isEqualToString:@"emj"]) {
-                        if ([content containString:@"sticker_"]) {
-                            msg.messageType = @(messageType_emj);
-                            self.conversation.lastMessage = @"[表情]";
-                        }else{
-                            msg.messageType = @(messageType_text);
-                            self.conversation.lastMessage = content;
-                        }
-                    }else if ([typeMessage isEqualToString:@"pic"]) {
-                        //image
-                        msg.messageType = @(messageType_image);
-                        self.conversation.lastMessage = @"[图片]";
-                        msg.imageUrl = imageurl;
-                    }else if ([typeMessage isEqualToString:@"vic"]) {
-                        //audio
-                        NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
-                        self.conversation.lastMessage = @"[语音]";
-                        msg.audioUrl = audiourl;
-                        msg.messageType = @(messageType_audio);
-                        int length  = [dicMessage[@"length"] intValue];
-                        msg.audioLength = @(length/audioLengthDefine);
-                    }else if ([typeMessage isEqualToString:@"map"]) {
-                        self.conversation.lastMessage = @"[位置信息]";
-                        msg.imageUrl = imageurl;
-                        msg.messageType = @(messageType_map);
-                    }else if ([typeMessage isEqualToString:@"video"]) {
-                        self.conversation.lastMessage = @"[视频]";
-                        msg.videoUrl = imageurl;
-                        msg.messageType = @(messageType_video);
-                    }
-                    
-                    msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                    
-                    self.conversation.lastMessageDate = date;
-                    self.conversation.badgeNumber = @0;
-                    self.conversation.messageStutes = @(messageStutes_incoming);
-                    [self.conversation addMessagesObject:msg];
-                    [self.messageList addObject:msg]; //table reload
-                    [localContext MR_saveToPersistentStoreAndWait];
+                msg.sentDate = date;
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                if (imageurl.length > 5)
+                {
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
                 }
+                
+                else
+                {
+                    msg.messageType = @(messageType_text);
+                    self.conversation.lastMessage = content;
+                }
+                
+                msg.imageUrl = imageurl;
+                msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                
+                self.conversation.lastMessageDate = date;
+                self.conversation.badgeNumber = @0;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                [self.conversation addMessagesObject:msg];
+                [self.messageList addObject:msg]; //table reload
+                [localContext MR_saveToPersistentStoreAndWait];
                 [self insertTableRow];
-
+                
             }else if(![self.conversation.facebookId isEqualToString:facebookID]){
                 //out view
                 NSString * content = dicMessage[@"content"];
                 NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
-                
-                // update lastmessage id index
-                NSInteger indexMsgID = [DataHelper getIntegerValue:dicMessage[@"msgid"] defaultValue:0];
-                
-                NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                if (messageIndex < indexMsgID) {
-                    [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                    [USER_DEFAULT synchronize];
-                }
-                
-                NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
-                FCMessage * message =  [FCMessage MR_findFirstWithPredicate:preCMD];
-                if (message) {
-                    // change by tinkl   ....MARK:  has this record
-                }else{
-                    
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                    msg.text = content;
-                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                    msg.sentDate = date;
-                    if ([typeMessage isEqualToString:@"txt"]) {
-                        if ([content containString:@"sticker_"]) {
-                            msg.messageType = @(messageType_emj);
-                            self.conversation.lastMessage = @"[表情]";
-                        }else{
-                            msg.messageType = @(messageType_text);
-                            self.conversation.lastMessage = content;
-                        }
-                    }else if ([typeMessage isEqualToString:@"emj"]) {
-                        if ([content containString:@"sticker_"]) {
-                            msg.messageType = @(messageType_emj);
-                            self.conversation.lastMessage = @"[表情]";
-                        }else{
-                            msg.messageType = @(messageType_text);
-                            self.conversation.lastMessage = content;
-                        }
-                    }else if ([typeMessage isEqualToString:@"pic"]) {
-                        //image
-                        msg.messageType = @(messageType_image);
-                        self.conversation.lastMessage = @"[图片]";
-                        msg.imageUrl = imageurl;
-                    }else if ([typeMessage isEqualToString:@"vic"]) {
-                        //audio
-                        NSString * audiourl = [tools getStringValue:dicMessage[@"voice"] defaultValue:@""];
-                        self.conversation.lastMessage = @"[语音]";
-                        msg.audioUrl = audiourl;
-                        msg.messageType = @(messageType_audio);
-                    }else if ([typeMessage isEqualToString:@"map"]) {
-                        self.conversation.lastMessage = @"[位置信息]";
-                        msg.imageUrl = imageurl;
-                        msg.messageType = @(messageType_map);
-                    }else if ([typeMessage isEqualToString:@"video"]) {
-                        self.conversation.lastMessage = @"[视频]";
-                        msg.videoUrl = imageurl;
-                        msg.messageType = @(messageType_video);
-                    }
-                    
-                    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
-                    // message did come, this will be on left
-                    msg.messageStatus = @(YES);
-                    msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                    self.conversation.lastMessage = content;
-                    self.conversation.lastMessageDate = date;
-                    self.conversation.messageStutes = @(messageStutes_incoming);
-                    // increase badge number.
-                    int badgeNumber = [self.conversation.badgeNumber intValue];
-                    badgeNumber ++;
-                    self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                    
-                    [self.conversation addMessagesObject:msg];
-                    [localContext MR_saveToPersistentStoreAndWait];
-                }
-            }
-        }else if ([requestKey isEqualToString:@"newpost_error"]){
-            // group new msg
-            /*
-             “data”:{
-             “post”:{
-             “postid”:
-             “uid”:
-             “group_id”:
-             “content”:
-                */
-            NSDictionary * dicResult = MsgContent[@"data"];
-            
-            NSDictionary * dicMessage = dicResult[@"post"];
-            NSString * gid = [tools getStringValue:dicMessage[@"gid"] defaultValue:@""];
-            
-            //获取群组消息类型 然后做相关写入操作
-            NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"gid == %@ ",gid];
-            FCHomeGroupMsg * groupMessage = [FCHomeGroupMsg MR_findFirstWithPredicate:parCMDss];
-            if ([groupMessage.gType isEqualToString: @"2"]) {
-                 
-                NSString * uid = [tools getStringValue:dicMessage[@"uid"] defaultValue:@""];
-                if([uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                msg.text = content;
+                NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                msg.sentDate = date;
+                if (imageurl.length > 5)
                 {
-                    return;
+                    msg.messageType = @(messageType_image);
+                    self.conversation.lastMessage = @"[图片]";
                 }
-                
-                
-                NSString * facebookID = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-                if ([self.conversation.facebookId isEqualToString:facebookID]) {
-                    // int view
-                    NSString * content = [tools getStringValue:dicMessage[@"content"] defaultValue:@""];
-                    NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                    msg.text = content;
-                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                    msg.sentDate = date;
-                    // message did come, this will be on left
-                    msg.messageStatus = @(YES);
-                    if (imageurl.length > 5)
-                    {
-                        msg.messageType = @(messageType_image);
-                        self.conversation.lastMessage = @"[图片]";
-                    }
-                    
-                    else
-                    {
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
-                    }
-                    
-                    msg.imageUrl = imageurl;
-                    msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                    
-                    self.conversation.lastMessageDate = date;
-                    self.conversation.badgeNumber = @0;
-                    self.conversation.messageStutes = @(messageStutes_incoming);
-                    [self.conversation addMessagesObject:msg];
-                    [self.messageList addObject:msg]; //table reload
-                    [localContext MR_saveToPersistentStoreAndWait];
-                    [self insertTableRow];
-                    
-                }else if(![self.conversation.facebookId isEqualToString:facebookID]){
-                    //out view
-                    NSString * content = dicMessage[@"content"];
-                    NSString * imageurl = [tools getStringValue:dicMessage[@"picture"] defaultValue:@""];
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                    msg.text = content;
-                    NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                    msg.sentDate = date;
-                    if (imageurl.length > 5)
-                    {
-                        msg.messageType = @(messageType_image);
-                        self.conversation.lastMessage = @"[图片]";
-                    }
-                    else
-                    {
-                        msg.messageType = @(messageType_text);
-                        self.conversation.lastMessage = content;
-                    }
-                    [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
-                    // message did come, this will be on left
-                    msg.messageStatus = @(YES);
-                    msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                        FCUserDescription * localdespObject = response;
-                        self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
-                    } withuid:uid];
-                    self.conversation.lastMessageDate = date;
-                    self.conversation.messageStutes = @(messageStutes_incoming);
-                    // increase badge number.
-                    int badgeNumber = [self.conversation.badgeNumber intValue];
-                    badgeNumber ++;
-                    self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                    
-                    [self.conversation addMessagesObject:msg];
-                    [localContext MR_saveToPersistentStoreAndWait];
+                else
+                {
+                    msg.messageType = @(messageType_text);
+                    self.conversation.lastMessage = content;
                 }
+                [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
+                // message did come, this will be on left
+                msg.messageStatus = @(YES);
+                msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                    FCUserDescription * localdespObject = response;
+                    self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                } withuid:uid];
+                self.conversation.lastMessageDate = date;
+                self.conversation.messageStutes = @(messageStutes_incoming);
+                // increase badge number.
+                int badgeNumber = [self.conversation.badgeNumber intValue];
+                badgeNumber ++;
+                self.conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                
+                [self.conversation addMessagesObject:msg];
+                [localContext MR_saveToPersistentStoreAndWait];
             }
-            
-            
-            
         }
+        
     }
-    
 }
 
 - (void)dealloc
@@ -1736,8 +1779,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     /**
-     *  两种信息, 1: 用户间聊天信息
-                 2: 系统公告
+     *  两种信息,   1: 用户间聊天信息    2: 系统公告
      */
     FCMessage *message = self.messageList[indexPath.row];
     if ([message.messageType intValue] == messageType_SystemAD) {
@@ -1759,9 +1801,12 @@
         return cell;
     }
     
+    NSString *CellIdentifier;
+    if ([message.messageStatus boolValue])
+        CellIdentifier = @"XCJChatMessageCell";
+    else
+        CellIdentifier = @"XCJMyChatMessageCell";
     
-    //MESSAGE_GUID
-    static NSString *CellIdentifier = @"XCJChatMessageCell";
     XCJChatMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     [cell setCurrentMessage:message];
     [cell setConversation:self.conversation];
@@ -1823,9 +1868,7 @@
         }
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         [cell SendMessageRemoteImgOper:_objImgListOper WithMessage:dictionary type:messageType_text];
-//        [cell SendMessageWithMessage:dictionary type:messageType_text];
     }
-    
     
     UIImageView * imageview_Img = (UIImageView *)[cell.contentView subviewWithTag:5];
     UIImageView * imageview_BG = (UIImageView *)[cell.contentView subviewWithTag:6];
@@ -1845,13 +1888,14 @@
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:self.userinfo.headpic Size:100]]];
             labelName.text = self.userinfo.nick;
         }
-        imageview_BG.image = [UIImage imageNamed:@"bubbleLeftTail"];
+//        imageview_BG.image = [UIImage imageNamed:@"bubbleLeftTail"];
         labelContent.textColor = [UIColor blackColor];
         cell.backgroundColor = [UIColor clearColor];
+       
     }else{
         //Outcoming
-        cell.backgroundColor = [UIColor whiteColorWithAlpha:.1];
-        imageview_BG.image = [UIImage imageNamed:@"bubbleRightTail-1"];
+//        cell.backgroundColor = [UIColor whiteColorWithAlpha:.1];
+//        imageview_BG.image = [UIImage imageNamed:@"bubbleRightTail-1"];
         [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_headpic] Size:100]]];
         labelName.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
         labelContent.textColor = [UIColor whiteColor];
@@ -1868,8 +1912,33 @@
         [imageview_Img addGestureRecognizer:ges];
         
         imageview_Img.hidden = NO;
+        
         [imageview_BG setHeight:108.0f];
         [imageview_BG setWidth:115.0f];
+        if ([message.messageStatus boolValue])
+        {
+            [imageview_BG setLeft:55.0f];
+            [imageview_Img setLeft:65.0f];
+            
+            
+            indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = imageview_BG.left + imageview_BG.width  ;
+            retryButton.top = imageview_BG.height/2  + 10;
+            
+        }
+        else
+        {
+            [imageview_BG setLeft:147 ];
+            [imageview_Img setLeft:152.0f];
+            
+            indictorView.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 - 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 -10 ;
+            retryButton.top = imageview_BG.height/2  + 10;
+        }
         
         [imageview_Img setHeight:100.0f];
         [imageview_Img setWidth:100.0f];
@@ -1879,11 +1948,6 @@
         address.text = @"";
         address.hidden = YES;
         
-        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
-        indictorView.top = imageview_BG.height/2  + 20;
-        
-        retryButton.left = imageview_BG.left + imageview_BG.width  ;
-        retryButton.top = imageview_BG.height/2  + 10;
         
     }else if ([message.messageType intValue] == messageType_text) {
         
@@ -1903,15 +1967,36 @@
         //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
         [imageview_BG setHeight:fmaxf(35.0f, sizeToFit.height + 18.0f )];
         [imageview_BG setWidth:fmaxf(35.0f, sizeToFit.width + 23.0f )];
+        
+        if ([message.messageStatus boolValue])
+        {
+            [imageview_BG setLeft:55.0f];
+            [labelContent setLeft:68.0f];
+            
+            
+            indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = imageview_BG.left + imageview_BG.width  ;
+            retryButton.top = imageview_BG.height/2  + 10;
+        }
+        else
+        {
+            [imageview_BG setLeft: APP_SCREEN_WIDTH - (imageview_BG.width + 55)];
+            [labelContent setLeft: APP_SCREEN_WIDTH - (labelContent.width + 77 -10 )  ];
+            
+            
+            indictorView.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 - 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 -10 ;
+            retryButton.top = imageview_BG.height/2  + 10;
+        }
+        
+        
         imageview_BG.hidden = NO;
         address.text = @"";
         address.hidden = YES;
-        
-        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
-        indictorView.top = imageview_BG.height/2  + 20;
-        
-        retryButton.left = imageview_BG.left + imageview_BG.width  ;
-        retryButton.top = imageview_BG.height/2  + 10;
         
     }else if([message.messageType intValue] == messageType_emj)
     {
@@ -1928,16 +2013,36 @@
         [imageview_Img setHeight:100.0f];
         [imageview_Img setWidth:100.0f];
         
+        
+        if ([message.messageStatus boolValue])
+        {
+            [imageview_BG setLeft:55.0f];
+            [imageview_Img setLeft:65.0f];
+            
+            indictorView.left = imageview_Img.left + imageview_Img.width  + 5;
+            indictorView.top = imageview_Img.height/2  + 20;
+            
+            retryButton.left = imageview_Img.left + imageview_Img.width  ;
+            retryButton.top = imageview_Img.height/2  + 10;
+        }
+        else
+        {
+            [imageview_BG setLeft:147 ];
+            [imageview_Img setLeft:152.0f];
+            
+            indictorView.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 - 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10  -10;
+            retryButton.top = imageview_BG.height/2  + 10;
+            
+        }
+        
         imageview_BG.hidden = YES;
         address.text = @"";
         address.hidden = YES;
         
         
-        indictorView.left = imageview_Img.left + imageview_Img.width  + 5;
-        indictorView.top = imageview_Img.height/2  + 20;
-        
-        retryButton.left = imageview_Img.left + imageview_Img.width  ;
-        retryButton.top = imageview_Img.height/2  + 10;
     }else if([message.messageType intValue] == messageType_map)
     {
         //display image  115 108
@@ -1948,6 +2053,33 @@
         [imageview_BG setWidth:174.0f];
         [imageview_BG setHeight:168.0f];
         
+        if ([message.messageStatus boolValue])
+        {
+            [imageview_BG setLeft:55.0f];
+            [imageview_Img setLeft:65.0f];
+            
+            
+            indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = imageview_BG.left + imageview_BG.width  ;
+            retryButton.top = imageview_BG.height/2  + 10;
+            
+        }
+        else
+        {
+            [imageview_BG setLeft:88 ];
+            [imageview_Img setLeft:92.0f];
+            
+            
+            indictorView.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 - 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 -10 ;
+            retryButton.top = imageview_BG.height/2  + 10;
+            
+        }
+        
         [imageview_Img setHeight:160.0f];
         [imageview_Img setWidth:160.0f];
         
@@ -1955,14 +2087,6 @@
         imageview_Img.userInteractionEnabled = YES;
         address.text = message.text;
         address.hidden = NO;
-        
-        
-        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
-        indictorView.top = imageview_BG.height/2  + 20;
-        
-        retryButton.left = imageview_BG.left + imageview_BG.width  ;
-        retryButton.top = imageview_BG.height/2  + 10;
-        
         
     }else if([message.messageType intValue] == messageType_audio)
     {
@@ -1975,17 +2099,11 @@
         //    fmaxf(35.0f, sizeToFit.height + 5.0f ) ,fmaxf(35.0f, sizeToFit.width + 10.0f )
         [imageview_BG setHeight:35.0f];
         [imageview_BG setWidth:80.0f];
+        
         imageview_BG.hidden = NO;
         address.text = @"";
         address.hidden = YES;
         
-        indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
-        indictorView.top = imageview_BG.height/2  + 20;
-        
-        retryButton.left = imageview_BG.left + imageview_BG.width;
-        retryButton.top = imageview_BG.height/2  + 10;
-        
-        audioButton.left = 50.0f;
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         if ([message.audioLength intValue] > 1000) {
             [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/audioLengthDefine] forState:UIControlStateNormal];
@@ -1993,16 +2111,43 @@
             if ([message.audioLength intValue] < 0) {
                 int leng = [message.audioLength intValue];
                 leng = -leng;
-                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/audioLengthDefine] forState:UIControlStateNormal];
+                 [audioButton setTitle:[NSString stringWithFormat:@"%d''  ",leng/audioLengthDefine] forState:UIControlStateNormal];
             }else{
-                [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+                [audioButton setTitle:[NSString stringWithFormat:@"%d''  ",[message.audioLength intValue]] forState:UIControlStateNormal];
             }
         }
         
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
-        Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
-        Image_playing.top = imageview_BG.height/2 + 17 ;
+ 
         
+        if ([message.messageStatus boolValue])
+        {
+            [imageview_BG setLeft:55.0f];
+            audioButton.left = 50.0f;
+            Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
+            
+            indictorView.left = imageview_BG.left + imageview_BG.width  + 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = imageview_BG.left + imageview_BG.width;
+            retryButton.top = imageview_BG.height/2  + 10;
+        }
+        else
+        {
+            [imageview_BG setLeft:APP_SCREEN_WIDTH -  imageview_BG.width - 55.0f ];
+            audioButton.left = APP_SCREEN_WIDTH -  50.0f -  55.0f -50;
+            Image_playing.left = APP_SCREEN_WIDTH -  imageview_BG.width - 55.0f - 25;
+            UIImage * image = [UIImage imageNamed:@"chat_my_bottom_voice_press"];
+            audioButton.imageEdgeInsets = UIEdgeInsetsMake(0., audioButton.frame.size.width - (image.size.width + 5.), 0., 0.);
+            audioButton.titleEdgeInsets = UIEdgeInsetsMake(0., 0., 0., image.size.width);
+            
+            indictorView.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 - 5;
+            indictorView.top = imageview_BG.height/2  + 20;
+            
+            retryButton.left = APP_SCREEN_WIDTH - 70 - imageview_BG.width - 10 -10 ;
+            retryButton.top = imageview_BG.height/2  + 10;
+        }
+         Image_playing.top = imageview_BG.height/2 + 17 ;
          if ([message.messageStatus boolValue])
          {
              //other
@@ -2165,11 +2310,21 @@
 
 - (void) ShowPlayingimgArray:(UITableViewCell * ) cell withTime:(int) timer
 {
+    NSString * string = cell.reuseIdentifier;
+    NSArray * gifArray;
+    if ([string isEqualToString:@"XCJMyChatMessageCell"]) {
+        gifArray = [NSArray arrayWithObjects:
+                              [UIImage imageNamedTwo:@"voice_receive_icon_my_1"],
+                              [UIImage imageNamedTwo:@"voice_receive_icon_my_2"],
+                              [UIImage imageNamedTwo:@"voice_receive_icon_my_3"], nil];
+    }else{
+        gifArray = [NSArray arrayWithObjects:
+                              [UIImage imageNamedTwo:@"voice_receive_icon_1"],
+                              [UIImage imageNamedTwo:@"voice_receive_icon_2"],
+                              [UIImage imageNamedTwo:@"voice_receive_icon_3"], nil];
+    }
     UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
-    NSArray * gifArray = [NSArray arrayWithObjects:
-                [UIImage imageNamedTwo:@"voice_receive_icon_1"],
-                [UIImage imageNamedTwo:@"voice_receive_icon_2"],
-                [UIImage imageNamedTwo:@"voice_receive_icon_3"], nil];
+    
     
     Image_playing.animationImages = gifArray; //动画图片数组
 	Image_playing.animationDuration = 1; //执行一次完整动画所需的时长

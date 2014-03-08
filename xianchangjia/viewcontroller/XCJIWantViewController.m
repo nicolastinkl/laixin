@@ -155,7 +155,7 @@
             break;
             
         case 2:
-            image_bgSign.image = [UIImage imageNamed:@"found_icons_location"];
+            image_bgSign.image = [UIImage imageNamed:@"group_avatar_default_0"];
             label_name.text = @"来活动";
             badage.hidden = YES;
             image_New.hidden = YES;

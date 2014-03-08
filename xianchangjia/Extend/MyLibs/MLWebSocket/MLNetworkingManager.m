@@ -17,6 +17,9 @@
 #import "DataHelper.h"
 NSString * const MLNetworkingManagerDidReceivePushMessageNotification = @"com.mlnetworking.didgetnotification";
 
+NSString * const MLNetworkingManagerDidReceiveForcegroundMessageNotification = @"com.mlnetworking.MLNetworkingManagerDidReceiveForcegroundMessageNotification";
+
+
 #define kRequestKeyName @"cdata"// @"client_code"
 #define kRequestKeyLength 10
 #define kTimeOut 10 //暂时设置10秒

@@ -130,7 +130,7 @@
 	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sortDescriptor count:1];
 	NSMutableArray *sortedMessages = [[NSMutableArray alloc] initWithArray:[conversation.messages allObjects]];
 	[sortedMessages sortUsingDescriptors:sortDescriptors];
-    return [NSMutableArray arrayWithArray:sortedMessages];
+    return  [NSMutableArray arrayWithArray:sortedMessages];
 }
 
 
