@@ -17,6 +17,7 @@
 #import "UINavigationSample.h"
 #import "XCJSendMapViewController.h"
 #import "XCJPayInfo.h"
+#import "XCJSeeJiuShuiViewController.h"
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
@@ -25,6 +26,11 @@
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_2;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_0;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_1;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_2;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_3;
+
+
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
 @property (weak, nonatomic) IBOutlet UIButton *image_button;
@@ -254,7 +260,7 @@
         return 1;
     }else if(section ==2)
     {
-        return 1;
+        return 4;
     }
     return 0;
 }
@@ -286,6 +292,29 @@
             
             [self.navigationController pushViewController:mapview animated:YES];
         }
+    }else if(indexPath.section == 2)
+    {
+        switch (indexPath.row) {
+            case 1:
+            {
+                XCJSeeJiuShuiViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeeJiuShuiViewController"];
+                [self.navigationController pushViewController:viewcontrs animated:YES];
+            }
+                break;
+            case 2:
+            {
+                
+            }
+                break;
+            case 3:
+            {
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
     }
 }
 
@@ -316,7 +345,14 @@
             break;
         case 2:
             if (indexPath.row == 0)
-            cell= self.cell_2_0;
+                cell= self.cell_2_0;
+            else if (indexPath.row == 1)
+                cell= self.cell_2_1;
+            else if (indexPath.row == 2)
+                cell= self.cell_2_2;
+            else if (indexPath.row == 3)
+                cell= self.cell_2_3;
+            
             break;
             
         default:

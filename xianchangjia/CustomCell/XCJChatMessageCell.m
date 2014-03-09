@@ -36,19 +36,32 @@
     [self setRemoteImgOper:objOper withGUID:guid];
     SLLog(@"SendMessageRemoteImgOper guid : %@",guid);
     __block NSMutableDictionary *blockDict = [dict mutableCopy];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (_objRemoteImgListOper)
-                {
-                    [_objRemoteImgListOper sendMessageGUID:guid ByDict:blockDict withProgress:nil];
-                }else{
-                    // local
-                    
-                }
-            });
-        });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_objRemoteImgListOper)
+        {
+            [_objRemoteImgListOper sendMessageGUID:guid ByDict:blockDict withProgress:nil];
+        }
     });
+  
+    
+    /*
+     
+     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+     dispatch_async(dispatch_get_main_queue(), ^{
+     if (_objRemoteImgListOper)
+     {
+     [_objRemoteImgListOper sendMessageGUID:guid ByDict:blockDict withProgress:nil];
+     }else{
+     // local
+     
+     }
+     });
+     });
+     });
+     */
+    
+    
 }
 
 - (void)setRemoteImgOper:(RemoteImgListOperator *)objOper  withGUID:(NSString * ) guid
