@@ -18,6 +18,8 @@
 #import "XCJSendMapViewController.h"
 #import "XCJPayInfo.h"
 #import "XCJSeeJiuShuiViewController.h"
+#import "XCJSelectLaixinViewController.h"
+#import "XCJAppDelegate.h"
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
@@ -62,6 +64,7 @@
     
     self.title = @"房间详情";
     
+    [[self.view subviewWithTag:1] setTop:(APP_SCREEN_HEIGHT - 44)];
     [self.tableview setHeight:(APP_SCREEN_HEIGHT - 44)];
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareclick:)];
     
@@ -95,30 +98,33 @@
     
     self.label_address.text = self.locatinfo.addressName;
     
-    NSRange rang = [self.rominfo.parensNumber rangeOfString:@"-"];
-    NSString * num =  [self.rominfo.parensNumber substringToIndex:rang.location];
+   self.label_serCount.text = @"0";
    
     
-    if ([num intValue] > 0) {
-        [SVProgressHUD showWithStatus:@"正在处理..."];
-        [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.count_price" parameters:@{@"mid":@"1",@"people_count":@([num intValue])} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
-                if (errnoMesg == 0) {
-                    int price =  [num intValue] * 500;
-                    int lowPrice = [self.rominfo.lowprice intValue]*.9;
-                    self.label_price.text = [NSString stringWithFormat:@"￥%d.00",lowPrice + price];
-                    
-                    self.label_serCount.text = num;
-                    [SVProgressHUD dismiss];
-                }
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
-             self.label_serCount.text = @"0";
-            [UIAlertView showAlertViewWithMessage:@"处理失败"];
-        }];
-    }
+    /*
+     NSRange rang = [self.rominfo.parensNumber rangeOfString:@"-"];
+     NSString * num =  [self.rominfo.parensNumber substringToIndex:rang.location];
+     if ([num intValue] > 0) {
+     [SVProgressHUD showWithStatus:@"正在处理..."];
+     [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.count_price" parameters:@{@"mid":@"1",@"people_count":@([num intValue])} success:^(MLRequest *request, id responseObject) {
+     if (responseObject) {
+     int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+     if (errnoMesg == 0) {
+     int price =  [num intValue] * 500;
+     int lowPrice = [self.rominfo.lowprice intValue]*.9;
+     self.label_price.text = [NSString stringWithFormat:@"￥%d.00",lowPrice + price];
+     
+     self.label_serCount.text = num;
+     [SVProgressHUD dismiss];
+     }
+     }
+     } failure:^(MLRequest *request, NSError *error) {
+     [SVProgressHUD dismiss];
+     self.label_serCount.text = @"0";
+     [UIAlertView showAlertViewWithMessage:@"处理失败"];
+     }];
+     }
+     */
 }
 
 
@@ -191,7 +197,7 @@
     NSString * count = self.label_serCount.text;
     int thiscount = [count intValue];
     [SVProgressHUD showWithStatus:@"正在处理..."];
-    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@"1",@"people_count":@(thiscount),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
             if (errnoMesg == 0) {          
@@ -225,9 +231,46 @@
 
 -(IBAction)shareclick:(id)sender
 {
-
+    //私信ta
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"分享到微信" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"好友", @"朋友圈",@"微信收藏",nil];
+    sheet.tag = 2;
+    [sheet showInView:self.view];
 }
 
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 2) {
+        //1  朋友圈
+        //0   好友
+        
+        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+        UIImage * image = [self.tableview  viewToImage:self.tableview];
+        NSData * data = UIImageJPEGRepresentation(image, .5);
+        switch (buttonIndex) {
+            case 0:
+            {
+                [delegate sendImageContent:0 withImageData:data];
+            }
+                break;
+            case 1:
+            {
+                [delegate sendImageContent:1 withImageData:data];
+            }
+                break;
+            case 2:
+            {
+                [delegate sendImageContent:2 withImageData:data];
+            }
+                break;
+                
+            default:
+                break;
+        }
+        
+    }
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -278,13 +321,18 @@
                  [sheet addButtonWithTitle:obj];
              }];
             [sheet addButtonWithTitle:@"取消"];
-            sheet.cancelButtonIndex = 2;
+            sheet.cancelButtonIndex = self.locatinfo.phone.count;
             [sheet showInView:self.view];
         }else if(indexPath.row == 2)
         {
-            return;
+            /*
+             Printing description of self->_TCoordinate.latitude:
+             (CLLocationDegrees) latitude = 30.62439918518066
+             Printing description of self->_TCoordinate.longitude:
+             (CLLocationDegrees) longitude = 104.0722732543945
+             */
             XCJSendMapViewController *mapview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendMapViewController"];
-            CLLocationCoordinate2D mylocation = CLLocationCoordinate2DMake([self.locatinfo.lng doubleValue], [self.locatinfo.log doubleValue]) ;
+            CLLocationCoordinate2D mylocation = CLLocationCoordinate2DMake(30.62439918518066, 104.0722732543945) ;
             mapview.isSeeTaMap = YES;
             mapview.TCoordinate = mylocation;
             mapview.title = self.locatinfo.addressName;
@@ -303,12 +351,17 @@
                 break;
             case 2:
             {
-                
+                XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
+                viewcontrs.title = @"K歌指导员";
+                [self.navigationController pushViewController:viewcontrs animated:YES];
             }
                 break;
             case 3:
             {
                 
+                XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
+                viewcontrs.title = @"选择推荐人";
+                [self.navigationController pushViewController:viewcontrs animated:YES];
             }
                 break;
                 

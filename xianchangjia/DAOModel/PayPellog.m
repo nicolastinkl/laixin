@@ -11,3 +11,7 @@
 @implementation PayPellog
 
 @end
+
+@implementation PayOrderHistorylog
+
+@end

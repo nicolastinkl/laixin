@@ -151,8 +151,10 @@
     UILabel * labelunit = (UILabel  *) [cell.contentView subviewWithTag:4];
     UILabel * labelml = (UILabel  *) [cell.contentView subviewWithTag:5];
     labelname.text = subinfo.name;
-    labelprice.text = subinfo.price;
-    labeltype.text = subinfo.unit;
+    labelprice.text =[NSString stringWithFormat:@"￥%@", subinfo.price];
+    labelprice.textColor = [tools colorWithIndex:6];
+    labeltype.text = [NSString stringWithFormat:@"/%@", subinfo.unit];
+    labeltype.left = labelprice.left + subinfo.price.length * 15 ;
     labelunit.text = subinfo.other;
     labelml.text = subinfo.type;
     return cell;

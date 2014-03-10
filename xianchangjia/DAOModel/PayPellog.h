@@ -25,3 +25,34 @@
 
 
 @end
+
+
+
+@interface PayOrderHistorylog : Model
+
+/*"orderid":"1394352157-875",
+ "remain":38,
+ "create_time":1394352157,
+ "uid":1,
+ "ex_people":12,
+ "paystate":0,
+ "paytime":null,
+ "refundtime":null,
+ "mid":1*/
+@property (nonatomic, copy  ) NSString  *orderid;
+@property (nonatomic, assign) NSInteger remain;
+@property (nonatomic, assign) NSInteger uid;
+@property (nonatomic, assign) NSInteger mid;
+
+@property (nonatomic, assign) double paytime;
+@property (nonatomic, assign) NSInteger ex_people;
+@property (nonatomic, assign) double refundtime;
+@property (nonatomic, assign) NSInteger paystate;
+@property (nonatomic, assign) double    create_time;
+
+
+@end
+
+
+
+

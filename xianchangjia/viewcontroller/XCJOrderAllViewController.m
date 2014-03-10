@@ -10,11 +10,25 @@
 #import "XCAlbumAdditions.h"
 #import "PayPellog.h"
 #import "UIButton+Bootstrap.h"
+#import "XCJPayInfo.h"
+#import "UINavigationSample.h"
 
-@interface XCJOrderAllViewController ()
+#include "OpenUDID.h"
+#import "DZWebBrowser.h"
+
+@interface XCJOrderAllViewController ()<UIAlertViewDelegate>
 {
     NSMutableArray * _datasouces;
+    NSMutableArray * _datasouces_canntPay;
+    NSMutableArray * _datasouces_canntrefund;
+    NSMutableDictionary * DictAry;
+    
+    int pagetype;
+    
 }
+
+@property (weak, nonatomic) IBOutlet UISearchBar *searchbar;
+
 @end
 
 @implementation XCJOrderAllViewController
@@ -28,12 +42,49 @@
     return self;
 }
 
+- (IBAction)SegemvalueChange:(id)sender {
+    UISegmentedControl * control = sender;
+    pagetype =  control.selectedSegmentIndex;
+    [self.tableView reloadData];
+}
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([self.searchbar isFirstResponder]) {
+        [self.searchbar resignFirstResponder];
+    }
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    NSMutableArray * array = [[NSMutableArray alloc] init];
-    _datasouces = array;
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        _datasouces = array;
+        
+    }
+    
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        _datasouces_canntPay = array;
+        
+    }
+    
+    {
+        NSMutableArray * array = [[NSMutableArray alloc] init];
+        _datasouces_canntrefund = array;
+        
+    }
+    
+    pagetype = 0;
+    
+    
+    NSMutableDictionary * arrayDicy = [[NSMutableDictionary alloc] init];
+    DictAry = arrayDicy;
+    
     
 //    self.title = @"订单详情";
     
@@ -55,25 +106,61 @@
      "ex_people":8,
      "productcatalog":1,
      "paystate":1*/
+    [self.view showIndicatorViewLargeBlue];
     
-    PayPellog * pay = [[PayPellog alloc] init];
-    pay.orderid = @"1394161723-366";
-    pay.payid = 9;
-    pay.mid = 1;
-    pay.uid = 1;
-    pay.productname = @"至尊公爵";
-    pay.amount = 26;
-    pay.create_time = 1394161970.0;
-    pay.productdesc = @"豪华包间,适合12-15人";
-    pay.productcatalog = 1;
-    pay.paystate = 1;
-    pay.ex_people = 8;
+    NSMutableArray * arrayMID = [[NSMutableArray alloc] init];
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.history" parameters:@{@"before":@"",@"count":@"10000"} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * dict =  responseObject[@"result"];
+            NSArray * jsonArray = dict[@"history"];
+            [jsonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                PayOrderHistorylog * log = [PayOrderHistorylog turnObject:obj];
+                if (log) {
+                    [_datasouces addObject:log];
+                    [arrayMID addObject:@(log.mid)];
+                    if (log.paystate == 0) {
+                        [_datasouces_canntPay addObject:log]; //未支付
+                    }else if (log.paystate == 1) {
+                        [_datasouces_canntrefund addObject:log]; //未消费
+                    }
+                }
+            }];
+            
+            if (jsonArray.count == 0) {
+                [self showErrorText:@"没有订单"];
+                [self.view hideIndicatorViewBlueOrGary];
+            }else{
+                [self resquestData:arrayMID];
+            }
+            
+        }
+        
+    } failure:^(MLRequest *request, NSError *error) {
+        [self showErrorText:@"加载出错,请检查网络设置"];
+        [self.view hideIndicatorViewBlueOrGary];
+    }];
+}
+
+-(void) resquestData:(NSArray * )arrayMID
+{
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.get" parameters:@{@"mid":arrayMID} success:^(MLRequest *request, id responseObjects) {
+        if (responseObjects) {
+            NSDictionary * dicts =  responseObjects[@"result"];
+            NSArray * merchandisesArray = dicts[@"merchandises"];
+            [merchandisesArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                roomInfo * rominfo = [[roomInfo alloc] initWithJSONObject:obj];
+                if (rominfo) {
+                    [DictAry setValue:rominfo forKey:[NSString stringWithFormat:@"%d",rominfo.mid]];
+                }
+            }];
+        }
+        [self.view hideIndicatorViewBlueOrGary];
+        [self.tableView reloadData];
+    } failure:^(MLRequest *request, NSError *error) {
+        [self showErrorText:@"加载出错,请检查网络设置"];
+        [self.view hideIndicatorViewBlueOrGary];
+    }];
     
-    [_datasouces addObject:pay];
-    pay.paystate = 0;
-    [_datasouces addObject:pay];
-    pay.ex_people = 2;
-    [_datasouces addObject:pay];
 }
 
 - (void)didReceiveMemoryWarning
@@ -87,7 +174,14 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return _datasouces.count;
+    if (pagetype == 0) {
+        return _datasouces.count;
+    }else     if (pagetype == 1) {
+        return _datasouces_canntPay.count;
+    }else     if (pagetype == 2) {
+        return _datasouces_canntrefund.count;
+    }
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -108,7 +202,14 @@
     
     // Configure the cell...
     
-    PayPellog * pay = _datasouces[indexPath.section];
+    PayOrderHistorylog * pay ;
+    if (pagetype == 0) {
+        pay = _datasouces[indexPath.section];
+    }else     if (pagetype == 1) {
+        pay = _datasouces_canntPay[indexPath.section];
+    }else     if (pagetype == 2) {
+        pay = _datasouces_canntrefund[indexPath.section];
+    }
     
     UILabel * labelname = (UILabel*) [cell.contentView subviewWithTag:1];
 //    UILabel * labelOne = (UILabel*) [cell.contentView subviewWithTag:2];
@@ -127,16 +228,17 @@
     UIButton * button_pay = (UIButton*) [cell.contentView subviewWithTag:11];
     UIButton * button_play = (UIButton*) [cell.contentView subviewWithTag:12];
     
+    roomInfo * rominfo = DictAry[[NSString stringWithFormat:@"%d",pay.mid]];
     
     int colorindex = indexPath.section % 6 + 1 ;
     labelBg.backgroundColor  = [tools colorWithIndex:colorindex];
-    labelname.text = @"乐佰汇-保利店";
-    labelBgname.text = pay.productname;
-    labelDes.text = pay.productdesc;
-    labelFiller.text = @"适合12-15人";
-    labelPriceRoom.text = [NSString stringWithFormat:@"￥%d.00",pay.amount * 10 * 10];
+    labelname.text = rominfo.productname;
+    labelBgname.text = rominfo.name;
+    labelDes.text = rominfo.productdesc;
+    labelFiller.text = [NSString stringWithFormat:@"适合%@人",rominfo.parensNumber];
+    labelPriceRoom.text = [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10];
     labelExCount.text = [NSString stringWithFormat:@"%d",pay.ex_people];
-    labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.amount * 10 * 10 + 1800];
+    labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10 + 1800];
     
     if (pay.paystate == 0) {
         button_pay.hidden = NO;
@@ -148,7 +250,86 @@
     
     [button_play primaryStyle];
     [button_pay sendMessageStyle];
+    
+    [button_pay addTarget:self action:@selector(payClick:) forControlEvents:UIControlEventTouchUpInside];
+    [button_play addTarget:self action:@selector(playClick:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
+}
+
+/**
+ *  支付
+ *
+ *  @param sender <#sender description#>
+ */
+-(IBAction)payClick:(id)sender
+{
+    
+   
+    
+    UIButton * button  = sender;
+    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
+    NSIndexPath *  indexPath =  [self.tableView indexPathForCell:cell];
+    PayOrderHistorylog * pay ;
+    if (pagetype == 0) {
+        pay = _datasouces[indexPath.section];
+    }else     if (pagetype == 1) {
+        pay = _datasouces_canntPay[indexPath.section];
+    }else     if (pagetype == 2) {
+        pay = _datasouces_canntrefund[indexPath.section];
+    }
+    NSString* openUDID = [OpenUDID value];
+    
+    [SVProgressHUD showWithStatus:@"正在处理..."];
+    //,@"cardid":pay.orderid
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(pay.mid),@"people_count":@(pay.ex_people),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+            if (errnoMesg == 0) {
+                [SVProgressHUD dismiss];
+                NSDictionary * dict = responseObject[@"result"];
+                NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
+                DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
+                webBrowser.showProgress = YES;
+                webBrowser.allowSharing = YES;
+                //
+                UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
+                [webBrowserNC pushViewController:webBrowser animated:NO];
+                
+                //[[UINavigationSample alloc] initWithRootViewController:webBrowser];
+                [self presentViewController:webBrowserNC animated:YES completion:NULL];
+                
+                
+                /* XCJBuySurityViewController * surView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJBuySurityViewController"];
+                 
+                 surView.BuyUrl      = [NSURL URLWithString:string];
+                 [self.navigationController pushViewController:surView animated:YES];
+                 */
+            }
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"处理失败"];
+        
+    }];
+}
+
+/**
+ *  消费
+ *
+ *  @param sender <#sender description#>
+ */
+-(IBAction)playClick:(id)sender
+{
+    
+    UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"是否标记为已消费?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
+    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        
+    }
 }
 
 /*
