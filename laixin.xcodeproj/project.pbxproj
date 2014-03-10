@@ -38,6 +38,8 @@
 		862F54B818A87ED6005DFD6C /* LKBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 862F54B718A87ED6005DFD6C /* LKBadgeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		8630C54318B5EBC600A11084 /* XCJSearchUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8630C54218B5EBC600A11084 /* XCJSearchUsersViewController.m */; };
 		863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */; };
+		8641195B18CD940A00C61F5F /* XCJTableViewMMController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641195A18CD940A00C61F5F /* XCJTableViewMMController.m */; };
+		8641195E18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8641195D18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m */; };
 		8643D0151839C712005238BC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8643D0141839C712005238BC /* CoreLocation.framework */; };
 		86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86467A97188F8763004AC59C /* XCJJIhuoViewController.m */; };
 		8646F8C0187A90EA004A8696 /* XCJSettingGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8BF187A90EA004A8696 /* XCJSettingGroupViewController.m */; };
@@ -558,6 +560,10 @@
 		8630C54218B5EBC600A11084 /* XCJSearchUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSearchUsersViewController.m; path = viewcontroller/XCJSearchUsersViewController.m; sourceTree = "<group>"; };
 		863FCCA218A9F0C700422DEB /* HTCopyableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTCopyableLabel.h; sourceTree = "<group>"; };
 		863FCCA318A9F0C700422DEB /* HTCopyableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTCopyableLabel.m; sourceTree = "<group>"; };
+		8641195918CD940A00C61F5F /* XCJTableViewMMController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJTableViewMMController.h; path = viewcontroller/XCJTableViewMMController.h; sourceTree = "<group>"; };
+		8641195A18CD940A00C61F5F /* XCJTableViewMMController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJTableViewMMController.m; path = viewcontroller/XCJTableViewMMController.m; sourceTree = "<group>"; };
+		8641195C18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSeetypeMMviewcontroller.h; path = viewcontroller/XCJSeetypeMMviewcontroller.h; sourceTree = "<group>"; };
+		8641195D18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSeetypeMMviewcontroller.m; path = viewcontroller/XCJSeetypeMMviewcontroller.m; sourceTree = "<group>"; };
 		8643D0141839C712005238BC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		86467A96188F8763004AC59C /* XCJJIhuoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJJIhuoViewController.h; path = viewcontroller/XCJJIhuoViewController.h; sourceTree = "<group>"; };
 		86467A97188F8763004AC59C /* XCJJIhuoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJJIhuoViewController.m; path = viewcontroller/XCJJIhuoViewController.m; sourceTree = "<group>"; };
@@ -2914,6 +2920,10 @@
 				866287D818CB357900891B2D /* XCJUserTAGViewController.m */,
 				8601AF2A18CCB585004B5469 /* XCJSeeJiuShuiViewController.h */,
 				8601AF2B18CCB585004B5469 /* XCJSeeJiuShuiViewController.m */,
+				8641195918CD940A00C61F5F /* XCJTableViewMMController.h */,
+				8641195A18CD940A00C61F5F /* XCJTableViewMMController.m */,
+				8641195C18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.h */,
+				8641195D18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m */,
 			);
 			name = FindRoom;
 			sourceTree = "<group>";
@@ -3539,6 +3549,7 @@
 				866287E118CC4CE800891B2D /* XCJCommentView.m in Sources */,
 				86D182AC1834AED30005901D /* LKDB+Manager.m in Sources */,
 				86268A3418C07AB7000F0A48 /* XCJCreateNearInviteViewcontr.m in Sources */,
+				8641195B18CD940A00C61F5F /* XCJTableViewMMController.m in Sources */,
 				865632E3185FFDDA00E9903C /* ChatViewController.m in Sources */,
 				86EB76CB185AA6CC00836947 /* UIImage+Addition.m in Sources */,
 				869CE536186BE38D0004C1EC /* MagicalRecord.m in Sources */,
@@ -3829,6 +3840,7 @@
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
 				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
 				8690DEC718C8891900A14A51 /* NJKWebViewProgress.m in Sources */,
+				8641195E18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m in Sources */,
 				86EB76D0185AA6CC00836947 /* AFHTTPSessionManager.m in Sources */,
 				862F54B418A87A00005DFD6C /* XCJIWantViewController.m in Sources */,
 			);

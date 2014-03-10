@@ -20,6 +20,8 @@
 #import "XCJSeeJiuShuiViewController.h"
 #import "XCJSelectLaixinViewController.h"
 #import "XCJAppDelegate.h"
+#import "XCJTableViewMMController.h"
+
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
@@ -264,7 +266,6 @@
                 [delegate sendImageContent:2 withImageData:data];
             }
                 break;
-                
             default:
                 break;
         }
@@ -351,7 +352,7 @@
                 break;
             case 2:
             {
-                XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
+                XCJTableViewMMController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJTableViewMMController"];
                 viewcontrs.title = @"K歌指导员";
                 [self.navigationController pushViewController:viewcontrs animated:YES];
             }
