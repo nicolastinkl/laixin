@@ -11,6 +11,9 @@
 #import "UITableViewCell+TKCategory.h"
 #import "UIButton+WebCache.h"
 #import "UIButton+AFNetworking.h"
+#import "XCJAddUserTableViewController.h"
+#import "EGOCache.h"
+
 
 @interface XCJSeetypeMMviewcontroller ()
 {
@@ -43,14 +46,11 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.title = @"K歌指导员列表";
+//    self.title = @"列表";
     
+    [self.view showIndicatorViewLargeBlue];
     {
-        NSString * strJson = [MobClick getConfigParams:@"HotTypeOfMM"];
-        NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
-        NSArray * array = [datajson  objectFromJSONData] ;
-        
-        NSDictionary * parames = @{@"uid":array};
+        NSDictionary * parames = @{@"uid":self.userArray};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
             // "users":[....]
             NSDictionary * userinfo = responseObject[@"result"];
@@ -61,14 +61,14 @@
                     [HotTypeOfMMArray addObject:currentUser];
                 }
             }];
+            [self.view hideIndicatorViewBlueOrGary];
             [self.tableView reloadData];
         } failure:^(MLRequest *request, NSError *error) {
+            [self showErrorText:@"加载出错"];
+            [self.view hideIndicatorViewBlueOrGary];
         }];
         
-        
     }
-
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -96,24 +96,31 @@
     static NSString *CellIdentifier = @"myCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UIButton * imageview = (UIButton * )  [cell.contentView subviewWithTag:1];
+    UIImageView * buttonview = (UIImageView * )  [cell.contentView subviewWithTag:1];
     UILabel * label_name = (UILabel * )  [cell.contentView subviewWithTag:2];
     UILabel * label_content = (UILabel * )  [cell.contentView subviewWithTag:3];
     UIButton * button = (UIButton * )  [cell.contentView subviewWithTag:4];
     LXUser *currentUser =  HotTypeOfMMArray[indexPath.row];
-    imageview.layer.cornerRadius = imageview.height/2;
-    imageview.layer.masksToBounds = YES;
-    
-    [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:currentUser.headpic Size:100]] forState:UIControlStateNormal   placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+
+//    [buttonview setImage:[UIImage imageNamed:@"avatar_default"] forState:UIControlStateNormal];
+    //forState:UIControlStateNormal
+    [buttonview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:currentUser.headpic Size:100]]   placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     label_name.text = currentUser.nick;
     label_content.text = currentUser.signature.length<=0?@"Ta什么都没说":currentUser.signature;
     NSMutableDictionary * keymuta  = [[NSMutableDictionary alloc] initWithObjectsAndKeys:currentUser,@"userinfo", nil];
     [cell setUserInfo:keymuta];
-    
+    buttonview.layer.cornerRadius = buttonview.height/2;
+    buttonview.layer.masksToBounds = YES;
     
     UIImageView * imageview1 = (UIImageView * )  [cell.contentView subviewWithTag:5];
     UIImageView * imageview2 = (UIImageView * )  [cell.contentView subviewWithTag:6];
     UIImageView * imageview3 = (UIImageView * )  [cell.contentView subviewWithTag:7];
+    
+    
+    UIButton * ButtonSeeuserinfo = (UIButton * )  [cell.contentView subviewWithTag:10];
+    ButtonSeeuserinfo.tag = indexPath.row;
+    
+    [ButtonSeeuserinfo addTarget:self action:@selector(SeeUserHotClick:) forControlEvents:UIControlEventTouchUpInside];
     
     imageview1.layer.cornerRadius = 2;
     imageview1.layer.masksToBounds = YES;
@@ -125,7 +132,6 @@
     imageview3.layer.masksToBounds = YES;
     
     if (indexPath.row == 0) {
-        
         [imageview1 setImageWithURL:[NSURL URLWithString:@"http://a.hiphotos.baidu.com/image/w%3D2048/sign=4b896f8ecbea15ce41eee70982383bf3/00e93901213fb80e335e60dc34d12f2eb9389429.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
         [imageview2 setImageWithURL:[NSURL URLWithString:@"http://h.hiphotos.baidu.com/image/w%3D2048/sign=87cb024a8418367aad8978dd1a4b8ad4/09fa513d269759ee0af7afa8b0fb43166d22df2a.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
         [imageview3 setImageWithURL:[NSURL URLWithString:@"http://a.hiphotos.baidu.com/image/w%3D2048/sign=7a3c52c9d5ca7bcb7d7bc02f8a316a63/9213b07eca80653804e5cf1995dda144ad3482a8.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
@@ -152,10 +158,32 @@
     label_more.text = @"AndyCreation国际造型团队,带你近距离感受真正的时尚大片魅力.";
     
     [button addTarget:self action:@selector(attentClick:) forControlEvents:UIControlEventTouchUpInside];
-    
+    NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+    if (![array containsObject:currentUser.uid])
+        [button setImage:[UIImage imageNamed:@"pictureHeartLike_0"] forState:UIControlStateNormal];
+    else
+        [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
     // Configure the cell...
     
     return cell;
+}
+
+
+-(IBAction)SeeUserHotClick:(id)sender
+{
+    UIButton * button = sender;
+    LXUser *currentUser = HotTypeOfMMArray[button.tag];
+    if (currentUser) {
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
+            if (response) {
+                //FCUserDescription
+                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                addUser.UserInfo = response;
+                [self.navigationController pushViewController:addUser animated:YES];
+            }
+        }];
+    }
+    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -166,8 +194,57 @@
 
 -(IBAction)attentClick:(id)sender
 {
-    
+    UIButton * button = sender;
+    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
+    NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+    LXUser * userinfo = cell.userInfo[@"userinfo"];
+    if (array) {
+        if ([array containsObject:userinfo.uid]) {
+            //如果存在 就移除
+            [array removeObject:userinfo.uid];
+            
+            [button setImage:[UIImage imageNamed:@"pictureHeartLike_0"] forState:UIControlStateNormal];
+            [button showAnimatingLayer];
+            
+            [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+            
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"remove"];
+            });
+        }else{
+            //如果不存在  就加入
+            
+            [array addObject:[NSString stringWithFormat:@"%@",userinfo.uid]];
+            
+            [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+            [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+            [button showAnimatingLayer];
+            
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+            });
+        }
+    }else{
+        
+        //如果不存在  就加入
+        [[EGOCache globalCache] setPlist:[NSArray arrayWithObject:userinfo.uid] forKey:KSingerCount];
+        [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+        [button showAnimatingLayer]; 
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+        });
+        
+        
+    }
 }
+
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

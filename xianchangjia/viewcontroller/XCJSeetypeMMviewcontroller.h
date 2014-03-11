@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface XCJSeetypeMMviewcontroller : UITableViewController
-
+@property (nonatomic,strong) NSArray * userArray;
 @end

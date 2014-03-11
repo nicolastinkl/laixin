@@ -159,7 +159,6 @@
             }
             self.UserSign.text =  [result objectForKey:@"signature"];
             self.UserName.text =   [result objectForKey:@"name"];
-            
         }
     } error:^(NSInteger index) {
     } failure:^(NSError *error) {
@@ -170,6 +169,11 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+-(IBAction)SeePrivateGalleryClick:(id)sender
+{
     
 }
 

@@ -63,6 +63,8 @@ typedef enum {
 #define SystemKidsColor             0xfcd412
 #define TableName                   @"KidswantProject.db"
 
+#define KSingerCount                   @"KSingerCountTINKL"
+
 #define APP_CACHES_PATH             [NSSearchPathForDirectoriesInDomains (NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 #define APP_SCREEN_WIDTH            [UIScreen mainScreen].bounds.size.width

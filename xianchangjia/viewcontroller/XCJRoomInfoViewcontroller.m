@@ -21,19 +21,23 @@
 #import "XCJSelectLaixinViewController.h"
 #import "XCJAppDelegate.h"
 #import "XCJTableViewMMController.h"
-
+#import "FCUserDescription.h"
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+{
+    int currentActive_by;
+}
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_1;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_2;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_0;
+
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_1;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_2;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_3;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cell_3_0;
 
+@property (weak, nonatomic) IBOutlet UILabel *label_sig1;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
@@ -45,6 +49,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *label_price;
 @property (weak, nonatomic) IBOutlet UIButton *button_buy;
 @property (weak, nonatomic) IBOutlet UILabel *label_serCount;
+@property (weak, nonatomic) IBOutlet UIView *view_kSonger;
+@property (weak, nonatomic) IBOutlet UILabel *label_KsongerNum;
+@property (weak, nonatomic) IBOutlet UIImageView *image_tuijianPeople;
 
 @end
 
@@ -73,11 +80,15 @@
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
     [self.button_buy infoStyle];
-    
-    self.label_one.layer.cornerRadius = 3.0f;
-    self.label_two.layer.cornerRadius = 3.0f;
+    self.label_sig1.layer.cornerRadius = 2.0f;
+    self.label_sig1.layer.masksToBounds = YES;
+    self.label_one.layer.cornerRadius = 2.0f;
+    self.label_two.layer.cornerRadius = 2.0f;
     self.label_one.layer.masksToBounds = YES;
     self.label_two.layer.masksToBounds = YES; 
+    
+    self.view_kSonger.layer.cornerRadius = 2.0f;
+    self.view_kSonger.layer.masksToBounds = YES;
     
     if ([self.rominfo.type containString:@"豪"]) {
         [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0002.jpg"] forState:UIControlStateNormal];
@@ -100,8 +111,24 @@
     
     self.label_address.text = self.locatinfo.addressName;
     
-   self.label_serCount.text = @"0";
-   
+    self.label_serCount.text = @"0";
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeLaixin:) name:@"changeLaixinMMID" object:nil]; 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMyKSonger:) name:@"updateMyKSonger" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+    
+    if ([LXAPIController sharedLXAPIController].currentUser.active_by > 0) {
+        currentActive_by = [LXAPIController sharedLXAPIController].currentUser.active_by;
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+            FCUserDescription * user = response;
+            NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+            [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
+            self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
+            self.image_tuijianPeople.layer.masksToBounds = YES;
+            self.cell_2_1.accessoryType = UITableViewCellAccessoryCheckmark;
+        } withuid:[NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.active_by]];
+    }
     
     /*
      NSRange rang = [self.rominfo.parensNumber rangeOfString:@"-"];
@@ -129,6 +156,78 @@
      */
 }
 
+
+-(void) updateMyKSonger:(NSNotification * ) notify
+{
+    if (notify.object) {
+        NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+        if (array.count > 0) {
+            self.label_KsongerNum.text = [NSString stringWithFormat:@"%d位 ",array.count];
+            self.view_kSonger.backgroundColor = [UIColor lightGrayColor];
+            [self.view_kSonger.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [((UIView * )obj) removeAllSubViews];
+                [((UIView * )obj) setHidden:YES];
+            }];
+            [self.view_kSonger layoutIfNeeded];
+            self.cell_2_0.accessoryType = UITableViewCellAccessoryCheckmark;
+            
+        }else{
+            self.label_KsongerNum.text = @"";
+            
+            self.view_kSonger.backgroundColor = [UIColor clearColor];
+            [self.view_kSonger.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [((UIView * )obj) removeAllSubViews];
+                [((UIView * )obj) setHidden:YES];
+            }];
+            [self.view_kSonger layoutIfNeeded];
+            self.cell_2_0.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+        }
+        
+
+        int TITLE_jianxi = 2;
+        int view_height = 12; // self.view_kSonger.height / array.count;
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSString * userid = obj;
+            int row = idx/3;
+            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(view_height*(idx%3)+TITLE_jianxi*(idx%3+1),TITLE_jianxi + (view_height+TITLE_jianxi) * row, view_height, view_height)];
+            iv.contentMode = UIViewContentModeScaleAspectFill;
+            iv.hidden = NO;
+            iv.clipsToBounds = YES;
+            iv.tag = idx;
+            iv.layer.cornerRadius = 1;
+            iv.layer.masksToBounds = YES;
+            [self.view_kSonger addSubview:iv];
+            
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                FCUserDescription * user = response;
+                NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+                [iv setImageWithURL:[NSURL URLWithString:Urlstring] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+            } withuid:userid];
+        }];
+        
+        [self.cell_2_0 reloadInputViews];
+    }
+    
+}
+
+-(void) changeLaixin:(NSNotification * ) notify
+{
+    if (notify.object) {
+        NSString * userid = notify.object;
+        FCUserDescription * user = [[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:userid];
+        if (user) {
+            currentActive_by = [user.active_by intValue];
+            
+            NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+            [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
+            self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
+            self.image_tuijianPeople.layer.masksToBounds = YES;
+            self.cell_2_1.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        
+    }
+}
 
 - (IBAction)addSerClick:(id)sender {
     NSString * count = self.label_serCount.text;
@@ -194,41 +293,10 @@
 
 - (IBAction)buyClick:(id)sender {
     
-    NSString* openUDID = [OpenUDID value];
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"确定提交订单吗" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"提交" otherButtonTitles:nil, nil];
+    actionsheet.tag = 3;
+    [actionsheet showInView:self.view];
     
-    NSString * count = self.label_serCount.text;
-    int thiscount = [count intValue];
-    [SVProgressHUD showWithStatus:@"正在处理..."];
-    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
-        if (responseObject) {
-            int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
-            if (errnoMesg == 0) {          
-                [SVProgressHUD dismiss];
-                NSDictionary * dict = responseObject[@"result"];
-                NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
-                DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
-                webBrowser.showProgress = YES;
-                webBrowser.allowSharing = YES;
-                //
-                UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
-                [webBrowserNC pushViewController:webBrowser animated:NO];
-                
-                //[[UINavigationSample alloc] initWithRootViewController:webBrowser];
-                [self presentViewController:webBrowserNC animated:YES completion:NULL];
-                
-                
-               /* XCJBuySurityViewController * surView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJBuySurityViewController"];
-               
-                surView.BuyUrl      = [NSURL URLWithString:string];
-                [self.navigationController pushViewController:surView animated:YES];
-*/
-            }
-        }
-    } failure:^(MLRequest *request, NSError *error) {
-        [SVProgressHUD dismiss];
-        [UIAlertView showAlertViewWithMessage:@"处理失败"];
-        
-    }];
 }
 
 -(IBAction)shareclick:(id)sender
@@ -238,8 +306,6 @@
     sheet.tag = 2;
     [sheet showInView:self.view];
 }
-
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
@@ -270,6 +336,50 @@
                 break;
         }
         
+    }else if(actionSheet.tag == 3)
+    {
+        
+        if(buttonIndex == 0)
+        {
+            
+            NSString* openUDID = [OpenUDID value];
+            
+            NSString * count = self.label_serCount.text;
+            int thiscount = [count intValue];
+            [SVProgressHUD showWithStatus:@"正在处理..."];
+            [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+                    if (errnoMesg == 0) {
+                        [SVProgressHUD dismiss];
+                        NSDictionary * dict = responseObject[@"result"];
+                        NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
+                        DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
+                        webBrowser.showProgress = YES;
+                        webBrowser.allowSharing = YES;
+                        //
+                        UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
+                        [webBrowserNC pushViewController:webBrowser animated:NO];
+                        
+                        //[[UINavigationSample alloc] initWithRootViewController:webBrowser];
+                        [self presentViewController:webBrowserNC animated:YES completion:NULL];
+                        
+                        
+                        /* XCJBuySurityViewController * surView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJBuySurityViewController"];
+                         
+                         surView.BuyUrl      = [NSURL URLWithString:string];
+                         [self.navigationController pushViewController:surView animated:YES];
+                         */
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [SVProgressHUD dismiss];
+                [UIAlertView showAlertViewWithMessage:@"处理失败"];
+                
+            }];
+
+        }
+        
     }
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -285,6 +395,9 @@
     }else if(indexPath.section == 2)
     {
         return 50;
+    } else if(indexPath.section == 3)
+    {
+        return 50;
     }
     return 0;
 }
@@ -292,7 +405,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return 4;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -304,7 +417,10 @@
         return 1;
     }else if(section ==2)
     {
-        return 4;
+        return 2;
+    }else if(section ==3)
+    {
+        return 1;
     }
     return 0;
 }
@@ -344,22 +460,16 @@
     }else if(indexPath.section == 2)
     {
         switch (indexPath.row) {
-            case 1:
-            {
-                XCJSeeJiuShuiViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeeJiuShuiViewController"];
-                [self.navigationController pushViewController:viewcontrs animated:YES];
-            }
-                break;
-            case 2:
+           
+            case 0:
             {
                 XCJTableViewMMController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJTableViewMMController"];
                 viewcontrs.title = @"K歌指导员";
                 [self.navigationController pushViewController:viewcontrs animated:YES];
             }
                 break;
-            case 3:
+            case 1:
             {
-                
                 XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
                 viewcontrs.title = @"选择推荐人";
                 [self.navigationController pushViewController:viewcontrs animated:YES];
@@ -368,6 +478,12 @@
                 
             default:
                 break;
+        }
+    } else if(indexPath.section == 3)
+    {
+        if (indexPath.row == 0) {
+            XCJSeeJiuShuiViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeeJiuShuiViewController"];
+            [self.navigationController pushViewController:viewcontrs animated:YES];
         }
     }
 }
@@ -402,13 +518,13 @@
                 cell= self.cell_2_0;
             else if (indexPath.row == 1)
                 cell= self.cell_2_1;
-            else if (indexPath.row == 2)
-                cell= self.cell_2_2;
-            else if (indexPath.row == 3)
-                cell= self.cell_2_3;
             
             break;
-            
+        case 3:
+            if (indexPath.row == 0)
+                
+                cell= self.cell_3_0;
+            break;
         default:
             break;
     }

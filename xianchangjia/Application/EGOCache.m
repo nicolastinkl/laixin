@@ -235,6 +235,7 @@ static inline NSString* cachePathForKey(NSString* directory, NSString* key) {
 	dispatch_async(_diskQueue, ^{
 		[data writeToFile:cachePath atomically:YES];
 	});
+    
 	
 	[self setCacheTimeoutInterval:timeoutInterval forKey:key];
 }

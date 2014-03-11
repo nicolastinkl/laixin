@@ -406,6 +406,7 @@
 		86D9A8A3186D30C800147631 /* FCModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86D9A89C186D30C700147631 /* FCModel.xcdatamodeld */; };
 		86DEA2F918C8382F0003694C /* XCJFindRoomViewControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */; };
 		86DEA2FC18C852180003694C /* XCJRoomInfoViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DEA2FB18C852180003694C /* XCJRoomInfoViewcontroller.m */; };
+		86E323D218CF2A6B00BBB533 /* XCJMutiMMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E323D118CF2A6B00BBB533 /* XCJMutiMMViewController.m */; };
 		86E392B618A8B46500FFD8C7 /* XCJFriendGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */; };
 		86E392BA18A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E392B918A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.m */; };
 		86E392BC18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86E392BB18A8B9B300FFD8C7 /* XCJFriendGroupNewmsg.xib */; };
@@ -1149,6 +1150,8 @@
 		86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindRoomViewControl.m; path = viewcontroller/XCJFindRoomViewControl.m; sourceTree = "<group>"; };
 		86DEA2FA18C852180003694C /* XCJRoomInfoViewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRoomInfoViewcontroller.h; path = viewcontroller/XCJRoomInfoViewcontroller.h; sourceTree = "<group>"; };
 		86DEA2FB18C852180003694C /* XCJRoomInfoViewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRoomInfoViewcontroller.m; path = viewcontroller/XCJRoomInfoViewcontroller.m; sourceTree = "<group>"; };
+		86E323D018CF2A6B00BBB533 /* XCJMutiMMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMutiMMViewController.h; path = viewcontroller/XCJMutiMMViewController.h; sourceTree = "<group>"; };
+		86E323D118CF2A6B00BBB533 /* XCJMutiMMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMutiMMViewController.m; path = viewcontroller/XCJMutiMMViewController.m; sourceTree = "<group>"; };
 		86E392B418A8B46500FFD8C7 /* XCJFriendGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupViewController.h; path = viewcontroller/XCJFriendGroupViewController.h; sourceTree = "<group>"; };
 		86E392B518A8B46500FFD8C7 /* XCJFriendGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFriendGroupViewController.m; path = viewcontroller/XCJFriendGroupViewController.m; sourceTree = "<group>"; };
 		86E392B818A8B9A500FFD8C7 /* XCJFriendGroupNewmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFriendGroupNewmsg.h; path = viewcontroller/views/XCJFriendGroupNewmsg.h; sourceTree = "<group>"; };
@@ -2924,6 +2927,8 @@
 				8641195A18CD940A00C61F5F /* XCJTableViewMMController.m */,
 				8641195C18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.h */,
 				8641195D18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m */,
+				86E323D018CF2A6B00BBB533 /* XCJMutiMMViewController.h */,
+				86E323D118CF2A6B00BBB533 /* XCJMutiMMViewController.m */,
 			);
 			name = FindRoom;
 			sourceTree = "<group>";
@@ -3641,6 +3646,7 @@
 				86E57CE018794E1100978AFA /* XCJChangeSignNaviController.m in Sources */,
 				86467A98188F8763004AC59C /* XCJJIhuoViewController.m in Sources */,
 				86AC093D1889304100C3BE30 /* XCJADDFriendLaixinBecomeViewController.m in Sources */,
+				86E323D218CF2A6B00BBB533 /* XCJMutiMMViewController.m in Sources */,
 				86494CC618815E9B00C22B14 /* XCJAddNearByUsersViewController.m in Sources */,
 				86D1827E1834AED30005901D /* NSDataAddition.m in Sources */,
 				868B5D581893B068004D1743 /* NSString+PinYin4Cocoa.m in Sources */,

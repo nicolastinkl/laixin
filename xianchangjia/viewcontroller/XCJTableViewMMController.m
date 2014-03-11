@@ -14,6 +14,7 @@
 #import "XCJAddUserTableViewController.h"
 #import "UIView+Additon.h"
 #import "XCJSeetypeMMviewcontroller.h"
+#import "XCJMutiMMViewController.h"
 
 #define BUTTONCOLL  5
 #define DISTANCE_BETWEEN_ITEMS  5.0
@@ -56,6 +57,20 @@
         NSMutableArray * array =   [[NSMutableArray alloc] init];
        NewUserTypeOfMMArray = array ;
     }
+  
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMyKSonger:) name:@"updateMyKSonger" object:nil];
+     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"已选(0)" style:UIBarButtonItemStyleDone target:self action:@selector(SeeChoseMMClick:)];
+    
+    self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    
+    NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+    
+    if (array.count > 0) {
+        self.navigationItem.rightBarButtonItem.title = [NSString stringWithFormat:@"已选(%d)",array.count];
+    }else{
+        self.navigationItem.rightBarButtonItem.title = @"已选(0)";
+    }
+    
     {
         NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
         //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
@@ -122,6 +137,29 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+
+
+
+
+-(void) updateMyKSonger:(NSNotification * ) notify
+{
+    if (notify.object) {
+        NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+        
+        if (array.count > 0) {
+            self.navigationItem.rightBarButtonItem.title = [NSString stringWithFormat:@"已选(%d)",array.count];
+        }else{
+               self.navigationItem.rightBarButtonItem.title = @"已选(0)";
+        }
+    }
+}
+-(IBAction)SeeChoseMMClick:(id)sender
+{
+    XCJMutiMMViewController  *MMViewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMutiMMViewController"];
+    [self.navigationController pushViewController:MMViewContr animated:YES];
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -199,12 +237,12 @@
                 nameLabel.font = [UIFont systemFontOfSize:13.0f];
                 nameLabel.textColor = [UIColor whiteColor];
                 nameLabel.backgroundColor = [UIColor colorWithWhite:.5 alpha:.5];
-                
+                imageButon.tag = idx;
                 [imageButon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:currentUser.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
                 nameLabel.text = currentUser.nick;
                 [viewFrame addSubview:imageButon];
                 [viewFrame addSubview:nameLabel];
-                
+                [imageButon addTarget:self action:@selector(SeeUserHotClick:) forControlEvents:UIControlEventTouchUpInside];
                 
                 [viewFrame setLeft:(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++)];
                 [scrollview addSubview:viewFrame];
@@ -229,7 +267,7 @@
                 iv.layer.masksToBounds =  YES;
                 iv.titleLabel.font = [UIFont boldSystemFontOfSize:30.0f];
                 [iv setBackgroundColor:[tools colorWithIndex:row+1]];
-                iv.tag = idx;
+                iv.tag = (idx + 1);
                 [iv setTitle:[NSString stringWithFormat:@"%@",obj] forState:UIControlStateNormal];
                 [iv addTarget:self action:@selector(seetypeMMClick:) forControlEvents:UIControlEventTouchUpInside];
                 [contentview addSubview:iv];
@@ -257,15 +295,117 @@
         [cell setUserInfo:keymuta];
         
         [button addTarget:self action:@selector(attentClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+        if (![array containsObject:currentUser.uid])
+            [button setImage:[UIImage imageNamed:@"pictureHeartLike_0"] forState:UIControlStateNormal];
+        else
+            [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+        
         return cell;
 	}
-
     return cell;
 }
+
+-(IBAction)SeeUserHotClick:(id)sender
+{
+   
+    UIButton * button = sender;
+    LXUser *currentUser = HotTypeOfMMArray[button.tag];
+    if (currentUser) {
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
+            if (response) {
+                //FCUserDescription
+                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                addUser.UserInfo = response;
+                [self.navigationController pushViewController:addUser animated:YES];
+            }
+        }];
+    }
+    
+}
+
 -(IBAction)seetypeMMClick:(id)sender
 {
-    XCJSeetypeMMviewcontroller * viewtronl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeetypeMMviewcontroller"];
-    [self.navigationController pushViewController:viewtronl animated:YES];
+    UIButton * button = sender;
+    NSString * paramsstr ;
+    switch (button.tag) {
+        case 1:
+        {
+            paramsstr = @"MMType_xueshengmei";
+        }
+            break;
+        case 2:
+        {
+            paramsstr = @"MMType_shaonvshidai";
+        }
+            break;
+        case 3:
+        {
+            paramsstr = @"MMType_doukounianhua";
+        }
+            break;
+        case 4:
+        {
+            paramsstr = @"MMType_qingchunwudi";
+        }
+            break;
+        case 5:
+        {
+            paramsstr = @"MMType_xiaoluoli";
+        }
+            break;
+        case 6:
+        {
+            paramsstr = @"MMType_tongyanjuru";
+        }
+            break;
+        case 7:
+        {
+            paramsstr = @"MMType_hanbaodaifang";
+        }
+            break;
+        case 8:
+        {
+            paramsstr = @"MMType_shaoyouyunwei";
+        }
+            break;
+        case 9:
+        {
+            paramsstr = @"MMType_poguazhinian";
+        }
+            break;
+        case 10:
+        {
+            paramsstr = @"MMType_biyunianhua";
+        }
+            break;
+        case 11:
+        {
+            paramsstr = @"MMType_taolinianhua";
+        }
+            break;
+        case 12:
+        {
+            paramsstr = @"MMType_huaxinnianhua";
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    NSString * strJson = [MobClick getConfigParams:paramsstr];
+    if (strJson) {
+        NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+        NSArray * array = [datajson  objectFromJSONData] ;
+         
+        XCJSeetypeMMviewcontroller * viewtronl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeetypeMMviewcontroller"];
+        viewtronl.title = button.titleLabel.text;
+        viewtronl.userArray = array;
+        [self.navigationController pushViewController:viewtronl animated:YES];
+    }
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -285,7 +425,6 @@
                 [self.navigationController pushViewController:addUser animated:YES];
             }
         }];
-        
     }
 }
 
@@ -294,26 +433,75 @@
     UIButton * button = sender;
     UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
     if ([cell.reuseIdentifier isEqualToString:@"userCell"]) {
-        
-        NSIndexPath *  indexPath =  [self.tableView indexPathForCell:cell];
-        LXUser *   userinfo = NewUserTypeOfMMArray[indexPath.section];
-        
-        [SVProgressHUD showWithStatus:@"正在处理..."];
-        NSDictionary * parames = @{@"uid":@[userinfo.uid]};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
-            // add this user to friends DB
-            // setFriendsObject
-            [SVProgressHUD dismiss];
-            if (responseObject) {
+        NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+        LXUser * userinfo = cell.userInfo[@"userinfo"];
+//        NSMutableArray * array = [NSMutableArray arrayWithArray:oldarray];
+        if (array) {
+            if ([array containsObject:userinfo.uid]) {
+                //如果存在 就移除
+                [array removeObject:userinfo.uid];
                 
-                [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+                [button setImage:[UIImage imageNamed:@"pictureHeartLike_0"] forState:UIControlStateNormal];
                 [button showAnimatingLayer];
                 
-                //[self.navigationController popViewControllerAnimated:YES];
+                SLog(@" remove array %d",array.count);
+                [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+                
+                double delayInSeconds = 0.1;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"remove"];
+                });
+            }else{
+                //如果不存在  就加入
+                
+                [array addObject:[NSString stringWithFormat:@"%@",userinfo.uid]];
+                
+                [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+                [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+                [button showAnimatingLayer];
+                SLog(@" add array %d",array.count);
+                
+                double delayInSeconds = 0.1;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+                });
             }
-        } failure:^(MLRequest *request, NSError *error) {
-            [UIAlertView showAlertViewWithMessage:@"处理失败..."];
-        }];
+        }else{
+            
+             //如果不存在  就加入
+            [[EGOCache globalCache] setPlist:[NSArray arrayWithObject:userinfo.uid] forKey:KSingerCount];
+            [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+            [button showAnimatingLayer];
+            SLog(@" add array %d",array.count);
+            
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+            });
+            
+       
+        }
+        
+        
+//        [SVProgressHUD showWithStatus:@"正在处理..."];
+//        NSDictionary * parames = @{@"uid":@[userinfo.uid]};
+//        [[MLNetworkingManager sharedManager] sendWithAction:@"user.add_friend" parameters:parames success:^(MLRequest *request, id responseObject) {
+//            // add this user to friends DB
+//            // setFriendsObject
+//            [SVProgressHUD dismiss];
+//            if (responseObject) {
+//                
+//                [button setImage:[UIImage imageNamed:@"pictureHeartLike_1"] forState:UIControlStateNormal];
+//                [button showAnimatingLayer];
+//                
+//                //[self.navigationController popViewControllerAnimated:YES];
+//            }
+//        } failure:^(MLRequest *request, NSError *error) {
+//            [UIAlertView showAlertViewWithMessage:@"处理失败..."];
+//        }];
         
         
     }

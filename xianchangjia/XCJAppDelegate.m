@@ -124,10 +124,16 @@ static NSString * const kLaixinStoreName = @"Laixins";
 {
     /*
      “push”:true，//推送标记，客户端用来识别推送信息和一般应答
-     “type”:“add_friend”
+     “type”:“event”
      “data”:{
-        “user”:
-        {“uid”:,
+     “event”:
+     {“type”:,
+     add_friend  group_invite 
+     
+     “push”:true，//推送标记，客户端用来识别推送信息和一般应答
+     “type”:“newlike” //newlike newreply newmsg newpost
+     
+     “data”:{ }
      */
     NSDictionary * MsgContent = notification.userInfo;
     NSInteger innum = [DataHelper getIntegerValue:MsgContent[@"push"] defaultValue:0];
@@ -998,7 +1004,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 if (currentUser) {
                     [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
                 }
-
                 
                 {
                 
