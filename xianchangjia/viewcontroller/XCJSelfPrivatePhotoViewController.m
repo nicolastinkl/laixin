@@ -85,6 +85,12 @@
     }else{
         [scrollview setHeight:APP_SCREEN_HEIGHT ];
         [viewadd setTop:APP_SCREEN_HEIGHT];
+        
+        
+        /*判断是否已经加入 小妹购货车*/
+        
+        [self EchorightItem];
+        
     }
     
      if([self.privateUID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
@@ -136,6 +142,85 @@
      }
    
 }
+
+-(void) EchorightItem
+{
+    NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+    self.navigationItem.rightBarButtonItem = nil;
+    if (![array containsObject:self.privateUID])
+    {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pictureHeartLike_0"] style:UIBarButtonItemStyleDone target:self action:@selector(LikeClick:)];
+    }
+    else
+    {
+        
+         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"pictureHeartLike_1"] style:UIBarButtonItemStyleDone target:self action:@selector(unLikeClick:)];
+    }
+}
+
+
+-(IBAction)attentClick:(id)sender
+{
+    NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
+    if (array) {
+        if ([array containsObject:self.privateUID]) {
+            //如果存在 就移除
+            [array removeObject:self.privateUID];
+            
+            [self.navigationItem.rightBarButtonItem.customView showAnimatingLayer];
+            
+            [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+            
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self EchorightItem];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"remove"];
+            });
+        }else{
+            //如果不存在  就加入
+            
+            [array addObject:[NSString stringWithFormat:@"%@",self.privateUID]];
+            
+            [[EGOCache globalCache] setPlist:array forKey:KSingerCount];
+            [self.navigationItem.rightBarButtonItem.customView showAnimatingLayer];
+            
+            double delayInSeconds = 0.1;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self EchorightItem];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+            });
+        }
+    }else{
+        
+        //如果不存在  就加入
+        [[EGOCache globalCache] setPlist:[NSArray arrayWithObject:self.privateUID] forKey:KSingerCount];
+        [self.navigationItem.rightBarButtonItem.customView showAnimatingLayer];
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [self EchorightItem];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+        });
+        
+        
+    }
+}
+
+
+
+-(IBAction)LikeClick:(id)sender
+{
+    [self attentClick:nil];
+}
+
+-(IBAction)unLikeClick:(id)sender
+{
+    [self attentClick:nil];
+}
+
+
 
 -(void) initScrollview
 {
@@ -204,7 +289,6 @@
         sheetDel.tag = 1;
         [sheetDel showInView:self.view];
     }
-   
 }
 
 -(IBAction)tagSelected:(id)sender
@@ -216,8 +300,8 @@
         // Create and setup browser
         IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
         //        browser.delegate = self;
-        browser.displayActionButton = YES;
-        browser.displayArrowButton = YES;
+        browser.displayActionButton = NO;
+        browser.displayArrowButton = NO;
         browser.displayCounterLabel = YES;
         [browser setInitialPageIndex:buttonSender.tag];
         if (buttonSender.image) {
@@ -226,7 +310,6 @@
         
         [self presentViewController:browser animated:YES completion:nil];
     }
-    
 }
 
 - (void)takePhotoClick

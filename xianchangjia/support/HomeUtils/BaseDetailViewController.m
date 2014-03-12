@@ -197,6 +197,58 @@
     ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
 
     
+    if (activity.excount > 0) {
+        if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
+            //check from networking
+            //查看是否有缓存
+            NSString * cacheKey = [NSString stringWithFormat:@"post.readex.%@",activity.postid];
+            NSArray * cahceArray = [[EGOCache globalCache] plistForKey:cacheKey];
+//            SLog(@"cahceArray :%@",cahceArray);
+            if (cahceArray && cahceArray.count > 0) {
+                NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                [[cahceArray mutableCopy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                    [arrayURLS addObject:stringurl];
+                }];
+                //                [activity.excountImages removeAllObjects];
+                //                [activity.excountImages addObjectsFromArray:arrayURLS];
+                activity.excountImages = arrayURLS ;
+                //               [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+                //                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [cell setActivity:activity];
+                cell.isloadingphotos = NO;
+            }else{
+                cell.isloadingphotos = YES;
+                //             [cell.imageListScroll showIndicatorViewBlue];
+                [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        NSDictionary  * result = responseObject[@"result"];
+                        NSArray * array = result[@"exdata"];
+                        if (array.count > 0) {
+                            [[EGOCache globalCache]  setPlist:[array mutableCopy] forKey:cacheKey];
+                        }
+                        NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                            [arrayURLS addObject:stringurl];
+                        }];
+                        [activity.excountImages removeAllObjects];
+                        [activity.excountImages addObjectsFromArray:arrayURLS];
+                        //    [_tableView reloadData];
+//                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                           [cell setActivity:activity];
+                    }
+                    cell.isloadingphotos = NO;
+                } failure:^(MLRequest *request, NSError *error) {
+                    cell.isloadingphotos = NO;
+                }];
+            }
+            
+        }
+    }
+    
+    
+    
     if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
@@ -227,44 +279,24 @@
         }];
     }
     
-    if (activity.excount > 0) {
-        if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
-            //check from networking
-            cell.isloadingphotos = YES;
-//             [cell.imageListScroll showIndicatorViewBlue];
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
-                if (responseObject) {
-                    NSDictionary  * result = responseObject[@"result"];
-                    NSArray * array = result[@"exdata"];
-                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
-                        [arrayURLS addObject:stringurl];
-                    }];
-                    [activity.excountImages removeAllObjects];
-                    [activity.excountImages addObjectsFromArray:arrayURLS];
-//                    [_tableView reloadData];
-                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }
-                cell.isloadingphotos = NO;
-//                [cell.imageListScroll hideIndicatorViewBlueOrGary];
-            } failure:^(MLRequest *request, NSError *error) {
-                cell.isloadingphotos = NO;
-//                [cell.imageListScroll hideIndicatorViewBlueOrGary];
-            }];
-        }
-        
-    }
-    
     if (_isDontNeedLazyLoad) {
         return;
     }
+    
     if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
         if (!_isLoading) {
             self.isLoading = YES;
-            [self postLoadMoreActivitiesRequest];
+//            [self performSelectorOnMainThread:@selector(postLoadMoreActivitiesRequest)  withObject:Nil waitUntilDone:YES];
+//            [self performSelectorInBackground:@selector(postLoadMoreActivitiesRequest) withObject:nil];
+            double delayInSeconds = .3;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self postLoadMoreActivitiesRequest];
+            });
+
         }
     }
+    
 }
 
 

@@ -441,30 +441,51 @@
             //check from networking
             cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil];
             [imageview showIndicatorViewBlue];
-            //             [cell.imageListScroll showIndicatorViewBlue];
+
+            
+            NSString * cacheKey = [NSString stringWithFormat:@"post.readex.%@",activity.postid];
+            NSArray * cahceArray = [[EGOCache globalCache] plistForKey:cacheKey];
+            //            SLog(@"cahceArray :%@",cahceArray);
+            if (cahceArray && cahceArray.count > 0) {
+                NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                [[cahceArray mutableCopy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                    [arrayURLS addObject:stringurl];
+                }];
+                activity.excountImages = arrayURLS ;
+                [self fillImagewithArray:arrayURLS withView:bgview];
+                cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+                [imageview hideIndicatorViewBlueOrGary];
+            }else{
+                
+                [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        NSDictionary  * result = responseObject[@"result"];
+                        NSArray * array = result[@"exdata"];
+                        if (array.count > 0) {
+                            [[EGOCache globalCache]  setPlist:[array mutableCopy] forKey:cacheKey];
+                        }
+                        NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                            [arrayURLS addObject:stringurl];
+                            
+                        }];
+                        [activity.excountImages removeAllObjects];
+                        [activity.excountImages addObjectsFromArray:arrayURLS];
+                        [self fillImagewithArray:arrayURLS withView:bgview];
+                        //54 84   23 23
+                        //23 23 23
+                    }
+                    cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+                    [imageview hideIndicatorViewBlueOrGary];
+                } failure:^(MLRequest *request, NSError *error) {
+                    cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+                    [imageview hideIndicatorViewBlueOrGary];
+                }];
+            }
+            
          
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
-                if (responseObject) {
-                    NSDictionary  * result = responseObject[@"result"];
-                    NSArray * array = result[@"exdata"];
-                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
-                        [arrayURLS addObject:stringurl];
-                        
-                    }];
-                    [activity.excountImages removeAllObjects];
-                    [activity.excountImages addObjectsFromArray:arrayURLS];
-                    [self fillImagewithArray:arrayURLS withView:bgview];
-                    //54 84   23 23
-                    //23 23 23 
-                }
-                cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
-                [imageview hideIndicatorViewBlueOrGary];
-            } failure:^(MLRequest *request, NSError *error) {
-                cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
-                [imageview hideIndicatorViewBlueOrGary];
-            }];
         }else{
             [self fillImagewithArray:activity.excountImages withView:bgview];
         }

@@ -502,44 +502,82 @@
                         
                         if (post.postid) {
                             // get photo list
-                           UIView *view =  [self.tableView.tableHeaderView subviewWithTag:1];
+                            UIView *view =  [self.tableView.tableHeaderView subviewWithTag:1];
                             [view showIndicatorViewLargeBlue];
                             
                             
-                            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":post.postid} success:^(MLRequest *request, id responseObject) {
-                                if (responseObject) {
-                                    NSDictionary  * result = responseObject[@"result"];
-                                    CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollview.frame.size.height);
-                                    NSArray * array = result[@"exdata"];
-                                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
-                                    __block NSUInteger page = 0;
-                                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
-                                        [arrayURLS addObject:stringurl];
-                                        
-                                        UIImageView * imageview = [[UIImageView alloc] init];
-                                        [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:320]] placeholderImage:[UIImage imageNamed:@"photo_loading"] displayProgress:YES];
-                                        [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, ITEM_WIDTH, ITEM_WIDTH)];
-                                        imageview.userInteractionEnabled = YES;
-                                        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
-//                                        [recognizer setNumberOfTapsRequired:1];
-                                        [recognizer setNumberOfTouchesRequired:1];
-                                        [imageview addGestureRecognizer:recognizer];
-                                        imageview.tag = idx;
-                                        [self.scrollview addSubview:imageview];
-                                        
-                                    }];
-                                    photoArray = arrayURLS;
-                                    self.pagecontrl.numberOfPages = photoArray.count;
-                                    self.pagecontrl.currentPageIndicatorTintColor = ios7BlueColor;
+                            NSString * cacheKey = [NSString stringWithFormat:@"post.readex.%@",post.postid];
+                            NSArray * cahceArray = [[EGOCache globalCache] plistForKey:cacheKey];
+                            //            SLog(@"cahceArray :%@",cahceArray);
+                            if (cahceArray && cahceArray.count > 0) {
+                                CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollview.frame.size.height);
+                                NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                                __block NSUInteger page = 0;
+                                [cahceArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                    NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                                    [arrayURLS addObject:stringurl];
                                     
-                                    self.scrollview.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([photoArray count] ), pageSize.height);
-                                }
+                                    UIImageView * imageview = [[UIImageView alloc] init];
+                                    [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:320]] placeholderImage:[UIImage imageNamed:@"photo_loading"] displayProgress:YES];
+                                    [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, ITEM_WIDTH, ITEM_WIDTH)];
+                                    imageview.userInteractionEnabled = YES;
+                                    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+                                    //                                        [recognizer setNumberOfTapsRequired:1];
+                                    [recognizer setNumberOfTouchesRequired:1];
+                                    [imageview addGestureRecognizer:recognizer];
+                                    imageview.tag = idx;
+                                    [self.scrollview addSubview:imageview];
+                                    
+                                }];
                                 [view hideIndicatorViewBlueOrGary];
-                            } failure:^(MLRequest *request, NSError *error) {
-                                [view hideIndicatorViewBlueOrGary];
-                                [self showErrorText:@"图片加载错误"];
-                            }];
+                                photoArray = arrayURLS;
+                                self.pagecontrl.numberOfPages = photoArray.count;
+                                self.pagecontrl.currentPageIndicatorTintColor = ios7BlueColor;
+                                
+                                self.scrollview.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([photoArray count] ), pageSize.height);
+                            }else{
+                                
+                                
+                                [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":post.postid} success:^(MLRequest *request, id responseObject) {
+                                    if (responseObject) {
+                                        NSDictionary  * result = responseObject[@"result"];
+                                        CGSize pageSize = CGSizeMake(ITEM_WIDTH, self.scrollview.frame.size.height);
+                                        NSArray * array = result[@"exdata"];
+                                        
+                                        if (array.count > 0) {
+                                            [[EGOCache globalCache]  setPlist:[array mutableCopy] forKey:cacheKey];
+                                        }
+                                        
+                                        NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                                        __block NSUInteger page = 0;
+                                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                            NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                                            [arrayURLS addObject:stringurl];
+                                            
+                                            UIImageView * imageview = [[UIImageView alloc] init];
+                                            [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:320]] placeholderImage:[UIImage imageNamed:@"photo_loading"] displayProgress:YES];
+                                            [imageview setFrame:CGRectMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * page++, LEFT_PADDING, ITEM_WIDTH, ITEM_WIDTH)];
+                                            imageview.userInteractionEnabled = YES;
+                                            UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tagSelected:)];
+                                            //                                        [recognizer setNumberOfTapsRequired:1];
+                                            [recognizer setNumberOfTouchesRequired:1];
+                                            [imageview addGestureRecognizer:recognizer];
+                                            imageview.tag = idx;
+                                            [self.scrollview addSubview:imageview];
+                                            
+                                        }];
+                                        photoArray = arrayURLS;
+                                        self.pagecontrl.numberOfPages = photoArray.count;
+                                        self.pagecontrl.currentPageIndicatorTintColor = ios7BlueColor;
+                                        
+                                        self.scrollview.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([photoArray count] ), pageSize.height);
+                                    }
+                                    [view hideIndicatorViewBlueOrGary];
+                                } failure:^(MLRequest *request, NSError *error) {
+                                    [view hideIndicatorViewBlueOrGary];
+                                    [self showErrorText:@"图片加载错误"];
+                                }];
+                            }
                         }
                     }
                 }];

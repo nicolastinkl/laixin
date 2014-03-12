@@ -15,6 +15,8 @@
 #import "UIView+Additon.h"
 #import "XCJSeetypeMMviewcontroller.h"
 #import "XCJMutiMMViewController.h"
+#import "XCJSelfPrivatePhotoViewController.h"
+
 
 #define BUTTONCOLL  5
 #define DISTANCE_BETWEEN_ITEMS  5.0
@@ -313,6 +315,12 @@
     UIButton * button = sender;
     LXUser *currentUser = HotTypeOfMMArray[button.tag];
     if (currentUser) {
+        
+        XCJSelfPrivatePhotoViewController * viewControl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPrivatePhotoViewController"];
+        viewControl.privateUID = currentUser.uid;
+        [self.navigationController pushViewController:viewControl animated:YES];
+        
+        return;
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
             if (response) {
                 //FCUserDescription
@@ -414,17 +422,19 @@
     
     UITableViewCell * cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell.reuseIdentifier isEqualToString:@"userCell"]) {
-          LXUser * currentUser = cell.userInfo[@"userinfo"];
-//        NSIndexPath *  indexPath =  [self.tableView indexPathForCell:cell];
-//        LXUser * currentUser   = NewUserTypeOfMMArray[indexPath.section];
-        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
-            if (response) {
-                //FCUserDescription
-                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-                addUser.UserInfo = response;
-                [self.navigationController pushViewController:addUser animated:YES];
-            }
-        }];
+        LXUser * currentUser = cell.userInfo[@"userinfo"];
+        XCJSelfPrivatePhotoViewController * viewControl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPrivatePhotoViewController"];
+        viewControl.privateUID = currentUser.uid;
+        [self.navigationController pushViewController:viewControl animated:YES];
+        
+        /* [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response    , NSError * error) {
+         if (response) {
+         //FCUserDescription
+         XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+         addUser.UserInfo = response;
+         [self.navigationController pushViewController:addUser animated:YES];
+         }
+         }];*/
     }
 }
 

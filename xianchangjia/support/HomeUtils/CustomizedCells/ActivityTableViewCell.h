@@ -51,5 +51,6 @@
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;
 
 -(int) heigthforCell:(XCJGroupPost_list * )activity;
+
 @property (nonatomic,weak) UIViewController *needRefreshViewController;
 @end

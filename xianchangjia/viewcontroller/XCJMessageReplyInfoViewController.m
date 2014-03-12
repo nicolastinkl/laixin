@@ -274,25 +274,45 @@
     if (activity.excount > 0) {
         if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
             //check from networking
+            
             cell.isloadingphotos = YES;
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
-                if (responseObject) {
-                    NSDictionary  * result = responseObject[@"result"];
-                    NSArray * array = result[@"exdata"];
-                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
-                        [arrayURLS addObject:stringurl];
-                    }];
-                    [activity.excountImages removeAllObjects];
-                    [activity.excountImages addObjectsFromArray:arrayURLS];
-                    //                    [_tableView reloadData];
-                    [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                }
+            NSString * cacheKey = [NSString stringWithFormat:@"post.readex.%@",activity.postid];
+            NSArray * cahceArray = [[EGOCache globalCache] plistForKey:cacheKey];
+            //            SLog(@"cahceArray :%@",cahceArray);
+            if (cahceArray && cahceArray.count > 0) {
+                NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                [[cahceArray mutableCopy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                    [arrayURLS addObject:stringurl];
+                }];
+                activity.excountImages = arrayURLS ;
                 cell.isloadingphotos = NO;
-            } failure:^(MLRequest *request, NSError *error) {
-                cell.isloadingphotos = NO;
-            }];
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            }else{
+                
+                [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        NSDictionary  * result = responseObject[@"result"];
+                        NSArray * array = result[@"exdata"];
+                        if (array.count > 0) {
+                            [[EGOCache globalCache]  setPlist:[array mutableCopy] forKey:cacheKey];
+                        }
+                        NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                            [arrayURLS addObject:stringurl];
+                        }];
+                        [activity.excountImages removeAllObjects];
+                        [activity.excountImages addObjectsFromArray:arrayURLS];
+                        //                    [_tableView reloadData];
+                        [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                    }
+                    cell.isloadingphotos = NO;
+                } failure:^(MLRequest *request, NSError *error) {
+                    cell.isloadingphotos = NO;
+                }];
+            }
+            
         }
         
     }

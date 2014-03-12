@@ -256,123 +256,123 @@
    
    
     //put here to GCD
-    double delayInSeconds = 0.1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        /* get all list data*/
-        
-        switch (typeIndex) {
-            case Enum_initData:
-            {
-                NSDictionary * parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
+//    double delayInSeconds = 0.1;
+//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//        /* get all list data*/
+//        
+//       
+//    });
+    switch (typeIndex) {
+        case Enum_initData:
+        {
+            NSDictionary * parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
+            
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //    postid = 12;
+                /*
+                 Result={
+                 “posts”:[*/
+                if (responseObject) {
+                    __block NSInteger lasID = 0;
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"posts"];
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        lasID = [post.postid integerValue];
+                        [self.activities addObject:post];
+                        
+                        if (idx == 0) {  //upload last message info
+                            self.groupInfo.lastMessage = post.content;
+                            self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];//[tools convertToUTC:];
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                        }
+                    }];
+                    [self successGetActivities:self.activities withLastID:lasID];
+                }else{
+                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [self failedGetActivitiesWithLastID:0];
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
+            
+        }
+            break;
+        case Enum_UpdateTopData:
+        {
+            //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
+            //                Result=同11
+            NSDictionary* parames = @{@"gid":_Currentgid,@"frompos":@(lastID)};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.get_new_post" parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"posts"];
+                __block NSInteger lasID = 0;
+                if (postsDict &&  postsDict.count > 0) {
+                    
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        if (post) {
+                            lasID = [post.postid integerValue];
+                            [self.activities insertObject:post atIndex:0];
+                            [self.cellHeights insertObject:@0 atIndex:0];
+                            [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                        }
+                    }];
+                    [self successGetActivities:self.activities withLastID:lasID];
+                }else{
+                    [self failedGetActivitiesWithLastID:0];
+                }
                 
-                [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                    //    postid = 12;
-                    /*
-                     Result={
-                     “posts”:[*/
-                    if (responseObject) {
-                        __block NSInteger lasID = 0;
-                        NSDictionary * groups = responseObject[@"result"];
-                        NSArray * postsDict =  groups[@"posts"];
+            } failure:^(MLRequest *request, NSError *error) {
+                [self failedGetActivitiesWithLastID:0];
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
+        }
+            break;
+        case Enum_MoreData:
+        {
+            NSString * postid ;
+            if (self.activities.count >= 20) {
+                XCJGroupPost_list * post =[self.activities lastObject];
+                postid = post.postid;
+            }else{
+                postid = [NSString stringWithFormat:@"%d",self.activities.count];
+            }
+            NSDictionary* parames = @{@"gid":_Currentgid,@"pos":postid,@"count":@"20"};
+            
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //    postid = 12;
+                /*
+                 Result={
+                 “posts”:[*/
+                if (responseObject) {
+                    __block NSInteger lasID = 0;
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"posts"];
+                    if (postsDict && postsDict.count > 0) {
                         [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                             lasID = [post.postid integerValue];
                             [self.activities addObject:post];
-                            
-                            if (idx == 0) {  //upload last message info
-                                self.groupInfo.lastMessage = post.content;
-                                self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];//[tools convertToUTC:];
-                                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-                            }
                         }];
                         [self successGetActivities:self.activities withLastID:lasID];
                     }else{
-                        [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                    }
-                } failure:^(MLRequest *request, NSError *error) {
-                    [self failedGetActivitiesWithLastID:0];
-                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                }];
-                
-            }
-                break;
-            case Enum_UpdateTopData:
-            {
-                //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
-//                Result=同11
-                 NSDictionary* parames = @{@"gid":_Currentgid,@"frompos":@(lastID)};
-                 [[MLNetworkingManager sharedManager] sendWithAction:@"group.get_new_post" parameters:parames success:^(MLRequest *request, id responseObject) {
-                     NSDictionary * groups = responseObject[@"result"];
-                     NSArray * postsDict =  groups[@"posts"];
-                      __block NSInteger lasID = 0;
-                     if (postsDict &&  postsDict.count > 0) {
-                         
-                         [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                             if (post) {
-                                 lasID = [post.postid integerValue];
-                                 [self.activities insertObject:post atIndex:0];
-                                 [self.cellHeights insertObject:@0 atIndex:0];
-                                 [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-                             }
-                         }];
-                          [self successGetActivities:self.activities withLastID:lasID];
-                     }else{
-                         [self failedGetActivitiesWithLastID:0];
-                     }
-                     
-                 } failure:^(MLRequest *request, NSError *error) {
-                     [self failedGetActivitiesWithLastID:0];
-                     [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                 }];
-            }
-                break;
-            case Enum_MoreData:
-            {
-                NSString * postid ;
-                if (self.activities.count >= 20) {
-                    XCJGroupPost_list * post =[self.activities lastObject];
-                    postid = post.postid;
-                }else{
-                    postid = [NSString stringWithFormat:@"%d",self.activities.count];
-                }
-                NSDictionary* parames = @{@"gid":_Currentgid,@"pos":postid,@"count":@"20"};
-                
-                [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                    //    postid = 12;
-                    /*
-                     Result={
-                     “posts”:[*/
-                    if (responseObject) {
-                        __block NSInteger lasID = 0;
-                        NSDictionary * groups = responseObject[@"result"];
-                        NSArray * postsDict =  groups[@"posts"];
-                        if (postsDict && postsDict.count > 0) {
-                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                                lasID = [post.postid integerValue];
-                                [self.activities addObject:post];
-                            }];
-                            [self successGetActivities:self.activities withLastID:lasID];
-                        }else{
-                            [self failedGetActivitiesWithLastID:0];
-                        }
-                    }else{
                         [self failedGetActivitiesWithLastID:0];
                     }
-                } failure:^(MLRequest *request, NSError *error) {
+                }else{
                     [self failedGetActivitiesWithLastID:0];
-                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                }];
-            }
-                break;
-                
-            default:
-                break;
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [self failedGetActivitiesWithLastID:0];
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
         }
-    });
-    
+            break;
+            
+        default:
+            break;
+    }
     NSDictionary * parames ;
     if(lastID == 0)
     {
