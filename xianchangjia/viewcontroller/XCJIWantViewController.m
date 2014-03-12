@@ -155,7 +155,8 @@
             break;
             
         case 2:
-            image_bgSign.image = [UIImage imageNamed:@"group_avatar_default_0"];
+            //@"group_avatar_default_0"
+            image_bgSign.image = [UIImage imageNamed:@"tb_icon_menu_weitao_normal"];
             label_name.text = @"来活动";
             badage.hidden = YES;
             image_New.hidden = YES;

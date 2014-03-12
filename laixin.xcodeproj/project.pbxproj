@@ -46,6 +46,7 @@
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */; };
 		8646FDDC18868425007CE6F4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDDB18868425007CE6F4 /* MapKit.framework */; };
+		86489D7918CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489D7818CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		86494CBC188139A100C22B14 /* ConverReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBB188139A100C22B14 /* ConverReply.m */; };
 		86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBF1881437600C22B14 /* XCJMessageReplylistController.m */; };
@@ -575,6 +576,8 @@
 		8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		8646FDD418863CD2007CE6F4 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		8646FDDB18868425007CE6F4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		86489D7718CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelfPrivatePhotoViewController.h; path = viewcontroller/XCJSelfPrivatePhotoViewController.h; sourceTree = "<group>"; };
+		86489D7818CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelfPrivatePhotoViewController.m; path = viewcontroller/XCJSelfPrivatePhotoViewController.m; sourceTree = "<group>"; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
 		86489EF61875874A001AB9BA /* PostActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostActivityViewController.m; sourceTree = "<group>"; };
 		86494CBA188139A100C22B14 /* ConverReply.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConverReply.h; path = DAOModel/coredata/ConverReply.h; sourceTree = "<group>"; };
@@ -3316,6 +3319,8 @@
 				866995E51879087100233C47 /* XCJErWeiCodeViewController.m */,
 				867AF35A18A623A400121DCF /* XCJSelfPhotoViewController.h */,
 				867AF35B18A623A400121DCF /* XCJSelfPhotoViewController.m */,
+				86489D7718CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.h */,
+				86489D7818CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -3845,6 +3850,7 @@
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
 				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
+				86489D7918CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m in Sources */,
 				8690DEC718C8891900A14A51 /* NJKWebViewProgress.m in Sources */,
 				8641195E18CDCEDA00C61F5F /* XCJSeetypeMMviewcontroller.m in Sources */,
 				86EB76D0185AA6CC00836947 /* AFHTTPSessionManager.m in Sources */,

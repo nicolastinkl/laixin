@@ -56,3 +56,31 @@
 
 
 
+
+@interface privatePhotoListInfo : Model
+
+/*
+ "picture":"http://kidswant.u.qiniudn.com/FpjyuFcobuiOCziqNptk1vZV7MOW",
+ "uid":5,
+ "did":5,
+ "text":"b6RZt0MXicse7o9",
+ "height":1504,
+ "width":2256,
+ "time":1394591837.0,
+ "type":"pic"*/
+@property (nonatomic, copy  ) NSString  *picture;
+@property (nonatomic, copy  ) NSString  *uid;
+@property (nonatomic, copy  ) NSString  *did;
+@property (nonatomic, copy  ) NSString  *text;
+@property (nonatomic, copy  ) NSString  *type;
+@property (nonatomic, assign) NSInteger height;
+@property (nonatomic, assign) NSInteger width;
+@property (nonatomic, assign) double time;
+
+
+@end
+
+
+
+
+

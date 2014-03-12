@@ -573,15 +573,19 @@
     }
 }
 
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
     if (operation && [operation isExecuting]) {
         [operation cancel];
     }
-//    scrollView.delegate=nil;
+    //    scrollView.delegate=nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    SLLog(@"viewDidDisappear");
 }
+
 
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {

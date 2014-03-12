@@ -16,11 +16,11 @@
     enum WXScene _scene;
 }
 
-@property (strong, nonatomic) CustomWindow                  *window;
-@property (readonly, nonatomic) SinaWeibo				*sinaweiboMain;
-@property (nonatomic,strong) NSDictionary				*launchingWithAps;
-@property (nonatomic, strong) IBOutlet XCJLoginNaviController *mainNavigateController;
-@property (nonatomic,strong) UITabBarController *tabBarController;
+@property (strong, nonatomic) CustomWindow                      *window;
+@property (readonly, nonatomic) SinaWeibo                       *sinaweiboMain;
+@property (nonatomic,strong) NSDictionary                       *launchingWithAps;
+@property (nonatomic, strong) IBOutlet XCJLoginNaviController   *mainNavigateController;
+@property (nonatomic,strong) UITabBarController                 *tabBarController;
 
 -(void) initWeiboView;
 +(BOOL) hasLogin;

@@ -10,6 +10,7 @@
 #import "XCAlbumAdditions.h"
 #import "MLNetworkingManager.h"
 #import "LXAPIController.h"
+#import "XCJSelfPrivatePhotoViewController.h"
 
 @interface XCJSettingsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *UserImageicon;
@@ -174,7 +175,9 @@
 
 -(IBAction)SeePrivateGalleryClick:(id)sender
 {
-    
+    XCJSelfPrivatePhotoViewController * viewss = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPrivatePhotoViewController"];
+    viewss.privateUID = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
+    [self.navigationController pushViewController:viewss animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

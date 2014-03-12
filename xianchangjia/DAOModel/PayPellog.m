@@ -15,3 +15,8 @@
 @implementation PayOrderHistorylog
 
 @end
+
+@implementation privatePhotoListInfo
+
+
+@end
