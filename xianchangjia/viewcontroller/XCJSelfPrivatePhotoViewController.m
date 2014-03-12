@@ -34,6 +34,10 @@
     NSMutableArray * dataSource;
     
     NSMutableArray * dataSource_imageurls;
+    
+    UIActionSheet * sheetDel;
+    
+    int deleteIndex;
 }
 @end
 
@@ -82,8 +86,6 @@
         [scrollview setHeight:APP_SCREEN_HEIGHT ];
         [viewadd setTop:APP_SCREEN_HEIGHT];
     }
-    
-    
     
      if([self.privateUID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
      {
@@ -177,7 +179,8 @@
             
             
             UILongPressGestureRecognizer * longizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longnicger:)];
-            longizer.
+            longizer.numberOfTouchesRequired = 1;
+            [imageview addGestureRecognizer:longizer];
             imageview.tag = idx;
             
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:photoinfo.picture Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
@@ -189,6 +192,19 @@
     
     scrollview.contentSize = CGSizeMake(scrollview.width,LEFT_PADDING + (ITEM_WIDTH + DISTANCE_BETWEEN_ITEMS) * (row +1 ) );
     
+}
+
+-(IBAction)longnicger:(id)sender
+{
+    UITapGestureRecognizer * ges = sender;
+    UIImageView *buttonSender = (UIImageView *)ges.view;
+    deleteIndex = buttonSender.tag;    
+    if (sheetDel == nil) {
+        sheetDel = [[UIActionSheet alloc] initWithTitle:@"删除照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil, nil];
+        sheetDel.tag = 1;
+        [sheetDel showInView:self.view];
+    }
+   
 }
 
 -(IBAction)tagSelected:(id)sender
@@ -254,24 +270,24 @@
  
     NSString * keyID =[NSString stringWithFormat:@"uploadtoken_privatePhoto_%@",self.privateUID];
     NSString  * oldToken = [[EGOCache globalCache] stringForKey:keyID];
-if (oldToken && oldToken.length > 0) {
-    //success
-    [self uploadimagewithImage:image token:oldToken];
-}else{
-    [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
-        if (response) {
-            NSString * token =  response[@"token"];
-            if (token) {
-                [[EGOCache globalCache] setString:token forKey:keyID withTimeoutInterval:60*60];
-                //success
-                [self uploadimagewithImage:image token:token];
-            }else{
-                //fail
-                [self taskMethodDidFailed];
+    if (oldToken && oldToken.length > 0) {
+        //success
+        [self uploadimagewithImage:image token:oldToken];
+    }else{
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {
+            if (response) {
+                NSString * token =  response[@"token"];
+                if (token) {
+                    [[EGOCache globalCache] setString:token forKey:keyID withTimeoutInterval:60*60];
+                    //success
+                    [self uploadimagewithImage:image token:token];
+                }else{
+                    //fail
+                    [self taskMethodDidFailed];
+                }
             }
-        }
-    } withParems:[NSString stringWithFormat:@"upload/UserExMedia?sessionid=%@&userid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid],self.privateUID]];
-}
+        } withParems:[NSString stringWithFormat:@"upload/UserExMedia?sessionid=%@&userid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid],self.privateUID]];
+    }
 
 }
 
@@ -360,18 +376,46 @@ if (oldToken && oldToken.length > 0) {
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0) {
-        [self takePhotoClick];
-    }else if(buttonIndex == 1)
-    {
-        [self choseFromGalleryClick];
+    if (actionSheet.tag == 1) {
+        
+        if (buttonIndex == 0) {
+            //delete
+            //album.delete(did)
+            NSDictionary * obj = [dataSource objectAtIndex:deleteIndex];
+            if (obj) {
+                
+                privatePhotoListInfo * photoinfo =  [privatePhotoListInfo turnObject:obj];
+                [SVProgressHUD showWithStatus:@"正在删除中..."];
+                [[MLNetworkingManager sharedManager] sendWithAction:@"album.delete" parameters:@{@"did":photoinfo.did} success:^(MLRequest *request, id responseObject) {
+                    [dataSource removeObjectAtIndex:deleteIndex];
+                    [self initScrollview];
+                    [UIAlertView showAlertViewWithMessage:@"删除成功"];
+                } failure:^(MLRequest *request, NSError *error) {
+                    [UIAlertView showAlertViewWithMessage:@"删除失败"];
+                }];
+            }else{
+                [UIAlertView showAlertViewWithMessage:@"删除失败"];
+            }
+            
+        }
+        sheetDel = nil;
+    }else if (actionSheet.tag == 2) {
+        if (buttonIndex == 0) {
+            [self takePhotoClick];
+        }else if(buttonIndex == 1)
+        {
+            [self choseFromGalleryClick];
+        }
     }
+   
 }
 
 -(IBAction)AddPhoto:(id)sender
 {
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"添加私密照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从手机相册选取", nil];
+    UIActionSheet *  sheet = [[UIActionSheet alloc] initWithTitle:@"添加私密照片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍照",@"从手机相册选取", nil];
+    sheet.tag = 2;
     [sheet showInView:self.view];
+   
 }
 
 - (void)didReceiveMemoryWarning

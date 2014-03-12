@@ -325,7 +325,7 @@
 - (void)uploadFile:(UIImage *)filePath  {
     // setup 1: frist get token
     //http://service.xianchangjia.com/upload/HeadImg?sessionid=5Wnp5qPWgpAhDRK
-    
+    [SVProgressHUD show];
     [self.takeButton setBackgroundImage:nil forState:UIControlStateNormal];
   
      [[[LXAPIController sharedLXAPIController] requestLaixinManager] requestGetURLWithCompletion:^(id response, NSError *error) {

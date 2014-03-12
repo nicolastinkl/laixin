@@ -125,6 +125,15 @@
         [UIAlertView showAlertViewWithMessage:@"请填写正确验证码"];
         return;
     }
+    
+    if ([self.yanzhengNumber isFirstResponder]) {
+        [self.yanzhengNumber resignFirstResponder];
+    }
+    
+    if ([self.PhoneNumber isFirstResponder]) {
+        [self.PhoneNumber resignFirstResponder];
+    }
+    
     if ( self.yanzhengNumber.text.length &&  self.PhoneNumber.text) {
         [SVProgressHUD show];
         NSString * paremsResult = [NSString stringWithFormat:@"PhoneLogin?phone=%@&code=%@",self.PhoneNumber.text,self.yanzhengNumber.text];
@@ -185,8 +194,9 @@
 
                         self.yanzhengNumber.text = yanzhengCode;
                     }
+                    [self.yanzhengNumber becomeFirstResponder];
                     
-                    self.image_success.hidden = NO;
+//                    self.image_success.hidden = NO;
                     self.button_getYanzhengma.enabled = NO;
                 }else{
                     [self loginError:@"获取验证码失败"];
