@@ -19,7 +19,7 @@
 {
      
         NSMutableArray *HotTypeOfMMArray;
-    
+    NSMutableDictionary * photoDict;
 }
 @end
 
@@ -41,6 +41,10 @@
     {   NSMutableArray * array =   [[NSMutableArray alloc] init];
         HotTypeOfMMArray = array ;
     }
+    {   NSMutableDictionary * array =   [[NSMutableDictionary alloc] init];
+        photoDict = array ;
+    }
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -101,7 +105,7 @@
     UILabel * label_content = (UILabel * )  [cell.contentView subviewWithTag:3];
     UIButton * button = (UIButton * )  [cell.contentView subviewWithTag:4];
     LXUser *currentUser =  HotTypeOfMMArray[indexPath.row];
-    
+    [self fillPhotoWithUID:currentUser.uid withcell:cell];
     if([buttonview isKindOfClass:[UIImageView class]])
     {
          [buttonview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:currentUser.headpic Size:100]]   placeholderImage:[UIImage imageNamed:@"avatar_default"]];
@@ -118,52 +122,24 @@
     buttonview.layer.cornerRadius = buttonview.height/2;
     buttonview.layer.masksToBounds = YES;
     
-    UIImageView * imageview1 = (UIImageView * )  [cell.contentView subviewWithTag:5];
-    UIImageView * imageview2 = (UIImageView * )  [cell.contentView subviewWithTag:6];
-    UIImageView * imageview3 = (UIImageView * )  [cell.contentView subviewWithTag:7];
-    
     
     UILabel * label_more = (UILabel * )  [cell.contentView subviewWithTag:8];
-    
     
     UIButton * ButtonSeeuserinfo = (UIButton * )  [cell.contentView subviewWithTag:10];
     ButtonSeeuserinfo.tag = indexPath.row;
     
     [ButtonSeeuserinfo addTarget:self action:@selector(SeeUserHotClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    imageview1.layer.cornerRadius = 2;
-    imageview1.layer.masksToBounds = YES;
-    
-    imageview2.layer.cornerRadius = 2;
-    imageview2.layer.masksToBounds = YES;
-    
-    imageview3.layer.cornerRadius = 2;
-    imageview3.layer.masksToBounds = YES;
-    
     if (indexPath.row == 0) {
         
         label_more.text = @"推荐理由: 千杯不醉,品酒达人. 精通:赤霞珠/西拉/增芳德/佳美娜";
         
-        [imageview1 setImageWithURL:[NSURL URLWithString:@"http://a.hiphotos.baidu.com/image/w%3D2048/sign=4b896f8ecbea15ce41eee70982383bf3/00e93901213fb80e335e60dc34d12f2eb9389429.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview2 setImageWithURL:[NSURL URLWithString:@"http://h.hiphotos.baidu.com/image/w%3D2048/sign=87cb024a8418367aad8978dd1a4b8ad4/09fa513d269759ee0af7afa8b0fb43166d22df2a.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview3 setImageWithURL:[NSURL URLWithString:@"http://a.hiphotos.baidu.com/image/w%3D2048/sign=7a3c52c9d5ca7bcb7d7bc02f8a316a63/9213b07eca80653804e5cf1995dda144ad3482a8.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        
     } else  if (indexPath.row == 1) {
         
-        [imageview1 setImageWithURL:[NSURL URLWithString:@"http://h.hiphotos.baidu.com/image/w%3D2048/sign=3c570f339045d688a302b5a490fa7c1e/a50f4bfbfbedab64fce58bc0f536afc379311e1f.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview2 setImageWithURL:[NSURL URLWithString:@"http://c.hiphotos.baidu.com/image/w%3D2048/sign=022720314e086e066aa8384b36307af4/7acb0a46f21fbe09d1dd7f1469600c338744ad2b.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview3 setImageWithURL:[NSURL URLWithString:@"http://g.hiphotos.baidu.com/image/w%3D2048/sign=80cd02e4b11c8701d6b6b5e613479f2f/b3fb43166d224f4a8e1acf130bf790529822d12b.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
         label_more.text = @"推荐理由: 声音性感,言语动听. 精通:埃德华兹酒园 菩裴拉佳美娜干红葡萄酒/洛神山庄加本力苏维翁红葡萄酒";
     } else  if (indexPath.row == 2) {
         
-        [imageview1 setImageWithURL:[NSURL URLWithString:@"http://d.hiphotos.baidu.com/image/w%3D2048/sign=40afb41569600c33f079d9c82e74500f/a044ad345982b2b7fb6e4ec533adcbef76099b39.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview2 setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/w%3D2048/sign=1f09578e08d162d985ee651c25e7a8ec/6a600c338744ebf8074d7d75dbf9d72a6059a7bf.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview3 setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/w%3D2048/sign=afa74c4e0ed79123e0e09374990c5882/cf1b9d16fdfaaf5196f99df98e5494eef01f7a59.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        
     }else{
-        [imageview1 setImageWithURL:[NSURL URLWithString:@"http://d.hiphotos.baidu.com/image/w%3D2048/sign=40afb41569600c33f079d9c82e74500f/a044ad345982b2b7fb6e4ec533adcbef76099b39.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview2 setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/w%3D2048/sign=1f09578e08d162d985ee651c25e7a8ec/6a600c338744ebf8074d7d75dbf9d72a6059a7bf.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        [imageview3 setImageWithURL:[NSURL URLWithString:@"http://f.hiphotos.baidu.com/image/w%3D2048/sign=afa74c4e0ed79123e0e09374990c5882/cf1b9d16fdfaaf5196f99df98e5494eef01f7a59.jpg"] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
          label_more.text = @"推荐理由: 眼神勾魂,身材惹火. 精通:伏特加/香槟";
     }
     
@@ -177,6 +153,77 @@
     // Configure the cell...
     
     return cell;
+}
+
+-(void) fillPhotoWithUID:(NSString*) uid withcell:(UITableViewCell *)cell
+{
+    
+    UIImageView * imageview1 = (UIImageView * )  [cell.contentView subviewWithTag:5];
+    UIImageView * imageview2 = (UIImageView * )  [cell.contentView subviewWithTag:6];
+    UIImageView * imageview3 = (UIImageView * )  [cell.contentView subviewWithTag:7];
+    imageview1.image = [UIImage imageNamed:@"aio_ogactivity_default"];
+    imageview2.image = [UIImage imageNamed:@"aio_ogactivity_default"];
+    imageview3.image = [UIImage imageNamed:@"aio_ogactivity_default"];
+    
+    imageview1.layer.cornerRadius = 2;
+    imageview1.layer.masksToBounds = YES;
+    
+    imageview2.layer.cornerRadius = 2;
+    imageview2.layer.masksToBounds = YES;
+    
+    imageview3.layer.cornerRadius = 2;
+    imageview3.layer.masksToBounds = YES;
+    
+    
+    NSArray * photos = photoDict[uid];
+    [photos enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (idx == 0) {
+            [imageview1 setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:obj Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+        }else        if (idx == 1) {
+            [imageview2 setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:obj Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+        }else        if (idx == 2) {
+            [imageview3 setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:obj Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+        }
+    }];
+    
+    
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LXUser *currentUser =  HotTypeOfMMArray[indexPath.row];
+    
+    NSString * CellKey  = [NSString stringWithFormat:@"CellKeyuid_%@",currentUser.uid];
+    Boolean bol = [cell.userInfo[CellKey] boolValue];
+ 
+    NSArray * photos = photoDict[currentUser.uid];
+    if (photos.count <= 0 && !bol) {
+        [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil]];
+        
+        [[MLNetworkingManager sharedManager] sendWithAction:@"album.read" parameters:@{@"uid":currentUser.uid,@"count":@"3"} success:^(MLRequest *request, id responseObject) {
+            NSDictionary * result = responseObject[@"result"];
+            NSArray * medias = result[@"medias"];
+            NSMutableArray * array = [[NSMutableArray alloc] init];
+            [medias enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString  *url = [DataHelper getStringValue:obj[@"picture"] defaultValue:@""];
+                [array addObject:url];
+            }];
+            [photoDict setValue:array forKey:currentUser.uid];
+
+            if(medias.count <= 0)
+            {
+                
+                [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil]];
+            }else{
+                [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil]];
+            }
+                
+            [self fillPhotoWithUID:currentUser.uid withcell:cell];
+        } failure:^(MLRequest *request, NSError *error) {
+            cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+        }];
+    }
+    
 }
 
 

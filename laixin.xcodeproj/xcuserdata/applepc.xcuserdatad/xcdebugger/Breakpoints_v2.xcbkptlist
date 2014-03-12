@@ -5138,11 +5138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJSeetypeMMviewcontroller.m"
-            timestampString = "416298974.378999"
+            timestampString = "416317863.270602"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
             landmarkName = "-attentClick:"
             landmarkType = "5">
          </BreakpointContent>

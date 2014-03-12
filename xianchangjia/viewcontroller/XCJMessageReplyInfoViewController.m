@@ -312,7 +312,6 @@
                     cell.isloadingphotos = NO;
                 }];
             }
-            
         }
         
     }
