@@ -8,7 +8,6 @@
 
 #import "XCJSeetypeMMviewcontroller.h"
 #import "XCAlbumAdditions.h"
-#import "UITableViewCell+TKCategory.h"
 #import "UIButton+WebCache.h"
 #import "UIButton+AFNetworking.h"
 #import "XCJAddUserTableViewController.h"
@@ -18,8 +17,9 @@
 @interface XCJSeetypeMMviewcontroller ()
 {
      
-        NSMutableArray *HotTypeOfMMArray;
+    NSMutableArray *HotTypeOfMMArray;
     NSMutableDictionary * photoDict;
+    NSMutableDictionary * isLoadDict;
 }
 @end
 
@@ -44,6 +44,10 @@
     {   NSMutableDictionary * array =   [[NSMutableDictionary alloc] init];
         photoDict = array ;
     }
+    {   NSMutableDictionary * array =   [[NSMutableDictionary alloc] init];
+        isLoadDict = array ;
+    }
+    
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -117,16 +121,13 @@
 //    button.tag = indexPath.row;
     label_name.text = currentUser.nick;
     label_content.text = currentUser.signature.length<=0?@"Ta什么都没说":currentUser.signature;
-    NSMutableDictionary * keymuta  = [[NSMutableDictionary alloc] initWithObjectsAndKeys:currentUser,@"userinfo", nil];
-    [cell setUserInfo:keymuta];
     buttonview.layer.cornerRadius = buttonview.height/2;
     buttonview.layer.masksToBounds = YES;
     
     
     UILabel * label_more = (UILabel * )  [cell.contentView subviewWithTag:8];
-    
     UIButton * ButtonSeeuserinfo = (UIButton * )  [cell.contentView subviewWithTag:10];
-    ButtonSeeuserinfo.tag = indexPath.row;
+//    ButtonSeeuserinfo.tag = indexPath.row;
     
     [ButtonSeeuserinfo addTarget:self action:@selector(SeeUserHotClick:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -194,11 +195,11 @@
     LXUser *currentUser =  HotTypeOfMMArray[indexPath.row];
     
     NSString * CellKey  = [NSString stringWithFormat:@"CellKeyuid_%@",currentUser.uid];
-    Boolean bol = [cell.userInfo[CellKey] boolValue];
+    Boolean bol = [isLoadDict[CellKey] boolValue];
  
     NSArray * photos = photoDict[currentUser.uid];
     if (photos.count <= 0 && !bol) {
-        [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil]];
+        [isLoadDict setValue:@YES forKey:CellKey];
         
         [[MLNetworkingManager sharedManager] sendWithAction:@"album.read" parameters:@{@"uid":currentUser.uid,@"count":@"3"} success:^(MLRequest *request, id responseObject) {
             NSDictionary * result = responseObject[@"result"];
@@ -212,15 +213,14 @@
 
             if(medias.count <= 0)
             {
-                
-                [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,CellKey, nil]];
+                [isLoadDict setValue:@YES forKey:CellKey];
             }else{
-                [cell setUserInfo: [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil]];
+                [isLoadDict setValue:@NO forKey:CellKey];
             }
                 
             [self fillPhotoWithUID:currentUser.uid withcell:cell];
         } failure:^(MLRequest *request, NSError *error) {
-            cell.userInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys:@NO,CellKey, nil];
+            [isLoadDict setValue:@NO forKey:CellKey];
         }];
     }
     
@@ -235,12 +235,13 @@
     [self.navigationController pushViewController:viewControl animated:YES];
 }
 
-
 -(IBAction)SeeUserHotClick:(id)sender
 {
     UIButton * button = sender;
     UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
-    LXUser * currentUser = cell.userInfo[@"userinfo"];
+    
+    LXUser *currentUser =  HotTypeOfMMArray[[self.tableView indexPathForCell:cell].row ];
+//    LXUser * currentUser = cell.userInfo[@"userinfo"];
     if (currentUser) {
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
             if (response) {
@@ -265,7 +266,8 @@
     UIButton * button = sender;
     UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
     NSMutableArray * array = [[[EGOCache globalCache] plistForKey:KSingerCount] mutableCopy];
-    LXUser * userinfo = cell.userInfo[@"userinfo"];
+//    LXUser * userinfo = cell.userInfo[@"userinfo"];
+    LXUser *userinfo =  HotTypeOfMMArray[[self.tableView indexPathForCell:cell].row ];
     if (array) {
         if ([array containsObject:userinfo.uid]) {
             //如果存在 就移除

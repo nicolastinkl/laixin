@@ -9,6 +9,8 @@
 
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
+
+
 #ifndef DoubanAlbum_DoubanAlbumDefines_h
 #define DoubanAlbum_DoubanAlbumDefines_h
 
@@ -26,7 +28,7 @@ typedef enum {
 	KMessage_private_Location = 3, //location
 } KMessage_private_user_Msg_type;
 
-//#warning Release
+
 #define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
 

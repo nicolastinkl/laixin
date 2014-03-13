@@ -165,7 +165,7 @@
     if (array) {
         if ([array containsObject:self.privateUID]) {
             //如果存在 就移除
-            [array removeObject:self.privateUID];
+            [array removeObject:[NSString stringWithFormat:@"%@",self.privateUID]];
             
             [self.navigationItem.rightBarButtonItem.customView showAnimatingLayer];
             

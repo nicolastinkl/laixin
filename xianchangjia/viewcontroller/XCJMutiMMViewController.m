@@ -144,7 +144,6 @@
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"remove"];
             });
-
         }
     }
     [_datasource removeObjectAtIndex: button.tag];

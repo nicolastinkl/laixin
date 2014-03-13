@@ -143,11 +143,12 @@
     }else{        
         [self initHomeData];
     }
+//    [self scrollTableViewToSearchBarAnimated:NO];
 }
 
 - (void)scrollTableViewToSearchBarAnimated:(BOOL)animated
 {
-    [self.tableView scrollRectToVisible:self.searchDisplayController.searchBar.frame animated:animated];
+    [self.tableView scrollRectToVisible:self.searchbar.frame animated:animated];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
