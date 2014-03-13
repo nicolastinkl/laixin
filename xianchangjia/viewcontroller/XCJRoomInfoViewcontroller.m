@@ -33,29 +33,22 @@
 {
     int currentActive_by;
 }
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_0;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_1;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_0_2;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_0;
+@property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_1;
 
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_0;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_2_1;
-@property (strong, nonatomic) IBOutlet UITableViewCell *cell_3_0;
-
-@property (weak, nonatomic) IBOutlet UILabel *label_sig1;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
 @property (weak, nonatomic) IBOutlet UIButton *image_button;
-@property (weak, nonatomic) IBOutlet UILabel *label_address;
-@property (weak, nonatomic) IBOutlet UILabel *label_phone;
-@property (weak, nonatomic) IBOutlet UILabel *label_one;
-@property (weak, nonatomic) IBOutlet UILabel *label_two;
+
 @property (weak, nonatomic) IBOutlet UILabel *label_price;
 @property (weak, nonatomic) IBOutlet UIButton *button_buy;
 @property (weak, nonatomic) IBOutlet UILabel *label_serCount;
+
 @property (weak, nonatomic) IBOutlet UIView *view_kSonger;
+
 @property (weak, nonatomic) IBOutlet UILabel *label_KsongerNum;
+
 @property (weak, nonatomic) IBOutlet UIImageView *image_tuijianPeople;
 
 @end
@@ -85,16 +78,8 @@
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
     [self.button_buy infoStyle];
-    self.label_sig1.layer.cornerRadius = 2.0f;
-    self.label_sig1.layer.masksToBounds = YES;
-    self.label_one.layer.cornerRadius = 2.0f;
-    self.label_two.layer.cornerRadius = 2.0f;
-    self.label_one.layer.masksToBounds = YES;
-    self.label_two.layer.masksToBounds = YES; 
     
-    self.view_kSonger.layer.cornerRadius = 2.0f;
-    self.view_kSonger.layer.masksToBounds = YES;
-    
+    currentActive_by = [[LXAPIController sharedLXAPIController] currentUser].active_by;
     if ([self.rominfo.type containString:@"豪"]) {
         [self.image_button setBackgroundImage:[UIImage imageNamed:@"room0002.jpg"] forState:UIControlStateNormal];
     }else   if ([self.rominfo.type containString:@"大"]) {
@@ -112,28 +97,9 @@
 
     self.label_name.text = self.rominfo.name;
     
-    self.label_phone.text = self.locatinfo.phone[0];
-    
-    self.label_address.text = self.locatinfo.addressName;
-    
-    self.label_serCount.text = @"0";
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeLaixin:) name:@"changeLaixinMMID" object:nil]; 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateMyKSonger:) name:@"updateMyKSonger" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
-    
-    if ([LXAPIController sharedLXAPIController].currentUser.active_by > 0) {
-        currentActive_by = [LXAPIController sharedLXAPIController].currentUser.active_by;
-        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-            FCUserDescription * user = response;
-            NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
-            [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
-            self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
-            self.image_tuijianPeople.layer.masksToBounds = YES;
-            self.cell_2_1.accessoryType = UITableViewCellAccessoryCheckmark;
-        } withuid:[NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.active_by]];
-    }
     
     /*
      NSRange rang = [self.rominfo.parensNumber rangeOfString:@"-"];
@@ -174,7 +140,7 @@
                 [((UIView * )obj) setHidden:YES];
             }];
             [self.view_kSonger layoutIfNeeded];
-            self.cell_2_0.accessoryType = UITableViewCellAccessoryCheckmark;
+            self.cell_1_0.accessoryType = UITableViewCellAccessoryCheckmark;
             
         }else{
             self.label_KsongerNum.text = @"";
@@ -185,7 +151,7 @@
                 [((UIView * )obj) setHidden:YES];
             }];
             [self.view_kSonger layoutIfNeeded];
-            self.cell_2_0.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            self.cell_1_0.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
         }
         
@@ -211,7 +177,7 @@
             } withuid:userid];
         }];
         
-        [self.cell_2_0 reloadInputViews];
+        [self.cell_1_0 reloadInputViews];
     }
     
 }
@@ -228,7 +194,7 @@
             [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
             self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
             self.image_tuijianPeople.layer.masksToBounds = YES;
-            self.cell_2_1.accessoryType = UITableViewCellAccessoryCheckmark;
+            self.cell_1_1.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         
     }
@@ -301,7 +267,7 @@
     //        browser.delegate = self;
     browser.displayActionButton = NO;
     browser.displayArrowButton = NO;
-    browser.displayCounterLabel = NO;
+    browser.displayCounterLabel = YES;
     [browser setInitialPageIndex:0];
     if (buttonSender.imageView.image) {
 //        browser.scaleImage = buttonSender.imageView.image;        // Show
@@ -494,15 +460,15 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             return 90;
+        }else if (indexPath.row == 1) {
+            return 50;
+        }else if (indexPath.row == 2) {
+            return 50;
+        }else  if (indexPath.row == 3)
+        {
+            return 151;
         }
-        return 44.0f;
-    }else if (indexPath.section == 1)
-    {
-        return 151;
-    }else if(indexPath.section == 2)
-    {
-        return 50;
-    } else if(indexPath.section == 3)
+    }else  if(indexPath.section == 1 || indexPath.section == 2 )
     {
         return 50;
     }
@@ -512,20 +478,17 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 4;
+    return 3;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 3;
+        return 4;
     }else if (section == 1)
     {
-        return 1;
-    }else if(section ==2)
-    {
         return 2;
-    }else if(section ==3)
+    }else if(section == 2)
     {
         return 1;
     }
@@ -564,7 +527,7 @@
             
             [self.navigationController pushViewController:mapview animated:YES];
         }
-    }else if(indexPath.section == 2)
+    }else if(indexPath.section == 1)
     {
         switch (indexPath.row) {
            
@@ -586,7 +549,7 @@
             default:
                 break;
         }
-    } else if(indexPath.section == 3)
+    } else if(indexPath.section == 2)
     {
         if (indexPath.row == 0) {
             XCJSeeJiuShuiViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeeJiuShuiViewController"];
@@ -605,36 +568,96 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
+    
+    NSString *CellIdentifier;
+    
     switch (indexPath.section) {
         case 0:
             if (indexPath.row == 0) {
-                cell = self.cell_0_0;
+                CellIdentifier = @"Cell_0_0";
             }else if (indexPath.row == 1) {
-                cell= self.cell_0_1;
+                CellIdentifier = @"Cell_0_1";
             }else if (indexPath.row == 2) {
-                cell= self.cell_0_2;
+                CellIdentifier = @"Cell_0_2";
+            }else if (indexPath.row == 3) {
+                CellIdentifier = @"Cell_0_3";
             }
             break;
         case 1:
             if (indexPath.row == 0)
-            cell= self.cell_1_0;
+                CellIdentifier = @"Cell_1_0";
+            else if (indexPath.row == 1)
+                CellIdentifier = @"Cell_1_1";
+            
             break;
         case 2:
             if (indexPath.row == 0)
-                cell= self.cell_2_0;
-            else if (indexPath.row == 1)
-                cell= self.cell_2_1;
-            
-            break;
-        case 3:
-            if (indexPath.row == 0)
-                
-                cell= self.cell_3_0;
+                CellIdentifier = @"Cell_2_0";
             break;
         default:
             break;
     }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    switch (indexPath.section) {
+        case 0:
+            if (indexPath.row == 0) {
+
+            }else if (indexPath.row == 1) {
+                UILabel * label = (UILabel *) [cell.contentView subviewWithTag:1];
+                label.text =  self.locatinfo.phone[0];
+            }else if (indexPath.row == 2) {
+                UILabel * label = (UILabel *) [cell.contentView subviewWithTag:1];
+                label.text =   self.locatinfo.addressName;
+            }else if (indexPath.row == 3) {
+                UILabel * label_sig1 = (UILabel *) [cell.contentView subviewWithTag:2];
+                UILabel *label_two = (UILabel *) [cell.contentView subviewWithTag:3];
+                UILabel *label_one = (UILabel *) [cell.contentView subviewWithTag:4];
+                label_sig1.layer.cornerRadius = 2.0f;
+                label_one.layer.cornerRadius = 2.0f;
+                label_two.layer.cornerRadius = 2.0f;
+                label_one.layer.masksToBounds = YES;
+                label_two.layer.masksToBounds = YES;
+                label_sig1.layer.masksToBounds = YES;
+            }
+            break;
+        case 1:
+            if (indexPath.row == 0)
+            {
+                self.label_KsongerNum = (UILabel *) [cell.contentView subviewWithTag:1];
+                self.view_kSonger = (UILabel *) [cell.contentView subviewWithTag:2];
+                
+                self.view_kSonger.layer.cornerRadius = 2.0f;
+                self.view_kSonger.layer.masksToBounds = YES;
+                
+                self.cell_1_0 = cell;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMyKSonger" object:@"add"];
+            }
+            
+            else if (indexPath.row == 1)
+            {
+                self.image_tuijianPeople = (UIImageView *) [cell.contentView subviewWithTag:1];
+                self.cell_1_1 = cell;
+                
+                if ([LXAPIController sharedLXAPIController].currentUser.active_by > 0) {
+                    currentActive_by = [LXAPIController sharedLXAPIController].currentUser.active_by;
+                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                        FCUserDescription * user = response;
+                        NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+                        [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
+                        self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
+                        self.image_tuijianPeople.layer.masksToBounds = YES;
+                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    } withuid:[NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.active_by]];
+                }
+                
+            }
+            break;
+            break;
+        default:
+            break;
+    }
+    
     return cell;
 }
 

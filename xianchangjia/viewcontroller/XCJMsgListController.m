@@ -886,8 +886,6 @@
     }
     
     
-   
-    
     UITabBar *tabBar =(UITabBar*) [cell.contentView viewWithTag:12];
     for (UIView *viewTab in tabBar.subviews) {
         for (UIView *subview in viewTab.subviews) {
@@ -907,6 +905,21 @@
     ((UILabel *)[cell.contentView viewWithTag:11]).height = 0.5f;
     
 }
+
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITabBar *tabBar =(UITabBar*) [cell.contentView viewWithTag:12];
+//    for (UIView *viewTab in tabBar.subviews) {
+//        for (UIView *subview in viewTab.subviews) {
+//            NSString *strClassName = [NSString stringWithUTF8String:object_getClassName(subview)];
+//            SLog(@"strClassName %@",strClassName);
+//            if (![strClassName isEqualToString:@"_UIBadgeView"]) {
+//                [subview setHidden: YES];
+//                [subview removeFromSuperview];
+//            }
+//        }
+//    }
+//}
 
 #pragma mark  - bragenumber
 

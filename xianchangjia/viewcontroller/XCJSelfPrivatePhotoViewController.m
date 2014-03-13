@@ -71,13 +71,14 @@
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"chat_bottom_up_nor"] style:UIBarButtonItemStyleDone target:self action:@selector(AddPhoto:)];
     
     UIScrollView * scrollview = (UIScrollView *) [self.view subviewWithTag:1];
-//    [scrollview setTop:44];
+    if (IS_4_INCH) {
+        [scrollview setTop:0];
+    }
+    
     UIView * viewadd =  [self.view subviewWithTag:2];
     if([self.privateUID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
     {
-       
         [scrollview setHeight:(APP_SCREEN_HEIGHT - 50)];
-
         UIButton * button = (UIButton *) [viewadd subviewWithTag:3];
         [button sendMessageStyle];
         [button addTarget:self action:@selector(AddPhoto:) forControlEvents:UIControlEventTouchUpInside];
@@ -262,10 +263,12 @@
             [recognizer setNumberOfTouchesRequired:1];
             [imageview addGestureRecognizer:recognizer];
             
-            
-            UILongPressGestureRecognizer * longizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longnicger:)];
-            longizer.numberOfTouchesRequired = 1;
-            [imageview addGestureRecognizer:longizer];
+            if([self.privateUID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+            {
+                UILongPressGestureRecognizer * longizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longnicger:)];
+                longizer.numberOfTouchesRequired = 1;
+                [imageview addGestureRecognizer:longizer];
+            }
             imageview.tag = idx;
             
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:photoinfo.picture Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];

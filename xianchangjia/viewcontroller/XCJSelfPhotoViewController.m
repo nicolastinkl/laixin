@@ -319,11 +319,14 @@
     static NSString *CellIdentifier = @"selfphotoCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    UILabel * label_time = (UILabel *) [cell.contentView subviewWithTag:3];
+    UILabel * label_address = (UILabel *) [cell.contentView subviewWithTag:4];
+
+    
     // Configure the cell...
     UIImageView * imageview = (UIImageView *) [cell.contentView subviewWithTag:1];
     UILabel * labelimage_text = (UILabel *) [cell.contentView subviewWithTag:2];
-    UILabel * label_time = (UILabel *) [cell.contentView subviewWithTag:3];
-    UILabel * label_address = (UILabel *) [cell.contentView subviewWithTag:4];
+    
     UILabel * label_text = (UILabel *) [cell.contentView subviewWithTag:5];
     UILabel * label_photoNumber = (UILabel *) [cell.contentView subviewWithTag:9];
     XCJGroupPost_list * post = dataSource[indexPath.row];
@@ -332,47 +335,45 @@
         label_text.hidden = YES;
         imageview.hidden = NO;
         labelimage_text.hidden = NO;
-        labelimage_text.text = post.content;
         [imageview setImage:nil];
-//        CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
-//        if (height > 47) {
-//            height = 35;
-//        }
         [labelimage_text setHeight:60];
-//        [labelimage_text sizeToFit];
         [labelimage_text setWidth:177];
         label_photoNumber.text = [NSString stringWithFormat:@"共%d张",post.excount];
+        labelimage_text.text = post.content;
     }else{
         label_photoNumber.text  = @"";
         if (post.imageURL.length > 5) {
             label_text.hidden = YES;
             imageview.hidden = NO;
             labelimage_text.hidden = NO;
-            labelimage_text.text = post.content;
-//            SLog(@"%@",[tools getUrlByImageUrl:post.imageURL width:60 height:100]);
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:post.imageURL width:60 height:100]]]; //placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]
             CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
-            
+            if (height > 97) {
+                height = 75;
+            }
             [labelimage_text setHeight:height];
-            [labelimage_text sizeToFit];
+            //            [labelimage_text sizeToFit];
             [labelimage_text setWidth:177];
+            
+            label_text.text = post.content;
         }else{
             label_text.hidden = NO;
             imageview.hidden = YES;
             labelimage_text.hidden = YES;
-            label_text.text = post.content;
             
             CGFloat height = [self heightForCellWithPost:post.content withWidth:237];
             if (height > 97) {
                 height = 75;
             }
             [label_text setHeight:height];
-            [label_text sizeToFit];
+            //            [label_text sizeToFit];
             [label_text setWidth:237];
+            
+            label_text.text = post.content;
         }
     }
-
     
+
     NSString * currentTime = [tools timeLabelTextOfTimeMoth:post.time];
     
     if(indexPath.row>=1)
@@ -393,11 +394,15 @@
 }
 
 - (CGFloat)heightForCellWithPost:(NSString *)post withWidth:(float) width{
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    CGSize sizeToFit = [post sizeWithFont:[UIFont systemFontOfSize:15.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-#pragma clang diagnostic pop
-    return  fmaxf(35.0f, sizeToFit.height + 25.0f );
+    NSDictionary * tdic = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15.0f],NSFontAttributeName,nil];
+    //ios7方法，获取文本需要的size，限制宽度 
+     CGSize  actualsize = [post boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading attributes:tdic context:nil].size;
+    SLog(@"actualsize.height %f",actualsize.height);
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+//    CGSize sizeToFit = [post sizeWithFont:[UIFont systemFontOfSize:15.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+//#pragma clang diagnostic pop
+    return  fmaxf(20.0f, actualsize.height );
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -419,11 +424,13 @@
     if (height > 97) {
         height = 75;
     }
-    return height-12;
+    return height+12 + 10;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
     NSString * CellKey  = @"isloadingphotos";
     XCJGroupPost_list * activity = dataSource[indexPath.row];
     UIView * bgview =  [cell.contentView subviewWithTag:10];
@@ -507,8 +514,6 @@
             [self initDataSourcewithBeforeID:post.postid];
         }
     }
-    
-    
 }
 
 
