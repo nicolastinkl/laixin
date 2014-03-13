@@ -135,7 +135,6 @@
             [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 Comment * comment = [Comment turnObject:obj];
                 [_datasource addObject:comment];
-                
             }];
             [self.tableView reloadData];
             [view_load hideIndicatorViewBlueOrGary];
@@ -147,6 +146,10 @@
                 [button_load setTitle:@"加载完成" forState:UIControlStateNormal];
                 [button_load setEnabled:NO];
             }
+        }else{
+            noMoreData = YES;
+            [button_load setTitle:@"加载完成" forState:UIControlStateNormal];
+            [button_load setEnabled:NO];
         }
         
     } failure:^(MLRequest *request, NSError *error) {

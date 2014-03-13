@@ -22,6 +22,11 @@
 #import "XCJAppDelegate.h"
 #import "XCJTableViewMMController.h"
 #import "FCUserDescription.h"
+#import "UIImage+Resize.h"
+#import "IDMPhotoBrowser.h"
+#import "Conversation.h"
+#import "FCMessage.h"
+#import "CoreData+MagicalRecord.h"
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
@@ -288,12 +293,25 @@
 
 - (IBAction)seeImage:(id)sender {
     
+    UIButton *   buttonSender = sender;
+    NSArray * arrayPhotos  = [IDMPhoto photosWithImages:@[[UIImage imageNamed:@"room0001.jpg"],[UIImage imageNamed:@"room0002.jpg"],[UIImage imageNamed:@"room0003.jpg"],[UIImage imageNamed:@"room0004.jpg"],[UIImage imageNamed:@"room0005.jpg"],[UIImage imageNamed:@"room0006.jpg"],[UIImage imageNamed:@"room0007.jpg"],[UIImage imageNamed:@"room0008.jpg"]]];
+//    NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:dataSource_imageurls];
+    // Create and setup browser
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+    //        browser.delegate = self;
+    browser.displayActionButton = NO;
+    browser.displayArrowButton = NO;
+    browser.displayCounterLabel = NO;
+    [browser setInitialPageIndex:0];
+    if (buttonSender.imageView.image) {
+//        browser.scaleImage = buttonSender.imageView.image;        // Show
+    }
+    [self presentViewController:browser animated:YES completion:nil];
 }
-
 
 - (IBAction)buyClick:(id)sender {
     
-    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"确定提交订单吗" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"提交" otherButtonTitles:nil, nil];
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"确定提交订单吗" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即预订" otherButtonTitles:nil, nil];
     actionsheet.tag = 3;
     [actionsheet showInView:self.view];
     
@@ -338,32 +356,61 @@
         
     }else if(actionSheet.tag == 3)
     {
-        
         if(buttonIndex == 0)
         {
-            
             NSString* openUDID = [OpenUDID value];
-            
             NSString * count = self.label_serCount.text;
             int thiscount = [count intValue];
             [SVProgressHUD showWithStatus:@"正在处理..."];
-            [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
+            NSDictionary * dict;
+            if(currentActive_by > 0)
+                dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by)};
+            else
+                dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:dict success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
                     int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
                     if (errnoMesg == 0) {
                         [SVProgressHUD dismiss];
+                        //给 喜欢的小妹发送私信
+                        
+                         NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+                        if (array.count > 0 ) {
+                            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                if (obj && [obj intValue] > 0) {
+                                    NSString * uid = [NSString stringWithFormat:@"%@",obj];
+                                    NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在<<%@-%@>>选中你",self.locatinfo.ktvName,self.rominfo.name]};
+                                    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+                                        if (responseObject) {
+                                            [self SavedbData:uid withType:[NSString stringWithFormat:@"我在<<%@-%@>>选中你",self.locatinfo.ktvName,self.rominfo.name]];
+                                        }
+                                    } failure:^(MLRequest *request, NSError *error) {
+                                        
+                                    }];
+                                }
+                            }];
+                        }
+                        if(currentActive_by > 0)
+                        {
+                            NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在<<%@-%@>>提到你是推荐人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
+                            [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+                                if (responseObject) {
+                                    [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在<<%@-%@>>提到你是推荐人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
+                                }
+                            } failure:^(MLRequest *request, NSError *error) {
+                                
+                            }];
+                        }
+                            
+                        
                         NSDictionary * dict = responseObject[@"result"];
                         NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
                         DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
                         webBrowser.showProgress = YES;
                         webBrowser.allowSharing = YES;
-                        //
                         UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
                         [webBrowserNC pushViewController:webBrowser animated:NO];
-                        
-                        //[[UINavigationSample alloc] initWithRootViewController:webBrowser];
                         [self presentViewController:webBrowserNC animated:YES completion:NULL];
-                        
                         
                         /* XCJBuySurityViewController * surView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJBuySurityViewController"];
                          
@@ -382,6 +429,66 @@
         
     }
 }
+
+
+-(void) SavedbData:(NSString * ) uid  withType:(NSString * ) stringName;
+{
+    // target to chat view
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",uid];
+    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
+    if (array) {
+        //系统消息公告
+        FCMessage * msg = [FCMessage MR_createInContext:localContext];
+        msg.messageType = @(messageType_SystemAD);
+        msg.text =stringName;
+        msg.sentDate = [NSDate date];
+        msg.audioUrl = @"";
+        // message did not come, this will be on rigth
+        msg.messageStatus = @(NO);
+        msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        msg.messageguid = @"";
+        msg.messageSendStatus = @0;
+        msg.read = @YES;
+        [array addMessagesObject:msg];
+        array.lastMessage = msg.text;
+        array.lastMessageDate = [NSDate date];
+        array.messageType = @(XCMessageActivity_UserPrivateMessage);
+        array.messageStutes = @(messageStutes_incoming);
+        array.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        
+        [localContext MR_saveOnlySelfAndWait];
+    }else{
+        // create new
+        Conversation * conversation =  [Conversation MR_createInContext:localContext];
+        conversation.lastMessageDate = [NSDate date];
+        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+        conversation.messageStutes = @(messageStutes_incoming);
+        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+//        conversation.facebookName = user.nick;
+        conversation.facebookId = uid;
+        conversation.badgeNumber = @0;
+        {
+            //系统消息公告
+            FCMessage * msg = [FCMessage MR_createInContext:localContext];
+            msg.messageType = @(messageType_SystemAD);
+            msg.text = stringName;
+            msg.sentDate = [NSDate date];
+            msg.audioUrl = @"";
+            // message did not come, this will be on rigth
+            msg.messageStatus = @(NO);
+            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+            msg.messageguid = @"";
+            msg.messageSendStatus = @0;
+            msg.read = @YES;
+            conversation.lastMessage = msg.text;
+            [conversation addMessagesObject:msg];
+        }
+        [localContext MR_saveOnlySelfAndWait];
+    }
+
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {

@@ -210,6 +210,7 @@
                                     photoArray = arrayURLS;
                                     self.pagecontrl.numberOfPages = photoArray.count;
                                     self.pagecontrl.currentPageIndicatorTintColor = ios7BlueColor;
+                                    self.pagecontrl.pageIndicatorTintColor = [UIColor whiteColor];
                                     
                                     self.scrollview.contentSize = CGSizeMake(LEFT_PADDING + (pageSize.width + DISTANCE_BETWEEN_ITEMS) * ([photoArray count] ), pageSize.height);
                                     
@@ -296,24 +297,24 @@
                             Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
                             ChatViewController * chatview = [self.storyboard instantiateViewControllerWithIdentifier:@"ChatViewController"];
                             if (array) {
+                                //系统消息公告
+                                FCMessage * msg = [FCMessage MR_createInContext:localContext];
+                                msg.messageType = @(messageType_SystemAD);
+                                msg.text =name;
+                                msg.sentDate = [NSDate date];
+                                msg.audioUrl = @"";
+                                // message did not come, this will be on rigth
+                                msg.messageStatus = @(NO);
+                                msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+                                msg.messageguid = @"";
+                                msg.messageSendStatus = @0;
+                                msg.read = @YES;
+                                [array addMessagesObject:msg]; 
+                                array.lastMessage = msg.text;
+                                array.lastMessageDate = [NSDate date];
+                                array.messageType = @(XCMessageActivity_UserPrivateMessage);
+                                [localContext MR_saveOnlySelfAndWait];
                                 chatview.conversation = array;
-                                
-                                {
-                                    //系统消息公告
-                                    FCMessage * msg = [FCMessage MR_createInContext:localContext];
-                                    msg.messageType = @(messageType_SystemAD);
-                                    msg.text =name;
-                                    msg.sentDate = [NSDate date];
-                                    msg.audioUrl = @"";
-                                    // message did not come, this will be on rigth
-                                    msg.messageStatus = @(NO);
-                                    msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-                                    msg.messageguid = @"";
-                                    msg.messageSendStatus = @0;
-                                    msg.read = @YES;
-                                    array.lastMessage = msg.text;
-                                    [array addMessagesObject:msg];
-                                }
                             }else{
                                 // create new
                                 Conversation * conversation =  [Conversation MR_createInContext:localContext];
@@ -328,7 +329,7 @@
                                     //系统消息公告
                                     FCMessage * msg = [FCMessage MR_createInContext:localContext];
                                     msg.messageType = @(messageType_SystemAD);
-                                    msg.text = [NSString stringWithFormat:@"我想参加您发起的活动(%@),有什么变化麻烦告诉我噢.",self.groupinfo.group_name],
+                                    msg.text = name;
                                     msg.sentDate = [NSDate date];
                                     msg.audioUrl = @"";
                                     // message did not come, this will be on rigth
@@ -439,12 +440,40 @@
     }
 }
 
+
+- (NSString*) timeLabelTextOfTime:(NSTimeInterval)time
+{
+    if (time<=0) {
+        return @"";
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM-dd HH:mm"];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+    NSString *text = [dateFormatter stringFromDate:date];
+    //最近时间处理
+    NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
+    SLog(@"timeAgo  %d",timeAgo);
+    if (timeAgo > 0 && timeAgo < 86400) {
+        return @"今天";
+    }else if (timeAgo >= 86400) {
+        return @"失效";
+    }
+    return text;
+}
+
 -(void) initallContr:( XCJGroup_list * ) groupinfo
 {
 //    self.groupinfo = groupinfo;
     self.label_name.text = groupinfo.group_name;
     self.label_address.text = groupinfo.position;
-    self.label_time.text = @"明天";
+    NSString * str =[self timeLabelTextOfTime:groupinfo.time];
+    self.label_time.text = str;
+    if ([str isEqualToString:@"失效"]) {
+        self.label_time.textColor =  [UIColor redColor];
+    }else{
+        self.label_time.textColor =  [tools colorWithIndex:0];
+    }
+    
     self.label_type.text = groupinfo.group_board;
     self.label_type.textColor = [tools colorWithIndex:3];
     self.image_user.layer.cornerRadius = self.image_user.height/2;
