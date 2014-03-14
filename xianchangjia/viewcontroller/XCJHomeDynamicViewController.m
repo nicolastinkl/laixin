@@ -720,12 +720,12 @@
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //如果有则删除，没有则不动啊
-            for (LXUser *aUser in activity.likeUsers) {
-                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
-//                    [activity.likeUsers removeObject:aUser];
-                    break;
-                }
-            }
+//            for (LXUser *aUser in activity.likeUsers) {
+//                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
+////                    [activity.likeUsers removeObject:aUser];
+//                    break;
+//                }
+//            }
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;

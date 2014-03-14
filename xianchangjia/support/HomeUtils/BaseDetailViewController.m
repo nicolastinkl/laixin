@@ -17,7 +17,7 @@
 #import "UIView+Indicator.h"
 #import "XCAlbumAdditions.h"
 #import "FCUserDescription.h"
-
+#import "XCJMessageReplyInfoViewController.h"
 
 
 //#import "MobClick.h"
@@ -158,9 +158,15 @@
     [_tableView addSubview:_noDataHintLabel];
     
     //先显示指示器
-    [_tableView reloadData];
-    
+    [_tableView reloadData];    
 }
+
+
+//-(void)viewDidAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    [_tableView reloadData];
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -345,8 +351,12 @@
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
     cell.needRefreshViewController = self;
-    if (activity.like > 0 && !cell.HasLoadlisks) {
-        cell.HasLoadlisks = YES;
+    // start requst comments  and likes
+    cell.activity = activity;
+//    if (activity.like > 0 && !cell.HasLoadlisks) {
+//        cell.HasLoadlisks = YES;
+//        [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
+//    }
        /*
         NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"100"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -369,12 +379,10 @@
         
         }];
         */
-    }
 
 //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
-    cell.activity = activity;
-    // start requst comments  and likes
     
+   
     return cell;
 }
 
@@ -415,6 +423,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    XCJMessageReplyInfoViewController * msgReplyInfoViewCr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplyInfoViewController"];
+    msgReplyInfoViewCr.post = _activities[indexPath.row];
+    [self.navigationController pushViewController:msgReplyInfoViewCr animated:YES];
+    
 }
 
 

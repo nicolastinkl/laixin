@@ -99,11 +99,14 @@
         if (obj) {
             XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
             currentGroup = list;
+            [self initLikesCount];
             [self.tableView reloadData];
         }
     }else{
         if (self.post) {
             currentGroup = self.post;
+//            拉取 赞的人
+            [self initLikesCount];
             [self.tableView reloadData];
         }else{
             //post.get(postid) 参数可以是数组
@@ -117,6 +120,7 @@
                             [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
                             XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
                             currentGroup = list;
+                            [self initLikesCount];
                             [self.tableView reloadData];
                         }
                     }];
@@ -132,6 +136,34 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+-(void) initLikesCount
+{
+    /*
+    if(currentGroup.like > 0)
+    {
+        NSDictionary * parames = @{@"postid":currentGroup.postid,@"pos":@0,@"count":@"100"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
+            NSDictionary * groups = responseObject[@"result"];
+            NSArray * postsDict =  groups[@"users"];
+            if (postsDict&& postsDict.count > 0) {
+                NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    postlikes * likes = [postlikes turnObject:obj];
+                    [mutaArray addObject:likes];
+                }];
+                currentGroup.like = postsDict.count;
+                [currentGroup.likeUsers  removeAllObjects];
+                [currentGroup.likeUsers addObjectsFromArray:mutaArray];
+                //indexofActivitys
+                [self.tableView reloadData];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            
+        }];
+    }*/
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -211,39 +243,40 @@
     XCJGroupPost_list* activity = currentGroup;
     ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
     
-    if (activity.like == 0 && !cell.HasLoadlisks) {
-        cell.HasLoadlisks = YES;
-        if (activity) {
-            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"100"};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * postsDict =  groups[@"users"];
-                if (postsDict&& postsDict.count > 0) {
-                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        postlikes * likes = [postlikes turnObject:obj];
-                        [mutaArray addObject:likes];
-                    }];
-                    
-                    [activity.likeUsers addObjectsFromArray:mutaArray];
-                    //indexofActivitys
-                    [self reloadSingleActivityRowOfTableView:0  withAnimation:NO];
-                }
-                cell.HasLoadlisks = YES;
-            } failure:^(MLRequest *request, NSError *error) {
-                cell.HasLoadlisks =YES;
-            }];
-        }else{
-            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
-        }
-        
-    }
+//    if (activity.like == 0 && !cell.HasLoadlisks) {
+//        cell.HasLoadlisks = YES;
+//        if (activity) {
+//            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
+//            [[MLNetworkingManager sharedManager] sendWithAction:@"post.likes" parameters:parames success:^(MLRequest *request, id responseObject) {
+//                NSDictionary * groups = responseObject[@"result"];
+//                NSArray * postsDict =  groups[@"users"];
+//                if (postsDict&& postsDict.count > 0) {
+//                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+//                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//                        postlikes * likes = [postlikes turnObject:obj];
+//                        [mutaArray addObject:likes];
+//                    }];
+//                    
+//                    [activity.likeUsers addObjectsFromArray:mutaArray];
+//                    activity.like = postsDict.count;
+//                    //indexofActivitys
+//                    [self reloadSingleActivityRowOfTableView:0  withAnimation:NO];
+//                }
+//                cell.HasLoadlisks = YES;
+//            } failure:^(MLRequest *request, NSError *error) {
+//                cell.HasLoadlisks =YES;
+//            }];
+//        }else{
+//            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+//        }
+//        
+//    }
     
     if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
         if (activity) {
-            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"20"};
+            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
                 //    postid = 12;
                 /*
@@ -258,6 +291,7 @@
                         [mutaArray addObject:comment];
                     }];
                     [activity.comments addObjectsFromArray:mutaArray];
+                    activity.replycount = postsDict.count;
                     //indexofActivitys
                     [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
                 }
@@ -455,10 +489,10 @@
         
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
-//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
+//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
             [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
@@ -467,12 +501,12 @@
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //如果有则删除，没有则不动啊
-            for (LXUser *aUser in activity.likeUsers) {
-                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
-                    [activity.likeUsers removeObject:aUser];
-                    break;
-                }
-            }
+//            for (LXUser *aUser in activity.likeUsers) {
+//                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
+//                    [activity.likeUsers removeObject:aUser];
+//                    break;
+//                }
+//            }
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;
