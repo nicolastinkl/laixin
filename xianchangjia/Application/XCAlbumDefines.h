@@ -29,7 +29,7 @@ typedef enum {
 } KMessage_private_user_Msg_type;
 
 
-#define NEED_OUTPUT_LOG                     0   // 0 relese  1 debug
+#define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
 #define LaixinSetupDBMessageNotification    @"com.laixin.LaixinSetupDBMessageNotification"
 #define LaixinCloseDBMessageNotification    @"com.laixin.LaixinCloseDBMessageNotification"

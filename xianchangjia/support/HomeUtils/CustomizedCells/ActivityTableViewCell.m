@@ -453,7 +453,7 @@
                 //                    // add self view
                 //                    [self.imageListScroll addSubview:item1];
                 int row = idx/3;
-                DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                  iv.tag = idx;
@@ -494,8 +494,6 @@
             }];
 //            [self.imageListScroll layoutIfNeeded];
         }
-      
-        
         float imageviewHeight = (_activity.excount/3)*65 +(_activity.excount/3)*TITLE_jianxi;
         if (_activity.excount%3>0) {
             imageviewHeight += TITLE_jianxi+65;
