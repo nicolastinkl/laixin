@@ -138,7 +138,7 @@
 //         UIImage * newimg = [self.postImage fixOrientation];
         _postImageView.image = self.postImage;
     }
-    
+    _postImageView.contentMode = UIViewContentModeScaleAspectFit;
     _postImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeImage)];
     [_postImageView addGestureRecognizer:tapGes];

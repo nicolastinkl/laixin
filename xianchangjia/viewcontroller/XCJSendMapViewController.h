@@ -14,8 +14,8 @@
 
 @interface XCJSendMapViewController : UIViewController
 @property (nonatomic,assign) CLLocationCoordinate2D TCoordinate;
-@property (nonatomic,strong) NSString *subtitle;
-@property (nonatomic,strong) NSString *title;
+@property (nonatomic,copy) NSString *subtitle;
+@property (nonatomic,copy) NSString *title;
 @property (nonatomic,assign) BOOL isSeeTaMap;
 @end
 
@@ -27,8 +27,8 @@
 }
 
 @property (nonatomic,readonly) CLLocationCoordinate2D coordinate;
-@property (nonatomic,retain) NSString *subtitle;
-@property (nonatomic,retain) NSString *title;
+@property (nonatomic,copy) NSString *subtitle;
+@property (nonatomic,copy) NSString *title;
 
 -(id) initWithCoords:(CLLocationCoordinate2D) coords;
 @end

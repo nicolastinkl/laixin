@@ -32,8 +32,10 @@
 #import <OHAttributedLabel/NSAttributedString+Attributes.h>
 #import <OHAttributedLabel/OHASBasicMarkupParser.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "DAImageResizedImageView.h"
 
-static NSInteger const kAttributedLabelTag = 100;
+
+//static NSInteger const kAttributedLabelTag = 100;
 
 
 @interface ActivityTableViewCell()<TTTAttributedLabelDelegate,ActivityCommentsViewDelegate,UIAlertViewDelegate>//OHAttributedLabelDelegate
@@ -451,7 +453,7 @@ static NSInteger const kAttributedLabelTag = 100;
                 //                    // add self view
                 //                    [self.imageListScroll addSubview:item1];
                 int row = idx/3;
-                UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                DAImageResizedImageView *iv = [[DAImageResizedImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
                 iv.contentMode = UIViewContentModeScaleAspectFill;
                 iv.clipsToBounds = YES;
                  iv.tag = idx;

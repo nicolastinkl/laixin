@@ -116,7 +116,7 @@
 
 - (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
-    if (assets.count == 1) {
+    /*if (assets.count == 1) {
         //单图模式
        ALAsset *asset =  [assets firstObject];
         if (asset) {            
@@ -135,7 +135,9 @@
             postVC.needRefreshViewController = self;
             [self.navigationController pushViewController:postVC animated:YES];
         }
-    }else if(assets.count > 1){
+    }else*/
+    
+    if(assets.count > 0){
         //多图模式
         XCJSendManySelectedImageViewCOntrooler * contr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendManySelectedImageViewCOntrooler"];
         contr.array = [assets mutableCopy];

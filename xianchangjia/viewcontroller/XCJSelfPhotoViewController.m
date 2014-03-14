@@ -336,7 +336,11 @@
         imageview.hidden = NO;
         labelimage_text.hidden = NO;
         [imageview setImage:nil];
-        [labelimage_text setHeight:60];
+        CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
+        if (height > 70) {
+            height = 60;
+        } 
+        [labelimage_text setHeight:height];
         [labelimage_text setWidth:177];
         label_photoNumber.text = [NSString stringWithFormat:@"共%d张",post.excount];
         labelimage_text.text = post.content;
@@ -346,16 +350,18 @@
             label_text.hidden = YES;
             imageview.hidden = NO;
             labelimage_text.hidden = NO;
+            
+            labelimage_text.text = post.content;
+            
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:post.imageURL width:60 height:100]]]; //placeholderImage:[UIImage imageNamed:@"usersummary_user_icon_loadpic"]
             CGFloat height = [self heightForCellWithPost:post.content withWidth:177];
             if (height > 97) {
                 height = 75;
             }
             [labelimage_text setHeight:height];
-            //            [labelimage_text sizeToFit];
             [labelimage_text setWidth:177];
             
-            label_text.text = post.content;
+            
         }else{
             label_text.hidden = NO;
             imageview.hidden = YES;

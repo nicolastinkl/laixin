@@ -1424,8 +1424,13 @@
     int Wasy = image.size.width/APP_SCREEN_WIDTH;
     int Hasy = image.size.height/APP_SCREEN_HEIGHT;
     int quality = Wasy/2;
-    UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
-    chatImgView.imageviewSource = newimage;
+    UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];    
+    if (!newimage) {
+        chatImgView.imageviewSource = image;
+    }else{
+        chatImgView.imageviewSource = newimage;
+    }
+    
     chatImgView.delegate = self;
     [self presentViewController:chatImgView animated:YES completion:^{
     }];

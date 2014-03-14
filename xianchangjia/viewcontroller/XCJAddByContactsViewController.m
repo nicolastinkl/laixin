@@ -53,22 +53,52 @@
     _datasource = array;
 //    NSMutableDictionary * dict  = [[NSMutableDictionary alloc] init];
 //    dictPhones = dict;
-    
+    [self contentABDressBOOK];
     FCContactsPhone* phone = [FCContactsPhone MR_findFirst];
     if (phone) {
 //        [FCContactsPhone MR_deleteAllMatchingPredicate:nil];
         UIView *subView = (UIView * ) [self.view subviewWithTag:1];
         subView.hidden = YES;
-
         NSArray * array = [FCContactsPhone MR_findAllSortedBy:@"hasLaixin" ascending:NO];
         [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [_datasource addObject:obj];
         }];
         [self.tableContacts reloadData];
-
     } else{
         //[self reloadContacts];
     }
+    
+    
+}
+
+-(void) contentABDressBOOK
+{
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    __block BOOL accessGranted = NO;
+    if (ABAddressBookRequestAccessWithCompletion != NULL) {
+        // we're on iOS 6
+        SLog(@"on iOS 6 or later, trying to grant access permission");
+        
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+            accessGranted = granted;
+            dispatch_semaphore_signal(sema);
+        });
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+//        dispatch_release(sema);
+    }
+    else { // we're on iOS 5 or older
+        SLog(@"on iOS 5 or older, it is OK");
+        accessGranted = YES;
+    }
+    if (accessGranted) {   
+        SLog(@"we got the access right");
+    }else
+    {
+        [UIAlertView showAlertViewWithTitle:@"通讯录没有访问权限" message:@"请前往手机设置->隐私->通讯录->开启来信访问权限?  "];
+    }
+    
 }
 
 
@@ -101,7 +131,7 @@
             MFMessageComposeViewController * controller = [[MFMessageComposeViewController alloc]init]; //autorelease];
             
             controller.recipients = [NSArray arrayWithObject:phone.phoneNumber];
-            controller.body = [NSString stringWithFormat:@"来信可以用语音发短信，挺简单的，推荐你用一下。下载地址：http://laixin.com/m  记得安装后加我的来信号：%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
+            controller.body = [NSString stringWithFormat:@"来信可以用语音发短信，挺简单的，推荐你用一下。下载地址：http://www.laixinle.com/  记得安装后加我的来信号：%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
             
             controller.messageComposeDelegate = self;
             
@@ -324,6 +354,8 @@
 //            [self.tableContacts reloadData];
             [SVProgressHUD dismiss];
         }];
+        
+        
             /* if (responseObject) { NSDictionary * dict = responseObject[@"data"];
              NSArray * array =  dict[@"users"];
              [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
