@@ -47,6 +47,7 @@
 {
     [super viewDidLoad];
     
+    self.title = @"群主相册";
     NSMutableArray * array = [[NSMutableArray alloc]init];
     dataSource =array;
     self.isDontNeedLazyLoad = NO;

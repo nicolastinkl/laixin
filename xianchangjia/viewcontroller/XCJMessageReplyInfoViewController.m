@@ -290,7 +290,7 @@
                         Comment * comment = [Comment turnObject:obj];
                         [mutaArray addObject:comment];
                     }];
-                    [activity.comments addObjectsFromArray:mutaArray];
+                    activity.comments =mutaArray;
                     activity.replycount = postsDict.count;
                     //indexofActivitys
                     [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];

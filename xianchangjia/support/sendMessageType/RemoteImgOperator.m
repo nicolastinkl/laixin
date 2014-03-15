@@ -203,7 +203,7 @@
                 int Hasy = image.size.height/APP_SCREEN_HEIGHT;
                 int quality = Wasy/2;
                 UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
-                  NSData * FileData = UIImageJPEGRepresentation(newimage, 0.5);
+                NSData * FileData = UIImageJPEGRepresentation(newimage, 0.5);
                 if (!FileData) {
                     FileData  = UIImageJPEGRepresentation(image, 0.5);
                 }

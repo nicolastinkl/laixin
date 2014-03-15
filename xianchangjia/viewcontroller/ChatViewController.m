@@ -1417,14 +1417,13 @@
 }
 
 - (void)uploadContent:(NSDictionary *)theInfo {
-    
     XCJChatSendImgViewController * chatImgView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJChatSendImgViewController"];
-    //    chatImgView.imageview.image = [postImage copy];
     UIImage *image = theInfo[UIImagePickerControllerOriginalImage];
-    int Wasy = image.size.width/APP_SCREEN_WIDTH;
-    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
-    int quality = Wasy/2;
-    UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];    
+//    int Wasy = image.size.width/APP_SCREEN_WIDTH;
+//    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
+//    int quality = Wasy/2;
+//    UIImage * newimage = [image resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+     UIImage * newimage = [image resizedImage:CGSizeMake(image.size.width, image.size.height) interpolationQuality:kCGInterpolationDefault];
     if (!newimage) {
         chatImgView.imageviewSource = image;
     }else{

@@ -4224,12 +4224,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="5" contentMode="scaleToFill" editable="NO" id="cuo-BB-12W">
-                                <rect key="frame" x="20" y="293" width="280" height="150"/>
+                                <rect key="frame" x="20" y="293" width="287" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <string key="text">长不大型（这类比较特殊）：她的性格活泼开朗、天真可爱又很爱帮助别人，别看她们年龄已经不小了，脑子却根本没有进化，上高中的孩子却爱踩着喜欢的人的影子走路，二十多岁时还用名字做自称，在她们心里，永远相信这个世界是美好的，永远相信自己爱的人也是爱自己的，她们不想多想，因为她们不想去恨别人，因为这样她们会失去她们的快乐，她们不想长大，因为相信长大了自己就不会被爱着了，即使有痛,她们也会忍着,也会在自己爱的人面前强颜欢笑,她们不想自己爱的人为她们担心,真正难能可贵的就是她们金子般的心 。</string>
                                 <color key="textColor" red="0.11740672831632648" green="0.11740672831632648" blue="0.11740672831632648" alpha="0.83000000000000007" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>

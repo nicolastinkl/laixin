@@ -52,6 +52,7 @@
 #import "FCUserDescription.h"
 #import "XCJMessageReplylistController.h"
 #import "UIButton+Bootstrap.h"
+#import "XCJSelfPhotoViewController.h"
 
 @interface XCJFriendGroupViewController ()<UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 {
@@ -123,6 +124,11 @@
     UILabel * label_name = (UILabel *) [tablehead subviewWithTag:1];
     UIImageView * label_bg = (UIImageView *) [tablehead subviewWithTag:2];
     UIImageView * label_icon = (UIImageView *) [tablehead subviewWithTag:3];
+    label_icon.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer * tapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(targettoPhotoView:)];
+    [label_icon addGestureRecognizer:tapGes];
+    
     button = (UIButton *) [tablehead subviewWithTag:4];
     newIcon = (UIImageView *) [tablehead subviewWithTag:5];
     newIcon_sign = (UIImageView *) [tablehead subviewWithTag:7];
@@ -167,7 +173,19 @@
      }
     
     UIBarButtonItem * baritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleBordered target:self action:@selector(showActionClick:)];
-    self.navigationItem.rightBarButtonItem = baritem;
+     UIBarButtonItem * takebaritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"blue_publisherBar_Icon_Photo_Highlighted"] style:UIBarButtonItemStylePlain target:self action:@selector(SendImgActionClick:)];
+ 
+    self.navigationItem.rightBarButtonItems = @[baritem,takebaritem];
+}
+
+-(IBAction)SendImgActionClick:(id)sender
+{
+
+}
+-(IBAction)targettoPhotoView:(id)sender
+{
+    XCJSelfPhotoViewController *view = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPhotoViewController"];
+    [self.navigationController pushViewController:view animated:YES];
 }
 
 -(void) hasNewPostInfo

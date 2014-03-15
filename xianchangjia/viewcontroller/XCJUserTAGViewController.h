@@ -11,4 +11,5 @@
 @interface XCJUserTAGViewController : UIViewController
 
 @property (nonatomic,strong) NSString * tags;
+
 @end

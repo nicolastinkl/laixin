@@ -203,6 +203,7 @@
 
 - (void)showRecipe:(FCBeInviteGroup *) info animated:(BOOL)animated
 {
+    return;
     XCJHomeDynamicViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJHomeDynamicViewController"];
     vc.Currentgid = info.groupID;
     vc.title = info.groupName;
