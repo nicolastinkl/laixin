@@ -95,8 +95,7 @@
     }
     
     UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"composeIcon"] style:UIBarButtonItemStyleDone target:self action:@selector(SendPostClick:)];
-    UIBarButtonItem * barTwo = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(postAction:)];
-    
+    UIBarButtonItem * barTwo = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(postAction:)];    
     self.navigationItem.rightBarButtonItems = @[barTwo,barOne];
     
     // init data with parent viewcontroller

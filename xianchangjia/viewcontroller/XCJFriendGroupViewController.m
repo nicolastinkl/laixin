@@ -52,16 +52,21 @@
 #import "FCUserDescription.h"
 #import "XCJMessageReplylistController.h"
 #import "UIButton+Bootstrap.h"
+#import "XCJSendManySelectedImageViewCOntrooler.h"
 #import "XCJSelfPhotoViewController.h"
+#import "UINavigationController+SGProgress.h"
+#import "Conversation.h"
 
-@interface XCJFriendGroupViewController ()<UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate>
+@interface XCJFriendGroupViewController ()<UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,CTAssetsPickerControllerDelegate>
 {
-
+    NSString * _Currentgid;
     XCJFriendGroupNewmsg * tablehead;
     UIButton * button;
     UIImageView * newIcon;
     UIImageView * newIcon_sign;
-    }
+    NSMutableArray * arrayGroup ;
+
+}
 @property (nonatomic, strong) NSMutableArray *assets;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
@@ -90,7 +95,6 @@
     }else{
         [tablehead setHeight:300.0f];
     }
-    
     
     NSPredicate *predicatesss = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
     ConverReply * con = [ConverReply MR_findFirstWithPredicate:predicatesss];
@@ -170,18 +174,74 @@
          button.hidden = YES;
          newIcon.hidden = YES;
          newIcon_sign.hidden = YES;
-     }
+    }
     
     UIBarButtonItem * baritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleBordered target:self action:@selector(showActionClick:)];
      UIBarButtonItem * takebaritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"blue_publisherBar_Icon_Photo_Highlighted"] style:UIBarButtonItemStylePlain target:self action:@selector(SendImgActionClick:)];
  
     self.navigationItem.rightBarButtonItems = @[baritem,takebaritem];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(StartPostUploadimages:) name:@"StartPostUploadimages" object:nil];
+}
+
+-(void) StartPostUploadimages:(NSNotification * ) notify
+{
+    if (notify.object) {
+        [self.navigationController showSGProgressWithDuration:[notify.object intValue] andTintColor:[UIColor redColor]];
+    }
 }
 
 -(IBAction)SendImgActionClick:(id)sender
 {
-
+    //查看是否有加入群组
+    if ( arrayGroup == nil) {
+        
+        NSMutableArray * auy = [[NSMutableArray alloc] init];
+        arrayGroup = auy;
+        
+        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+        NSArray * array = [Conversation MR_findAllWithPredicate:nil inContext:localContext];
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            Conversation  * conver = obj;
+            if ([conver.messageType intValue] == XCMessageActivity_UserGroupMessage) {
+                [arrayGroup addObject:conver];
+            }
+        }];
+    }
+    
+    if (arrayGroup.count == 0) {
+        [UIAlertView showAlertViewWithTitle:@"提示" message:@"您还没有加入任何群组,还不能发表群组动态."];
+    }else{
+    
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"请选择群组" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+        alert.tag =  1;
+        [arrayGroup enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            Conversation  * conver = obj;
+            if ([conver.messageType intValue] == XCMessageActivity_UserGroupMessage) {
+                [alert addButtonWithTitle:conver.facebookName];
+            }
+        }];
+        [alert addButtonWithTitle:@"取消"];
+        alert.cancelButtonIndex = arrayGroup.count;
+        [alert show];
+    }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ( alertView.tag == 1) {
+        if (buttonIndex == arrayGroup.count) {
+            //dismiss
+        }else{
+             Conversation  * conver = arrayGroup[buttonIndex];
+             NSString * gid =[conver.facebookId stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
+             _Currentgid = gid;
+             UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字", nil];
+             action.tag = 3;
+            [action showInView:self.view];
+        }
+    }
+}
+
 -(IBAction)targettoPhotoView:(id)sender
 {
     XCJSelfPhotoViewController *view = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelfPhotoViewController"];
@@ -203,17 +263,147 @@
 -(IBAction)showActionClick:(id)sender
 {
     UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:Nil delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:Nil otherButtonTitles:@"查看消息列表", nil];
+    sheet.tag = 1;
     [sheet showInView:self.view];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+#pragma mark - Assets Picker Delegate
+
+- (void)assetsPickerController:(CTAssetsPickerController *)picker didFinishPickingAssets:(NSArray *)assets
 {
-    if (buttonIndex == 0) {
-        XCJMessageReplylistController * viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplylistController"];
-        viewcontr.conversation = self.conversation;
-        [self.navigationController pushViewController:viewcontr animated:YES];
+    
+    if(assets.count > 0){
+        //多图模式
+        XCJSendManySelectedImageViewCOntrooler * contr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSendManySelectedImageViewCOntrooler"];
+        contr.array = [assets mutableCopy];
+        contr.gID = _Currentgid;
+        contr.needRefreshViewController = self;
+        [self.navigationController pushViewController:contr animated:YES];
     }
 }
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 1) {
+        if (buttonIndex == 0) {
+            XCJMessageReplylistController * viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplylistController"];
+            viewcontr.conversation = self.conversation;
+            [self.navigationController pushViewController:viewcontr animated:YES];
+        }
+    } else if(actionSheet.tag == 3)
+    {
+        switch (buttonIndex) {
+            case 0:
+            {
+                XCJPostTextNaviController * postNavi = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJPostTextNaviController"];
+                XCJPostTextViewController *view = (XCJPostTextViewController*)postNavi.visibleViewController;
+                view.gID = _Currentgid;
+                view.needRefreshViewController = self;
+                [self presentViewController:postNavi animated:YES completion:^{
+                    
+                }];
+            }
+                break;
+            case 1:{
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                    UIImagePickerController *camera = [[UIImagePickerController alloc] init];
+                    camera.delegate = self;
+                    camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    [self presentViewController:camera animated:YES completion:nil];
+                }
+            }
+                break;
+            case 2:{
+                [self pickAssets:21];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
+#pragma mark - UIImagePickerController delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
+{
+    [picker dismissViewControllerAnimated:NO completion:nil];    
+    NSURL * url = [self uploadContent:theInfo];
+    PostActivityViewController *postVC = [self.storyboard instantiateViewControllerWithIdentifier:@"PostActivityViewController"];
+    postVC.gID = _Currentgid;
+    postVC.filePath = [url copy];
+    postVC.uploadKey = [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@",url]];
+    postVC.postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
+    postVC.needRefreshViewController = self;
+    [self.navigationController pushViewController:postVC animated:YES];
+}
+
+- (NSURL * )uploadContent:(NSDictionary *)theInfo {
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat: @"yyyy-MM-dd-HH-mm-ss"];
+    //Optionally for time zone conversions
+    [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    
+    NSString *timeDesc = [formatter stringFromDate:[NSDate date]];
+    
+    NSString *mediaType = [theInfo objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *)kUTTypeImage] || [mediaType isEqualToString:(NSString *)ALAssetTypePhoto]) {
+        NSString * namefile =  [self getMd5_32Bit_String:[NSString stringWithFormat:@"%@%@",timeDesc,_Currentgid]];
+        NSString *key = [NSString stringWithFormat:@"%@%@", namefile, @".jpg"];
+        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:key];
+        SLLog(@"Upload Path: %@", filePath);
+        NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerOriginalImage], 1);
+        [webData writeToFile:filePath atomically:YES];
+        return [NSURL URLWithString:filePath];
+    }
+    return nil;
+}
+
+- (NSString *)getMd5_32Bit_String:(NSString *)srcString{
+    const char *cStr = [srcString UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    CC_MD5( cStr, strlen(cStr), digest );
+    NSMutableString *result = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [result appendFormat:@"%02x", digest[i]];
+    
+    return result;
+}
+
+
+- (void)pickAssets:(int )sender
+{
+    if (!self.assets)
+        self.assets = [[NSMutableArray alloc] init];
+    
+    CTAssetsPickerController *picker = [[CTAssetsPickerController alloc] init];
+    picker.navigationBar.barStyle = UIBarStyleBlack;
+    picker.navigationBar.barTintColor  = [UIColor colorWithRed:48.0/255.0 green:167.0/255.0 blue:255.0/255.0 alpha:1.0];
+    picker.navigationBar.translucent = YES;
+    picker.navigationBar.tintColor  = [UIColor whiteColor];
+    //[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];    //
+    picker.navigationBarHidden = NO;
+    //    picker.navigationBar.backgroundColor = [UIColor whiteColor];
+    
+    picker.maximumNumberOfSelection = sender;
+    picker.assetsFilter = [ALAssetsFilter allAssets];
+    // only allow video clips if they are at least 5s
+    picker.selectionFilter = [NSPredicate predicateWithBlock:^BOOL(ALAsset* asset, NSDictionary *bindings) {
+        if ([[asset valueForProperty:ALAssetPropertyType] isEqual:ALAssetTypeVideo]) {
+            //            NSTimeInterval duration = [[asset valueForProperty:ALAssetPropertyDuration] doubleValue];
+            return NO;
+        } else {
+            return YES;
+        }
+    }];
+    
+    picker.delegate = self;
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
 
 -(void)viewWillAppear:(BOOL)animated
 {
