@@ -62,19 +62,19 @@
                 string = [NSString stringWithFormat:@"%f %f",locationCorrrdinate.latitude,locationCorrrdinate.longitude];
                 self.navigationItem.rightBarButtonItem.enabled = YES;
                 SLog(@"string :%@",string);
+                 
                 [mapview setCenterCoordinate:locationCorrrdinate zoomLevel:30 animated:YES];
                 mapview.zoomEnabled  = YES;
             } withAddress:^(NSString *addressString) {
                 strAddresss = addressString;
                 //[NSString stringWithFormat:@"%@\n%@",string,addressString];
-                SLog(@"string :%@",string);
+                SLog(@"string :%@",strAddresss);
+                self.title = strAddresss;
                 self.navigationItem.rightBarButtonItem.enabled = YES;
             }];
             
         });
     }
-    
-    
     
 }
 

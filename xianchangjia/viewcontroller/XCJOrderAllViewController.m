@@ -16,7 +16,7 @@
 #include "OpenUDID.h"
 #import "DZWebBrowser.h"
 
-@interface XCJOrderAllViewController ()<UIAlertViewDelegate>
+@interface XCJOrderAllViewController ()<UIAlertViewDelegate,UIActionSheetDelegate>
 {
     NSMutableArray * _datasouces;
     NSMutableArray * _datasouces_canntPay;
@@ -139,8 +139,40 @@
         [self showErrorText:@"加载出错,请检查网络设置"];
         [self.view hideIndicatorViewBlueOrGary];
     }];
+    
+    UIBarButtonItem * baritem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleBordered target:self action:@selector(showActionClick:)];
+    
+    self.navigationItem.rightBarButtonItem = baritem;
+    
 }
 
+-(IBAction)showActionClick:(id)sender
+{
+    //查看 我被推荐的订单
+    //merchandise.recommendbyme
+    
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"查看我是推荐人的订单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"查看" otherButtonTitles:nil, nil];
+    [sheet showInView:self.view];
+    
+    
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [SVProgressHUD show];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.recommendbyme" parameters:@{@"count":@"1000"} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dicty = responseObject[@"result"];
+                NSArray * array =dicty[@"history"];
+                [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"一共%d个订单",array.count]];
+                
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            [SVProgressHUD dismiss];
+            [UIAlertView showAlertViewWithMessage:@"网络请求失败,请检查网络设置"];
+        }];
+    }
+}
 -(void) resquestData:(NSArray * )arrayMID
 {
     [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.get" parameters:@{@"mid":arrayMID} success:^(MLRequest *request, id responseObjects) {
@@ -263,8 +295,6 @@
  */
 -(IBAction)payClick:(id)sender
 {
-    
-   
     
     UIButton * button  = sender;
     UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;

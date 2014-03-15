@@ -270,7 +270,6 @@
                 [imageview addGestureRecognizer:longizer];
             }
             imageview.tag = idx;
-            
             [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:photoinfo.picture Size:160]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
             [scrollview addSubview:imageview];
         }
@@ -331,7 +330,7 @@
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
         UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
         photoLibrary.delegate = self;
-        photoLibrary.allowsEditing = YES;
+//        photoLibrary.allowsEditing = YES;
         photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:photoLibrary animated:YES completion:nil];
     }
@@ -343,17 +342,14 @@
 {
     [picker dismissViewControllerAnimated:NO completion:nil];
     
-    
-    UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerEditedImage];
+    UIImage *postImage = [theInfo objectForKey:UIImagePickerControllerOriginalImage];
     //upload image
-    
     [self performSelector:@selector(uploadImage:) withObject:postImage];
 }
 
 -(void) uploadImage:(UIImage * ) image
 {
     [SVProgressHUD showWithStatus:@"正在上传..."];
- 
     NSString * keyID =[NSString stringWithFormat:@"uploadtoken_privatePhoto_%@",self.privateUID];
     NSString  * oldToken = [[EGOCache globalCache] stringForKey:keyID];
     if (oldToken && oldToken.length > 0) {
@@ -379,11 +375,11 @@
 
 -(void) uploadimagewithImage:(UIImage*) image token:(NSString*) token  {
     
-//    int Wasy = image.size.width/APP_SCREEN_WIDTH;
-//    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
-//    int quality = Wasy/2;
-//    UIImage * newimage = [[image copy] resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
-    UIImage * newimage = [[image copy] resizedImage:CGSizeMake(640,640) interpolationQuality:kCGInterpolationDefault];
+    int Wasy = image.size.width/APP_SCREEN_WIDTH;
+    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
+    int quality = Wasy/2;
+    UIImage * newimage = [[image copy] resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+//    UIImage * newimage = [[image copy] resizedImage:CGSizeMake(640,640) interpolationQuality:kCGInterpolationDefault];
     NSData * FileData = UIImageJPEGRepresentation(newimage, 0.5);
     if (!FileData) {
         FileData = UIImageJPEGRepresentation(image, 0.5);
@@ -475,7 +471,7 @@
                 [[MLNetworkingManager sharedManager] sendWithAction:@"album.delete" parameters:@{@"did":photoinfo.did} success:^(MLRequest *request, id responseObject) {
                     [dataSource removeObjectAtIndex:deleteIndex];
                     [self initScrollview];
-                    [UIAlertView showAlertViewWithMessage:@"删除成功"];
+//                    [UIAlertView showAlertViewWithMessage:@"删除成功"];
                 } failure:^(MLRequest *request, NSError *error) {
                     [UIAlertView showAlertViewWithMessage:@"删除失败"];
                 }];

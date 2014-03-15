@@ -97,7 +97,7 @@
         
         [SVProgressHUD showWithStatus:@"正在处理中..."];
         
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.update" parameters:@{@"tags":@[self.tags]} success:^(MLRequest *request, id responseObject) {
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.update_tag" parameters:@{@"tags":@[self.tags]} success:^(MLRequest *request, id responseObject) {
             if (responseObject) {
                 [SVProgressHUD dismiss];
                 UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"设置成功" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];

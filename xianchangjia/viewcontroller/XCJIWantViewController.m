@@ -186,10 +186,14 @@
            break;
         case 1:
         {
-            XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
-            viewcontr.title = @"来抢";
-            [self.navigationController pushViewController:viewcontr animated:YES];
-            //[UIAlertView showAlertViewWithMessage:@"内测功能,敬请期待"];
+            if ([LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
+                
+                XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
+                viewcontr.title = @"来抢";
+                [self.navigationController pushViewController:viewcontr animated:YES];
+            }else{
+                [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容. 进入条件:只有被该圈内用户激活才能进入."];
+            }
         }
             break;
         case 2:

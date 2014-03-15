@@ -103,10 +103,7 @@
         } failure:^(MLRequest *request, NSError *error) {
         }];
         
-        
     }
-    
-    
     UITableView * usertable = (UITableView*) [self.mainsTableView.tableFooterView subviewWithTag:1];
     
     {
@@ -138,10 +135,17 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    
+    
+    UIButton * button = (UIButton * ) [self.tableView.tableFooterView subviewWithTag:3];
+    [button addTarget:self action:@selector(SeemoreClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-
-
+-(IBAction)SeemoreClick:(id)sender
+{
+    [UIAlertView showAlertViewWithMessage:@"没有更多了"];
+}
 
 -(void) updateMyKSonger:(NSNotification * ) notify
 {
@@ -155,6 +159,8 @@
         }
     }
 }
+
+
 -(IBAction)SeeChoseMMClick:(id)sender
 {
     XCJMutiMMViewController  *MMViewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMutiMMViewController"];
@@ -403,16 +409,18 @@
             break;
     }
     
-    NSString * strJson = [MobClick getConfigParams:paramsstr];
-    if (strJson) {
-        NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
-        NSArray * array = [datajson  objectFromJSONData] ;
-         
-        XCJSeetypeMMviewcontroller * viewtronl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeetypeMMviewcontroller"];
-        viewtronl.title = button.titleLabel.text;
-        viewtronl.userArray = array;
-        [self.navigationController pushViewController:viewtronl animated:YES];
-    }
+//    NSString * strJson = [MobClick getConfigParams:paramsstr];
+//    if (strJson) {
+    //    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    //    NSArray * array = [datajson  objectFromJSONData] ;
+
+//    }
+    
+    
+    XCJSeetypeMMviewcontroller * viewtronl = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSeetypeMMviewcontroller"];
+    viewtronl.title = button.titleLabel.text;
+//    viewtronl.userArray = array;
+    [self.navigationController pushViewController:viewtronl animated:YES];
     
 }
 

@@ -57,6 +57,37 @@
 //    self.title = @"列表";
     
     [self.view showIndicatorViewLargeBlue];
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.filter" parameters:@{@"alltag":@[[NSString stringWithFormat:@"%@",self.title]]} success:^(MLRequest *request, id responseObject) {
+        if(responseObject)
+        {
+            NSMutableArray * array =   [[NSMutableArray alloc] init];
+            NSDictionary * result =  responseObject[@"result"];
+            NSArray * arrayuser = result[@"users"];
+            [arrayuser enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSString * stringuid =  [DataHelper getStringValue:obj[@"uid"] defaultValue:@""];
+                if (stringuid.length > 0) {
+                    [array addObject:stringuid];
+                }
+            }];
+            
+            self.userArray = array;
+            if (self.userArray.count == 0) {
+                 [self.view hideIndicatorViewBlueOrGary];
+                [self showErrorText:@"还没有相关K歌指导员"];
+            }else{
+                [self requestUserinfo];
+            }
+        }
+            
+    } failure:^(MLRequest *request, NSError *error) {
+         [self.view hideIndicatorViewBlueOrGary];
+        [self showErrorText:@"加载出错"];
+    }];
+   
+}
+
+-(void ) requestUserinfo
+{
     {
         NSDictionary * parames = @{@"uid":self.userArray};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -133,15 +164,15 @@
     
     if (indexPath.row == 0) {
         
-        label_more.text = @"推荐理由: 千杯不醉,品酒达人. 精通:赤霞珠/西拉/增芳德/佳美娜";
+        label_more.text = @"推荐理由: 千杯不醉,品酒达人. \n特长: 赤霞珠/西拉/增芳德/佳美娜";
         
     } else  if (indexPath.row == 1) {
         
-        label_more.text = @"推荐理由: 声音性感,言语动听. 精通:埃德华兹酒园 菩裴拉佳美娜干红葡萄酒/洛神山庄加本力苏维翁红葡萄酒";
+        label_more.text = @"推荐理由: 声音性感,言语动听. \n特长: 埃德华兹酒园 菩裴拉佳美娜干红葡萄酒/洛神山庄加本力苏维翁红葡萄酒";
     } else  if (indexPath.row == 2) {
         
     }else{
-         label_more.text = @"推荐理由: 眼神勾魂,身材惹火. 精通:伏特加/香槟";
+         label_more.text = @"推荐理由: 眼神勾魂,身材惹火. \n特长: 伏特加/香槟";
     }
     
     
