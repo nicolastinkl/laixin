@@ -6709,7 +6709,7 @@
                                                     <rect key="frame" x="453" y="30" width="89" height="34"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                                    <state key="normal" title="1''" image="chat_my_bottom_voice_press">
+                                                    <state key="normal" title="2''" image="chat_my_bottom_voice_press">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                 </button>

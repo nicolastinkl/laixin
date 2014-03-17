@@ -285,11 +285,7 @@
 		86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA2E1893DAC7000A0C22 /* MKMapView+ZoomLevel.m */; };
 		86ADDA361894E73F000A0C22 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA341894E73E000A0C22 /* UIImage+WebP.m */; };
 		86ADDA371894E73F000A0C22 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ADDA351894E73E000A0C22 /* WebP.framework */; };
-		86AFF8C718D6F55A000BBAD4 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AFF8C618D6F559000BBAD4 /* OpenGLES.framework */; };
-		86AFF8CA18D6F560000BBAD4 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AFF8C918D6F560000BBAD4 /* GLKit.framework */; };
-		86AFF8CC18D6F580000BBAD4 /* Instabug.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AFF8CB18D6F580000BBAD4 /* Instabug.framework */; };
 		86AFF8CE18D6F5D7000BBAD4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AFF8CD18D6F5D7000BBAD4 /* CoreTelephony.framework */; };
-		86AFF8D018D6F6DA000BBAD4 /* Instabug.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 86AFF8CF18D6F6DA000BBAD4 /* Instabug.bundle */; };
 		86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BDD4FD18BC501C00F621F6 /* CoreText.framework */; };
 		86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BDD51B18BC6F4700F621F6 /* libOHAttributedLabel.a */; };
 		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
@@ -1017,7 +1013,6 @@
 		86AFF8C918D6F560000BBAD4 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		86AFF8CB18D6F580000BBAD4 /* Instabug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Instabug.framework; path = xianchangjia/instabug/Instabug.framework; sourceTree = "<group>"; };
 		86AFF8CD18D6F5D7000BBAD4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		86AFF8CF18D6F6DA000BBAD4 /* Instabug.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Instabug.bundle; path = instabug/Instabug.bundle; sourceTree = "<group>"; };
 		86BDD4FD18BC501C00F621F6 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OHAttributedLabel.xcodeproj; path = OHAttributedLabel/OHAttributedLabel.xcodeproj; sourceTree = "<group>"; };
 		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
@@ -1326,9 +1321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				86AFF8CE18D6F5D7000BBAD4 /* CoreTelephony.framework in Frameworks */,
-				86AFF8CC18D6F580000BBAD4 /* Instabug.framework in Frameworks */,
-				86AFF8CA18D6F560000BBAD4 /* GLKit.framework in Frameworks */,
-				86AFF8C718D6F55A000BBAD4 /* OpenGLES.framework in Frameworks */,
 				86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */,
 				86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */,
 				867B054018C41D3B00A562FA /* libWeChatSDK.a in Frameworks */,
@@ -2645,7 +2637,6 @@
 		86D1820518349B0A0005901D /* SupportView */ = {
 			isa = PBXGroup;
 			children = (
-				86AFF8CF18D6F6DA000BBAD4 /* Instabug.bundle */,
 				866287E518CCB28500891B2D /* TKViewMoreCell */,
 				862EC4CE188E2A80006F4D43 /* AnimationLabel */,
 				86C6422C1887A3D200E0CDDB /* CTAssetsPickerController */,
@@ -3506,7 +3497,6 @@
 				866287E318CC4CFA00891B2D /* XCJCommentView.xib in Resources */,
 				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
 				866618A718951B07000228FC /* ChatVoiceRecorderVC.xib in Resources */,
-				86AFF8D018D6F6DA000BBAD4 /* Instabug.bundle in Resources */,
 				8690DE8E18C872C900A14A51 /* room0003.jpg in Resources */,
 				8690DE8D18C872C900A14A51 /* room0002.jpg in Resources */,
 				86EB76441859A66800836947 /* logo80x80.png in Resources */,

@@ -34,7 +34,7 @@
 #import "FCUserDescription.h"
 #import "FCMessage.h" 
 #import <AVFoundation/AVFoundation.h>
-#import <Instabug/Instabug.h>
+//#import <Instabug/Instabug.h>
 
 #import "BundleHelper.h"
 
@@ -746,21 +746,21 @@ static NSString * const kLaixinStoreName = @"Laixins";
     self.launchingWithAps=[launchOptions valueForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     [self initAllControlos];
     
-    [Instabug KickOffWithToken:@"6fd7d2d10a87f33de702536bcd70470c" CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
-    [Instabug setColorTheme:InstabugColorThemeFlatWhite];
-    
-    [Instabug setCommentInvalidText:@"请输入至少一个字"];
-    [Instabug setCommentPlaceholder:@"请输入您使用来信不爽的地方"];
-    [Instabug setAlertsTitle:@"提示"];
-    [Instabug setEmailInvalidText:@"请输入您的电子邮件 方面来信团队回复您的反馈"];
-    [Instabug setUserDataString:@"您可以在屏幕上绘画或者添加文本"];
-    [Instabug setEmailPlaceholder:@"您的电子邮件"];
-    [Instabug setButtonsColor:ios7BlueColor];
-    [Instabug setButtonsFontColor:[UIColor whiteColor]];
-    [Instabug setShowThankYouAlert:NO];
+//    [Instabug KickOffWithToken:@"6fd7d2d10a87f33de702536bcd70470c" CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];
+//    [Instabug setColorTheme:InstabugColorThemeFlatWhite];
+//    
+//    [Instabug setCommentInvalidText:@"请输入至少一个字"];
+//    [Instabug setCommentPlaceholder:@"请输入您使用来信不爽的地方"];
+//    [Instabug setAlertsTitle:@"提示"];
+//    [Instabug setEmailInvalidText:@"请输入您的电子邮件 方面来信团队回复您的反馈"];
+//    [Instabug setUserDataString:@"您可以在屏幕上绘画或者添加文本"];
+//    [Instabug setEmailPlaceholder:@"您的电子邮件"];
+//    [Instabug setButtonsColor:ios7BlueColor];
+//    [Instabug setButtonsFontColor:[UIColor whiteColor]];
+//    [Instabug setShowThankYouAlert:NO];
 //    [Instabug setShowScreenshot:NO];
-    [Instabug setStartAlertText:@"在来信使用过程中,您只要有使用不爽的地方都可以摇一摇截图发给来信团队.我们将非常感谢您的反馈"];
-    //向微信注册 
+//    [Instabug setStartAlertText:@"在来信使用过程中,您只要有使用不爽的地方都可以摇一摇截图发给来信团队.我们将非常感谢您的反馈"];
+    //向微信注册
     
     [WXApi registerApp:kAppkeyForWeChat withDescription:[NSString stringWithFormat:@"%@ %@", [BundleHelper bundleDisplayNameString], [BundleHelper bundleShortVersionString]]];
     

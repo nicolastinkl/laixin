@@ -229,7 +229,7 @@
 #pragma mark - VoiceRecorderBaseVC Delegate Methods
 //录音完成回调，返回文件路径和文件名
 - (void)VoiceRecorderBaseVCRecordFinish:(NSString *)_filePath fileName:(NSString*)_fileName{
-    NSLog(@"录音完成，文件路径:%@",_filePath);
+    SLog(@"录音完成，文件路径:%@",_filePath);
     
     if (originWav.length > 0){
         self.convertAmr = [originWav stringByAppendingString:@"wavToAmr"];
@@ -2113,15 +2113,16 @@
         address.hidden = YES;
         
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
+        //SLog(@"message.audioLength %@",message.audioLength);
         if ([message.audioLength intValue] > 1000) {
             [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/audioLengthDefine] forState:UIControlStateNormal];
         }else{
             if ([message.audioLength intValue] < 0) {
                 int leng = [message.audioLength intValue];
                 leng = -leng;
-                 [audioButton setTitle:[NSString stringWithFormat:@"%d''  ",leng/audioLengthDefine] forState:UIControlStateNormal];
+                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/audioLengthDefine] forState:UIControlStateNormal];
             }else{
-                [audioButton setTitle:[NSString stringWithFormat:@"%d''  ",[message.audioLength intValue]] forState:UIControlStateNormal];
+                [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
             }
         }
         
@@ -2131,6 +2132,7 @@
         if ([message.messageStatus boolValue])
         {
             [imageview_BG setLeft:55.0f];
+            [audioButton setWidth:90];
             audioButton.left = 50.0f;
             Image_playing.left = imageview_BG.left + imageview_BG.width + 10;
             
@@ -2142,6 +2144,7 @@
         }
         else
         {
+            [audioButton setWidth:95];
             [imageview_BG setLeft:APP_SCREEN_WIDTH -  imageview_BG.width - 55.0f ];
             audioButton.left = APP_SCREEN_WIDTH -  50.0f -  55.0f -50;
             Image_playing.left = APP_SCREEN_WIDTH -  imageview_BG.width - 55.0f - 25;
@@ -2202,7 +2205,6 @@
         playingCell.isplayingAudio = NO;
     }
     
-   
     if (cell.isplayingAudio) {
         if (playingURL) {
             player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
@@ -2276,8 +2278,8 @@
             }else{
                 button.userInteractionEnabled = YES;
                 int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-//                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1024] forState:UIControlStateNormal];
-                [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
+                
+                [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:fileNameWhole ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                 
                 //初始化播放器的时候如下设置
                 UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
@@ -2292,6 +2294,10 @@
                 //默认情况下扬声器播放
                 [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
                 [audioSession setActive:YES error:nil];
+                
+                 if ([filename containString:@"wavToAmr.amr"]) {
+                     filename = [filename stringByReplacingOccurrencesOfString:@"wavToAmr.amr" withString:@""];
+                 }
                 playingURL = [NSURL URLWithString:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                 
                 player = [[AVAudioPlayer alloc] initWithContentsOfURL:playingURL error:nil];
