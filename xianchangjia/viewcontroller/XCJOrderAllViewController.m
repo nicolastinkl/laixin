@@ -12,17 +12,16 @@
 #import "UIButton+Bootstrap.h"
 #import "XCJPayInfo.h"
 #import "UINavigationSample.h"
-
+#import "XCJRecommendUIDViewContrl.h"
 #include "OpenUDID.h"
 #import "DZWebBrowser.h"
 
 @interface XCJOrderAllViewController ()<UIAlertViewDelegate,UIActionSheetDelegate>
 {
     NSMutableArray * _datasouces;
-    NSMutableArray * _datasouces_canntPay;
+    NSMutableArray * _datasouces_Used;
     NSMutableArray * _datasouces_canntrefund;
     NSMutableDictionary * DictAry;
-    
     int pagetype;
     
 }
@@ -69,7 +68,7 @@
     
     {
         NSMutableArray * array = [[NSMutableArray alloc] init];
-        _datasouces_canntPay = array;
+        _datasouces_Used = array;
         
     }
     
@@ -118,10 +117,10 @@
                 if (log) {
                     [_datasouces addObject:log];
                     [arrayMID addObject:@(log.mid)];
-                    if (log.paystate == 0) {
-                        [_datasouces_canntPay addObject:log]; //未支付
-                    }else if (log.paystate == 1) {
-                        [_datasouces_canntrefund addObject:log]; //未消费
+                    if (log.paystate == 1) {
+                        [_datasouces_Used addObject:log]; //已消费
+                    }else if (log.paystate == 2) {
+                        [_datasouces_canntrefund addObject:log]; //已退款
                     }
                 }
             }];
@@ -153,26 +152,16 @@
     
     UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"查看我是推荐人的订单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"查看" otherButtonTitles:nil, nil];
     [sheet showInView:self.view];
-    
-    
 }
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-        [SVProgressHUD show];
-        [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.recommendbyme" parameters:@{@"count":@"1000"} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dicty = responseObject[@"result"];
-                NSArray * array =dicty[@"history"];
-                [UIAlertView showAlertViewWithMessage:[NSString stringWithFormat:@"一共%d个订单",array.count]];
-                
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            [SVProgressHUD dismiss];
-            [UIAlertView showAlertViewWithMessage:@"网络请求失败,请检查网络设置"];
-        }];
+        XCJRecommendUIDViewContrl * viewtrol = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJRecommendUIDViewContrl"];
+        [self.navigationController pushViewController:viewtrol animated:YES];
     }
 }
+
 -(void) resquestData:(NSArray * )arrayMID
 {
     [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.get" parameters:@{@"mid":arrayMID} success:^(MLRequest *request, id responseObjects) {
@@ -209,7 +198,7 @@
     if (pagetype == 0) {
         return _datasouces.count;
     }else     if (pagetype == 1) {
-        return _datasouces_canntPay.count;
+        return _datasouces_Used.count;
     }else     if (pagetype == 2) {
         return _datasouces_canntrefund.count;
     }
@@ -238,7 +227,7 @@
     if (pagetype == 0) {
         pay = _datasouces[indexPath.section];
     }else     if (pagetype == 1) {
-        pay = _datasouces_canntPay[indexPath.section];
+        pay = _datasouces_Used[indexPath.section];
     }else     if (pagetype == 2) {
         pay = _datasouces_canntrefund[indexPath.section];
     }
@@ -254,13 +243,18 @@
     UILabel * labelDes = (UILabel*) [cell.contentView subviewWithTag:6];
     UILabel * labelFiller = (UILabel*) [cell.contentView subviewWithTag:7];
     UILabel * labelPriceRoom = (UILabel*) [cell.contentView subviewWithTag:8];
-    UILabel * labelTotalPrice = (UILabel*) [cell.contentView subviewWithTag:9];
-    UILabel * labelExCount = (UILabel*) [cell.contentView subviewWithTag:10];
     
     UIButton * button_pay = (UIButton*) [cell.contentView subviewWithTag:11];
     UIButton * button_play = (UIButton*) [cell.contentView subviewWithTag:12];
     
+    UIView * stateView =   [cell.contentView subviewWithTag:15];
+    
+    UILabel * labelTotalPrice = (UILabel*) [stateView subviewWithTag:9];
+    UILabel * labelExCount = (UILabel*) [stateView subviewWithTag:10];
+    
     roomInfo * rominfo = DictAry[[NSString stringWithFormat:@"%d",pay.mid]];
+    
+    UIImageView * image_payStatu = (UIImageView*) [cell.contentView subviewWithTag:30];
     
     int colorindex = indexPath.section % 6 + 1 ;
     labelBg.backgroundColor  = [tools colorWithIndex:colorindex];
@@ -273,11 +267,21 @@
     labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10 + 1800];
     
     if (pay.paystate == 0) {
-        button_pay.hidden = NO;
-        button_play.hidden = YES;
-    }else if (pay.paystate == 1) {
         button_pay.hidden = YES;
-        button_play.hidden = NO;
+        button_play.hidden = YES;
+        image_payStatu.hidden = YES;
+        [stateView setLeft:15];
+    }else if (pay.paystate == 1) { //已经支付 消费
+        button_pay.hidden = YES;
+        button_play.hidden = YES;
+        image_payStatu.image = [UIImage imageNamed:@"trip_order_alreadybuy"];
+        image_payStatu.hidden = NO;
+        [stateView setLeft:160];
+    }else if (pay.paystate == 2) { //退款
+        button_pay.hidden = YES;
+        button_play.hidden = YES;
+        image_payStatu.hidden = YES;
+         [stateView setLeft:160];
     }
     
     [button_play primaryStyle];
@@ -303,7 +307,7 @@
     if (pagetype == 0) {
         pay = _datasouces[indexPath.section];
     }else     if (pagetype == 1) {
-        pay = _datasouces_canntPay[indexPath.section];
+        pay = _datasouces_Used[indexPath.section];
     }else     if (pagetype == 2) {
         pay = _datasouces_canntrefund[indexPath.section];
     }

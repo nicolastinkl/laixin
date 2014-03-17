@@ -186,7 +186,7 @@
            break;
         case 1:
         {
-            if ([LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
+            if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
                 
                 XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
                 viewcontr.title = @"来抢";

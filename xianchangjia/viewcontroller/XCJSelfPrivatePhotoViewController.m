@@ -22,7 +22,7 @@
 #import "PayPellog.h"
 #import "UIImage+Resize.h"
 #import "IDMPhotoBrowser.h"
-
+#import "EGOCache.h"
 
 
 #define DISTANCE_BETWEEN_ITEMS  8.0
@@ -470,8 +470,8 @@
                 [SVProgressHUD showWithStatus:@"正在删除中..."];
                 [[MLNetworkingManager sharedManager] sendWithAction:@"album.delete" parameters:@{@"did":photoinfo.did} success:^(MLRequest *request, id responseObject) {
                     [dataSource removeObjectAtIndex:deleteIndex];
+                    [SVProgressHUD dismiss];
                     [self initScrollview];
-//                    [UIAlertView showAlertViewWithMessage:@"删除成功"];
                 } failure:^(MLRequest *request, NSError *error) {
                     [UIAlertView showAlertViewWithMessage:@"删除失败"];
                 }];

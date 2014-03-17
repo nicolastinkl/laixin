@@ -58,6 +58,61 @@
     UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发表评论" style:UIBarButtonItemStyleDone target:self action:@selector(AddCommentClick:)];
     self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear: animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification object:nil];
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    
+    CGFloat newY = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height ;
+     if (CommentView) {
+         [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                          animations:^{
+//                              CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                               [CommentView setTop:APP_SCREEN_HEIGHT - CommentView.height-newY];
+                          }
+                          completion:^(BOOL finished) {
+                             
+                          }];
+        
+     }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    if (CommentView) {
+        NSDictionary *userInfo = [notification userInfo];
+        [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+                         animations:^{
+                             //                              CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                             
+                             [CommentView setTop:APP_SCREEN_HEIGHT + CommentView.height];
+                         }
+                         completion:^(BOOL finished) {
+                             
+                         }];
+    }
 }
 
 -(IBAction)AddCommentClick:(id)sender
@@ -68,7 +123,7 @@
     }
     
     [self.navigationController.view addSubview:CommentView];
-    [CommentView showAnimatingLayer];
+//    [CommentView showAnimatingLayer];
     [CommentView.textview becomeFirstResponder];
     
 }
@@ -110,7 +165,6 @@
         [UIAlertView showAlertViewWithMessage:@"回复失败 请重试!"];
     }];
 }
-
 
 -(IBAction)LoadMoreClick:(id)sender
 {

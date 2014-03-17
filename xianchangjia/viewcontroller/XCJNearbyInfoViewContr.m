@@ -452,7 +452,7 @@
     NSString *text = [dateFormatter stringFromDate:date];
     //最近时间处理
     NSInteger timeAgo = [[NSDate date] timeIntervalSince1970] - time;
-    SLog(@"timeAgo  %d",timeAgo);
+//    SLog(@"timeAgo  %d",timeAgo);
     if (timeAgo > 0 && timeAgo < 86400) {
         return @"今天";
     }else if (timeAgo >= 86400) {

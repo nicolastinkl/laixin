@@ -276,8 +276,14 @@
 }
 
 - (IBAction)buyClick:(id)sender {
-    
-    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"确定提交订单吗" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即预订" otherButtonTitles:nil, nil];
+    NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+    NSString * strtitle;
+    if (array.count > 0) {
+        strtitle = [NSString stringWithFormat:@"一共选择了%d位K歌指导员,确定提交订单吗",array.count];
+    }else{
+        strtitle = @"确定提交订单吗";
+    }
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:strtitle delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即预订" otherButtonTitles:nil, nil];
     actionsheet.tag = 3;
     [actionsheet showInView:self.view];
     
@@ -325,8 +331,12 @@
         if(buttonIndex == 0)
         {
             NSString* openUDID = [OpenUDID value];
-            NSString * count = self.label_serCount.text;
-            int thiscount = [count intValue];
+            
+//            NSString * count = self.label_serCount.text;
+//            int thiscount = [count intValue];
+            
+            NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+            int thiscount = array.count;
             [SVProgressHUD showWithStatus:@"正在处理..."];
             NSDictionary * dict;
             if(currentActive_by > 0)
@@ -345,10 +355,10 @@
                             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                                 if (obj && [obj intValue] > 0) {
                                     NSString * uid = [NSString stringWithFormat:@"%@",obj];
-                                    NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@-%@)选中你",self.locatinfo.ktvName,self.rominfo.name]};
+                                    NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
                                     [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
                                         if (responseObject) {
-                                            [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@-%@)选中你",self.locatinfo.ktvName,self.rominfo.name]];
+                                            [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
                                         }
                                     } failure:^(MLRequest *request, NSError *error) {
                                         
@@ -540,6 +550,7 @@
                 break;
             case 1:
             {
+                return;
                 XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
                 viewcontrs.title = @"选择推荐人";
                 [self.navigationController pushViewController:viewcontrs animated:YES];
@@ -562,7 +573,11 @@
 {
     NSString * str = [actionSheet buttonTitleAtIndex:buttonIndex];
     if (![str isEqualToString:@"取消"]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",str]]];
+        
+        NSMutableString * strURL = [[NSMutableString alloc] initWithFormat:@"telprompt://%@",str];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:strURL]];
+        
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",str]]];
     }
 }
 

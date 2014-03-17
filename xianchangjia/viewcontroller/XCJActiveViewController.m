@@ -195,7 +195,7 @@
                         //upload myself level
                         int activeCode = [LXAPIController sharedLXAPIController ].currentUser.actor_level;
                         if (level > activeCode) {
-                            [LXAPIController sharedLXAPIController ].currentUser.actor_level = level;
+                            [LXAPIController sharedLXAPIController ].currentUser.active_level = level;
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadMyLevel" object:nil];
                         }
                     }

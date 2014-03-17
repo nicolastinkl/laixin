@@ -25,7 +25,7 @@
 @property (nonatomic, assign, readonly) int height;
 @property (nonatomic, assign, readonly) double create_time;
 @property (nonatomic, assign, readonly) int active_by;
-@property (nonatomic, assign, readonly) int active_level;
+@property (nonatomic, assign) int active_level;
 @property (nonatomic, assign, readonly) int actor;
 @property (nonatomic, assign) int actor_level;
 

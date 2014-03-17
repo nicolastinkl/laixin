@@ -54,6 +54,7 @@
 		86494CC618815E9B00C22B14 /* XCJAddNearByUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CC518815E9B00C22B14 /* XCJAddNearByUsersViewController.m */; };
 		86494CC918838C3C00C22B14 /* FCContactsPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CC818838C3C00C22B14 /* FCContactsPhone.m */; };
 		864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 864E57A318B394DB000989CB /* XCJFindMMFirtStupViewcontr.m */; };
+		86528CE918D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 86528CE818D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m */; };
 		86536F6E18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m in Sources */ = {isa = PBXBuildFile; fileRef = 86536F6D18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m */; };
 		86536F7118AB33260059E9C7 /* MinroadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86536F7018AB33260059E9C7 /* MinroadOperation.m */; };
 		865632E2185FFDDA00E9903C /* ChatListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 865632C9185FFDDA00E9903C /* ChatListViewController.m */; };
@@ -592,6 +593,8 @@
 		86494CC818838C3C00C22B14 /* FCContactsPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCContactsPhone.m; path = DAOModel/coredata/FCContactsPhone.m; sourceTree = "<group>"; };
 		864E57A218B394DB000989CB /* XCJFindMMFirtStupViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindMMFirtStupViewcontr.h; path = viewcontroller/XCJFindMMFirtStupViewcontr.h; sourceTree = "<group>"; };
 		864E57A318B394DB000989CB /* XCJFindMMFirtStupViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindMMFirtStupViewcontr.m; path = viewcontroller/XCJFindMMFirtStupViewcontr.m; sourceTree = "<group>"; };
+		86528CE718D6A9BA007AD93A /* XCJRecommendUIDViewContrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRecommendUIDViewContrl.h; path = viewcontroller/XCJRecommendUIDViewContrl.h; sourceTree = "<group>"; };
+		86528CE818D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRecommendUIDViewContrl.m; path = viewcontroller/XCJRecommendUIDViewContrl.m; sourceTree = "<group>"; };
 		86536F6C18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSendManySelectedImageViewCOntrooler.h; path = viewcontroller/XCJSendManySelectedImageViewCOntrooler.h; sourceTree = "<group>"; };
 		86536F6D18AB1B870059E9C7 /* XCJSendManySelectedImageViewCOntrooler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSendManySelectedImageViewCOntrooler.m; path = viewcontroller/XCJSendManySelectedImageViewCOntrooler.m; sourceTree = "<group>"; };
 		86536F6F18AB33260059E9C7 /* MinroadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinroadOperation.h; sourceTree = "<group>"; };
@@ -1582,6 +1585,17 @@
 				86AC093F18893AC100C3BE30 /* XCJMessageReplyInfoViewController.m */,
 			);
 			name = messagereplyList;
+			sourceTree = "<group>";
+		};
+		86528CE518D6A99B007AD93A /* PayReCom */ = {
+			isa = PBXGroup;
+			children = (
+				86528CE718D6A9BA007AD93A /* XCJRecommendUIDViewContrl.h */,
+				86528CE818D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m */,
+				8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */,
+				8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */,
+			);
+			name = PayReCom;
 			sourceTree = "<group>";
 		};
 		86608404188FBBDF00F4870B /* ActiveView */ = {
@@ -2912,6 +2926,7 @@
 		86DEA2F518C8381C0003694C /* FindRoom */ = {
 			isa = PBXGroup;
 			children = (
+				86528CE518D6A99B007AD93A /* PayReCom */,
 				86DEA2F718C8382F0003694C /* XCJFindRoomViewControl.h */,
 				86DEA2F818C8382F0003694C /* XCJFindRoomViewControl.m */,
 				86DEA2FA18C852180003694C /* XCJRoomInfoViewcontroller.h */,
@@ -2920,8 +2935,6 @@
 				8690DE9518C875DA00A14A51 /* XCJBuySurityViewController.m */,
 				8690DED018C88ABA00A14A51 /* UINavigationSample.h */,
 				8690DED118C88ABA00A14A51 /* UINavigationSample.m */,
-				8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */,
-				8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */,
 				866287D718CB357900891B2D /* XCJUserTAGViewController.h */,
 				866287D818CB357900891B2D /* XCJUserTAGViewController.m */,
 				8601AF2A18CCB585004B5469 /* XCJSeeJiuShuiViewController.h */,
@@ -3828,6 +3841,7 @@
 				8683FA98187FE38400CEFA45 /* XCJPostTextNaviController.m in Sources */,
 				86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
+				86528CE918D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m in Sources */,
 				8690DE9618C875DA00A14A51 /* XCJBuySurityViewController.m in Sources */,
 				86F9B9B61872A3CB00ED768B /* FCMessage.m in Sources */,
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
