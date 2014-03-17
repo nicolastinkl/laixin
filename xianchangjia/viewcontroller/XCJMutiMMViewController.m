@@ -49,8 +49,10 @@
     }
         
     if (arrays.count  == 0) {
-        [self showErrorText:@"没有数据"];
+        [self showErrorText:@"还没有选择K歌指导员"];
     }
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

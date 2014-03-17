@@ -1030,7 +1030,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 }];
                 }
                 
-                
                 //读取未读私信
                 //message.read(afterid=0) 读私信
                 __block NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
@@ -1081,7 +1080,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                     content = @"";
                                 }
                                 msg.text = content;
-                                NSTimeInterval receiveTime  = [obj[@"time"] doubleValue];
+                                NSTimeInterval receiveTime  = [obj[@"time"] floatValue];
+//                                SLog(@"receiveTime : %f",receiveTime);
                                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
                                 msg.sentDate = date;
                                 // message did come, this will be on left
@@ -1091,45 +1091,71 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                 if ([typeMessage isEqualToString:@"txt"]) {
                                     if ([content containString:@"sticker_"]) {
                                         msg.messageType = @(messageType_emj);
-                                        conversation.lastMessage = @"[表情]";
+//                                        conversation.lastMessage = @"[表情]";
                                     }else{
                                         msg.messageType = @(messageType_text);
-                                        conversation.lastMessage = content;
+//                                        conversation.lastMessage = content;
                                     }
                                 }else if ([typeMessage isEqualToString:@"emj"]) {
                                     if ([content containString:@"sticker_"]) {
                                         msg.messageType = @(messageType_emj);
-                                        conversation.lastMessage = @"[表情]";
+//                                        conversation.lastMessage = @"[表情]";
                                     }else{
                                         msg.messageType = @(messageType_text);
-                                        conversation.lastMessage = content;
+//                                        conversation.lastMessage = content;
                                     }
                                 }else if ([typeMessage isEqualToString:@"pic"]) {
                                     //image
                                     msg.messageType = @(messageType_image);
-                                    conversation.lastMessage = @"[图片]";
+//                                    conversation.lastMessage = @"[图片]";
                                     msg.imageUrl = imageurl;
                                 }else if ([typeMessage isEqualToString:@"vic"]) {
                                     //audio
                                     NSString * audiourl = [tools getStringValue:obj[@"voice"] defaultValue:@""];
-                                    conversation.lastMessage = @"[语音]";
+//                                    conversation.lastMessage = @"[语音]";
                                     msg.audioUrl = audiourl;
                                     msg.messageType = @(messageType_audio);
                                     int length  = [obj[@"length"] intValue];
                                     msg.audioLength = @(length/audioLengthDefine);
                                 }else if ([typeMessage isEqualToString:@"map"]) {
-                                    conversation.lastMessage = @"[位置信息]";
+//                                    conversation.lastMessage = @"[位置信息]";
                                     msg.imageUrl = imageurl;
                                     msg.messageType = @(messageType_map);
                                 }else if ([typeMessage isEqualToString:@"video"]) {
-                                    conversation.lastMessage = @"[视频]";
+//                                    conversation.lastMessage = @"[视频]";
                                     msg.videoUrl = imageurl;
                                     msg.messageType = @(messageType_video);
                                 }
-                                conversation.lastMessageDate = date;
-                                conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+
+                                if (idx == 0) {
+                                    conversation.lastMessageDate = date;
+                                    conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+                                     conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
+                                    if ([typeMessage isEqualToString:@"txt"]) {
+                                        if ([content containString:@"sticker_"]) {
+                                            conversation.lastMessage = @"[表情]";
+                                        }else{
+                                            conversation.lastMessage = content;
+                                        }
+                                    }else if ([typeMessage isEqualToString:@"emj"]) {
+                                        if ([content containString:@"sticker_"]) {
+                                            conversation.lastMessage = @"[表情]";
+                                        }else{
+                                            conversation.lastMessage = content;
+                                        }
+                                    }else if ([typeMessage isEqualToString:@"pic"]) {
+                                        //image
+                                        conversation.lastMessage = @"[图片]";
+                                    }else if ([typeMessage isEqualToString:@"vic"]) {
+                                        conversation.lastMessage = @"[语音]";
+                                    }else if ([typeMessage isEqualToString:@"map"]) {
+                                        conversation.lastMessage = @"[位置信息]";
+                                    }else if ([typeMessage isEqualToString:@"video"]) {
+                                        conversation.lastMessage = @"[视频]";
+                                    }
+
+                                }
                                 conversation.messageStutes = @(messageStutes_incoming);
-                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
                                 conversation.facebookName = @"";
                                 conversation.facebookId = facebookID;
                                 // increase badge number.

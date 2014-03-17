@@ -74,13 +74,19 @@
     }
     
     {
-        NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
-        //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
-        NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
-        
-        NSString * strJson =  [dictionary valueForKey:@"ageDes"];
+        NSString * strJson = [MobClick getConfigParams:@"MMType_ALLTAGS"];
         NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
-        tagArray = [datajson  objectFromJSONData] ;
+        NSArray * array = [datajson  objectFromJSONData] ;
+        tagArray = [array copy];
+        
+//        NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
+//        //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+//        NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+//        
+//        NSString * strJson =  [dictionary valueForKey:@"ageDes"];
+//        NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+//        tagArray = [datajson  objectFromJSONData] ; 
+        
     }
     
     {
@@ -124,7 +130,6 @@
                 }
                 
             }];
-            
             [usertable reloadData];
         } failure:^(MLRequest *request, NSError *error) {
         }];
@@ -200,7 +205,7 @@
             return 142.0f;
         }else
         if (indexPath.row == 1) {
-            int row =  tagArray.count / 2;
+            int row =  tagArray.count / 2 + tagArray.count % 2;
             return (row * 150 + row * 5) + 50;
         }
     }
@@ -264,7 +269,7 @@
             __block int TITLE_jianxi = 5;
             static NSString *CellIdentifier = @"typeCell";
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UIView * contentview =  [cell.contentView subviewWithTag:1];
             [tagArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 int row = idx/2;
@@ -280,7 +285,8 @@
                 [iv addTarget:self action:@selector(seetypeMMClick:) forControlEvents:UIControlEventTouchUpInside];
                 [contentview addSubview:iv];
             }];
-            int row =  tagArray.count / 2;
+            int row =  tagArray.count / 2 + tagArray.count % 2;
+//            int row =  tagArray.count / 2;
             [contentview setHeight: (row * 150 + row * TITLE_jianxi)];
             return cell;
         }

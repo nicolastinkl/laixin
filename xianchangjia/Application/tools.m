@@ -444,6 +444,22 @@
 }
 
 
+//+(NSString * ) serverTimeFormatLocalTime:(NSString * ) timess
+//{
+//    NSDateFormatter *dateFormatter2 = [[NSDateFormatter alloc] init];
+//    [dateFormatter2 setDateFormat:@"yyyy-MM-dd HH:mm:SS"];
+//    NSString *fromTimeZone = @"America/Los_Angeles"; //服务器时区
+//    NSString *date_fromTimeZone = [NSString stringWithUTF8String:timess]; //time是服务器返回的时间字符串
+//    
+//    [dateFormatter2 setTimeZone:[NSTimeZone timeZoneWithName:fromTimeZone]];
+//    NSDate *dateOfGMT = [dateFormatter2 dateFromString:date_fromTimeZone]; //转换为GMT时间
+//    
+//    NSTimeZone* totimeZone = [NSTimeZone localTimeZone]; //获得本地时区
+//    [dateFormatter2 setTimeZone:totimeZone]; //
+//    NSString *dateStrDst = [dateFormatter2 stringFromDate:dateOfGMT]; //由GMT时间转换为本地时间
+//    return dateStrDst;
+//}
+
 
 +(NSURL*)UrlFromString:(NSString*) str
 {
