@@ -404,7 +404,7 @@
     NSDictionary * tdic = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:15.0f],NSFontAttributeName,nil];
     //ios7方法，获取文本需要的size，限制宽度 
      CGSize  actualsize = [post boundingRectWithSize:CGSizeMake(width, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading attributes:tdic context:nil].size;
-    SLog(@"actualsize.height %f",actualsize.height);
+   
 //#pragma clang diagnostic push
 //#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 //    CGSize sizeToFit = [post sizeWithFont:[UIFont systemFontOfSize:15.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];

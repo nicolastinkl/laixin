@@ -183,7 +183,7 @@
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
     [self initHomeData];  // get all data
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginInReceivingAllMessage" object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginInReceivingAllMessage" object:nil];
 }
 
 - (IBAction)ShowMenuClick:(id)sender {
@@ -302,6 +302,9 @@
             [self  reLoadData]; // 更新群组信息
             [self  runSequucer];  //更新好友信息
             tryCatchCount = 4;
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginInReceivingAllMessage" object:nil];
+            
         }
         {
             //            [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
