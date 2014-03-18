@@ -46,6 +46,7 @@
 
 @property (nonatomic, assign) BOOL isloadingphotos;
 
+@property (nonatomic, assign) BOOL showCommentslikes;
 
 //delegate
 @property (nonatomic, weak) id<ActivityTableViewCellDelegate> delegate;

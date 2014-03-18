@@ -18,14 +18,16 @@
 #import "XCAlbumAdditions.h"
 #import "FCUserDescription.h"
 #import "XCJMessageReplyInfoViewController.h"
-
+#import <FBKVOController/FBKVOController.h>
 
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
 
 
 @interface BaseDetailViewController () <UITableViewDataSource,UITableViewDelegate,MLScrollRefreshHeaderDelegate,ActivityTableViewCellDelegate,UITextViewDelegate,InterceptTouchViewDelegate>
-
+{
+  FBKVOController *_KVOController;
+}
 
 @property (nonatomic,strong) UIView *inputView;
 @property (nonatomic,strong) UITextView *inputTextView;
@@ -185,7 +187,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    SLog(@"_activities.count : %d",_activities.count);
+//    SLog(@"_activities.count : %d",_activities.count);
      return _activities.count;
     
     if (_isDontNeedLazyLoad) {
@@ -253,12 +255,29 @@
         }
     }
     
+    if (_isDontNeedLazyLoad) {
+        return;
+    }
     
+    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
+        if (!_isLoading) {
+            self.isLoading = YES;
+//            [self performSelectorOnMainThread:@selector(postLoadMoreActivitiesRequest)  withObject:Nil waitUntilDone:YES];
+//            [self performSelectorInBackground:@selector(postLoadMoreActivitiesRequest) withObject:nil];
+            double delayInSeconds = .3;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self postLoadMoreActivitiesRequest];
+            });
+
+        }
+    }
     
+    return;
     if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
         /* get all list data*/
         cell.HasLoad = YES;
-       
+        
         NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //    postid = 12;
@@ -279,30 +298,11 @@
                 [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
             }
             cell.HasLoad = YES;
-
+            
         } failure:^(MLRequest *request, NSError *error) {
             cell.HasLoad = NO;
         }];
     }
-    
-    if (_isDontNeedLazyLoad) {
-        return;
-    }
-    
-    if ((indexPath.row) >= (NSInteger)(_activities.count-1)) {
-        if (!_isLoading) {
-            self.isLoading = YES;
-//            [self performSelectorOnMainThread:@selector(postLoadMoreActivitiesRequest)  withObject:Nil waitUntilDone:YES];
-//            [self performSelectorInBackground:@selector(postLoadMoreActivitiesRequest) withObject:nil];
-            double delayInSeconds = .3;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self postLoadMoreActivitiesRequest];
-            });
-
-        }
-    }
-    
 }
 
 
@@ -348,8 +348,30 @@
     if (cell == nil) {
         cell = [[ActivityTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.delegate = self;
+//        _KVOController = [FBKVOController controllerWithObserver:self];
+//        [_KVOController observe:cell keyPath:@"cellHeight" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew block:^(id observer, id object, NSDictionary *change) {
+//            if ([object isKindOfClass:[ActivityTableViewCell class]]) {
+//                // update observer with new value
+//                
+//                
+//                NSIndexPath *newPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+//                [self.tableView reloadRowsAtIndexPaths:@[newPath] withRowAnimation:UITableViewRowAnimationNone];
+////              [_cellHeights replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithFloat:[change[NSKeyValueChangeNewKey] floatValue]]];
+//                
+//                SLog(@"new NSKeyValueChangeNewKey");
+////                ((ActivityTableViewCell *)observer).activity = change[NSKeyValueChangeNewKey];
+//              
+////                CLOCK_LAYER(((ClockView *)observer)).date = change[NSKeyValueChangeNewKey];
+//            }else{
+//                  SLog(@"new NSKeyValueChangeNewKey not");
+//            }
+////            ((ActivityTableViewCell *)object).cellHeight
+//            
+//            
+//        }];
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
+    cell.showCommentslikes = NO;
     cell.needRefreshViewController = self;
     // start requst comments  and likes
     cell.activity = activity;

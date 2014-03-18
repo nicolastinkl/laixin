@@ -140,7 +140,7 @@
 
 -(void) initLikesCount
 {
-    /*
+    
     if(currentGroup.like > 0)
     {
         NSDictionary * parames = @{@"postid":currentGroup.postid,@"pos":@0,@"count":@"100"};
@@ -162,7 +162,7 @@
         } failure:^(MLRequest *request, NSError *error) {
             
         }];
-    }*/
+    }
     
 }
 
@@ -228,7 +228,7 @@
     }
     XCJGroupPost_list* activity = currentGroup;
     cell.needRefreshViewController = self;
-    
+    cell.showCommentslikes = YES;
    
     //    cell.indexofActivitys =  [self.activities indexOfObject:activity];
     cell.activity = activity;
@@ -499,7 +499,7 @@
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
-//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
+            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
             [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
@@ -508,12 +508,12 @@
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //如果有则删除，没有则不动啊
-//            for (LXUser *aUser in activity.likeUsers) {
-//                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
-//                    [activity.likeUsers removeObject:aUser];
-//                    break;
-//                }
-//            }
+            for (LXUser *aUser in activity.likeUsers) {
+                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
+                    [activity.likeUsers removeObject:aUser];
+                    break;
+                }
+            }
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;

@@ -178,17 +178,19 @@
         
         //赞按钮
         self.likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
+//        [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
         [_likeButton setContentMode:UIViewContentModeCenter];
         [_likeButton setTitleColor:commonColor forState:UIControlStateNormal];
         [_likeButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 10.0f, 0.0, 0.0)];
         [_likeButton addTarget:self
                            action:@selector(likeOrCommentButtonClick:)
                  forControlEvents:UIControlEventTouchUpInside];
-        [_likeButton setTitle:@"赞" forState:UIControlStateNormal];
+//        [_likeButton setTitle:@"赞" forState:UIControlStateNormal];
         _likeButton.titleLabel.font = [UIFont systemFontOfSize:11.5];
         _likeButton.tag = 801;
         [self addSubview:_likeButton];
+    
+        
         
         self.likeCommentBackView = [[UIImageView alloc]initWithImage:[[UIImage imageNamed:@"like_comment_bg_two.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:23]];
         [self addSubview:_likeCommentBackView];
@@ -212,7 +214,7 @@
         [_likeBackView addSubview:_likeLabel];
         
         //赞label里的赞图标
-        UIImageView *likeIcon = [[UIImageView alloc]initWithFrame:CGRectMake(8, 5, 15, 15)];
+        UIImageView *likeIcon = [[UIImageView alloc]initWithFrame:CGRectMake(8, 8, 15, 15)];
         likeIcon.image = [UIImage imageNamed:@"btn_like.png"];
         [_likeBackView addSubview:likeIcon];
         
@@ -329,14 +331,31 @@
     if (_activity.imageURL && _activity.imageURL.length > 5 && _activity.excount <= 0) {
         [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL width:_activity.width/10 height:_activity.height/10]]];
     }
+ 
     
-    if (_activity.ilike) {
-        [_likeButton setImage:[UIImage imageNamed:@"btn_like.png"] forState:UIControlStateNormal];
-        [_likeButton setTitle:@"已赞" forState:UIControlStateNormal];
+    
+    if (self.showCommentslikes) {
+        if (_activity.ilike) {
+            [_likeButton setImage:[UIImage imageNamed:@"btn_like.png"] forState:UIControlStateNormal];
+            [_likeButton setTitle:@"已赞" forState:UIControlStateNormal];
+        }else{
+            [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
+            [_likeButton setTitle:@"赞" forState:UIControlStateNormal];
+        }
+        
+         [_commentButton setTitle:@"评论" forState:UIControlStateNormal];
+        
     }else{
-        [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
-        [_likeButton setTitle:@"赞" forState:UIControlStateNormal];
+        if (_activity.ilike) {
+            [_likeButton setImage:[UIImage imageNamed:@"btn_like.png"] forState:UIControlStateNormal];
+            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.ilike] forState:UIControlStateNormal];
+        }else{
+            [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
+            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.ilike] forState:UIControlStateNormal];
+        }
+        [_commentButton setTitle:[NSString stringWithFormat:@"%d",_activity.replycount] forState:UIControlStateNormal];
     }
+    
     //根据latestLikeUser和likeCount来设置text
     if (_activity.like>0) {
         NSString *text = @"     ";
@@ -535,44 +554,54 @@
     _likeButton.frame = CGRectMake(self.frameWidth-120, yOffset, 50, 20);
     _commentButton.frame = CGRectMake(_likeButton.frame.origin.x+_likeButton.frameWidth+10, yOffset, 50, _likeButton.frameHeight);
     _ReportButton.frame =   CGRectMake(50, yOffset, 50, _likeButton.frameHeight);
+    
+    
     yOffset += _likeButton.frameHeight+10;
     
-
-    
-    CGFloat likeCommentBackY = yOffset-6.2;
-    
-    if (_activity.like>0) {
-        _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
-        [_likeLabel sizeToFit];
+    if (self.showCommentslikes) {
+        CGFloat likeCommentBackY = yOffset-6.2;
+        if (_activity.like>0) {
+            _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
+            [_likeLabel sizeToFit];
+            
+            _likeBackView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, _likeLabel.frameHeight+5*2);
+            
+            _likeBackView.hidden = NO;
+            yOffset += _likeBackView.frameHeight;
+        }else{
+            _likeBackView.hidden = YES;
+        }
         
-        _likeBackView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, _likeLabel.frameHeight+5*2);
+        if (_activity.comments.count>0) {
+            _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
+            _commentsView.comments = _activity.comments; //会根据内容和自身宽度自动调整高度
+            _commentsView.delegate = self;
+            _commentsView.hidden = NO;
+            yOffset += _commentsView.frameHeight;
+        }else{
+            _commentsView.comments = nil;
+            _commentsView.hidden = YES;
+        }
         
-        _likeBackView.hidden = NO;
-        yOffset += _likeBackView.frameHeight;
+        _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
+        
+        if (_activity.like>0||_activity.comments.count>0) {
+            yOffset += 10;
+            _likeCommentBackView.hidden = NO;
+        }else{
+            _likeCommentBackView.hidden = YES;
+        }
+        _likeButton.userInteractionEnabled = YES;
+        _commentButton.userInteractionEnabled = YES;
     }else{
+        _likeButton.userInteractionEnabled = NO;
+        _commentButton.userInteractionEnabled = NO;
         _likeBackView.hidden = YES;
-    }
-    
-    if (_activity.comments.count>0) {
-        _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
-        _commentsView.comments = _activity.comments; //会根据内容和自身宽度自动调整高度
-        _commentsView.delegate = self;
-        _commentsView.hidden = NO;
-        yOffset += _commentsView.frameHeight;
-    }else{
         _commentsView.comments = nil;
         _commentsView.hidden = YES;
-    }
-    
-    _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
-    
-    if (_activity.like>0||_activity.comments.count>0) {
-        yOffset += 10;
-        _likeCommentBackView.hidden = NO;
-    }else{
         _likeCommentBackView.hidden = YES;
+       
     }
-    
     _cellHeight = yOffset;
 }
 
@@ -635,41 +664,47 @@
     _ReportButton.frame =   CGRectMake(50, yOffset, 50, _likeButton.frameHeight);
     yOffset += _likeButton.frameHeight+10;
     
-    
-    
-    CGFloat likeCommentBackY = yOffset-6.2;
-    
-    if (_activity_new.like>0) {
-        _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
-        [_likeLabel sizeToFit];
+    if (self.showCommentslikes) {
+        CGFloat likeCommentBackY = yOffset-6.2;
         
-        _likeBackView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, _likeLabel.frameHeight+5*2);
+        if (_activity_new.like>0) {
+            _likeLabel.frame = CGRectMake(8, 5, self.frameWidth-xOffset-10-8*2, 0);
+            [_likeLabel sizeToFit];
+            
+            _likeBackView.frame = CGRectMake(xOffset,  yOffset, self.frameWidth-xOffset-10, _likeLabel.frameHeight+5*2);
+            
+            _likeBackView.hidden = NO;
+            yOffset += _likeBackView.frameHeight;
+        }else{
+            _likeBackView.hidden = YES;
+        }
         
-        _likeBackView.hidden = NO;
-        yOffset += _likeBackView.frameHeight;
-    }else{
-        _likeBackView.hidden = YES;
-    }
-    
-    if (_activity_new.comments.count>0) {
-        _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
-        _commentsView.comments = _activity_new.comments; //会根据内容和自身宽度自动调整高度
-        _commentsView.delegate = self;
-        _commentsView.hidden = NO;
+        if (_activity_new.comments.count>0) {
+            _commentsView.frame = CGRectMake(xOffset, yOffset, self.frameWidth-xOffset-10, 0);
+            _commentsView.comments = _activity_new.comments; //会根据内容和自身宽度自动调整高度
+            _commentsView.delegate = self;
+            _commentsView.hidden = NO;
+            
+            yOffset += _commentsView.frameHeight;
+        }else{
+            _commentsView.comments = nil;
+            _commentsView.hidden = YES;
+        }
         
-        yOffset += _commentsView.frameHeight;
+        _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
+        
+        if (_activity_new.like>0||_activity_new.comments.count>0) {
+            yOffset += 10;
+            _likeCommentBackView.hidden = NO;
+        }else{
+            _likeCommentBackView.hidden = YES;
+        }
     }else{
-        _commentsView.comments = nil;
-        _commentsView.hidden = YES;
-    }
-    
-    _likeCommentBackView.frame = CGRectMake(xOffset, likeCommentBackY, self.frameWidth-xOffset-10, yOffset-likeCommentBackY);
-    
-    if (_activity_new.like>0||_activity_new.comments.count>0) {
-        yOffset += 10;
-        _likeCommentBackView.hidden = NO;
-    }else{
-        _likeCommentBackView.hidden = YES;
+         _likeBackView.hidden = YES;
+         _commentsView.comments = nil;
+         _commentsView.hidden = YES;
+         _likeCommentBackView.hidden = YES;
+        
     }
     
     _cellHeight = yOffset;

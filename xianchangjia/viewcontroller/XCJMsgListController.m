@@ -180,7 +180,6 @@
 //    
 //}
 
-
 -(void) uploadDataWithLogin:(NSNotification *) notify
 {
     [self initHomeData];  // get all data
@@ -261,7 +260,6 @@
     
 }
 
-
 -(void)   initHomeData
 {
     //    [self.refreshControl beginRefreshing];
@@ -276,39 +274,40 @@
         //首次登陆返回的用户信息
         NSDictionary * userinfo = responseObject[@"result"];
         LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
-        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
-        
-        [USER_DEFAULT setValue:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
-        [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
-        [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
-        [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
-        [USER_DEFAULT setObject:currentUser.background_image forKey:KeyChain_Laixin_account_user_backgroupbg];
-        [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
-        [USER_DEFAULT synchronize];
-        
+        if (currentUser) {
+            [self  webSocketDidOpen:nil];
+            [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+            [USER_DEFAULT setValue:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
+            [USER_DEFAULT setObject:currentUser.nick forKey:KeyChain_Laixin_account_user_nick];
+            [USER_DEFAULT setObject:currentUser.headpic forKey:KeyChain_Laixin_account_user_headpic];
+            [USER_DEFAULT setObject:currentUser.signature forKey:KeyChain_Laixin_account_user_signature];
+            [USER_DEFAULT setObject:currentUser.background_image forKey:KeyChain_Laixin_account_user_backgroupbg];
+            [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
+            [USER_DEFAULT synchronize];
+            NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
+            FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
+            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+            if (account == nil) {
+                account = [FCAccount MR_createInContext:localContext];
+                account.facebookId = currentUser.uid;
+            }
+            account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+            account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
+            account.time = @"";
+            account.userJson = userinfo;
+            [localContext MR_saveToPersistentStoreAndWait];
+            //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+            
+            // Return the number of rows in the section.
+            [self  reLoadData]; // 更新群组信息
+            [self  runSequucer];  //更新好友信息
+            tryCatchCount = 4;
+        }
         {
             //            [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
-            
         }
         
-        NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
-        FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
-        NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-        if (account == nil) {
-            account = [FCAccount MR_createInContext:localContext];
-            account.facebookId = currentUser.uid;
-        }
-        account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-        account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
-        account.time = @"";
-        account.userJson = userinfo;
-        [localContext MR_saveToPersistentStoreAndWait];
-        //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-        
-        // Return the number of rows in the section.
-        [self  reLoadData]; // 更新群组信息
-        [self  runSequucer];  //更新好友信息
-        tryCatchCount = 4;
+       
     } failure:^(MLRequest *request, NSError *error) {
         //         re request login
         tryCatchCount ++ ;

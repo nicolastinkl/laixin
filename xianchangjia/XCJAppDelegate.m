@@ -820,7 +820,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     
 
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(LoginInReceivingAllMessage)
+                                             selector:@selector(ReceiveAllMessage)
                                                  name:@"LoginInReceivingAllMessage"
                                                object:nil];
 
@@ -992,11 +992,296 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
 
+
+-(void) ReceiveAllMessage
+{
+    {
+        
+        // 读取事件
+        // get  event.read(pos=0)
+        NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
+        [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                NSDictionary * dict = responseObject[@"result"];
+                NSArray * array = dict[@"events"];
+                __block NSInteger manEIDTwo = 0;
+                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
+                    NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
+                    if (manEIDTwo < curretnEid) {
+                        manEIDTwo = curretnEid;
+                        [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
+                        [USER_DEFAULT synchronize];
+                    }
+                    [self initEventData:typeStr Data:obj];
+                }];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
+    
+    //读取未读私信
+    //message.read(afterid=0) 读私信
+    __block NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+    //        [FCMessage MR_findFirstOrderedByAttribute:@"messageId" ascending:YES];
+    [[MLNetworkingManager sharedManager] sendWithAction:@"message.read" parameters:@{@"afterid":@(messageIndex)} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketDidOpen" object:nil];
+            
+            NSDictionary * resultDict = responseObject[@"result"];
+            NSArray * array = resultDict[@"message"];
+            
+            
+            
+            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                /*
+                 “msgid”:
+                 “uid”:
+                 “content”:
+                 “time”: */
+                NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"msgid"] defaultValue:0];
+                if (messageIndex < curretnEid) {
+                    messageIndex = curretnEid;
+                    [USER_DEFAULT setInteger:messageIndex forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
+                    [USER_DEFAULT synchronize];
+                }
+                
+                {
+                    //MARK THIS
+                    NSString *facebookID = [tools getStringValue:obj[@"fromid"] defaultValue:@""];
+                    
+                    //out view
+                    NSString * content = [tools getStringValue:obj[@"content"] defaultValue:@""];
+                    NSString * imageurl = [tools getStringValue:obj[@"picture"] defaultValue:@""];
+                    
+                    NSString * typeMessage = [tools getStringValue:obj[@"type"] defaultValue:@""];
+                    // Build the predicate to find the person sought
+                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
+                    Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
+                    if(conversation == nil)
+                    {
+                        conversation =  [Conversation MR_createInContext:localContext];
+                    }
+                    
+                    FCMessage *msg = [FCMessage MR_createInContext:localContext];
+                    if ([content isNilOrEmpty]) {
+                        content = @"";
+                    }
+                    msg.text = content;
+                    NSTimeInterval receiveTime  = [obj[@"time"] floatValue];
+                    //                                SLog(@"receiveTime : %f",receiveTime);
+                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+                    msg.sentDate = date;
+                    // message did come, this will be on left
+                    msg.messageStatus = @(YES);
+                    msg.messageId = [tools getStringValue:obj[@"msgid"] defaultValue:@"0"];
+                    
+                    if ([typeMessage isEqualToString:@"txt"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            //                                        conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            //                                        conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"emj"]) {
+                        if ([content containString:@"sticker_"]) {
+                            msg.messageType = @(messageType_emj);
+                            //                                        conversation.lastMessage = @"[表情]";
+                        }else{
+                            msg.messageType = @(messageType_text);
+                            //                                        conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"pic"]) {
+                        //image
+                        msg.messageType = @(messageType_image);
+                        //                                    conversation.lastMessage = @"[图片]";
+                        msg.imageUrl = imageurl;
+                    }else if ([typeMessage isEqualToString:@"vic"]) {
+                        //audio
+                        NSString * audiourl = [tools getStringValue:obj[@"voice"] defaultValue:@""];
+                        //                                    conversation.lastMessage = @"[语音]";
+                        msg.audioUrl = audiourl;
+                        msg.messageType = @(messageType_audio);
+                        int length  = [obj[@"length"] intValue];
+                        msg.audioLength = @(length/audioLengthDefine);
+                    }else if ([typeMessage isEqualToString:@"map"]) {
+                        //                                    conversation.lastMessage = @"[位置信息]";
+                        msg.imageUrl = imageurl;
+                        msg.messageType = @(messageType_map);
+                    }else if ([typeMessage isEqualToString:@"video"]) {
+                        //                                    conversation.lastMessage = @"[视频]";
+                        msg.videoUrl = imageurl;
+                        msg.messageType = @(messageType_video);
+                    }
+                    
+                    if (idx == 0) {
+                        conversation.lastMessageDate = date;
+                        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+                        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
+                        if ([typeMessage isEqualToString:@"txt"]) {
+                            if ([content containString:@"sticker_"]) {
+                                conversation.lastMessage = @"[表情]";
+                            }else{
+                                conversation.lastMessage = content;
+                            }
+                        }else if ([typeMessage isEqualToString:@"emj"]) {
+                            if ([content containString:@"sticker_"]) {
+                                conversation.lastMessage = @"[表情]";
+                            }else{
+                                conversation.lastMessage = content;
+                            }
+                        }else if ([typeMessage isEqualToString:@"pic"]) {
+                            //image
+                            conversation.lastMessage = @"[图片]";
+                        }else if ([typeMessage isEqualToString:@"vic"]) {
+                            conversation.lastMessage = @"[语音]";
+                        }else if ([typeMessage isEqualToString:@"map"]) {
+                            conversation.lastMessage = @"[位置信息]";
+                        }else if ([typeMessage isEqualToString:@"video"]) {
+                            conversation.lastMessage = @"[视频]";
+                        }
+                        
+                    }
+                    conversation.messageStutes = @(messageStutes_incoming);
+                    conversation.facebookName = @"";
+                    conversation.facebookId = facebookID;
+                    // increase badge number.
+                    int badgeNumber = [conversation.badgeNumber intValue];
+                    badgeNumber ++;
+                    conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                    [conversation addMessagesObject:msg];
+                    [localContext MR_saveToPersistentStoreAndWait];
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceiveForcegroundMessageNotification object:@{@"message":msg,@"fromid":facebookID}];
+                }
+                
+                // update tabbar item  badge
+                [self updateMessageTabBarItemBadge];
+            }];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
+        
+    }];
+    
+    //读取最新评论信息
+    
+    {
+        int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+        if (localreplyid > 0) {
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_new_reply" parameters:@{@"from_reply":@(localreplyid)} success:^(MLRequest *request, id responseObject) {
+                if(responseObject)
+                {
+                    NSDictionary * dict = responseObject[@"result"];
+                    NSArray *arrayReplys = dict[@"replys"];
+                    [arrayReplys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        if (obj) {
+                            NSDictionary *replyDict = obj;
+                            NSString * postid = [DataHelper getStringValue:replyDict[@"postid"] defaultValue:@""];
+                            NSString * replyid = [DataHelper getStringValue:replyDict[@"replyid"] defaultValue:@""];
+                            
+                            int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+                            if (localreplyid < [replyid intValue]) {
+                                [USER_DEFAULT setInteger:[replyid intValue] forKey:KeyChain_Laixin_Max_ReplyID];
+                                [USER_DEFAULT synchronize];
+                            }
+                            
+                            NSString * content = [DataHelper getStringValue:replyDict[@"content"] defaultValue:@""];
+                            NSString * uid = [DataHelper getStringValue:replyDict[@"uid"] defaultValue:@""];
+                            NSTimeInterval receiveTime = [DataHelper getDoubleValue:replyDict[@"time"] defaultValue:0];
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+                            ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+                            if (ConverRe == nil) {
+                                ConverRe = [ConverReply MR_createInContext:localContext];
+                            }
+                            FCReplyMessage * message = [FCReplyMessage MR_createInContext:localContext];
+                            message.typeReply = @"newreply";
+                            message.uid = uid;
+                            message.postid = postid;
+                            message.replyid = replyid;
+                            message.content = content;
+                            message.time = @(receiveTime);
+                            
+                            [ConverRe addFcreplymesgshipsObject: message];
+                            ConverRe.uid = uid;
+                            ConverRe.postid = postid;
+                            ConverRe.content = @"新评论";
+                            ConverRe.time = @(receiveTime);
+                            int unreadNumber  = [ConverRe.badgeNumber intValue];
+                            unreadNumber ++;
+                            ConverRe.badgeNumber = @(unreadNumber);
+                            
+                            [localContext MR_saveToPersistentStoreAndWait];
+                            
+                            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",unreadNumber]];
+                            
+                            
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+                        }
+                    }];
+                    
+                    
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
+    }
+    
+    //读取朋友圈新事件
+    {
+        NSDictionary * parames = @{@"count":@"1"};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            //    postid = 12;
+            /*
+             Result={
+             “posts”:[*/
+            if (responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"posts"];
+                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    if(idx == 0)
+                    {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        int oldpostid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+                        if (oldpostid <= 0 || oldpostid != [post.postid intValue]) {
+                            [USER_DEFAULT setInteger:[post.postid intValue] forKey:KeyChain_Laixin_Max_FriendGroup_messageID];
+                            [USER_DEFAULT synchronize];
+                            
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+                            ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+                            if (ConverRe == nil) {
+                                ConverRe = [ConverReply MR_createInContext:localContext];
+                            }
+                            ConverRe.uid = post.uid;
+                            ConverRe.postid = post.postid;
+                            ConverRe.content = @"新朋友圈消息";
+                            ConverRe.time = @(post.time);
+                            
+                            [localContext MR_saveToPersistentStoreAndWait];
+                            //提示有新朋友圈消息
+                            if ([ConverRe.badgeNumber intValue]<=0) {
+                                [self.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
+                            }else{
+                                [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[ConverRe.badgeNumber intValue]]];
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+    }
+}
 
 -(void) LoginInReceivingAllMessage
 {
@@ -1027,308 +1312,38 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 if (currentUser) {
                     [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
                 }
-                
-                {
-                
-                // 读取事件
-                // get  event.read(pos=0)
-                NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
-                [[MLNetworkingManager sharedManager] sendWithAction:@"event.read"  parameters:@{@"pos":@(MaxEid)} success:^(MLRequest *request, id responseObject) {
-                    if (responseObject) {
-                        NSDictionary * dict = responseObject[@"result"];
-                        NSArray * array = dict[@"events"];
-                        __block NSInteger manEIDTwo = 0;
-                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            NSString * typeStr =  [DataHelper getStringValue:obj[@"type"] defaultValue:@""];
-                            NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"eid"] defaultValue:0];
-                            if (manEIDTwo < curretnEid) {
-                                manEIDTwo = curretnEid;
-                                [USER_DEFAULT setInteger:manEIDTwo forKey:KeyChain_Laixin_Max_Event_messageID];
-                                [USER_DEFAULT synchronize];
-                            }
-                            [self initEventData:typeStr Data:obj];
-                        }];
-                    }
-                } failure:^(MLRequest *request, NSError *error) {
-                }];
-                }
-                
-                //读取未读私信
-                //message.read(afterid=0) 读私信
-                __block NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                //        [FCMessage MR_findFirstOrderedByAttribute:@"messageId" ascending:YES];
-                [[MLNetworkingManager sharedManager] sendWithAction:@"message.read" parameters:@{@"afterid":@(messageIndex)} success:^(MLRequest *request, id responseObject) {
-                    if (responseObject) {
-                        
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketDidOpen" object:nil];
-                        
-                        NSDictionary * resultDict = responseObject[@"result"];
-                        NSArray * array = resultDict[@"message"];
-                        
-                        
-                        
-                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            /*
-                             “msgid”:
-                             “uid”:
-                             “content”:
-                             “time”: */
-                            NSInteger curretnEid =[DataHelper getIntegerValue:obj[@"msgid"] defaultValue:0];
-                            if (messageIndex < curretnEid) {
-                                messageIndex = curretnEid;
-                                [USER_DEFAULT setInteger:messageIndex forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
-                                [USER_DEFAULT synchronize];
-                            }
-                           
-                            {
-                                //MARK THIS
-                                NSString *facebookID = [tools getStringValue:obj[@"fromid"] defaultValue:@""];
-                                
-                                //out view
-                                NSString * content = [tools getStringValue:obj[@"content"] defaultValue:@""];
-                                NSString * imageurl = [tools getStringValue:obj[@"picture"] defaultValue:@""];
-                                
-                                NSString * typeMessage = [tools getStringValue:obj[@"type"] defaultValue:@""];
-                                // Build the predicate to find the person sought
-                                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == %@", facebookID];
-                                Conversation *conversation = [Conversation MR_findFirstWithPredicate:predicate inContext:localContext];
-                                if(conversation == nil)
-                                {
-                                    conversation =  [Conversation MR_createInContext:localContext];
-                                }
-                                
-                                FCMessage *msg = [FCMessage MR_createInContext:localContext];
-                                if ([content isNilOrEmpty]) {
-                                    content = @"";
-                                }
-                                msg.text = content;
-                                NSTimeInterval receiveTime  = [obj[@"time"] floatValue];
-//                                SLog(@"receiveTime : %f",receiveTime);
-                                NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
-                                msg.sentDate = date;
-                                // message did come, this will be on left
-                                msg.messageStatus = @(YES);
-                                msg.messageId = [tools getStringValue:obj[@"msgid"] defaultValue:@"0"];
-                                
-                                if ([typeMessage isEqualToString:@"txt"]) {
-                                    if ([content containString:@"sticker_"]) {
-                                        msg.messageType = @(messageType_emj);
-//                                        conversation.lastMessage = @"[表情]";
-                                    }else{
-                                        msg.messageType = @(messageType_text);
-//                                        conversation.lastMessage = content;
-                                    }
-                                }else if ([typeMessage isEqualToString:@"emj"]) {
-                                    if ([content containString:@"sticker_"]) {
-                                        msg.messageType = @(messageType_emj);
-//                                        conversation.lastMessage = @"[表情]";
-                                    }else{
-                                        msg.messageType = @(messageType_text);
-//                                        conversation.lastMessage = content;
-                                    }
-                                }else if ([typeMessage isEqualToString:@"pic"]) {
-                                    //image
-                                    msg.messageType = @(messageType_image);
-//                                    conversation.lastMessage = @"[图片]";
-                                    msg.imageUrl = imageurl;
-                                }else if ([typeMessage isEqualToString:@"vic"]) {
-                                    //audio
-                                    NSString * audiourl = [tools getStringValue:obj[@"voice"] defaultValue:@""];
-//                                    conversation.lastMessage = @"[语音]";
-                                    msg.audioUrl = audiourl;
-                                    msg.messageType = @(messageType_audio);
-                                    int length  = [obj[@"length"] intValue];
-                                    msg.audioLength = @(length/audioLengthDefine);
-                                }else if ([typeMessage isEqualToString:@"map"]) {
-//                                    conversation.lastMessage = @"[位置信息]";
-                                    msg.imageUrl = imageurl;
-                                    msg.messageType = @(messageType_map);
-                                }else if ([typeMessage isEqualToString:@"video"]) {
-//                                    conversation.lastMessage = @"[视频]";
-                                    msg.videoUrl = imageurl;
-                                    msg.messageType = @(messageType_video);
-                                }
-
-                                if (idx == 0) {
-                                    conversation.lastMessageDate = date;
-                                    conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
-                                     conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
-                                    if ([typeMessage isEqualToString:@"txt"]) {
-                                        if ([content containString:@"sticker_"]) {
-                                            conversation.lastMessage = @"[表情]";
-                                        }else{
-                                            conversation.lastMessage = content;
-                                        }
-                                    }else if ([typeMessage isEqualToString:@"emj"]) {
-                                        if ([content containString:@"sticker_"]) {
-                                            conversation.lastMessage = @"[表情]";
-                                        }else{
-                                            conversation.lastMessage = content;
-                                        }
-                                    }else if ([typeMessage isEqualToString:@"pic"]) {
-                                        //image
-                                        conversation.lastMessage = @"[图片]";
-                                    }else if ([typeMessage isEqualToString:@"vic"]) {
-                                        conversation.lastMessage = @"[语音]";
-                                    }else if ([typeMessage isEqualToString:@"map"]) {
-                                        conversation.lastMessage = @"[位置信息]";
-                                    }else if ([typeMessage isEqualToString:@"video"]) {
-                                        conversation.lastMessage = @"[视频]";
-                                    }
-
-                                }
-                                conversation.messageStutes = @(messageStutes_incoming);
-                                conversation.facebookName = @"";
-                                conversation.facebookId = facebookID;
-                                // increase badge number.
-                                int badgeNumber = [conversation.badgeNumber intValue];
-                                badgeNumber ++;
-                                conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                                [conversation addMessagesObject:msg];
-                                [localContext MR_saveToPersistentStoreAndWait];
-                                
-                                [[NSNotificationCenter defaultCenter] postNotificationName:MLNetworkingManagerDidReceiveForcegroundMessageNotification object:@{@"message":msg,@"fromid":facebookID}];
-                            }
-                            
-                            // update tabbar item  badge
-                            [self updateMessageTabBarItemBadge];
-                        }];
-                    }
-                } failure:^(MLRequest *request, NSError *error) {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
-                    
-                }];
-                
-                //读取最新评论信息
-                
-                {
-                    int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
-                    if (localreplyid > 0) {
-                        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_new_reply" parameters:@{@"from_reply":@(localreplyid)} success:^(MLRequest *request, id responseObject) {
-                            if(responseObject)
-                            {
-                                NSDictionary * dict = responseObject[@"result"];
-                                NSArray *arrayReplys = dict[@"replys"];
-                                [arrayReplys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                    if (obj) {
-                                        NSDictionary *replyDict = obj;
-                                        NSString * postid = [DataHelper getStringValue:replyDict[@"postid"] defaultValue:@""];
-                                        NSString * replyid = [DataHelper getStringValue:replyDict[@"replyid"] defaultValue:@""];
-                                        
-                                        int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
-                                        if (localreplyid < [replyid intValue]) {
-                                            [USER_DEFAULT setInteger:[replyid intValue] forKey:KeyChain_Laixin_Max_ReplyID];
-                                            [USER_DEFAULT synchronize];
-                                        }
-                                        
-                                        NSString * content = [DataHelper getStringValue:replyDict[@"content"] defaultValue:@""];
-                                        NSString * uid = [DataHelper getStringValue:replyDict[@"uid"] defaultValue:@""];
-                                        NSTimeInterval receiveTime = [DataHelper getDoubleValue:replyDict[@"time"] defaultValue:0];
-                                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
-                                        ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
-                                        if (ConverRe == nil) {
-                                            ConverRe = [ConverReply MR_createInContext:localContext];
-                                        }
-                                        FCReplyMessage * message = [FCReplyMessage MR_createInContext:localContext];
-                                        message.typeReply = @"newreply";
-                                        message.uid = uid;
-                                        message.postid = postid;
-                                        message.replyid = replyid;
-                                        message.content = content;
-                                        message.time = @(receiveTime);
-                                        
-                                        [ConverRe addFcreplymesgshipsObject: message];
-                                        ConverRe.uid = uid;
-                                        ConverRe.postid = postid;
-                                        ConverRe.content = @"新评论";
-                                        ConverRe.time = @(receiveTime);
-                                        int unreadNumber  = [ConverRe.badgeNumber intValue];
-                                        unreadNumber ++;
-                                        ConverRe.badgeNumber = @(unreadNumber);
-                                        
-                                        [localContext MR_saveToPersistentStoreAndWait];
-                                        
-                                        [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",unreadNumber]];
-                                        
-                                        
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
-                                    }
-                                }];
-                                
-                                
-                            }
-                        } failure:^(MLRequest *request, NSError *error) {
-                            
-                        }];
-                    }
-                }
-                
-                //读取朋友圈新事件
-                {
-                    NSDictionary * parames = @{@"count":@"1"};
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                        //    postid = 12;
-                        /*
-                         Result={
-                         “posts”:[*/
-                        if (responseObject) {
-                            NSDictionary * groups = responseObject[@"result"];
-                            NSArray * postsDict =  groups[@"posts"];
-                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                if(idx == 0)
-                                {
-                                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                                    int oldpostid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_FriendGroup_messageID];
-                                    if (oldpostid <= 0 || oldpostid != [post.postid intValue]) {
-                                        [USER_DEFAULT setInteger:[post.postid intValue] forKey:KeyChain_Laixin_Max_FriendGroup_messageID];
-                                        [USER_DEFAULT synchronize];
-                                        
-                                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
-                                        ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
-                                        if (ConverRe == nil) {
-                                            ConverRe = [ConverReply MR_createInContext:localContext];
-                                        }
-                                        ConverRe.uid = post.uid;
-                                        ConverRe.postid = post.postid;
-                                        ConverRe.content = @"新朋友圈消息";
-                                        ConverRe.time = @(post.time);
-                                        
-                                        [localContext MR_saveToPersistentStoreAndWait];
-                                        //提示有新朋友圈消息
-                                        if ([ConverRe.badgeNumber intValue]<=0) {
-                                            [self.tabBarController.tabBar.items[2] setBadgeValue:@"新"];
-                                        }else{
-                                            [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",[ConverRe.badgeNumber intValue]]];
-                                        }
-                                        
-                                    }
-                                    
-                                }
-                                
-                            }];
-                        }
-                    } failure:^(MLRequest *request, NSError *error) {
-                    }];
-                }
+                [self ReceiveAllMessage];
+               
             } failure:^(MLRequest *request, NSError *error) {
             }];
     }
     });
 }
 
+
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+}
+
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    SLog(@"applicationWillEnterForeground");
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    [self LoginInReceivingAllMessage];
+    //查看 websocket是否有关闭
+    
+//    if ([[MLNetworkingManager sharedManager].webSocket readyState] >= SR_CLOSING) {
+//       
+//    }
+     [self LoginInReceivingAllMessage];
 }
 
 -(void) initEventData:(NSString *) requestKey Data:(NSDictionary  *)dictEvent
 {
-    
     if ([requestKey isEqualToString:@"add_friend"]) {
         NSString  * uid = [tools getStringValue:dictEvent[@"uid"] defaultValue:nil];
         NSString  * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];

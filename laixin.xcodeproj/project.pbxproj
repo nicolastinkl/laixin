@@ -16,6 +16,7 @@
 		86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */; };
 		86045FD318B346290002581E /* XCJSelectAgeModefilViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
+		860C6D9318D8314F00F67EE3 /* libFBKVOController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 860C6D8F18D8314000F67EE3 /* libFBKVOController.a */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
 		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
@@ -487,6 +488,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		860C6D8E18D8314000F67EE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ECEA60FE18A49C620064AFF4;
+			remoteInfo = FBKVOController;
+		};
+		860C6D9018D8314000F67EE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ECEA610E18A49C620064AFF4;
+			remoteInfo = FBKVOControllerTests;
+		};
 		86BDD51A18BC6F4700F621F6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */;
@@ -522,6 +537,7 @@
 		86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectAgeModefilViewContr.m; path = viewcontroller/XCJSelectAgeModefilViewContr.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
+		860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBKVOController.xcodeproj; path = FBKVOControllerTK/FBKVOController.xcodeproj; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		8622C876187D192100776A38 /* ListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItem.h; sourceTree = "<group>"; };
@@ -1320,6 +1336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				860C6D9318D8314F00F67EE3 /* libFBKVOController.a in Frameworks */,
 				86AFF8CE18D6F5D7000BBAD4 /* CoreTelephony.framework in Frameworks */,
 				86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */,
 				86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */,
@@ -1401,6 +1418,15 @@
 				86045FC918B2F7EF0002581E /* AOTag.m */,
 			);
 			name = AOtag;
+			sourceTree = "<group>";
+		};
+		860C6D8918D8313F00F67EE3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				860C6D8F18D8314000F67EE3 /* libFBKVOController.a */,
+				860C6D9118D8314000F67EE3 /* FBKVOControllerTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		861E7CDF18C8679F0082B3DE /* RoomJPG */ = {
@@ -2514,6 +2540,7 @@
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
+				860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */,
 				86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */,
 				86D181D31834822C0005901D /* laixin */,
 				86D181F51834822D0005901D /* xianchangjiaTests */,
@@ -3446,6 +3473,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 860C6D8918D8313F00F67EE3 /* Products */;
+					ProjectRef = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
+				},
+				{
 					ProductGroup = 86BDD51718BC6F4700F621F6 /* Products */;
 					ProjectRef = 86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */;
 				},
@@ -3459,6 +3490,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		860C6D8F18D8314000F67EE3 /* libFBKVOController.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFBKVOController.a;
+			remoteRef = 860C6D8E18D8314000F67EE3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		860C6D9118D8314000F67EE3 /* FBKVOControllerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FBKVOControllerTests.xctest;
+			remoteRef = 860C6D9018D8314000F67EE3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		86BDD51B18BC6F4700F621F6 /* libOHAttributedLabel.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
