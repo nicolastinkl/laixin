@@ -443,7 +443,6 @@
     return text;
 }
 
-
 //+(NSString * ) serverTimeFormatLocalTime:(NSString * ) timess
 //{
 //    NSDateFormatter *dateFormatter2 = [[NSDateFormatter alloc] init];

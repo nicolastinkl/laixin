@@ -100,7 +100,7 @@ typedef enum {
 #define KeyChain_Laixin_account_devtokenstring @"KeyChain_Laixin_account_devtokenstring"
 #define KeyChain_Laixin_message_PrivateUnreadIndex @"KeyChain_Laixin_message_PrivateUnreadIndex"
 #define KeyChain_Laixin_message_GroupBeinvite @"KeyChain_Laixin_message_GroupBeinvite"
-
+#define KeyChain_Laixin_Max_ReplyID       @"KeyChain_Laixin_Max_ReplyID"
 #define KeyChain_Laixin_Code_Jihuo @"KeyChain_Laixin_Code_Jihuo"
 
 /*-----------------------------

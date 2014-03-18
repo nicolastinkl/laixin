@@ -20,7 +20,8 @@
     UIBarButtonItem * rightBar ;
 }
 
-
+@property (weak, nonatomic) IBOutlet UIButton *button_info;
+@property (weak, nonatomic) IBOutlet UIButton *button_closeavcapture;
 
 @property (strong,nonatomic)AVCaptureDevice * device;
 @property (strong,nonatomic)AVCaptureDeviceInput * input;
@@ -40,6 +41,9 @@
     }
     return self;
 }
+- (IBAction)showInfoClick:(id)sender {
+    [UIAlertView showAlertViewWithMessage:@"找到级别比自己高的激活码或找到已经进入该圈子的好友激活自己即可提高自己等级"];
+}
 
 -(IBAction)hiddenKeyboard:(id)sender
 {
@@ -52,6 +56,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (IS_4_INCH) {
+        [self.button_info setTop:465.0f + 50];
+        [self.button_closeavcapture setTop:465.0f + 50];
+    }else{
+        [self.button_info setTop:365.0f + 50];
+        [self.button_closeavcapture setTop:365.0f + 50];
+    }
 	// Do any additional setup after loading the view.
     UIButton * button = ((UIButton *) [self.view subviewWithTag:2]);
     [button setHeight:40.0f];

@@ -150,7 +150,7 @@
     //查看 我被推荐的订单
     //merchandise.recommendbyme
     
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"查看我是推荐人的订单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"查看" otherButtonTitles:nil, nil];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"查看我是联系人的订单" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"查看" otherButtonTitles:nil, nil];
     [sheet showInView:self.view];
 }
 
@@ -158,6 +158,7 @@
 {
     if (buttonIndex == 0) {
         XCJRecommendUIDViewContrl * viewtrol = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJRecommendUIDViewContrl"];
+        viewtrol.navigationItem.backBarButtonItem.title = @"返回";
         [self.navigationController pushViewController:viewtrol animated:YES];
     }
 }

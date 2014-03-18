@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CustomWindow.h"
 #import "WXApi.h"
+
 @class SinaWeibo,XCJLoginNaviController;
 @interface XCJAppDelegate : UIResponder <UIApplicationDelegate>
 {

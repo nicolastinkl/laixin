@@ -134,14 +134,20 @@ SINGLETON_GCD(MinroadOperation);
 
 -(void) uploadimagewithPostid:(NSString *) postid  image:(UIImage*) image token:(NSString*) token withDict:(NSDictionary *) dict
 {
-    
-    int Wasy = image.size.width/APP_SCREEN_WIDTH;
-    int Hasy = image.size.height/APP_SCREEN_HEIGHT;
-    int quality = Wasy/2;
-    UIImage * newimage = [[image copy] resizedImage:CGSizeMake(APP_SCREEN_WIDTH*Wasy/quality, APP_SCREEN_HEIGHT*Hasy/quality) interpolationQuality:kCGInterpolationDefault];
+    float quality;
+    if (image.size.height > image.size.width) {
+        quality = image.size.height/image.size.width;
+    }else{
+        quality = image.size.width/image.size.height;
+    }
+    quality = quality/2;
+    if (quality > 1) {
+        quality = .5;
+    }
+    UIImage * newimage = [image resizedImage:CGSizeMake(image.size.width * quality, image.size.height * quality) interpolationQuality:kCGInterpolationDefault];
     NSData * FileData = UIImageJPEGRepresentation(newimage, 0.5);
     if (!FileData) {
-        FileData = UIImageJPEGRepresentation(image, 0.5);
+        FileData  = UIImageJPEGRepresentation(image, 0.5);
     }
     if (FileData) {
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

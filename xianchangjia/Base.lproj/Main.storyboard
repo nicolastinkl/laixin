@@ -337,7 +337,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1708" y="-809"/>
+            <point key="canvasLocation" x="1548" y="-941"/>
         </scene>
         <!--Change User Info Controller - 个人信息-->
         <scene sceneID="nx4-TZ-41F">
@@ -3889,7 +3889,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="选择推荐人" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Smb-rM-nRT">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联系人" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Smb-rM-nRT">
                                                     <rect key="frame" x="20" y="14" width="164" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -4479,7 +4479,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="itemsInfo_tabbar_bg" id="riD-Wt-XMo">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="itemsInfo_tabbar_bg" id="riD-Wt-XMo">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <rect key="contentStretch" x="0.59999999999999998" y="0.49999999999999994" width="0.24999999999999967" height="0.29999999999999966"/>
@@ -7329,6 +7329,16 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="HTK-ck-1q9">
+                                <rect key="frame" x="267" y="466" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="threadInfoButtonSelected">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="showInfoClick:" destination="vvD-82-ccm" eventType="touchUpInside" id="m5K-jK-Vld"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" tag="9" contentMode="scaleToFill" id="bhW-Fu-MOE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -7338,10 +7348,10 @@
                                         <autoresizingMask key="autoresizingMask"/>
                                     </imageView>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="pim-hW-RFR">
-                                        <rect key="frame" x="256" y="65" width="76" height="54"/>
+                                        <rect key="frame" x="112" y="507" width="96" height="41"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" image="eventMinusIcon">
+                                        <state key="normal" title="关闭" backgroundImage="intro-button">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -7359,6 +7369,10 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" title="激活" id="rfU-O2-TVi"/>
+                    <connections>
+                        <outlet property="button_closeavcapture" destination="pim-hW-RFR" id="W4i-m1-AWv"/>
+                        <outlet property="button_info" destination="HTK-ck-1q9" id="KLn-1Y-L8C"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TZl-Pq-nQd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="WPA-td-YqH">
@@ -8054,6 +8068,7 @@
         <image name="tabBarRecentsIcon" width="25" height="25"/>
         <image name="thread-edit-delete-button" width="13" height="30"/>
         <image name="threadInfoAddPeople" width="25" height="25"/>
+        <image name="threadInfoButtonSelected" width="22" height="22"/>
         <image name="toolbar-action-button" width="20" height="20"/>
         <image name="trip_order_alreadybuy" width="87" height="54"/>
         <image name="userinfo_gender_female_checkbox" width="17" height="18"/>

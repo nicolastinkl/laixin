@@ -303,7 +303,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
             /*"postid":83,
              "uid":4,
              "time":1389426716*/
-            
             NSString * postid = [DataHelper getStringValue:likeDict[@"postid"] defaultValue:@""];
             NSString * uid = [DataHelper getStringValue:likeDict[@"uid"] defaultValue:@""];
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
@@ -346,10 +345,16 @@ static NSString * const kLaixinStoreName = @"Laixins";
             
             NSString * postid = [DataHelper getStringValue:replyDict[@"postid"] defaultValue:@""];
             NSString * replyid = [DataHelper getStringValue:replyDict[@"replyid"] defaultValue:@""];
+            
+            int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+            if (localreplyid < [replyid intValue]) {
+                [USER_DEFAULT setInteger:[replyid intValue] forKey:KeyChain_Laixin_Max_ReplyID];
+                [USER_DEFAULT synchronize];
+            }
+            
             NSString * content = [DataHelper getStringValue:replyDict[@"content"] defaultValue:@""];
             NSString * uid = [DataHelper getStringValue:replyDict[@"uid"] defaultValue:@""];
             NSTimeInterval receiveTime = [DataHelper getDoubleValue:replyDict[@"time"] defaultValue:0];
-            
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
             ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
@@ -1194,6 +1199,72 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
                     
                 }];
+                
+                //读取最新评论信息
+                
+                {
+                    int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+                    if (localreplyid > 0) {
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_new_reply" parameters:@{@"from_reply":@(localreplyid)} success:^(MLRequest *request, id responseObject) {
+                            if(responseObject)
+                            {
+                                NSDictionary * dict = responseObject[@"result"];
+                                NSArray *arrayReplys = dict[@"replys"];
+                                [arrayReplys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                    if (obj) {
+                                        NSDictionary *replyDict = obj;
+                                        NSString * postid = [DataHelper getStringValue:replyDict[@"postid"] defaultValue:@""];
+                                        NSString * replyid = [DataHelper getStringValue:replyDict[@"replyid"] defaultValue:@""];
+                                        
+                                        int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+                                        if (localreplyid < [replyid intValue]) {
+                                            [USER_DEFAULT setInteger:[replyid intValue] forKey:KeyChain_Laixin_Max_ReplyID];
+                                            [USER_DEFAULT synchronize];
+                                        }
+                                        
+                                        NSString * content = [DataHelper getStringValue:replyDict[@"content"] defaultValue:@""];
+                                        NSString * uid = [DataHelper getStringValue:replyDict[@"uid"] defaultValue:@""];
+                                        NSTimeInterval receiveTime = [DataHelper getDoubleValue:replyDict[@"time"] defaultValue:0];
+                                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                                        NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"postid > %@", @"0"];
+                                        ConverReply * ConverRe = [ConverReply MR_findFirstWithPredicate:predicatess];
+                                        if (ConverRe == nil) {
+                                            ConverRe = [ConverReply MR_createInContext:localContext];
+                                        }
+                                        FCReplyMessage * message = [FCReplyMessage MR_createInContext:localContext];
+                                        message.typeReply = @"newreply";
+                                        message.uid = uid;
+                                        message.postid = postid;
+                                        message.replyid = replyid;
+                                        message.content = content;
+                                        message.time = @(receiveTime);
+                                        
+                                        [ConverRe addFcreplymesgshipsObject: message];
+                                        ConverRe.uid = uid;
+                                        ConverRe.postid = postid;
+                                        ConverRe.content = @"新评论";
+                                        ConverRe.time = @(receiveTime);
+                                        int unreadNumber  = [ConverRe.badgeNumber intValue];
+                                        unreadNumber ++;
+                                        ConverRe.badgeNumber = @(unreadNumber);
+                                        
+                                        [localContext MR_saveToPersistentStoreAndWait];
+                                        
+                                        [self.tabBarController.tabBar.items[2] setBadgeValue:[NSString stringWithFormat:@"%d",unreadNumber]];
+                                        
+                                        
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
+                                    }
+                                }];
+                                
+                                
+                            }
+                        } failure:^(MLRequest *request, NSError *error) {
+                            
+                        }];
+                    }
+                }
+                
                 //读取朋友圈新事件
                 {
                     NSDictionary * parames = @{@"count":@"1"};
@@ -1242,7 +1313,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     } failure:^(MLRequest *request, NSError *error) {
                     }];
                 }
-                
             } failure:^(MLRequest *request, NSError *error) {
             }];
     }
@@ -1252,6 +1322,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     [self LoginInReceivingAllMessage];
 }
 

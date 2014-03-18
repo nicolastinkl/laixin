@@ -368,10 +368,10 @@
                         }
                         if(currentActive_by > 0)
                         {
-                            NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在(%@-%@)提到你是推荐人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
+                            NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
                             [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
                                 if (responseObject) {
-                                    [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在(%@-%@)提到你是推荐人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
+                                    [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
                                 }
                             } failure:^(MLRequest *request, NSError *error) {
                                 
@@ -551,7 +551,7 @@
             {
                 return;
                 XCJSelectLaixinViewController * viewcontrs = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJSelectLaixinViewController"];
-                viewcontrs.title = @"选择推荐人";
+                viewcontrs.title = @"联系人";
                 [self.navigationController pushViewController:viewcontrs animated:YES];
             }
                 break;

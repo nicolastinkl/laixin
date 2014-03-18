@@ -14,6 +14,7 @@
 #import "UINavigationSample.h"
 #import "FCUserDescription.h"
 #import "UIButton+WebCache.h"
+#import "XCJAddUserTableViewController.h"
 
 @interface XCJRecommendUIDViewContrl ()
 {
@@ -37,7 +38,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.backBarButtonItem.title = @"返回";
-    self.title = @"我是推荐人的订单";
+    self.title = @"我是联系人的订单";
     {
         NSMutableArray * array = [[NSMutableArray alloc] init];
         _datasouces = array;
@@ -200,6 +201,15 @@
 
 -(IBAction)SeeUseinfoClick:(id)sender
 {
+    UIButton * button = sender;
+    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
+    PayOrderHistorylog * pay = _datasouces[[self.tableView indexPathForCell:cell].row];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+        FCUserDescription * useinfo = response;
+        XCJAddUserTableViewController *viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+        viewcontr.UserInfo = useinfo;
+        [self.navigationController pushViewController:viewcontr animated:YES];
+    } withuid:[NSString stringWithFormat:@"%d",pay.uid]];
     
 }
 

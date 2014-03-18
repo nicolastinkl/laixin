@@ -374,6 +374,13 @@
         if (responseObject) {
             NSDictionary * result =  responseObject[@"result"];
             NSString * repID = [DataHelper getStringValue:result[@"replyid"] defaultValue:@""];
+            
+            int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
+            if (localreplyid < [repID intValue]) {
+                [USER_DEFAULT setInteger:[repID intValue] forKey:KeyChain_Laixin_Max_ReplyID];
+                [USER_DEFAULT synchronize];
+            }
+            
             Comment  *comment = [[Comment alloc] init];
             comment.replyid = repID;
             comment.uid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
