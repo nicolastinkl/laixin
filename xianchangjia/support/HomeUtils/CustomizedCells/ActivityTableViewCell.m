@@ -346,10 +346,10 @@
     }else{
         if (_activity.ilike) {
             [_likeButton setImage:[UIImage imageNamed:@"btn_like.png"] forState:UIControlStateNormal];
-            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.ilike] forState:UIControlStateNormal];
+            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.like] forState:UIControlStateNormal];
         }else{
             [_likeButton setImage:[UIImage imageNamed:@"btn_unlike.png"] forState:UIControlStateNormal];
-            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.ilike] forState:UIControlStateNormal];
+            [_likeButton setTitle:[NSString stringWithFormat:@"%d",_activity.like] forState:UIControlStateNormal];
         }
         [_commentButton setTitle:[NSString stringWithFormat:@"%d",_activity.replycount] forState:UIControlStateNormal];
     }

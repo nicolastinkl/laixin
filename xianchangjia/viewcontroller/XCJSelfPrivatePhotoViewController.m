@@ -83,6 +83,11 @@
         [button sendMessageStyle];
         [button addTarget:self action:@selector(AddPhoto:) forControlEvents:UIControlEventTouchUpInside];
         [viewadd setTop:(APP_SCREEN_HEIGHT - 50)];
+        
+        //如果是自己
+        
+         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonSelected"] style:UIBarButtonItemStyleDone target:self action:@selector(showinfoClick:)];
+        
     }else{
         [scrollview setHeight:APP_SCREEN_HEIGHT ];
         [viewadd setTop:APP_SCREEN_HEIGHT];
@@ -142,6 +147,11 @@
          }];
      }
    
+}
+
+-(IBAction)showinfoClick:(id)sender
+{
+    [UIAlertView showAlertViewWithTitle:@"私密相册介绍" message:@"普通用户没有权限看到您的私密相册,只有当您加入特殊圈子后会对该圈子里人员开放私密相册. \n\n 该功能内测中,请不要上传太过于\n色情的私密照."];
 }
 
 -(void) EchorightItem

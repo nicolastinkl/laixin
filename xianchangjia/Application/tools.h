@@ -51,6 +51,7 @@
 + (NSString*)timeLabelTextOfTime:(NSTimeInterval)time;
 + (NSString*)timeLabelTextOfTimeMoth:(NSTimeInterval)time;
 + (NSString*)randomStringWithLength:(NSUInteger)length;
++(void) SetMaxPostID:(NSString * ) postid;
 + (NSString *)getStringValue:(id)object
                 defaultValue:(NSString *)defaultValue;
 +(UIColor *) colorWithIndex:( int ) strIndex;

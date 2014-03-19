@@ -137,6 +137,34 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    
+    XCJGroupPost_list * activity = self.post;
+    if (activity.replycount > 0 && activity.comments.count <= 0) {
+        /* get all list data*/
+        if (activity) {
+            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"replys"];
+                if (postsDict && postsDict.count > 0) {
+                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        Comment * comment = [Comment turnObject:obj];
+                        [mutaArray addObject:comment];
+                    }];
+                    activity.comments =mutaArray;
+                    activity.replycount = postsDict.count;
+                    //indexofActivitys
+                    [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        }else{
+            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+        }
+    }
+    
 }
 
 -(void) initLikesCount
@@ -243,7 +271,7 @@
     
     XCJGroupPost_list* activity = currentGroup;
     ActivityTableViewCell *cell = (ActivityTableViewCell *)activityCell;
-    
+    {
 //    if (activity.like == 0 && !cell.HasLoadlisks) {
 //        cell.HasLoadlisks = YES;
 //        if (activity) {
@@ -272,40 +300,7 @@
 //        }
 //        
 //    }
-    
-    if (activity.replycount > 0 && activity.comments.count <= 0 && !cell.HasLoad) {
-        /* get all list data*/
-        cell.HasLoad = YES;
-        if (activity) {
-            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                //    postid = 12;
-                /*
-                 Result={
-                 “posts”:[*/
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * postsDict =  groups[@"replys"];
-                if (postsDict && postsDict.count > 0) {
-                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        Comment * comment = [Comment turnObject:obj];
-                        [mutaArray addObject:comment];
-                    }];
-                    activity.comments =mutaArray;
-                    activity.replycount = postsDict.count;
-                    //indexofActivitys
-                    [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
-                }
-                cell.HasLoad = YES;
-            } failure:^(MLRequest *request, NSError *error) {
-                cell.HasLoad = NO;
-            }];
-        }else{
-            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
-        }
-        
     }
-    
     if (activity.excount > 0) {
         if (activity.excountImages.count <= 0 && !cell.isloadingphotos) {
             //check from networking
@@ -381,7 +376,7 @@
                 [USER_DEFAULT setInteger:[repID intValue] forKey:KeyChain_Laixin_Max_ReplyID];
                 [USER_DEFAULT synchronize];
             }
-            
+            self.post.replycount ++ ;
             Comment  *comment = [[Comment alloc] init];
             comment.replyid = repID;
             comment.uid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
@@ -391,6 +386,7 @@
             [currentOperateActivity.comments addObject:comment];
             //刷新此cell
             [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateCellInfo"  object:self.post];
         }
         //        //升序排序
         //        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"_time" ascending:YES];
@@ -508,6 +504,8 @@
             activity.like ++;
             likeButton.enabled = YES;
             [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateCellInfo"  object:self.post];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
             [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
@@ -525,6 +523,7 @@
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateCellInfo"  object:self.post];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
             [UIAlertView showAlertViewWithMessage:@"取消赞失败 请重试!"];

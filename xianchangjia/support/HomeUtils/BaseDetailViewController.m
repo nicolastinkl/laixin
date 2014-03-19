@@ -94,7 +94,8 @@
     
     origView.backgroundColor = [UIColor whiteColor];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
+    /*
+     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
@@ -102,6 +103,10 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+     */
+    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"updateCellInfo" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellInfo:) name:@"updateCellInfo" object:nil];
     
     self.activities = [[NSMutableArray alloc]initWithCapacity:1];
     self.cellHeights = [[NSMutableArray alloc]initWithCapacity:1];
@@ -348,33 +353,31 @@
     if (cell == nil) {
         cell = [[ActivityTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.delegate = self;
-//        _KVOController = [FBKVOController controllerWithObserver:self];
-//        [_KVOController observe:cell keyPath:@"cellHeight" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew block:^(id observer, id object, NSDictionary *change) {
-//            if ([object isKindOfClass:[ActivityTableViewCell class]]) {
-//                // update observer with new value
-//                
-//                
-//                NSIndexPath *newPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
-//                [self.tableView reloadRowsAtIndexPaths:@[newPath] withRowAnimation:UITableViewRowAnimationNone];
-////              [_cellHeights replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithFloat:[change[NSKeyValueChangeNewKey] floatValue]]];
-//                
-//                SLog(@"new NSKeyValueChangeNewKey");
-////                ((ActivityTableViewCell *)observer).activity = change[NSKeyValueChangeNewKey];
-//              
-////                CLOCK_LAYER(((ClockView *)observer)).date = change[NSKeyValueChangeNewKey];
-//            }else{
-//                  SLog(@"new NSKeyValueChangeNewKey not");
-//            }
-////            ((ActivityTableViewCell *)object).cellHeight
-//            
-//            
-//        }];
+        
+       /* _KVOController = [FBKVOController controllerWithObserver:self];
+        [_KVOController observe:cell keyPath:@"activity" options:NSKeyValueObservingOptionNew block:^(id observer, id object, NSDictionary *change) {
+            if ([object isKindOfClass:[ActivityTableViewCell class]]) {
+                // update observer with new value
+                //                NSIndexPath *newPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
+                //                [self.tableView reloadRowsAtIndexPaths:@[newPath] withRowAnimation:UITableViewRowAnimationNone];
+                //              [_cellHeights replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithFloat:[change[NSKeyValueChangeNewKey] floatValue]]];
+                
+                SLog(@"new NSKeyValueChangeNewKey");
+                //                ((ActivityTableViewCell *)observer).activity = change[NSKeyValueChangeNewKey];
+                
+                //                CLOCK_LAYER(((ClockView *)observer)).date = change[NSKeyValueChangeNewKey];
+            }
+            
+        }];*/
     }
     XCJGroupPost_list* activity = _activities[indexPath.row];
     cell.showCommentslikes = NO;
     cell.needRefreshViewController = self;
     // start requst comments  and likes
     cell.activity = activity;
+    
+    
+    
 //    if (activity.like > 0 && !cell.HasLoadlisks) {
 //        cell.HasLoadlisks = YES;
 //        [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
@@ -445,11 +448,20 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     XCJMessageReplyInfoViewController * msgReplyInfoViewCr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJMessageReplyInfoViewController"];
     msgReplyInfoViewCr.post = _activities[indexPath.row];
     [self.navigationController pushViewController:msgReplyInfoViewCr animated:YES];
-    
+}
+
+-(void) updateCellInfo:(NSNotification * ) notify
+{
+    if (notify.object) {
+        XCJGroupPost_list * post = notify.object;
+        NSInteger index = [self.activities indexOfObject:post];
+        NSIndexPath * indexpath = [NSIndexPath indexPathForRow:index inSection:0];
+         ActivityTableViewCell *cell =  (ActivityTableViewCell *)[self.tableView cellForRowAtIndexPath:indexpath];
+        cell.activity = post;
+    }
 }
 
 

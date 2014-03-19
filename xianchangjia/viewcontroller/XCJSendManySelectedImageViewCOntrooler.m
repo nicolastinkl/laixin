@@ -208,7 +208,7 @@
             [SVProgressHUD dismiss];
             NSString *postID = [tools getStringValue:result[@"postid"] defaultValue:@""];
             if ([postID intValue ] > 0) {
-                
+                [tools SetMaxPostID:postID];
                 XCJGroupPost_list *glist = [[XCJGroupPost_list alloc] init];
                 glist.postid = postID;
                 glist.imageURL = @"";

@@ -218,6 +218,7 @@
                 [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateNormal];
                 [self.Button_Sendmsg setTitle:@"发送消息" forState:UIControlStateHighlighted];
                 [self.Button_Sendmsg sendMessageStyle];
+                [self.Button_Sendmsg removeTarget:self action:@selector(addFriendClick:) forControlEvents:UIControlEventTouchUpInside];
                 [self.Button_Sendmsg addTarget:self action:@selector(sendMessageClick:) forControlEvents:UIControlEventTouchUpInside];
                 
                 //[self.navigationController popViewControllerAnimated:YES];

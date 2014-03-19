@@ -240,7 +240,6 @@
 	}
 }
 
-
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	// The fetch controller has sent all current change notifications, so tell the table view to process all updates.
 	[self.tableView endUpdates];
@@ -269,10 +268,7 @@
     UILabel *labelnick = (UILabel *)[cell.contentView viewWithTag:2];
     UILabel *labelContent = (UILabel *)[cell.contentView viewWithTag:3];
     UILabel *labelTime = (UILabel *)[cell.contentView viewWithTag:4];
-    UIImageView *imgViewbuttonBG = (UIImageView *)[cell.contentView viewWithTag:5];
-    UIImageView * imageviewTag = (UIImageView *)[cell.contentView viewWithTag:6];
-     UILabel * labelText = (UILabel *)[cell.contentView viewWithTag:7];
-    
+        UIImageView * imageviewTag = (UIImageView *)[cell.contentView viewWithTag:6];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
         FCUserDescription * user = response;
         //内容
@@ -300,46 +296,6 @@
         imageviewTag.hidden = YES;
         labelTime.top = labelContent.top + labelContent.height + 2;
     }
-    
-    if (info.jsonStr) {
-        // fromat 
-        NSDictionary * obj =  info.jsonStr;//[ objectFromJSONData];
-        if (obj) {
-            XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
-            if (list.imageURL.length > 5) {
-                [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
-                labelText.text = @"";
-            }else{
-                labelText.text = list.content;
-                [imgViewbuttonBG setImage:nil];
-                //[labelText sizeToFit];
-            }
-        }
-    }else{
-        //post.get(postid) 参数可以是数组
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"postid": info.postid} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-               NSDictionary * dict = responseObject[@"result"];
-               NSArray *array = dict[@"posts"];
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    if (idx == 0) {
-                        info.jsonStr =  obj;
-                        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-                        XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
-                        if (list.imageURL.length > 5) {
-                            [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
-                        }else{
-                            labelText.text = list.content;
-                            //[labelText sizeToFit];
-                        }
-                    }
-                }];
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-            
-        }];
-    }
-    
 }
 
 -(IBAction)addFriendClick:(id)sender
@@ -394,6 +350,71 @@
     return  fmaxf(20.0f, sizeToFit.height + 10.0f );
 }
 
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    FCReplyMessage *info = (FCReplyMessage *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    UIImageView *imgViewbuttonBG = (UIImageView *)[cell.contentView viewWithTag:5];
+    UILabel * labelText = (UILabel *)[cell.contentView viewWithTag:7];
+    
+    if (info.jsonStr) {
+        // fromat
+        NSDictionary * obj =  info.jsonStr;//[ objectFromJSONData];
+        if (obj) {
+            XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
+            if (list.imageURL.length > 5) {
+                [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
+                labelText.text = @"";
+            }else{
+                labelText.text = list.content;
+                [imgViewbuttonBG setImage:nil];
+                //[labelText sizeToFit];
+            }
+        }
+    }else{
+        //post.get(postid) 参数可以是数组
+        // get data from local cache
+        NSString * strPostIDCache = [NSString stringWithFormat:@"POSTID_LOCAL_CACHE.%@",info.postid];
+        NSArray * cacheArray = [[EGOCache globalCache] plistForKey:strPostIDCache];
+        NSDictionary * firstObj = [cacheArray firstObject];
+        if (firstObj) {
+            info.jsonStr =  firstObj;
+            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+            XCJGroupPost_list * list = [XCJGroupPost_list turnObject:firstObj];
+            if (list.imageURL.length > 5) {
+                [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
+            }else{
+                labelText.text = list.content;
+            }
+            
+        }else{
+            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get" parameters:@{@"postid": info.postid} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dict = responseObject[@"result"];
+                    NSArray *array = dict[@"posts"];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        if (idx == 0) {
+                            info.jsonStr =  obj;
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+                            
+                            [[EGOCache globalCache] setPlist:[NSArray arrayWithArray:array] forKey:strPostIDCache];
+                            XCJGroupPost_list * list = [XCJGroupPost_list turnObject:obj];
+                            if (list.imageURL.length > 5) {
+                                [imgViewbuttonBG setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:list.imageURL Size:240]]];
+                            }else{
+                                labelText.text = list.content;
+                            }
+                        }
+                    }];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
+        
+    }
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

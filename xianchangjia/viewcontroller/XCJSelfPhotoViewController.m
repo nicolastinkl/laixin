@@ -57,9 +57,6 @@
     UILabel * label_sign = (UILabel *)[self.tableView.tableHeaderView viewWithTag:2];
     UIImageView * imageIcon = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:3];
     UIImageView * imagebg = (UIImageView*)[self.tableView.tableHeaderView viewWithTag:4];
-
-    
-    
     if (!self.userID || [self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
         self.userID           = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
         label_name.text       = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick];
@@ -80,16 +77,13 @@
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem;
         NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
-//        [[EGOCache globalCache] removeCacheForKey:plistKeyName];
-        if ([[EGOCache globalCache] plistForKey:plistKeyName] != nil) {
-            NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
-            
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
+        if (array && array.count > 0) {
+           [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                 //是当前用户
                 [dataSource addObject:post];
             }];
-
         } else{
             // get json data from networking
             [self initDataSourcewithBeforeID:@""];
@@ -122,9 +116,8 @@
         } withuid:self.userID];
         NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
 
-        if ([[EGOCache globalCache] plistForKey:plistKeyName] != nil) {
-            NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
-            
+        NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
+        if (array && array.count > 0) {
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                 //是当前用户
@@ -135,6 +128,40 @@
             [self initDataSourcewithBeforeID:@""];
     }
 }
+
+/*-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    //每次进入都retry一次是否有新图片
+    if (dataSource.count > 0) {
+        XCJGroupPost_list * post = dataSource.firstObject;
+        NSString * oldPostid = [USER_DEFAULT stringForKey:KeyChain_Laixin_Max_beforeid];
+        if (oldPostid && [oldPostid intValue] > 0) {
+            NSDictionary * parems = @{@"uid":self.userID,@"count":@([oldPostid intValue]-[post.postid intValue]),@"before":oldPostid};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:parems success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dicreult = responseObject[@"result"];
+                    NSArray * array = dicreult[@"posts"];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        [dataSource insertObject:post atIndex:idx];
+                    }];
+                    if (array.count > 0) {
+                    NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
+                        NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
+                        NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
+                        [arr addObjectsFromArray:arrayss];
+                        [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*5];
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
+       
+    }
+    
+}*/
 
 -(void) XCJSelfPhotoViewControllerDeletePhoto:(NSNotification * ) notify
 {
@@ -273,9 +300,7 @@
             }
         }
     } withParems:[NSString stringWithFormat:@"upload/BackgroundImg?sessionid=%@",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid]]];
-    
 }
-
 
 -(void) uploadImage:(UIImage *)filePath  token:(NSString *)token
 {

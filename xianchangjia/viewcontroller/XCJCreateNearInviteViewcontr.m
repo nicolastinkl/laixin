@@ -144,6 +144,7 @@
                         NSDictionary * result = responseObject[@"result"];
 
                         NSString *postID = [tools getStringValue:result[@"postid"] defaultValue:@""];
+                        [tools SetMaxPostID:postID];
                         postIDCurrent = postID;
                         [SVProgressHUD dismiss];
                         [self startuploaduserimages];

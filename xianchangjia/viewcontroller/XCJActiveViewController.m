@@ -42,7 +42,7 @@
     return self;
 }
 - (IBAction)showInfoClick:(id)sender {
-    [UIAlertView showAlertViewWithMessage:@"找到级别比自己高的激活码或找到已经进入该圈子的好友激活自己即可提高自己等级"];
+    [UIAlertView showAlertViewWithTitle:@"激活介绍" message:@"找到级别比自己高的激活码或找到已经进入该圈子的好友激活自己即可提高自己等级  \n\n  激活后可以看到好友私密相册 ^_^ !!!"];
 }
 
 -(IBAction)hiddenKeyboard:(id)sender

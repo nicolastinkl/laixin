@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7C928334-003E-4F2A-93C4-0907E119789E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FBKVOController</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1406FA53-CED8-4909-9772-7DD2AB7E722E</key>
+		<string>ssh://github.com/nicolastinkl/laixin.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FBKVOControllerTK/FBKVOController.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1406FA53-CED8-4909-9772-7DD2AB7E722E</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/nicolastinkl/laixin.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1406FA53-CED8-4909-9772-7DD2AB7E722E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1406FA53-CED8-4909-9772-7DD2AB7E722E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>laixin</string>
+		</dict>
+	</array>
+</dict>
+</plist>

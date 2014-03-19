@@ -66,6 +66,7 @@
                 NSDictionary * result = responseObject[@"result"];
                 [SVProgressHUD dismiss];
                 NSString *postID = [tools getStringValue:result[@"postid"] defaultValue:@""];
+                 [tools SetMaxPostID:postID];
                 XCJGroupPost_list *glist = [[XCJGroupPost_list alloc] init];
                 glist.postid = postID;
                 glist.imageURL = @"";

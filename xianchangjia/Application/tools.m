@@ -491,6 +491,30 @@
     return defaultValue;
 }
 
+/**
+ *  设置我发图的最新PostID
+ *
+ *  @param postid <#postid description#>
+ */
++(void) SetMaxPostID:(NSString * ) postid
+{
+    if (!postid) {
+        return;
+    }
+    //KeyChain_Laixin_Max_beforeid
+    NSString * oldPostid = [USER_DEFAULT stringForKey:KeyChain_Laixin_Max_beforeid];
+    if (oldPostid && [oldPostid intValue ] > 0) {
+        if ([oldPostid intValue] < [postid intValue]) {
+            [USER_DEFAULT setValue:postid forKey:KeyChain_Laixin_Max_beforeid];
+            [USER_DEFAULT synchronize];
+        }
+    }else{
+        [USER_DEFAULT setValue:postid forKey:KeyChain_Laixin_Max_beforeid];
+        [USER_DEFAULT synchronize];
+    }
+    
+}
+
 + (NSString *) getUrlByImageUrl:(NSString * ) url Size:(NSInteger) value
 {
     if ([url isNilOrEmpty]) {
