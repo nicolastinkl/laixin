@@ -217,12 +217,13 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 //        currentAlert =  [[UIAlertView alloc] initWithTitle:@"提示" message:@"网络连接失败,请检查网络设置" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
 //        [currentAlert show];        
     }
-    self.webSocket = nil;
     //这里的话需要执行全部保存的requests的失败和清理操作
     for (MLRequest *request in self.requests) {
         //执行对应的failureBlock
+        SLog(@"faile requestKey : %@",request.requestKey);
         request.failureBlock(request,error);
     }
+    self.webSocket = nil;
     [self.sentRequests removeAllObjects];
     [self.preparedRequests removeAllObjects];
 }

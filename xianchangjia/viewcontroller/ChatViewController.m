@@ -2354,6 +2354,7 @@
                               [UIImage imageNamedTwo:@"voice_receive_icon_2"],
                               [UIImage imageNamedTwo:@"voice_receive_icon_3"], nil];
     }
+    
     UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
     
     

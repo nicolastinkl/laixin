@@ -47,6 +47,8 @@
 {
     [super viewDidLoad];
     
+    
+    [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(XCJSelfPhotoViewControllerDeletePhoto:) name:@"XCJSelfPhotoViewControllerDeletePhoto" object:nil];
     self.title = @"群组相册";
     NSMutableArray * array = [[NSMutableArray alloc]init];
     dataSource =array;
@@ -133,6 +135,21 @@
             [self initDataSourcewithBeforeID:@""];
     }
 }
+
+-(void) XCJSelfPhotoViewControllerDeletePhoto:(NSNotification * ) notify
+{
+    if (notify.object) {
+        
+        XCJGroupPost_list * post = notify.object;
+        if (dataSource.count > 0) {
+            [dataSource removeObject:post];
+            [self.tableView reloadData];
+        }
+ 
+    }
+    
+}
+
 
 -(void) initDataSourcewithBeforeID:(NSString *) beforeid
 {

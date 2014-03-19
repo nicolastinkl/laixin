@@ -985,6 +985,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // tell websocket disconnect
     if([XCJAppDelegate hasLogin])
     {
+        
         SLLog(@"applicationDidEnterBackground webSocket close");
         [[[MLNetworkingManager sharedManager] webSocket] close];
     }
@@ -996,8 +997,19 @@ static NSString * const kLaixinStoreName = @"Laixins";
 
 -(void) ReceiveAllMessage
 {
+    
+     if(![XCJAppDelegate hasLogin])
+         return;
     {
-        
+        { //我的好友
+            NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd == %@",@NO];
+            NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
+            if (cont > 0 || [USER_DEFAULT boolForKey:KeyChain_Laixin_message_GroupBeinvite]) {
+                [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+            }else{
+                [self.tabBarController.tabBar.items[1] setBadgeValue:nil];
+            }
+        }
         // 读取事件
         // get  event.read(pos=0)
         NSInteger MaxEid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_Event_messageID];
@@ -1295,17 +1307,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
         
         if([XCJAppDelegate hasLogin]){
             
-            { //我的好友
-                NSPredicate * pre = [NSPredicate predicateWithFormat:@"hasAdd == %@",@NO];
-                NSUInteger cont = [FCBeAddFriend MR_countOfEntitiesWithPredicate:pre];
-                if (cont > 0 || [USER_DEFAULT boolForKey:KeyChain_Laixin_message_GroupBeinvite]) {
-                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-                }else{
-                    [self.tabBarController.tabBar.items[1] setBadgeValue:nil];
-                }
-            }
-            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidreceingWithMsg" object:nil];
+            
             NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
             NSDictionary * parames = @{@"sessionid":sessionid};
             [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObjectsss) {
@@ -1314,10 +1317,12 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 LXUser *currentUser = [[LXUser alloc] initWithDict:userinfo];
                 if (currentUser) {
                     [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                    [self ReceiveAllMessage];
+                }else{
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
                 }
-                [self ReceiveAllMessage];
-               
             } failure:^(MLRequest *request, NSError *error) {
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
             }];
     }
     });

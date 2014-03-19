@@ -403,7 +403,6 @@
     
 }
 
-
 - (void)clickDeleteButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity
 {
     if (activity) {
@@ -412,21 +411,30 @@
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.delete" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
             if (responseObject) {
                 // delete ok
+                //remove local cache
+                
+                NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
+                //        [[EGOCache globalCache] removeCacheForKey:plistKeyName];
+                if ([[EGOCache globalCache] plistForKey:plistKeyName] != nil) {
+                    NSArray *array = [[EGOCache globalCache] plistForKey:plistKeyName];
+                    NSMutableArray * BakArray = [[NSMutableArray alloc] initWithArray:array];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        if ([post.postid isEqualToString:activity.postid]) {
+                            [BakArray removeObject:obj];
+                        }
+                    }];
+                    if (BakArray.count != array.count) {
+                        [[EGOCache globalCache] setPlist:BakArray  forKey:plistKeyName];
+                         
+                    }
+                }
+                
                 [SVProgressHUD dismiss];
-                @try {
-//                    int index = [self.activities indexOfObject:activity];
-//                    [self.cellHeights removeObjectAtIndex:index];
-//                    [self.activities removeObject:activity];
-//                    NSIndexPath  * indexpath = [NSIndexPath indexPathForRow:index inSection:0];
-//                    [self.tableView deleteRowsAtIndexPaths:@[indexpath] withRowAnimation:UITableViewRowAnimationTop];
-                    [self.navigationController popViewControllerAnimated:YES];
-                }
-                @catch (NSException *exception) {
-                    [UIAlertView showAlertViewWithMessage:@"删除失败"];
-                }
-                @finally {
-                    
-                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"XCJSelfPhotoViewControllerDeletePhoto" object:activity];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+                
                 
             }
             

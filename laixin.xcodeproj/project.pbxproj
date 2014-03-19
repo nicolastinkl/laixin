@@ -273,6 +273,9 @@
 		869CE54E186BEE820004C1EC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8681BDE91836236D00521D36 /* libxml2.dylib */; };
 		869D15131839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		869D15141839BDBB00B14A02 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 869D15121839BDBB00B14A02 /* JSONKit.m */; };
+		869DAE1B18D94C2E0078168B /* ZAActivityBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 869DAE1818D94C2E0078168B /* ZAActivityBar.bundle */; };
+		869DAE1C18D94C2E0078168B /* ZAActivityBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DAE1A18D94C2E0078168B /* ZAActivityBar.m */; };
+		869DAE2318D94D4F0078168B /* SKBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DAE2218D94D4F0078168B /* SKBounceAnimation.m */; };
 		869DDC5F1872BB9300560AFD /* XCJMsgListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DDC5E1872BB9300560AFD /* XCJMsgListController.m */; };
 		869DDC621874422600560AFD /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 869DDC611874422600560AFD /* Conversation.m */; };
 		86A3069F1871A7D900C7168B /* XCJCompleteUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A3069E1871A7D900C7168B /* XCJCompleteUserInfoViewController.m */; };
@@ -1000,6 +1003,11 @@
 		869CE54C186BEC1A0004C1EC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		869D15111839BDBB00B14A02 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		869D15121839BDBB00B14A02 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		869DAE1818D94C2E0078168B /* ZAActivityBar.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZAActivityBar.bundle; sourceTree = "<group>"; };
+		869DAE1918D94C2E0078168B /* ZAActivityBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZAActivityBar.h; sourceTree = "<group>"; };
+		869DAE1A18D94C2E0078168B /* ZAActivityBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZAActivityBar.m; sourceTree = "<group>"; };
+		869DAE2118D94D4F0078168B /* SKBounceAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKBounceAnimation.h; sourceTree = "<group>"; };
+		869DAE2218D94D4F0078168B /* SKBounceAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SKBounceAnimation.m; sourceTree = "<group>"; };
 		869DDC5D1872BB9300560AFD /* XCJMsgListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJMsgListController.h; path = viewcontroller/XCJMsgListController.h; sourceTree = "<group>"; };
 		869DDC5E1872BB9300560AFD /* XCJMsgListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJMsgListController.m; path = viewcontroller/XCJMsgListController.m; sourceTree = "<group>"; };
 		869DDC601874422600560AFD /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Conversation.h; path = DAOModel/coredata/Conversation.h; sourceTree = "<group>"; };
@@ -2413,6 +2421,18 @@
 			path = Private;
 			sourceTree = "<group>";
 		};
+		869DAE1718D94C2E0078168B /* ZAActivityBar */ = {
+			isa = PBXGroup;
+			children = (
+				869DAE2118D94D4F0078168B /* SKBounceAnimation.h */,
+				869DAE2218D94D4F0078168B /* SKBounceAnimation.m */,
+				869DAE1818D94C2E0078168B /* ZAActivityBar.bundle */,
+				869DAE1918D94C2E0078168B /* ZAActivityBar.h */,
+				869DAE1A18D94C2E0078168B /* ZAActivityBar.m */,
+			);
+			path = ZAActivityBar;
+			sourceTree = "<group>";
+		};
 		86A306A61871A89700C7168B /* SuperViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -2818,6 +2838,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				869DAE1718D94C2E0078168B /* ZAActivityBar */,
 				8690DEAD18C8891900A14A51 /* WebSource */,
 				867B053C18C41D3B00A562FA /* WeChatSDK_1.4.2.1 */,
 				868A0EEF18B3608000C2875F /* iCarousel */,
@@ -3531,6 +3552,7 @@
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				8668E478187540DB00D20C9E /* btn_comment_disable@2x.png in Resources */,
 				866618A518951B07000228FC /* ChatRecorderView.xib in Resources */,
+				869DAE1B18D94C2E0078168B /* ZAActivityBar.bundle in Resources */,
 				86660DC31876BB8B007477C0 /* XCJHomeMenuView.xib in Resources */,
 				86E57CEF18795CC900978AFA /* city.plist in Resources */,
 				86D181D81834822C0005901D /* InfoPlist.strings in Resources */,
@@ -3814,6 +3836,7 @@
 				868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
 				869CE533186BE38D0004C1EC /* MagicalRecord+Options.m in Sources */,
+				869DAE2318D94D4F0078168B /* SKBounceAnimation.m in Sources */,
 				8690DECA18C8891900A14A51 /* SDCachedURLResponse.m in Sources */,
 				86E57CE318794E2900978AFA /* XCJChangeNickViewController.m in Sources */,
 				866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */,
@@ -3906,6 +3929,7 @@
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				8666189E18951B07000228FC /* UIView+Animation.m in Sources */,
 				86D182AE1834AED30005901D /* LKDB+Mapping.m in Sources */,
+				869DAE1C18D94C2E0078168B /* ZAActivityBar.m in Sources */,
 				8668E480187540DB00D20C9E /* MLJson.m in Sources */,
 				86D9A8A2186D30C800147631 /* FCConversationModel.m in Sources */,
 				86ADDA2F1893DAC7000A0C22 /* MKMapView+ZoomLevel.m in Sources */,

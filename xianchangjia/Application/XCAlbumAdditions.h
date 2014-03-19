@@ -38,4 +38,5 @@
 #import "UIImage-Helpers.h"
 #import "EGOCache.h"
 #import "UIAlertViewAddition.h"
+#import "ZAActivityBar.h"
 #endif

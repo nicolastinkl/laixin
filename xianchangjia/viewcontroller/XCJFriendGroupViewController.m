@@ -103,28 +103,23 @@
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
     }
     
-    double delayInSeconds = .1;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyFriendGroupPhotoCache"];
-        if (jsonData.length > 150) {
-            // parse
-            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];            
-            NSDictionary * responseObject =[data  objectFromJSONData] ;
-            NSDictionary * dicreult = responseObject[@"result"];
-            NSArray * postsDict = dicreult[@"posts"];
-            __block NSInteger lasID = 0;
-            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                lasID = [post.postid integerValue]; 
-                [self.activities addObject:post];
-            }];
-            [self successGetActivities:self.activities withLastID:lasID];
-        }else{
-            [self.refreshView beginRefreshing];
-        }
-    });
-   
+    NSArray * postsDict = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
+    if (postsDict.count > 0) {
+        // parse
+        __block NSInteger lasID = 0;
+        
+        NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(0, 20)];
+        [postsDict enumerateObjectsAtIndexes:indexset options:NSSortStable usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+            lasID = [post.postid integerValue];
+            [self.activities addObject:post];
+        }];
+        [self successGetActivities:self.activities withLastID:lasID];
+    }else{
+        [self.refreshView beginRefreshing];
+    }
+    
+    
     UILabel * label_name = (UILabel *) [tablehead subviewWithTag:1];
     UIImageView * label_bg = (UIImageView *) [tablehead subviewWithTag:2];
     UIImageView * label_icon = (UIImageView *) [tablehead subviewWithTag:3];
@@ -460,8 +455,8 @@
                             [self.activities addObject:post];
                         }];
                         [self successGetActivities:self.activities withLastID:lasID];
+                        [[EGOCache globalCache] setPlist:[NSArray arrayWithArray:postsDict] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60*24];
                         
-                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60];
                     }else{
                         [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
                     }
@@ -493,18 +488,13 @@
                         }];
                         
                         // update cache
-                        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyFriendGroupPhotoCache"];
-                        if (jsonData.length > 150) {
+                        NSArray * postsDictOld = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
+                        if (postsDictOld.count > 0) {
                             // parse
-                            NSData* data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-                            NSDictionary * responseObjectold =[data  objectFromJSONData] ;
-                            NSDictionary * dicreultold = responseObjectold[@"result"];
-                            NSArray * postsDictOld = dicreultold[@"posts"];
                             NSMutableArray * array = [[NSMutableArray alloc] initWithArray:postsDict];
                             [array addObjectsFromArray:postsDictOld];
                             
-                             [[EGOCache globalCache] setString:[@{@"result":@{@"posts":array}} JSONString] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60];
-                            
+                             [[EGOCache globalCache] setPlist:[array mutableCopy] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60*24];
                         }
                         
                         [self successGetActivities:self.activities withLastID:lasID];
@@ -520,40 +510,65 @@
                 break;
             case Enum_MoreData:
             {
-                NSString * postid ;
-                if (self.activities.count >= 20) {
-                    XCJGroupPost_list * post =[self.activities lastObject];
-                    postid = post.postid;
+                // frist get data from cache
+                NSArray * postsDictOld = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
+                if (postsDictOld.count > self.activities.count) {
+                    
+                    __block NSInteger lasID = 0;
+                    NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(self.activities.count, 20)];
+                    [postsDictOld enumerateObjectsAtIndexes:indexset options:NSSortStable usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        lasID = [post.postid integerValue];
+                        [self.activities addObject:post];
+                    }];
+                    [self successGetActivities:self.activities withLastID:lasID];
                 }else{
-                    postid = [NSString stringWithFormat:@"%d",self.activities.count];
-                }
-                NSDictionary* parames = @{@"before":postid,@"count":@"20"};
-                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                    //    postid = 12;
-                    /*
-                     Result={
-                     “posts”:[*/
-                    if (responseObject) {
-                        __block NSInteger lasID = 0;
-                        NSDictionary * groups = responseObject[@"result"];
-                        NSArray * postsDict =  groups[@"posts"];
-                        if (postsDict && postsDict.count > 0) {
-                            [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                                lasID = [post.postid integerValue];
-                                [self.activities addObject:post];
-                            }];
-                            [self successGetActivities:self.activities withLastID:lasID];
+                    NSString * postid ;
+                    if (self.activities.count >= 20) {
+                        XCJGroupPost_list * post =[self.activities lastObject];
+                        postid = post.postid;
+                    }else{
+                        postid = [NSString stringWithFormat:@"%d",self.activities.count];
+                    }
+                    NSDictionary* parames = @{@"before":postid,@"count":@"20"};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                        //    postid = 12;
+                        /*
+                         Result={
+                         “posts”:[*/
+                        if (responseObject) {
+                            __block NSInteger lasID = 0;
+                            NSDictionary * groups = responseObject[@"result"];
+                            NSArray * postsDict =  groups[@"posts"];
+                            if (postsDict && postsDict.count > 0) {
+                                [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                                    lasID = [post.postid integerValue];
+                                    [self.activities addObject:post];
+                                }];
+                                [self successGetActivities:self.activities withLastID:lasID];
+                                
+                                NSArray * postsDictOld = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
+                                if (postsDictOld.count > 0) {
+                                    // parse
+                                    NSMutableArray * array = [[NSMutableArray alloc] initWithArray:postsDictOld];
+                                    [array addObjectsFromArray:postsDict];
+                                    
+                                    [[EGOCache globalCache] setPlist:[array mutableCopy] forKey:@"MyFriendGroupPhotoCache" withTimeoutInterval:60*60*24];
+                                    
+                                }
+                                
+                            }else{
+                                [self failedGetActivitiesWithLastID:0];
+                            }
                         }else{
                             [self failedGetActivitiesWithLastID:0];
                         }
-                    }else{
+                    } failure:^(MLRequest *request, NSError *error) {
                         [self failedGetActivitiesWithLastID:0];
-                    }
-                } failure:^(MLRequest *request, NSError *error) {
-                    [self failedGetActivitiesWithLastID:0];
-                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                }];
+                        [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+                    }];
+                }
             }
                 break;
                 
@@ -570,17 +585,20 @@
     likeButton.enabled = NO;
     //赞
     if (!activity.ilike) {
+        [ZAActivityBar showWithStatus:@"正在点赞" forAction:activity.postid];
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
+            [ZAActivityBar dismissForAction:activity.postid];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
-            [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
+            [ZAActivityBar showErrorWithStatus:@"点赞失败" forAction:activity.postid];
         }];
     }else{
+        [ZAActivityBar showWithStatus:@"正在取消点赞" forAction:activity.postid];
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //如果有则删除，没有则不动啊
@@ -593,9 +611,10 @@
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;
+            [ZAActivityBar dismissForAction:activity.postid];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
-            [UIAlertView showAlertViewWithMessage:@"取消赞失败 请重试!"];
+            [ZAActivityBar showErrorWithStatus:@"取消点赞失败" forAction:activity.postid];
         }];
     }
     
@@ -623,6 +642,15 @@
                 [SVProgressHUD dismiss];
                 @try {
                     int index = [self.activities indexOfObject:activity];
+                    {
+//                        remove from cache
+                        NSArray * postsDict = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
+                        if (postsDict.count > 0) {
+                            NSMutableArray * arrayBAK = [[NSMutableArray alloc] initWithArray:postsDict];
+                            [arrayBAK removeObjectAtIndex:index];
+                            [[EGOCache globalCache]  setPlist:arrayBAK forKey:@"MyFriendGroupPhotoCache"];
+                        }
+                    }
                     [self.cellHeights removeObjectAtIndex:index];
                     [self.activities removeObject:activity];
                     NSIndexPath  * indexpath = [NSIndexPath indexPathForRow:index inSection:0];
@@ -651,6 +679,7 @@
         return;
     }
     
+    [ZAActivityBar showWithStatus:@"正在发表评论" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
     NSDictionary * parames = @{@"postid":currentOperateActivity.postid,@"content":content};
     [[MLNetworkingManager sharedManager] sendWithAction:@"post.reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //"result":{"replyid":1}
@@ -674,6 +703,7 @@
             [currentOperateActivity.comments addObject:comment];
             //刷新此cell
             [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:currentOperateActivity] withAnimation:NO];
+            [ZAActivityBar dismissForAction:[NSString stringWithFormat:@"%d",commentIndex]];
         }
         //        //升序排序
         //        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"_time" ascending:YES];
@@ -681,7 +711,7 @@
         
         
     } failure:^(MLRequest *request, NSError *error) {
-        [UIAlertView showAlertViewWithMessage:@"回复失败 请重试!"];
+        [ZAActivityBar showErrorWithStatus:@"评论失败" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
     }];
     
 }
