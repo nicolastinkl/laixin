@@ -585,20 +585,20 @@
     likeButton.enabled = NO;
     //赞
     if (!activity.ilike) {
-        [ZAActivityBar showWithStatus:@"正在点赞" forAction:activity.postid];
+        //[ZAActivityBar showWithStatus:@"正在点赞" forAction:activity.postid];
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
             activity.ilike = YES;
             activity.like ++;
             likeButton.enabled = YES;
-            [ZAActivityBar dismissForAction:activity.postid];
+            //[ZAActivityBar dismissForAction:activity.postid];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
-            [ZAActivityBar showErrorWithStatus:@"点赞失败" forAction:activity.postid];
+            //[ZAActivityBar showErrorWithStatus:@"点赞失败" forAction:activity.postid];
         }];
     }else{
-        [ZAActivityBar showWithStatus:@"正在取消点赞" forAction:activity.postid];
+        //[ZAActivityBar showWithStatus:@"正在取消点赞" forAction:activity.postid];
         NSDictionary * parames = @{@"postid":activity.postid};
         [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //如果有则删除，没有则不动啊
@@ -611,10 +611,10 @@
             activity.like -- ;
             activity.ilike = NO;
             likeButton.enabled = YES;
-            [ZAActivityBar dismissForAction:activity.postid];
+            //[ZAActivityBar dismissForAction:activity.postid];
         } failure:^(MLRequest *request, NSError *error) {
             likeButton.enabled = YES;
-            [ZAActivityBar showErrorWithStatus:@"取消点赞失败" forAction:activity.postid];
+            //[ZAActivityBar showErrorWithStatus:@"取消点赞失败" forAction:activity.postid];
         }];
     }
     
@@ -679,7 +679,7 @@
         return;
     }
     
-    [ZAActivityBar showWithStatus:@"正在发表评论" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
+    //[ZAActivityBar showWithStatus:@"正在发表评论" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
     NSDictionary * parames = @{@"postid":currentOperateActivity.postid,@"content":content};
     [[MLNetworkingManager sharedManager] sendWithAction:@"post.reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
         //"result":{"replyid":1}
@@ -703,7 +703,7 @@
             [currentOperateActivity.comments addObject:comment];
             //刷新此cell
             [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:currentOperateActivity] withAnimation:NO];
-            [ZAActivityBar dismissForAction:[NSString stringWithFormat:@"%d",commentIndex]];
+            //[ZAActivityBar dismissForAction:[NSString stringWithFormat:@"%d",commentIndex]];
         }
         //        //升序排序
         //        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"_time" ascending:YES];
@@ -711,7 +711,8 @@
         
         
     } failure:^(MLRequest *request, NSError *error) {
-        [ZAActivityBar showErrorWithStatus:@"评论失败" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
+        [UIAlertView showAlertViewWithMessage:@"评论失败"];
+        //[ZAActivityBar showErrorWithStatus:@"评论失败" forAction:[NSString stringWithFormat:@"%d",commentIndex]];
     }];
     
 }

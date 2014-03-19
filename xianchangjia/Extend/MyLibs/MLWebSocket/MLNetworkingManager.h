@@ -16,8 +16,6 @@ extern NSString * const MLNetworkingManagerDidReceiveForcegroundMessageNotificat
 
 @interface MLNetworkingManager : NSObject
 
-
-
 //对于requests的操作必须放在主线程，以免不安全
 @property (nonatomic,strong,readonly) NSArray *requests;
 //准备发送

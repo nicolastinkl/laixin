@@ -426,7 +426,6 @@
                     }];
                     if (BakArray.count != array.count) {
                         [[EGOCache globalCache] setPlist:BakArray  forKey:plistKeyName];
-                         
                     }
                 }
                 

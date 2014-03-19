@@ -34,6 +34,7 @@
 #import "FCUserDescription.h"
 #import "FCMessage.h" 
 #import <AVFoundation/AVFoundation.h>
+#import "Reachability.h"
 //#import <Instabug/Instabug.h>
 
 #import "BundleHelper.h"
@@ -766,8 +767,15 @@ static NSString * const kLaixinStoreName = @"Laixins";
 //    [Instabug setShowScreenshot:NO];
 //    [Instabug setStartAlertText:@"在来信使用过程中,您只要有使用不爽的地方都可以摇一摇截图发给来信团队.我们将非常感谢您的反馈"];
     //向微信注册
-    
     [WXApi registerApp:kAppkeyForWeChat withDescription:[NSString stringWithFormat:@"%@ %@", [BundleHelper bundleDisplayNameString], [BundleHelper bundleShortVersionString]]];
+    
+    
+    Reachability* reach = [Reachability reachabilityForInternetConnection];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil];
+     [reach startNotifier];
     
     //注册推送通知
     [[UIApplication sharedApplication]
@@ -827,6 +835,22 @@ static NSString * const kLaixinStoreName = @"Laixins";
    
     // Override point for customization after application launch.
     return YES;
+}
+
+-(void) reachabilityChanged: (NSNotification*)note {
+    Reachability * reach = [note object];
+     if(![reach isReachable])
+     {
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"webSocketdidFailWithError" object:nil];
+         // notify websocket close
+         [UIAlertView showAlertViewWithMessage:@"网络不可用,请检查您的网络设置"];
+         
+     }else{
+         // notify websocket reConntect
+         [self LoginInReceivingAllMessage];
+         
+     }
+    
 }
 
 -(void) changeScene:(NSInteger)scene
