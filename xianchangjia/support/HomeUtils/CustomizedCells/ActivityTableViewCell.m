@@ -331,8 +331,6 @@
     if (_activity.imageURL && _activity.imageURL.length > 5 && _activity.excount <= 0) {
         [_activityImageView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:_activity.imageURL width:_activity.width/10 height:_activity.height/10]]];
     }
- 
-    
     
     if (self.showCommentslikes) {
         if (_activity.ilike) {

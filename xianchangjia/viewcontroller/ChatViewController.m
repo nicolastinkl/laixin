@@ -534,6 +534,8 @@
      */
      [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:)name: MLNetworkingManagerDidReceivePushMessageNotification   object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:)name:@"UIDeviceProximityStateDidChangeNotification"   object:nil];
+    
     /**
      *  从后台切换到前台收取数据
      *
@@ -548,6 +550,18 @@
     [self.tableView reloadData];
 }
 
+ -(void)sensorStateChange:(NSNotificationCenter *)notification
+{
+    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗（省电啊）
+    if ([[UIDevice currentDevice] proximityState] == YES)
+    {
+        SLog(@"Device is close to user");
+         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    }else{
+         SLog(@"Device is not close to user");
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    }
+}
 
 -(void) webSocketDidReceiveForceMessage:(NSNotification * ) notify
 {
@@ -2115,7 +2129,8 @@
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         //SLog(@"message.audioLength %@",message.audioLength);
         if ([message.audioLength intValue] > 1000) {
-            [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]/audioLengthDefine] forState:UIControlStateNormal];
+            int len =[message.audioLength intValue];
+            [audioButton setTitle:[NSString stringWithFormat:@"%d''",len/audioLengthDefine] forState:UIControlStateNormal];
         }else{
             if ([message.audioLength intValue] < 0) {
                 int leng = [message.audioLength intValue];
@@ -2317,6 +2332,7 @@
 
 -(void) StopPlayingimgArray:(UITableViewCell*) cell
 {
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
     [Image_playing stopAnimating];
     [Image_playing.layer removeAllAnimations];
@@ -2324,6 +2340,7 @@
 
 - (void) ShowPlayingimgArray:(UITableViewCell * ) cell withTime:(int) timer
 {
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     NSString * string = cell.reuseIdentifier;
     NSArray * gifArray;
     if ([string isEqualToString:@"XCJMyChatMessageCell"]) {
@@ -2353,7 +2370,7 @@
     UIImageView * Image_playing = (UIImageView*)[cellself.contentView subviewWithTag:12];
     [Image_playing stopAnimating];
     Image_playing.image = nil;
-    
+     [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

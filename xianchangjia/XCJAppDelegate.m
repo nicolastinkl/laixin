@@ -1072,8 +1072,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     }
                     msg.text = content;
                     NSTimeInterval receiveTime  = [obj[@"time"] floatValue];
-                    //                                SLog(@"receiveTime : %f",receiveTime);
+                    //fix local time from server time...
+//                    receiveTime = receiveTime + 10;
+                    
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+//                    SLog(@"receiveTime : %@",date);
                     msg.sentDate = date;
                     // message did come, this will be on left
                     msg.messageStatus = @(YES);
