@@ -104,6 +104,7 @@
 //    panRecognizer.delegate = self;
 //    [self.tableView addGestureRecognizer:panRecognizer];
     
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     
     UIButton * button = (UIButton *) [self.inputContainerView subviewWithTag:1];
     [button defaultStyle];
@@ -590,16 +591,19 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if (operation && [operation isExecuting]) {
-        [operation cancel];
-    }
-    //    scrollView.delegate=nil;
+//    if (operation && [operation isExecuting]) {
+//        [operation cancel];
+//    }
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    SLLog(@"viewDidDisappear");
 }
 
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollViewDat
+{
+    if ([scrollViewDat isKindOfClass:[UITableView class]]) {
+        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+    }
+
+}
 
 - (void)webSocketDidReceivePushMessage:(NSNotification *)notification
 {
