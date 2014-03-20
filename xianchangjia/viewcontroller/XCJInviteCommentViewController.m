@@ -164,6 +164,7 @@
             comment.content = content;
             [_datasource insertObject:comment atIndex:0];
             [self.tableView reloadData];
+            CommentView.textview.text = @"";
             [self closeView];
         }
         

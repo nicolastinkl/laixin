@@ -35,6 +35,7 @@
 #import "FCMessage.h" 
 #import <AVFoundation/AVFoundation.h>
 #import "Reachability.h"
+#import "PayPellog.h"
 //#import <Instabug/Instabug.h>
 
 #import "BundleHelper.h"
@@ -664,6 +665,52 @@ static NSString * const kLaixinStoreName = @"Laixins";
             }
             
         }*/
+        }else if([eventType isEqualToString:@"paylog"])
+        {
+            /**
+             *  新的支付信息
+             */
+            NSDictionary * dicResult = MsgContent[@"data"];
+            
+            NSDictionary * logMessage = dicResult[@"log"];
+            if (logMessage) {
+                PayPellog * paylog = [PayPellog turnObject:logMessage];
+                if (paylog) {
+                    // notify: new pay info
+                    NSString * title;
+                    NSString * description;
+                    if([[NSString stringWithFormat:@"%d",paylog.uid] isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]])
+                    {
+                        title= @"新订单信息";
+                        description = @"我的订单";
+                    }
+                    else
+                    {
+                        title = @"新订单提到我是联系人";
+                        description =@"我是联系人的订单";
+                    }
+                    
+                    NSString *stringss;
+                    if (paylog.amount >= 100) {
+                        stringss =  [NSString stringWithFormat:@"￥%d.00",paylog.amount/100];
+                    }else{
+                        if (paylog.amount >=10) {
+                            stringss =  [NSString stringWithFormat:@"￥0.%d",paylog.amount];
+                        }else{
+                            stringss =  [NSString stringWithFormat:@"￥0.0%d",paylog.amount];
+                        }
+                    }
+                    
+                    SystemSoundID id = 1007; //声音
+                    AudioServicesPlaySystemSound(id);
+                    NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@ \n \n更多详情请进入\n'%@'中查看",paylog.productname,paylog.ex_people,stringss,description];
+                    [UIAlertView showAlertViewWithTitle:title message:messagessLog];
+                    
+                    
+                }
+            }
+
+            
         }
     }
 }

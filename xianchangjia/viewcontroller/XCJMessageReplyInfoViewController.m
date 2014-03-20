@@ -138,33 +138,36 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    
-    XCJGroupPost_list * activity = self.post;
-    if (activity.replycount > 0 && activity.comments.count <= 0) {
-        /* get all list data*/
-        if (activity) {
-            NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * postsDict =  groups[@"replys"];
-                if (postsDict && postsDict.count > 0) {
-                    NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
-                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        Comment * comment = [Comment turnObject:obj];
-                        [mutaArray addObject:comment];
-                    }];
-                    activity.comments =mutaArray;
-                    activity.replycount = postsDict.count;
-                    //indexofActivitys
-                    [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
-        }else{
-            //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+    double delayInSeconds = 0.1;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){        
+        XCJGroupPost_list * activity = currentGroup;
+        if (activity.comments.count <= 0) {
+            /* get all list data*/
+            if (activity) {
+                NSDictionary * parames = @{@"postid":activity.postid,@"pos":@0,@"count":@"1000"};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"post.get_reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"replys"];
+                    if (postsDict && postsDict.count > 0) {
+                        NSMutableArray * mutaArray = [[NSMutableArray alloc] init];
+                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            Comment * comment = [Comment turnObject:obj];
+                            [mutaArray addObject:comment];
+                        }];
+                        activity.comments =mutaArray;
+                        activity.replycount = postsDict.count;
+                        //indexofActivitys
+                        [self reloadSingleActivityRowOfTableView:0 withAnimation:NO];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            }else{
+                //[UIAlertView showAlertViewWithMessage:@"该条动态不存在"];
+            }
         }
-    }
-    
+
+    });    
 }
 
 -(void) initLikesCount

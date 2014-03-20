@@ -256,16 +256,26 @@
     roomInfo * rominfo = DictAry[[NSString stringWithFormat:@"%d",pay.mid]];
     
     UIImageView * image_payStatu = (UIImageView*) [cell.contentView subviewWithTag:30];
-    
+    UILabel * label_time = (UILabel*) [cell.contentView subviewWithTag:19];
+    label_time.text = [tools timeLabelTextOfTime:pay.create_time];
     int colorindex = indexPath.section % 6 + 1 ;
     labelBg.backgroundColor  = [tools colorWithIndex:colorindex];
     labelname.text = rominfo.productname;
     labelBgname.text = rominfo.name;
     labelDes.text = rominfo.productdesc;
     labelFiller.text = [NSString stringWithFormat:@"适合%@人",rominfo.parensNumber];
-    labelPriceRoom.text = [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10];
+    labelPriceRoom.text = [NSString stringWithFormat:@"￥%@.00",rominfo.lowprice];
     labelExCount.text = [NSString stringWithFormat:@"%d",pay.ex_people];
-    labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10 + 1800];
+    
+    if (pay.remain >= 100) {
+        labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain/100];
+    }else{
+        if (pay.remain >=10) {
+            labelTotalPrice.text =  [NSString stringWithFormat:@"￥0.%d",pay.remain];
+        }else{
+            labelTotalPrice.text =  [NSString stringWithFormat:@"￥0.0%d",pay.remain];
+        }
+    }
     
     if (pay.paystate == 0) {
         button_pay.hidden = YES;

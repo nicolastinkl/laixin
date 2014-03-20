@@ -144,6 +144,8 @@
     PayOrderHistorylog * pay = _datasouces[indexPath.section];
     
     UILabel * labelname = (UILabel*) [cell.contentView subviewWithTag:1];
+    [(UIView *)[cell.contentView subviewWithTag:22] setHeight:.5];
+    [(UIView *)[cell.contentView subviewWithTag:23] setHeight:.5];
     UILabel * labelBg = (UILabel*) [cell.contentView subviewWithTag:4];
     UILabel * labelBgname = (UILabel*) [cell.contentView subviewWithTag:5];
     
@@ -166,10 +168,18 @@
     labelBgname.text = rominfo.name;
     labelDes.text = rominfo.productdesc;
     labelFiller.text = [NSString stringWithFormat:@"适合%@人",rominfo.parensNumber];
-    labelPriceRoom.text = [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10];
+    labelPriceRoom.text = [NSString stringWithFormat:@"￥%@.00",rominfo.lowprice];
     labelExCount.text = [NSString stringWithFormat:@"%d",pay.ex_people];
-    labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain * 10 * 10 + 1800];
     
+    if (pay.remain >= 100) {
+        labelTotalPrice.text =  [NSString stringWithFormat:@"￥%d.00",pay.remain/100];
+    }else{
+        if (pay.remain >=10) {
+            labelTotalPrice.text =  [NSString stringWithFormat:@"￥0.%d",pay.remain];
+        }else{
+            labelTotalPrice.text =  [NSString stringWithFormat:@"￥0.0%d",pay.remain];
+        }
+    } 
     if (pay.paystate == 0) {
         image_payStatu.hidden = YES;
     }else if (pay.paystate == 1) { //已经支付 消费
@@ -180,16 +190,18 @@
         image_payStatu.image = [UIImage imageNamed:@"trip_order_hasfailed"];
     }
     
-    UIButton * button_user = (UIButton*) [stateView subviewWithTag:16];
+    UIButton * button_user = (UIButton*) [cell.contentView subviewWithTag:17];
     
     button_user.layer.cornerRadius = button_user.height/2;
     button_user.layer.masksToBounds = YES;
     
-    UILabel * label_username = (UILabel*) [stateView subviewWithTag:17];
+    UILabel * label_username = (UILabel*) [cell.contentView subviewWithTag:18];
+    UILabel * label_time = (UILabel*) [cell.contentView subviewWithTag:19];
+    label_time.text = [tools timeLabelTextOfTime:pay.create_time];
      [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
          FCUserDescription * useinfo = response;
          
-         [button_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:useinfo.headpic Size:100]] forState:UIControlStateNormal];
+         [button_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:useinfo.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
          label_username.text = useinfo.nick;
          label_username.textColor = [tools colorWithIndex:0];
          

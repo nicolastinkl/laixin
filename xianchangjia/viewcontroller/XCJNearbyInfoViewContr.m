@@ -30,6 +30,8 @@
 {
     NSMutableArray * photoArray;
     XCJGroupPost_list *  postinfo;
+    
+    int currentLikes;
 }
 @property (weak, nonatomic) IBOutlet UILabel *label_name;
 @property (weak, nonatomic) IBOutlet UILabel *label_likeCount;
@@ -60,11 +62,16 @@
     return self;
 }
 
-
 - (IBAction)likeorunlikeClick:(id)sender {
+    
+    if (currentLikes > 3) {
+        [UIAlertView showAlertViewWithTitle:@"警告" message:@"你有病么,这样一直点来点去有意思吗?"];
+        return;
+    }
     if (postinfo) {
+        currentLikes ++;
+        self.button_like.enabled = NO;
         [self.button_like showAnimatingLayer];
-        
         if (!postinfo.ilike) {
             NSDictionary * parames = @{@"postid":postinfo.postid};
             [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
@@ -514,7 +521,7 @@
                         
                         XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                         postinfo = post;
-                        self.label_likeCount.text = [NSString stringWithFormat:@"%d",post.like];
+                        self.label_likeCount.text = [NSString stringWithFormat:@"%d",post.like<0?-post.like:post.like];
                         
                         if(post.ilike)
                         {

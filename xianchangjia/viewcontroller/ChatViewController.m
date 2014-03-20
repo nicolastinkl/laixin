@@ -2453,6 +2453,8 @@
 #pragma mark - Keyboard
 - (void)keyboardWillShow:(NSNotification *)notification
 {
+ 
+    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     
     NSDictionary *info = [notification userInfo];
     CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
