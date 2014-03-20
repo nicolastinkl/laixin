@@ -131,9 +131,9 @@
                     break;
                 case messageType_audio:
                 {
-                    self.currentMessage.audioUrl = url;
-                    NSNumber * audiolength = @([DataHelper getIntegerValue:dataImg[@"length"] defaultValue:0]);
-                    self.currentMessage.audioLength = audiolength;
+//                    self.currentMessage.audioUrl = url;
+//                    NSNumber * audiolength = @([DataHelper getIntegerValue:dataImg[@"length"] defaultValue:0]);
+//                    self.currentMessage.audioLength = audiolength;
                 }
                     break;
                     
