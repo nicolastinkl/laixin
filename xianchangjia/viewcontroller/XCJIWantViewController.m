@@ -19,8 +19,9 @@
 #import "XCJFindYouMMViewcontr.h"
 #import "XCJNearbyInviteViewContr.h"
 #import "XCJFindRoomViewControl.h"
+#import "PPPinPadViewController.h"
 
-@interface XCJIWantViewController ()
+@interface XCJIWantViewController ()<PinPadPasswordProtocol>
 
 @end
 
@@ -186,14 +187,23 @@
            break;
         case 1:
         {
+            
+            
             if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
-                
-                XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
-                viewcontr.title = @"来抢";
-                [self.navigationController pushViewController:viewcontr animated:YES];
+                PPPinPadViewController * pinViewController = [[PPPinPadViewController alloc] init];
+                pinViewController.delegate = self;
+                NSString * Pin = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
+                if (Pin && Pin.length > 0) {
+                    pinViewController.inputModel = 1;
+                    
+                }else{
+                    pinViewController.inputModel = 2;
+                }
+                [self presentViewController:pinViewController animated:YES completion:NULL];
             }else{
                 [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容. 进入条件:只有被该圈内用户激活才能进入."];
             }
+            
         }
             break;
         case 2:
@@ -207,6 +217,31 @@
             break;
     }
 }
+
+
+- (BOOL)checkPin:(NSString *)pin {
+    NSString * PinOld = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
+    return [pin isEqualToString:PinOld];
+}
+
+- (NSInteger)pinLenght {
+    return 4;
+}
+
+
+- (void)CorrectRight
+{
+    
+    XCJFindRoomViewControl*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFindRoomViewControl"];
+    viewcontr.title = @"来抢";
+    [self.navigationController pushViewController:viewcontr animated:YES];
+    
+}
+
+- (void)CorrectError
+{
+}
+
 
 /*
 // Override to support conditional editing of the table view.

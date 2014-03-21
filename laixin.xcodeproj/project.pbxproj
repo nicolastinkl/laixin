@@ -18,6 +18,10 @@
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
 		860C6D9318D8314F00F67EE3 /* libFBKVOController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 860C6D8F18D8314000F67EE3 /* libFBKVOController.a */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
+		861C0F4A18DC2F6C001DA32F /* PPCircleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 861C0F4418DC2F6C001DA32F /* PPCircleButton.m */; };
+		861C0F4B18DC2F6C001DA32F /* PPPinCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 861C0F4618DC2F6C001DA32F /* PPPinCircleView.m */; };
+		861C0F4C18DC2F6C001DA32F /* PPPinPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 861C0F4818DC2F6C001DA32F /* PPPinPadViewController.m */; };
+		861C0F4D18DC2F6C001DA32F /* PPPinPadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 861C0F4918DC2F6C001DA32F /* PPPinPadViewController.xib */; };
 		8622C87B187D192100776A38 /* ListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C877187D192100776A38 /* ListItem.m */; };
 		8622C87C187D192100776A38 /* POHorizontalList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C879187D192100776A38 /* POHorizontalList.m */; };
 		8622C880187D2BEC00776A38 /* XCJErrorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8622C87F187D2BEC00776A38 /* XCJErrorView.m */; };
@@ -543,6 +547,13 @@
 		860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBKVOController.xcodeproj; path = FBKVOControllerTK/FBKVOController.xcodeproj; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
+		861C0F4318DC2F6C001DA32F /* PPCircleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCircleButton.h; sourceTree = "<group>"; };
+		861C0F4418DC2F6C001DA32F /* PPCircleButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPCircleButton.m; sourceTree = "<group>"; };
+		861C0F4518DC2F6C001DA32F /* PPPinCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPPinCircleView.h; sourceTree = "<group>"; };
+		861C0F4618DC2F6C001DA32F /* PPPinCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPPinCircleView.m; sourceTree = "<group>"; };
+		861C0F4718DC2F6C001DA32F /* PPPinPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPPinPadViewController.h; sourceTree = "<group>"; };
+		861C0F4818DC2F6C001DA32F /* PPPinPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PPPinPadViewController.m; sourceTree = "<group>"; };
+		861C0F4918DC2F6C001DA32F /* PPPinPadViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PPPinPadViewController.xib; sourceTree = "<group>"; };
 		8622C876187D192100776A38 /* ListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListItem.h; sourceTree = "<group>"; };
 		8622C877187D192100776A38 /* ListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListItem.m; sourceTree = "<group>"; };
 		8622C878187D192100776A38 /* POHorizontalList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POHorizontalList.h; sourceTree = "<group>"; };
@@ -1437,6 +1448,21 @@
 				860C6D9118D8314000F67EE3 /* FBKVOControllerTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		861C0F4218DC2F6C001DA32F /* PinPad */ = {
+			isa = PBXGroup;
+			children = (
+				861C0F4318DC2F6C001DA32F /* PPCircleButton.h */,
+				861C0F4418DC2F6C001DA32F /* PPCircleButton.m */,
+				861C0F4518DC2F6C001DA32F /* PPPinCircleView.h */,
+				861C0F4618DC2F6C001DA32F /* PPPinCircleView.m */,
+				861C0F4718DC2F6C001DA32F /* PPPinPadViewController.h */,
+				861C0F4818DC2F6C001DA32F /* PPPinPadViewController.m */,
+				861C0F4918DC2F6C001DA32F /* PPPinPadViewController.xib */,
+			);
+			name = PinPad;
+			path = support/PinPad;
 			sourceTree = "<group>";
 		};
 		861E7CDF18C8679F0082B3DE /* RoomJPG */ = {
@@ -2686,6 +2712,7 @@
 		86D1820518349B0A0005901D /* SupportView */ = {
 			isa = PBXGroup;
 			children = (
+				861C0F4218DC2F6C001DA32F /* PinPad */,
 				866287E518CCB28500891B2D /* TKViewMoreCell */,
 				862EC4CE188E2A80006F4D43 /* AnimationLabel */,
 				86C6422C1887A3D200E0CDDB /* CTAssetsPickerController */,
@@ -3567,6 +3594,7 @@
 				866287E318CC4CFA00891B2D /* XCJCommentView.xib in Resources */,
 				86E57CF318795FD800978AFA /* HZAreaPickerView.xib in Resources */,
 				866618A718951B07000228FC /* ChatVoiceRecorderVC.xib in Resources */,
+				861C0F4D18DC2F6C001DA32F /* PPPinPadViewController.xib in Resources */,
 				8690DE8E18C872C900A14A51 /* room0003.jpg in Resources */,
 				8690DE8D18C872C900A14A51 /* room0002.jpg in Resources */,
 				86EB76441859A66800836947 /* logo80x80.png in Resources */,
@@ -3664,6 +3692,7 @@
 				86660DD318780BCF007477C0 /* XCJAddFriendTableController.m in Sources */,
 				86E57CFB18796D1100978AFA /* THBubbleColor.m in Sources */,
 				8690DEE018C9CE6E00A14A51 /* UITableViewCell+TKCategory.m in Sources */,
+				861C0F4C18DC2F6C001DA32F /* PPPinPadViewController.m in Sources */,
 				86D182EE1834AF540005901D /* FMDatabase.m in Sources */,
 				8690DEC818C8891900A14A51 /* NJKWebViewProgressView.m in Sources */,
 				864E57A418B394DB000989CB /* XCJFindMMFirtStupViewcontr.m in Sources */,
@@ -3689,6 +3718,7 @@
 				86536F7118AB33260059E9C7 /* MinroadOperation.m in Sources */,
 				86EB76D4185AA6CC00836947 /* AFURLRequestSerialization.m in Sources */,
 				8668E473187540DB00D20C9E /* BaseDetailViewController.m in Sources */,
+				861C0F4A18DC2F6C001DA32F /* PPCircleButton.m in Sources */,
 				865632E7185FFDDA00E9903C /* XCJFriendViewController.m in Sources */,
 				86EB76BB185AA6CC00836947 /* Chat.m in Sources */,
 				866516A1187BF276001F05F6 /* mask.c in Sources */,
@@ -3728,6 +3758,7 @@
 				865632E9185FFDDA00E9903C /* XCJMessageCenterViewController.m in Sources */,
 				865632E8185FFDDA00E9903C /* XCJLoginViewController.m in Sources */,
 				86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */,
+				861C0F4B18DC2F6C001DA32F /* PPPinCircleView.m in Sources */,
 				868B5D561893B068004D1743 /* ChineseToPinyinResource.m in Sources */,
 				86EB76ED185AA72F00836947 /* MLTextView.m in Sources */,
 				8668E489187541BB00D20C9E /* Comment.m in Sources */,

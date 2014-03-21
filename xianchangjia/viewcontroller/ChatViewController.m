@@ -120,7 +120,7 @@
         //添加长按手势
         UILongPressGestureRecognizer *gr = [[UILongPressGestureRecognizer alloc] init];
         [gr addTarget:self action:@selector(recordBtnLongPressed:)];
-        gr.minimumPressDuration = 0.3;
+        gr.minimumPressDuration = 0.15;
         [buttonAudioss addGestureRecognizer:gr];
         
         
@@ -437,7 +437,8 @@
      UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
     //长按开始
     if(longPressedRecognizer.state == UIGestureRecognizerStateBegan) {
-     SLog(@"recordBtnLongPressedss..");
+        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        SLog(@"recordBtnLongPressedss..");
         [self speakClick:nil];
     }//长按结束
     else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){

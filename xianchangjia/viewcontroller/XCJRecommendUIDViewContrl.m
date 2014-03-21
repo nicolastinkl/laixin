@@ -204,7 +204,7 @@
          [button_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:useinfo.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
          label_username.text = useinfo.nick;
          label_username.textColor = [tools colorWithIndex:0];
-         
+         [button_user.layer setValue:[NSString stringWithFormat:@"%d",pay.uid] forKey:@"useid"];
          [button_user addTarget:self action:@selector(SeeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
      } withuid:[NSString stringWithFormat:@"%d",pay.uid]];
     
@@ -214,14 +214,15 @@
 -(IBAction)SeeUseinfoClick:(id)sender
 {
     UIButton * button = sender;
-    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
-    PayOrderHistorylog * pay = _datasouces[[self.tableView indexPathForCell:cell].row];
+    NSString * stringid = [button.layer valueForKey:@"useid"];
+//    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
+//    PayOrderHistorylog * pay = _datasouces[[self.tableView indexPathForCell:cell].row];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
         FCUserDescription * useinfo = response;
         XCJAddUserTableViewController *viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
         viewcontr.UserInfo = useinfo;
         [self.navigationController pushViewController:viewcontr animated:YES];
-    } withuid:[NSString stringWithFormat:@"%d",pay.uid]];
+    } withuid:stringid];
     
 }
 

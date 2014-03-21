@@ -284,8 +284,8 @@ NSString * const kNewAttachmentKey = @"kNewAttachmentKey";
     if (!_progressView)
     {
         _progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
-        _progressView.progressTintColor = [UIColor lightGrayColor];
-        _progressView.trackTintColor = [UIColor darkGrayColor];
+        _progressView.progressTintColor = ios7BlueColor;//[UIColor ios];
+        _progressView.trackTintColor = [UIColor whiteColor];
         [self.navigationItem setTitleView:_progressView];
     }
     return _progressView;

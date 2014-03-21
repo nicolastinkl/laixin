@@ -29,9 +29,10 @@
 #import "CoreData+MagicalRecord.h"
 
 
-@interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate>
+@interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
     int currentActive_by;
+    NSArray * arrayCardIDS;
 }
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_1;
@@ -283,7 +284,7 @@
     }else{
         strtitle = @"确定提交订单吗";
     }
-    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:strtitle delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即预订" otherButtonTitles:nil, nil];
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:strtitle delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"￥99元 立即预订" otherButtonTitles:nil, nil];
     actionsheet.tag = 3;
     [actionsheet showInView:self.view];
     
@@ -330,79 +331,143 @@
     {
         if(buttonIndex == 0)
         {
-            NSString* openUDID = [OpenUDID value];
-            
-//            NSString * count = self.label_serCount.text;
-//            int thiscount = [count intValue];
-            
-            NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
-            int thiscount = array.count;
             [SVProgressHUD showWithStatus:@"正在处理..."];
-            NSDictionary * dict;
-            if(currentActive_by > 0)
-                dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by)};
-            else
-                dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:dict success:^(MLRequest *request, id responseObject) {
+            [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.cards" parameters:@{} success:^(MLRequest *request, id responseObject) {
                 if (responseObject) {
-                    int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
-                    if (errnoMesg == 0) {
+                    NSDictionary * reultDict = responseObject[@"result"];
+                    
+                    NSArray * array = reultDict[@"cards"];
+                    if (array && array.count > 0) {
                         [SVProgressHUD dismiss];
-                        //给 喜欢的小妹发送私信
+                        arrayCardIDS = [NSArray arrayWithArray:array];
+                        UIAlertView *paySelectBank = [[UIAlertView alloc] initWithTitle:@"选择银行卡" message:nil delegate:self cancelButtonTitle:@"放弃支付" otherButtonTitles:nil, nil];
                         
-                         NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
-                        if (array.count > 0 ) {
-                            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                                if (obj && [obj intValue] > 0) {
-                                    NSString * uid = [NSString stringWithFormat:@"%@",obj];
-                                    NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
-                                    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
-                                        if (responseObject) {
-                                            [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
-                                        }
-                                    } failure:^(MLRequest *request, NSError *error) {
-                                        
-                                    }];
-                                }
-                            }];
-                        }
-                        if(currentActive_by > 0)
-                        {
-                            NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString * cardName = [DataHelper getStringValue:obj[@"card_name"] defaultValue:@""];
+                            NSString * cardNumberlast = [DataHelper getStringValue:obj[@"card_last"] defaultValue:@""];
+                            [paySelectBank addButtonWithTitle:[NSString stringWithFormat:@"%@(尾号%@)",cardName,cardNumberlast]];
+                        }];
+                        [paySelectBank addButtonWithTitle:@"添加其它银行卡支付"];
+                        paySelectBank.tag = 4;
+                        [paySelectBank show];
+                    }else{
+                        arrayCardIDS = @[];
+                        [self SurePayClick:@"merchandise.createorder" withCardid:nil];
+                    }
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                [UIAlertView showAlertViewWithMessage:@"网络请求失败,请检查网络设置"];
+            }];
+            
+        }
+        
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 4)
+    {
+        if (arrayCardIDS && arrayCardIDS.count > 0) {
+            if(buttonIndex > 0)
+            {
+                if (buttonIndex <= arrayCardIDS.count) {
+                    //选择银行卡
+                    NSDictionary * objDicy = arrayCardIDS[buttonIndex-1];
+                    NSString * cardid = [DataHelper getStringValue:objDicy[@"cardid"] defaultValue:@""];
+                    [self SurePayClick:@"merchandise.paybycard" withCardid:cardid];
+                }else{
+                   // 添加银行卡
+                   [self SurePayClick:@"merchandise.createorder" withCardid:nil];
+                }
+            }
+        }
+    }
+}
+
+//确认支付
+-(void) SurePayClick:(NSString * )action withCardid:(NSString * ) cardid
+{
+    NSString* openUDID = [OpenUDID value];
+    
+    //            NSString * count = self.label_serCount.text;
+    //            int thiscount = [count intValue];
+    
+    NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+    int thiscount = array.count;
+    [SVProgressHUD showWithStatus:@"正在处理..."];
+    NSDictionary * dict;
+    if(currentActive_by > 0)
+    {
+        if (cardid) {
+            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by),@"cardid":cardid};
+        }else{
+            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by)};
+        }
+    }
+    else
+    {
+        if (cardid) {
+            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"cardid":cardid};
+        }else{
+            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID};
+        }
+        
+    }
+    [[MLNetworkingManager sharedManager] sendWithAction:action parameters:dict success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+            if (errnoMesg == 0) {
+                [SVProgressHUD dismiss];
+                //给 喜欢的小妹发送私信
+                NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+                if (array.count > 0 ) {
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        if (obj && [obj intValue] > 0) {
+                            NSString * uid = [NSString stringWithFormat:@"%@",obj];
+                            NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
                             [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
                                 if (responseObject) {
-                                    [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
+                                    [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
                                 }
                             } failure:^(MLRequest *request, NSError *error) {
                                 
                             }];
                         }
-                            
-                        
-                        NSDictionary * dict = responseObject[@"result"];
-                        NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
-                        DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
-                        webBrowser.showProgress = YES;
-                        webBrowser.allowSharing = YES;
-                        UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
-                        [webBrowserNC pushViewController:webBrowser animated:NO];
-                        [self presentViewController:webBrowserNC animated:YES completion:NULL];
-                        
-                        /* XCJBuySurityViewController * surView = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJBuySurityViewController"];
-                         
-                         surView.BuyUrl      = [NSURL URLWithString:string];
-                         [self.navigationController pushViewController:surView animated:YES];
-                         */
-                    }
+                    }];
                 }
-            } failure:^(MLRequest *request, NSError *error) {
-                [SVProgressHUD dismiss];
-                [UIAlertView showAlertViewWithMessage:@"处理失败"];
+                if(currentActive_by > 0)
+                {
+                    NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
+                    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+                        if (responseObject) {
+                            [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
+                        }
+                    } failure:^(MLRequest *request, NSError *error) {
+                        
+                    }];
+                }
                 
-            }];
+                NSDictionary * dict = responseObject[@"result"];
+                NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
+                if (string.length > 0) {
+                    
+                    DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
+                    webBrowser.showProgress = YES;
+                    webBrowser.allowSharing = YES;
+                    UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
+                    [webBrowserNC pushViewController:webBrowser animated:NO];
+                    [self presentViewController:webBrowserNC animated:YES completion:NULL];
+                }else{
+                    [UIAlertView showAlertViewWithTitle:@"新订单提醒" message:@"支付成功!\n\n请进入我的订单查看订单详情"];
+                }
+            }
         }
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"处理失败"];
         
-    }
+    }];
 }
 
 
