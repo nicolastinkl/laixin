@@ -168,7 +168,7 @@
         if (newFcObj == nil) {
              newFcObj = [FCUserDescription MR_createInContext:localContext];
         }
-        newFcObj.uid  = fcuserdesp.uid;
+        newFcObj.uid  = fcuserdesp.uid; 
         newFcObj.nick = fcuserdesp.nick;
         newFcObj.headpic = fcuserdesp.headpic;
         newFcObj.background_image = fcuserdesp.background_image;

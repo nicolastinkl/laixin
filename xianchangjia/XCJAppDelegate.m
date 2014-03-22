@@ -1065,12 +1065,10 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-
-
 -(void) ReceiveAllMessage
 {
     
-     if(![XCJAppDelegate hasLogin])
+    if(![XCJAppDelegate hasLogin])
          return;
     {
         { //我的好友

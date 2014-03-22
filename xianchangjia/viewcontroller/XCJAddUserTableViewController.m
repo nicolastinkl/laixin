@@ -61,17 +61,6 @@
         }
         
         [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:self.UserInfo.headpic defaultValue:@""] Size:100]]];
-        
-        /*
-         @property (nonatomic, retain) NSNumber * create_time;
-         @property (nonatomic, retain) NSString * headpic;
-         @property (nonatomic, retain) NSNumber * height;
-         @property (nonatomic, retain) NSString * marriage;
-         @property (nonatomic, retain) NSString * nick;
-         @property (nonatomic, retain) NSNumber * sex;
-         @property (nonatomic, retain) NSString * signature;*/
-        
-        
         if (self.UserInfo.create_time) {
             @try {
                 UserDict[@"注册时间"] = [tools timeLabelTextOfTime:[self.UserInfo.create_time doubleValue]];
@@ -96,25 +85,57 @@
             UserDict[@"个性签名"] = self.UserInfo.signature;
         }
         
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * dicreult = responseObject[@"result"];
-                NSArray * array = dicreult[@"posts"];
-                [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                    UserDict[@"最新动态"] = post.content;
-                }];
-                [self.tableView reloadData];
+        NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.UserInfo.uid];
+        NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
+        if (arrayss && arrayss.count > 0) {
+            NSMutableArray * arrObj = [NSMutableArray arrayWithArray:arrayss];
+            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[arrObj firstObject]];
+            if (post) {
+                UserDict[@"最新动态"] = post.content;
             }
-        } failure:^(MLRequest *request, NSError *error) {
+        }else{
+            NSString * key =[NSString stringWithFormat:@"fetchRequestUserIDPOSY.%@",self.UserInfo.uid];
+            NSArray * valueforKey = [[EGOCache globalCache] plistForKey:key];
+            if ([valueforKey firstObject]) {
+                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[valueforKey firstObject]];
+                UserDict[@"最新动态"] = post.content;
+            }else{
+                [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        NSDictionary * dicreult = responseObject[@"result"];
+                        NSArray * array = dicreult[@"posts"];
+                        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            
+                            [[EGOCache globalCache] setPlist:@[obj] forKey:key withTimeoutInterval:60*3];
+                            
+                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                            UserDict[@"最新动态"] = post.content;
+                        }];
+                        [self.tableView reloadData];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                    
+                }];
+            } 
             
-        }];
+        }
+        
+        NSString * key =[NSString stringWithFormat:@"fetchRequestUserID.%@",self.UserInfo.uid];
+        NSString * valueforKey = [[EGOCache globalCache] stringForKey:key];
+        if (valueforKey && valueforKey.length > 0) {
+        }else{
+            //check user neweast infomation
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
+                FCUserDescription* newFcObj = response;
+                self.Label_nick.text  = newFcObj.nick;
+                UserDict[@"个性签名"] = self.UserInfo.signature;
+                [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:newFcObj.headpic defaultValue:@""] Size:100]]];
+                [[EGOCache globalCache] setString:@"1" forKey:key withTimeoutInterval:60*5];
+            } withuid:self.UserInfo.uid];
+        }
+
     }
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
     
     if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:self.UserInfo.uid]) {
         self.Image_btnBG.hidden = YES;

@@ -137,13 +137,14 @@
         
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(webSocketdidreceingWithMsg:) name:@"webSocketdidreceingWithMsg" object:nil];
     
-    
-    if (![XCJAppDelegate hasLogin]) {
-        [self OpenLoginview:nil];
-    }else{        
-        [self initHomeData];
-    }
-//    [self scrollTableViewToSearchBarAnimated:NO];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (![XCJAppDelegate hasLogin]) {
+            [self OpenLoginview:nil];
+        }else{
+            [self initHomeData];
+        }
+    });
 }
 
 - (void)scrollTableViewToSearchBarAnimated:(BOOL)animated
@@ -262,9 +263,6 @@
 
 -(void)   initHomeData
 {
-    //    [self.refreshControl beginRefreshing];
-//    [self setupLocationManager];
-    
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
     [self reloadFetchedResults:nil];
     
@@ -299,9 +297,19 @@
             //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
             
             // Return the number of rows in the section.
-            [self  reLoadData]; // 更新群组信息
-            [self  runSequucer];  //更新好友信息
+//            [self  reLoadData]; // 更新群组信息
+//            [self  runSequucer];  //更新好友信息
             tryCatchCount = 4;
+            
+            NSString * _devtokenstring =[USER_DEFAULT stringForKey:KeyChain_Laixin_account_devtokenstring];
+            //1 debug    ....   0 release
+            if (_devtokenstring) {
+                
+                NSDictionary * paramesss = @{@"device_token":_devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:paramesss success:^(MLRequest *request, id responseObject) {
+                } failure:^(MLRequest *request, NSError *error) {
+                }];
+            }
             
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginInReceivingAllMessage" object:nil];
             
@@ -322,7 +330,9 @@
     }];
 }
 
-
+/**
+ *  获取我的群组数据
+ */
 - (void ) reLoadData
 {
     double delayInSeconds = 0.3;
@@ -431,15 +441,7 @@
             } failure:^(MLRequest *request, NSError *error) {
             }];
             
-            NSString * _devtokenstring =[USER_DEFAULT stringForKey:KeyChain_Laixin_account_devtokenstring];
-            //1 debug    ....   0 release
-            if (_devtokenstring) {
-                
-                NSDictionary * paramesss = @{@"device_token":_devtokenstring,@"is_debug":@(NEED_OUTPUT_LOG)};
-                [[MLNetworkingManager sharedManager] sendWithAction:@"ios.reg"  parameters:paramesss success:^(MLRequest *request, id responseObject) {
-                } failure:^(MLRequest *request, NSError *error) {
-                }];
-            }
+            
         }
     });
 }
@@ -886,7 +888,6 @@
             
             break;
     }
-    
     
     UITabBar *tabBar =(UITabBar*) [cell.contentView viewWithTag:12];
     for (UIView *viewTab in tabBar.subviews) {

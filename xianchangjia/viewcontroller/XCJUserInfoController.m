@@ -61,7 +61,6 @@
     if (self.UserInfo) {
         self.Label_nick.text  = self.UserInfo.nick;
         self.Label_sign.text  = self.UserInfo.signature;
-        self.Label_address.text = @"成都";
         if ([self.UserInfo.sex intValue] == 1) {
             self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
         }else if ([self.UserInfo.sex intValue] == 2) {
@@ -74,7 +73,6 @@
         self.UserInfo = self.frend.friendRelation;
         self.Label_nick.text  = self.frend.friendRelation.nick;
         self.Label_sign.text  = self.frend.friendRelation.signature;
-        self.Label_address.text = @"成都";
         if ([self.frend.friendRelation.sex intValue] == 1) {
             self.Image_sex.image = [UIImage imageNamed:@"md_boy"];
         }else if ([self.frend.friendRelation.sex intValue] == 2) {
@@ -106,20 +104,6 @@
         UserDict[@"个性签名"] = self.UserInfo.signature;
     }
     
-    [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
-        if (responseObject) {
-            NSDictionary * dicreult = responseObject[@"result"];
-            NSArray * array = dicreult[@"posts"];
-            [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                 UserDict[@"最新动态"] = post.content;
-            }];
-            [self.tableView reloadData];
-        }
-    } failure:^(MLRequest *request, NSError *error) {
-        
-    }];
-    
     if ([self.UserInfo.uid isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id ]]) {
         self.Button_Sendmsg.hidden = YES;
         self.Image_btnBG.hidden = YES;
@@ -132,6 +116,56 @@
     
     UIBarButtonItem * rightitem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(delmyfriendClick:)];
     self.navigationItem.rightBarButtonItem  = rightitem;
+    
+    NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.UserInfo.uid];
+    NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
+    if (arrayss && arrayss.count > 0) {
+        NSMutableArray * arrObj = [NSMutableArray arrayWithArray:arrayss];
+        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[arrObj firstObject]];
+        if (post) {
+            UserDict[@"最新动态"] = post.content;
+        }
+    }else{
+        NSString * key =[NSString stringWithFormat:@"fetchRequestUserIDPOSY.%@",self.UserInfo.uid];
+        NSArray * valueforKey = [[EGOCache globalCache] plistForKey:key];
+        if ([valueforKey firstObject]) {
+            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[valueforKey firstObject]];
+            UserDict[@"最新动态"] = post.content;
+        }else{
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
+                if (responseObject) {
+                    NSDictionary * dicreult = responseObject[@"result"];
+                    NSArray * array = dicreult[@"posts"];
+                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        
+                        [[EGOCache globalCache] setPlist:@[obj] forKey:key withTimeoutInterval:60*3];
+                        
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        UserDict[@"最新动态"] = post.content;
+                    }];
+                    [self.tableView reloadData];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+                
+            }];
+        }
+        
+        
+    }
+    
+    NSString * key =[NSString stringWithFormat:@"fetchRequestUserID.%@",self.UserInfo.uid];
+    NSString * valueforKey = [[EGOCache globalCache] stringForKey:key];
+    if (valueforKey && valueforKey.length > 0) {
+    }else{
+        //check user neweast infomation
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
+            FCUserDescription* newFcObj = response;
+            self.Label_nick.text  = newFcObj.nick;
+            self.Label_sign.text  = newFcObj.signature;
+            [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:newFcObj.headpic defaultValue:@""] Size:100]]];
+            [[EGOCache globalCache] setString:@"1" forKey:key withTimeoutInterval:60*5];
+        } withuid:self.UserInfo.uid];
+    }
 }
 
 -(IBAction)delmyfriendClick:(id)sender
