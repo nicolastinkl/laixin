@@ -519,9 +519,13 @@
     {
         // if is me...
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription * user = response;
-            _inputTextView.text = [NSString stringWithFormat:@"@%@:",user.nick];
-            [_inputTextView becomeFirstResponder];
+            if (response) {
+                FCUserDescription * user = response;
+                _inputTextView.text = [NSString stringWithFormat:@"@%@:",user.nick];
+                [_inputTextView becomeFirstResponder];
+            }
+                
+            
         } withuid:comment.uid];
     }else{
         _inputTextView.text = @"";

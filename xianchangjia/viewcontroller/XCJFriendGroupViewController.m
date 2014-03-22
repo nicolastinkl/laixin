@@ -145,8 +145,12 @@
     [label_bg setHeight:270.0f];
     
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id  response, NSError *error) {
-        FCUserDescription * localdespObject  = response;
-        [newIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+        if(response)
+        {
+            FCUserDescription * localdespObject  = response;
+            [newIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+        }
+        
     } withuid:self.conversation.uid];
     
     [button setTitle:[NSString stringWithFormat:@"%d条新消息",[self.conversation.badgeNumber  intValue]] forState:UIControlStateNormal];
@@ -723,9 +727,13 @@
 {
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-        infoview.UserInfo = result;
-        infoview.title = @"详细资料";
-        [self.navigationController pushViewController:infoview animated:YES];
+        if(result)
+        {
+            infoview.UserInfo = result;
+            infoview.title = @"详细资料";
+            [self.navigationController pushViewController:infoview animated:YES];
+        }
+        
     } withuid:uid];
 }
 
@@ -734,9 +742,12 @@
 {
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-        infoview.UserInfo = result;
-        infoview.title = @"详细资料";
-        [self.navigationController pushViewController:infoview animated:YES];
+        if (result) {
+            
+            infoview.UserInfo = result;
+            infoview.title = @"详细资料";
+            [self.navigationController pushViewController:infoview animated:YES];
+        }
     } withuid:activity.uid];
 }
 

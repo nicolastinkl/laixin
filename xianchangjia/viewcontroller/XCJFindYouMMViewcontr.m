@@ -274,7 +274,7 @@ enum actionTag {
                 
                 
                 [SVProgressHUD showWithStatus:@"正在处理..."];
-                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {                    
                     FCUserDescription * user = response;
                     if (user) {
                         

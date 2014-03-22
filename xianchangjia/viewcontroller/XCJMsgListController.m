@@ -39,6 +39,7 @@
 #import "XCJCreateNaviController.h"
 #import "XCJAddFriendNaviController.h"
 #import "XCJScanViewController.h"
+#import "FCFriends.h"
 
 @interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate>//,UISearchDisplayDelegate,UISearchBarDelegate
 {
@@ -298,7 +299,7 @@
             
             // Return the number of rows in the section.
 //            [self  reLoadData]; // 更新群组信息
-//            [self  runSequucer];  //更新好友信息
+            [self  runSequucer];  //更新好友信息
             tryCatchCount = 4;
             
             NSString * _devtokenstring =[USER_DEFAULT stringForKey:KeyChain_Laixin_account_devtokenstring];
@@ -407,43 +408,45 @@
     //    }];
     //
     //    [sequencer run];
-    double delayInSeconds = 1.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
-            NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@1000};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
-                self.navigationItem.rightBarButtonItem.enabled = YES;
-                NSArray * friends = responseObject[@"result"][@"friend_id"];
-                NSMutableArray * arrayIDS = [[NSMutableArray alloc] init];
-                [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
+    
+    FCFriends * friends = [FCFriends MR_findFirst];
+    if (friends == nil) {        
+        double delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            if ([LXAPIController sharedLXAPIController].currentUser.uid ) {
+                NSDictionary * parames = @{@"uid":[LXAPIController sharedLXAPIController].currentUser.uid,@"pos":@0,@"count":@1000};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_list" parameters:parames success:^(MLRequest *request, id responseObject) {
+                    self.navigationItem.rightBarButtonItem.enabled = YES;
+                    NSArray * friends = responseObject[@"result"][@"friend_id"];
+                    NSMutableArray * arrayIDS = [[NSMutableArray alloc] init];
+                    [friends enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        [arrayIDS addObject: [tools getStringValue:[obj objectForKey:@"uid"] defaultValue:@""]];
+                    }];
+                    
+                    if (![arrayIDS containsObject:@"24"]) {
+                        [arrayIDS addObject:@"24"];
+                    }
+                    if (arrayIDS.count > 0) {
+                        NSDictionary * parameIDS = @{@"uid":arrayIDS};
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {
+                            // "users":[....]
+                            NSDictionary * userinfo = responseObject[@"result"];
+                            NSArray * userArray = userinfo[@"users"];
+                            [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                LXUser * luser = [[LXUser alloc] initWithDict:obj];
+                                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
+                            }];
+                        } failure:^(MLRequest *request, NSError *error) {
+                        }];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
                 }];
                 
-                if (![arrayIDS containsObject:@"24"]) {
-                    [arrayIDS addObject:@"24"];
-                }
-                if (arrayIDS.count > 0) {
-                    NSDictionary * parameIDS = @{@"uid":arrayIDS};
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parameIDS success:^(MLRequest *request, id responseObject) {
-                        // "users":[....]
-                        NSDictionary * userinfo = responseObject[@"result"];
-                        NSArray * userArray = userinfo[@"users"];
-                        [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            LXUser * luser = [[LXUser alloc] initWithDict:obj];
-                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
-                        }];
-                        
-                        // [[[LXAPIController sharedLXAPIController] chatDataStoreManager] differenceOfFriendsIdWithNewConversation:friends withCompletion:^(id response, NSError * error) {        }];
-                    } failure:^(MLRequest *request, NSError *error) {
-                    }];
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
-            
-            
-        }
-    });
+                
+            }
+        });
+    }
 }
 
 
@@ -681,8 +684,11 @@
                 msg.messageStatus = @(YES);
                 msg.messageId = [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                    FCUserDescription * localdespObject = response;
-                    conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    if (response) {
+                        
+                        FCUserDescription * localdespObject = response;
+                        conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    }
                 } withuid:uid];
                 conversation.lastMessageDate = date;
                 conversation.messageStutes = @(messageStutes_incoming);
@@ -828,6 +834,39 @@
     
 }
 
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIImageView * imageIcon = (UIImageView *)[cell.contentView viewWithTag:4];  //icon
+    
+    Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
+    switch ([conver.messageType intValue]) {
+        case XCMessageActivity_UserPrivateMessage:
+        {
+            //check user info
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+                if (response) {
+                    FCUserDescription * localdespObject = response;
+                    ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
+                    [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[NSString stringWithFormat:@"%@",localdespObject.headpic] Size:100]]];
+                }else{
+                    // from network
+                    
+                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id userinfo , NSError *error) {
+                         FCUserDescription * localdespObject = userinfo;
+                         ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
+                         [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[NSString stringWithFormat:@"%@",localdespObject.headpic] Size:100]]];
+                     } withuid:conver.facebookId];
+                }
+            } withuid:conver.facebookId];
+        }
+            break;
+        default:
+            // ok
+            
+            break;
+    }
+}
+
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     Conversation * conver = (Conversation *)[self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -841,22 +880,7 @@
     switch ([conver.messageType intValue]) {
         case XCMessageActivity_UserPrivateMessage:
         {// 私信
-            @try {
-                [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                    FCUserDescription * localdespObject = response;
-                    ((UILabel *)[cell.contentView viewWithTag:1]).text  = localdespObject.nick;  //nick
-                    [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[NSString stringWithFormat:@"%@",localdespObject.headpic] Size:100]]];
-                } withuid:conver.facebookId];
-            }
-            @catch (NSException *exception) {
-                SLLog(@"icon %@",exception.userInfo);
-            }
-            @finally {
-                
-            }
-            
-            
-            switch ([conver.messageStutes intValue]) {
+             switch ([conver.messageStutes intValue]) {
                 case messageStutes_incoming:
                     [imageStuts setImage:[UIImage imageNamed:@"inboxRepliedIcon"]];
                     break;

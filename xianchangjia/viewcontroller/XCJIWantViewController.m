@@ -125,8 +125,13 @@
                         badage.text = [NSString stringWithFormat:@"%@",contr.badgeNumber];
                     badage.hidden = NO;
                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id resobj, NSError *error) {
-                        FCUserDescription * localdespObject = resobj;
-                        [imageSign setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+                        if(resobj)
+                        {
+                            
+                            FCUserDescription * localdespObject = resobj;
+                            [imageSign setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+                        }
+                        
                     } withuid:contr.uid];
                     imageSign.hidden = NO;
                     image_New.hidden = NO;

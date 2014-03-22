@@ -73,11 +73,13 @@
         }else
         {
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                FCUserDescription * user = response;
-                 [label.linkAttributes setValue: [tools colorWithIndex:[user.actor_level intValue] ]forKey:(NSString *)kCTForegroundColorAttributeName];
-                label.text = [NSString stringWithFormat:@"%@: %@",user.nick,comment.content];
-                [label addLinkToCommand:user.uid withRange: NSMakeRange (0,user.nick.length)];
-                [label sizeToFit];
+                if (response) {
+                    FCUserDescription * user = response;
+                    [label.linkAttributes setValue: [tools colorWithIndex:[user.actor_level intValue] ]forKey:(NSString *)kCTForegroundColorAttributeName];
+                    label.text = [NSString stringWithFormat:@"%@: %@",user.nick,comment.content];
+                    [label addLinkToCommand:user.uid withRange: NSMakeRange (0,user.nick.length)];
+                    [label sizeToFit];
+                }
             } withuid:comment.uid];
         }
         label.frameHeight += 5*2;//多来点间距

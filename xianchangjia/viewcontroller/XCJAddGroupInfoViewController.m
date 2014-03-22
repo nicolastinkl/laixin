@@ -68,8 +68,11 @@
                     ((UILabel * ) [self.view subviewWithTag:3]).textColor = [tools colorWithIndex:0];
                     
                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                        FCUserDescription * localdespObject   = response;
-                         ((UILabel * ) [self.view subviewWithTag:2]).text = localdespObject.nick;
+                        if (response) {
+                            
+                            FCUserDescription * localdespObject   = response;
+                            ((UILabel * ) [self.view subviewWithTag:2]).text = localdespObject.nick;
+                        }
                     } withuid:list.creator];
                    
                 }

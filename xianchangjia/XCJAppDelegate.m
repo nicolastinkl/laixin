@@ -155,23 +155,26 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 NSString  * uid = [tools getStringValue:dictEvent[@"uid"] defaultValue:nil];
                 NSString  * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                    FCUserDescription * newFcObj = response;
-                    // Build the predicate to find the person sought
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
-                    FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
-                    if(conversation == nil)
-                    {
-                        conversation =  [FCBeAddFriend MR_createInContext:localContext];
+                    if (response) {
+                        FCUserDescription * newFcObj = response;
+                        // Build the predicate to find the person sought
+                        NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
+                        FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
+                        if(conversation == nil)
+                        {
+                            conversation =  [FCBeAddFriend MR_createInContext:localContext];
+                        }
+                        conversation.facebookID = uid;
+                        conversation.beAddFriendShips = newFcObj;
+                        conversation.addTime = [NSDate date];
+                        conversation.hasAdd = @NO;
+                        conversation.eid = eid;
+                        [localContext MR_saveToPersistentStoreAndWait];
+                        [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
                     }
-                    conversation.facebookID = uid;
-                    conversation.beAddFriendShips = newFcObj;
-                    conversation.addTime = [NSDate date];
-                    conversation.hasAdd = @NO;
-                    conversation.eid = eid;
-                    [localContext MR_saveToPersistentStoreAndWait];
-                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
+                   
                 } withuid:uid];
                 
             }else if ([requestKey isEqualToString:@"group_invite"])
@@ -186,115 +189,118 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 NSString * fromuid = [tools getStringValue:dictEvent[@"fromuid"] defaultValue:nil];
                 
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                    FCUserDescription *newFcObj = response;
-                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-                    NSDictionary * paramess = @{@"gid":@[gid]};
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
-                        NSDictionary * groupsss = responseObjects[@"result"];
-                        NSArray * groupsDicts =  groupsss[@"groups"];
-                        [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            XCJGroup_list * list = [XCJGroup_list turnObject:obj];
-                            // Build the predicate to find the person sought
-                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
-                            FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
-                            if(conversation == nil)
-                            {
-                                conversation =  [FCBeInviteGroup MR_createInContext:localContext];
-                            }
-                            conversation.groupID = gid;
-                            conversation.eid = eid;
-                            conversation.groupName = list.group_name;
-                            conversation.groupJson = [obj JSONString];
-                            conversation.hasAdd = @NO;
-                            conversation.fcBeinviteGroupShips = newFcObj;
-                            conversation.beaddTime = [NSDate date];
-                            [localContext MR_saveToPersistentStoreAndWait];
-                            
-                            // Build the predicate to find the person sought
-                            // target to chat view
-                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
-                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
-                            if (!array) {
-                                [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
-                                [USER_DEFAULT synchronize];
-                                [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
-                                // create new
-                               /* Conversation * conversation =  [Conversation MR_createInContext:localContext];
-                                conversation.lastMessage = list.group_board;
-                                conversation.lastMessageDate = [NSDate date];
-                                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
-                                conversation.messageStutes = @(messageStutes_incoming);
-                                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
-                                conversation.facebookName = list.group_name;
-                                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
-                                conversation.badgeNumber = @1;
-                                [localContext MR_saveOnlySelfAndWait];
-                                SystemSoundID id = 1007; //声音
-                                AudioServicesPlaySystemSound(id);
-                                // 处理加入请求
-                                [self joingroup:list.gid]; // ok  join
-                                */
-                            }else{
-                                //更新群信息
-                                if (![array.facebookName isEqualToString:list.group_name]) {
-                                    array.facebookName = list.group_name;
-                                    array.lastMessageDate = [NSDate date];
-                                    [localContext MR_saveOnlySelfAndWait];
-                                }
-                            }
-                            
-                            /*if (list.type == 1) {
-                                //首页群组
-                                [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-                            }else if (list.type == 2) {
-                                //聊天群组
-                                
-                                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid]];
-                               Conversation * conversation  = [Conversation MR_findFirstWithPredicate:pre];
-                                if (conversation == nil) {
-                                    // create new
-                                    conversation =  [Conversation MR_createInContext:localContext];
-                                    conversation.lastMessage = @"你被邀请加入群聊";
-                                    conversation.lastMessageDate = [NSDate date];
-                                    conversation.messageType = @(XCMessageActivity_UserGroupMessage);
-                                    conversation.messageStutes = @(messageStutes_incoming);
-                                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
-                                    conversation.facebookName = list.group_name;
-                                    conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
-                                    conversation.badgeNumber = @0;
-                                    [localContext MR_saveOnlySelfAndWait];
-                                } 
-                            }
-#pragma mark                处理加入请求
-                            {
-                                NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
-                                FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
-                                if(msg == nil)
+                    if (response) {
+                        FCUserDescription *newFcObj = response;
+                        [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                        NSDictionary * paramess = @{@"gid":@[gid]};
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                            NSDictionary * groupsss = responseObjects[@"result"];
+                            NSArray * groupsDicts =  groupsss[@"groups"];
+                            [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                XCJGroup_list * list = [XCJGroup_list turnObject:obj];
+                                // Build the predicate to find the person sought
+                                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
+                                FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
+                                if(conversation == nil)
                                 {
-                                    // 处理加入请求
-                                    [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
-                                        if(responseObject){
-                                            // Build the predicate to find the person sought
-                                            
-                                        }
-                                    } failure:^(MLRequest *request, NSError *error) {
-                                        
-                                    }];
-                                    msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                                    conversation =  [FCBeInviteGroup MR_createInContext:localContext];
                                 }
-                                msg.gid = list.gid;
-                                msg.gCreatorUid = list.creator;
-                                msg.gName = list.group_name;
-                                msg.gBoard = list.group_board;
-                                msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
-                                msg.gbadgeNumber = @1;
-                                msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                                conversation.groupID = gid;
+                                conversation.eid = eid;
+                                conversation.groupName = list.group_name;
+                                conversation.groupJson = [obj JSONString];
+                                conversation.hasAdd = @NO;
+                                conversation.fcBeinviteGroupShips = newFcObj;
+                                conversation.beaddTime = [NSDate date];
                                 [localContext MR_saveToPersistentStoreAndWait];
-                            }*/
+                                
+                                // Build the predicate to find the person sought
+                                // target to chat view
+                                NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+                                Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+                                if (!array) {
+                                    [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
+                                    [USER_DEFAULT synchronize];
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
+                                    // create new
+                                    /* Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                     conversation.lastMessage = list.group_board;
+                                     conversation.lastMessageDate = [NSDate date];
+                                     conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                     conversation.messageStutes = @(messageStutes_incoming);
+                                     conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                     conversation.facebookName = list.group_name;
+                                     conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                                     conversation.badgeNumber = @1;
+                                     [localContext MR_saveOnlySelfAndWait];
+                                     SystemSoundID id = 1007; //声音
+                                     AudioServicesPlaySystemSound(id);
+                                     // 处理加入请求
+                                     [self joingroup:list.gid]; // ok  join
+                                     */
+                                }else{
+                                    //更新群信息
+                                    if (![array.facebookName isEqualToString:list.group_name]) {
+                                        array.facebookName = list.group_name;
+                                        array.lastMessageDate = [NSDate date];
+                                        [localContext MR_saveOnlySelfAndWait];
+                                    }
+                                }
+                                
+                                /*if (list.type == 1) {
+                                 //首页群组
+                                 [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                                 }else if (list.type == 2) {
+                                 //聊天群组
+                                 
+                                 NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid]];
+                                 Conversation * conversation  = [Conversation MR_findFirstWithPredicate:pre];
+                                 if (conversation == nil) {
+                                 // create new
+                                 conversation =  [Conversation MR_createInContext:localContext];
+                                 conversation.lastMessage = @"你被邀请加入群聊";
+                                 conversation.lastMessageDate = [NSDate date];
+                                 conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                 conversation.messageStutes = @(messageStutes_incoming);
+                                 conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                 conversation.facebookName = list.group_name;
+                                 conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,gid];
+                                 conversation.badgeNumber = @0;
+                                 [localContext MR_saveOnlySelfAndWait];
+                                 }
+                                 }
+                                 #pragma mark                处理加入请求
+                                 {
+                                 NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
+                                 FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
+                                 if(msg == nil)
+                                 {
+                                 // 处理加入请求
+                                 [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                                 if(responseObject){
+                                 // Build the predicate to find the person sought
+                                 
+                                 }
+                                 } failure:^(MLRequest *request, NSError *error) {
+                                 
+                                 }];
+                                 msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                                 }
+                                 msg.gid = list.gid;
+                                 msg.gCreatorUid = list.creator;
+                                 msg.gName = list.group_name;
+                                 msg.gBoard = list.group_board;
+                                 msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+                                 msg.gbadgeNumber = @1;
+                                 msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                                 [localContext MR_saveToPersistentStoreAndWait];
+                                 }*/
+                            }];
+                        } failure:^(MLRequest *request, NSError *error) {
                         }];
-                    } failure:^(MLRequest *request, NSError *error) {
-                    }];
+                    }
+                   
                 } withuid:fromuid];
             }
         }else if ([eventType isEqualToString:@"newlike"])
@@ -542,26 +548,29 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                    FCUserDescription * localdespObject = response;
-                    if (imageurl.length > 5)
-                    {
-                        conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",localdespObject.nick];
-                    }else
-                    {
-                        conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    if (response) {
+                        FCUserDescription * localdespObject = response;
+                        if (imageurl.length > 5)
+                        {
+                            conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",localdespObject.nick];
+                        }else
+                        {
+                            conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                        }
+                        
+                        conversation.lastMessageDate = date;
+                        conversation.messageStutes = @(messageStutes_incoming);
+                        // increase badge number.
+                        int badgeNumber = [conversation.badgeNumber intValue];
+                        badgeNumber ++;
+                        conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
+                        
+                        [localContext MR_saveToPersistentStoreAndWait];
+                        
+                        SystemSoundID id = 1007; //声音
+                        AudioServicesPlaySystemSound(id);
                     }
                     
-                    conversation.lastMessageDate = date;
-                    conversation.messageStutes = @(messageStutes_incoming);
-                    // increase badge number.
-                    int badgeNumber = [conversation.badgeNumber intValue];
-                    badgeNumber ++;
-                    conversation.badgeNumber = [NSNumber numberWithInt:badgeNumber];
-                    
-                    [localContext MR_saveToPersistentStoreAndWait];
-                    
-                    SystemSoundID id = 1007; //声音
-                    AudioServicesPlaySystemSound(id);
                     
                 } withuid:uid];
             }
@@ -1114,9 +1123,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
             
             NSDictionary * resultDict = responseObject[@"result"];
             NSArray * array = resultDict[@"message"];
-            
-            
-            
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 /*
                  “msgid”:
@@ -1203,34 +1209,32 @@ static NSString * const kLaixinStoreName = @"Laixins";
                         msg.messageType = @(messageType_video);
                     }
                     
-                    if (idx == 0) {
-                        conversation.lastMessageDate = date;
-                        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
-                        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
-                        if ([typeMessage isEqualToString:@"txt"]) {
-                            if ([content containString:@"sticker_"]) {
-                                conversation.lastMessage = @"[表情]";
-                            }else{
-                                conversation.lastMessage = content;
-                            }
-                        }else if ([typeMessage isEqualToString:@"emj"]) {
-                            if ([content containString:@"sticker_"]) {
-                                conversation.lastMessage = @"[表情]";
-                            }else{
-                                conversation.lastMessage = content;
-                            }
-                        }else if ([typeMessage isEqualToString:@"pic"]) {
-                            //image
-                            conversation.lastMessage = @"[图片]";
-                        }else if ([typeMessage isEqualToString:@"vic"]) {
-                            conversation.lastMessage = @"[语音]";
-                        }else if ([typeMessage isEqualToString:@"map"]) {
-                            conversation.lastMessage = @"[位置信息]";
-                        }else if ([typeMessage isEqualToString:@"video"]) {
-                            conversation.lastMessage = @"[视频]";
+                    conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+                    conversation.lastMessageDate = date;
+                    conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,[tools getStringValue:obj[@"msgid"] defaultValue:@"0"]];
+                    if ([typeMessage isEqualToString:@"txt"]) {
+                        if ([content containString:@"sticker_"]) {
+                            conversation.lastMessage = @"[表情]";
+                        }else{
+                            conversation.lastMessage = content;
                         }
-                        
+                    }else if ([typeMessage isEqualToString:@"emj"]) {
+                        if ([content containString:@"sticker_"]) {
+                            conversation.lastMessage = @"[表情]";
+                        }else{
+                            conversation.lastMessage = content;
+                        }
+                    }else if ([typeMessage isEqualToString:@"pic"]) {
+                        //image
+                        conversation.lastMessage = @"[图片]";
+                    }else if ([typeMessage isEqualToString:@"vic"]) {
+                        conversation.lastMessage = @"[语音]";
+                    }else if ([typeMessage isEqualToString:@"map"]) {
+                        conversation.lastMessage = @"[位置信息]";
+                    }else if ([typeMessage isEqualToString:@"video"]) {
+                        conversation.lastMessage = @"[视频]";
                     }
+                    
                     conversation.messageStutes = @(messageStutes_incoming);
                     conversation.facebookName = @"";
                     conversation.facebookId = facebookID;
@@ -1426,23 +1430,26 @@ static NSString * const kLaixinStoreName = @"Laixins";
         NSString  * uid = [tools getStringValue:dictEvent[@"uid"] defaultValue:nil];
         NSString  * eid = [tools getStringValue:dictEvent[@"eid"] defaultValue:nil];
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription * newFcObj = response;
-            // Build the predicate to find the person sought
-            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
-            FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
-            if(conversation == nil)
-            {
-                conversation =  [FCBeAddFriend MR_createInContext:localContext];
+            if (response) {
+                FCUserDescription * newFcObj = response;
+                // Build the predicate to find the person sought
+                NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookID == %@", uid];
+                FCBeAddFriend *conversation = [FCBeAddFriend MR_findFirstWithPredicate:predicate inContext:localContext];
+                if(conversation == nil)
+                {
+                    conversation =  [FCBeAddFriend MR_createInContext:localContext];
+                }
+                conversation.facebookID = uid;
+                conversation.beAddFriendShips = newFcObj;
+                conversation.addTime = [NSDate date];
+                conversation.hasAdd = @NO;
+                conversation.eid = eid;
+                [localContext MR_saveToPersistentStoreAndWait];
+                [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
             }
-            conversation.facebookID = uid;
-            conversation.beAddFriendShips = newFcObj;
-            conversation.addTime = [NSDate date];
-            conversation.hasAdd = @NO;
-            conversation.eid = eid;
-            [localContext MR_saveToPersistentStoreAndWait];
-            [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"add_friend_Notify" object:nil];
+           
         } withuid:uid];
         
     }else if ([requestKey isEqualToString:@"group_invite"])
@@ -1456,94 +1463,97 @@ static NSString * const kLaixinStoreName = @"Laixins";
         NSString * fromuid = [tools getStringValue:dictEvent[@"fromuid"] defaultValue:nil];
         
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription *newFcObj = response;
-            
-            NSDictionary * paramess = @{@"gid":@[gid]};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
-                NSDictionary * groupsss = responseObjects[@"result"];
-                NSArray * groupsDicts =  groupsss[@"groups"];
-                [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    XCJGroup_list * list = [XCJGroup_list turnObject:obj];
-                    // Build the predicate to find the person sought
-                    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
-                    FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
-                    if(conversation == nil)
-                    {
-                        conversation =  [FCBeInviteGroup MR_createInContext:localContext];
-                    }
-                    conversation.groupID = gid;
-                    conversation.eid = eid;
-                    conversation.groupName = list.group_name;
-                    conversation.groupJson = [obj JSONString];
-                    conversation.fcBeinviteGroupShips = newFcObj;
-                    conversation.beaddTime = [NSDate date];
-                    [localContext MR_saveToPersistentStoreAndWait];
-                    [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
-                    
-                    
-                    {
-                        
+            if (response) {
+                FCUserDescription *newFcObj = response;
+                
+                NSDictionary * paramess = @{@"gid":@[gid]};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"group.info"  parameters:paramess success:^(MLRequest *request, id responseObjects) {
+                    NSDictionary * groupsss = responseObjects[@"result"];
+                    NSArray * groupsDicts =  groupsss[@"groups"];
+                    [groupsDicts enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroup_list * list = [XCJGroup_list turnObject:obj];
                         // Build the predicate to find the person sought
                         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-                        // target to chat view
-                        NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
-                        Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
-                        if (!array) {
-                            // create new
-                            
-                            
-                            [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
-                            [USER_DEFAULT synchronize];
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
-                            
-//                            Conversation * conversation =  [Conversation MR_createInContext:localContext];
-//                            conversation.lastMessage = list.group_board;
-//                            conversation.lastMessageDate = [NSDate date];
-//                            conversation.messageType = @(XCMessageActivity_UserGroupMessage);
-//                            conversation.messageStutes = @(messageStutes_incoming);
-//                            conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
-//                            conversation.facebookName = list.group_name;
-//                            conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
-//                            conversation.badgeNumber = @0;
-//                            [localContext MR_saveOnlySelfAndWait];
-                        }else{
-                            //更新群信息
-                            if (![array.facebookName isEqualToString:list.group_name]) {
-                                array.facebookName = list.group_name;
-                                array.lastMessageDate = [NSDate date];
-                                [localContext MR_saveOnlySelfAndWait];
-                            }
-                        }
-                        
-                        /*NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
-                         FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
-                        if(msg == nil)
+                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"groupID == %@", gid];
+                        FCBeInviteGroup *conversation = [FCBeInviteGroup MR_findFirstWithPredicate:predicate inContext:localContext];
+                        if(conversation == nil)
                         {
-                            // 处理加入请求
-                            [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
-                                if(responseObject){
-                                    // Build the predicate to find the person sought
-                                    
-                                }
-                            } failure:^(MLRequest *request, NSError *error) {
-                                
-                            }];
-                            msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                            conversation =  [FCBeInviteGroup MR_createInContext:localContext];
                         }
-                        msg.gid = list.gid;
-                        msg.gCreatorUid = list.creator;
-                        msg.gName = list.group_name;
-                        msg.gBoard = list.group_board;
-                        msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
-                        msg.gbadgeNumber = @1;
-                        msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                        conversation.groupID = gid;
+                        conversation.eid = eid;
+                        conversation.groupName = list.group_name;
+                        conversation.groupJson = [obj JSONString];
+                        conversation.fcBeinviteGroupShips = newFcObj;
+                        conversation.beaddTime = [NSDate date];
                         [localContext MR_saveToPersistentStoreAndWait];
-                         */
-                    }
+                        [self.tabBarController.tabBar.items[1] setBadgeValue:@"新"];
+                        
+                        
+                        {
+                            
+                            // Build the predicate to find the person sought
+                            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+                            // target to chat view
+                            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+                            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+                            if (!array) {
+                                // create new
+                                
+                                
+                                [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_message_GroupBeinvite];
+                                [USER_DEFAULT synchronize];
+                                [[NSNotificationCenter defaultCenter] postNotificationName:@"group_invite_Notify" object:nil];
+                                
+                                //                            Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                                //                            conversation.lastMessage = list.group_board;
+                                //                            conversation.lastMessageDate = [NSDate date];
+                                //                            conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                                //                            conversation.messageStutes = @(messageStutes_incoming);
+                                //                            conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                                //                            conversation.facebookName = list.group_name;
+                                //                            conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                                //                            conversation.badgeNumber = @0;
+                                //                            [localContext MR_saveOnlySelfAndWait];
+                            }else{
+                                //更新群信息
+                                if (![array.facebookName isEqualToString:list.group_name]) {
+                                    array.facebookName = list.group_name;
+                                    array.lastMessageDate = [NSDate date];
+                                    [localContext MR_saveOnlySelfAndWait];
+                                }
+                            }
+                            
+                            /*NSPredicate *predicatess = [NSPredicate predicateWithFormat:@"gid == %@", gid];
+                             FCHomeGroupMsg *msg = [FCHomeGroupMsg MR_findFirstWithPredicate:predicatess inContext:localContext];
+                             if(msg == nil)
+                             {
+                             // 处理加入请求
+                             [[MLNetworkingManager sharedManager] sendWithAction:@"group.join" parameters:@{@"gid":gid} success:^(MLRequest *request, id responseObject) {
+                             if(responseObject){
+                             // Build the predicate to find the person sought
+                             
+                             }
+                             } failure:^(MLRequest *request, NSError *error) {
+                             
+                             }];
+                             msg = [FCHomeGroupMsg MR_createInContext:localContext];
+                             }
+                             msg.gid = list.gid;
+                             msg.gCreatorUid = list.creator;
+                             msg.gName = list.group_name;
+                             msg.gBoard = list.group_board;
+                             msg.gDate = [NSDate dateWithTimeIntervalSinceNow:list.time];
+                             msg.gbadgeNumber = @1;
+                             msg.gType = [NSString stringWithFormat:@"%d",list.type];
+                             [localContext MR_saveToPersistentStoreAndWait];
+                             */
+                        }
+                    }];
+                } failure:^(MLRequest *request, NSError *error) {
                 }];
-            } failure:^(MLRequest *request, NSError *error) {
-            }];
+            }
+           
         } withuid:fromuid];
     }
 

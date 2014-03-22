@@ -111,11 +111,14 @@
     UIButton * butondel =  (UIButton *)[cell.contentView subviewWithTag:4];
     NSString * userid   = _datasource[indexPath.row];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-        FCUserDescription * user = response;
-        NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
-        [imageview setImageWithURL:[NSURL URLWithString:Urlstring] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
-        name.text = user.nick;
-        des.text = user.signature.length<=0?@"Ta没有写任何东西":user.signature;
+        if(response)
+        {
+            FCUserDescription * user = response;
+            NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+            [imageview setImageWithURL:[NSURL URLWithString:Urlstring] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+            name.text = user.nick;
+            des.text = user.signature.length<=0?@"Ta没有写任何东西":user.signature;
+        }
         
     } withuid:userid];
     butondel.tag = indexPath.row;
@@ -156,10 +159,13 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString * userid   = _datasource[indexPath.row];
-    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) { 
-        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-        addUser.UserInfo = response;
-        [self.navigationController pushViewController:addUser animated:YES];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+        if (response) {
+            
+            XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+            addUser.UserInfo = response;
+            [self.navigationController pushViewController:addUser animated:YES];
+        }
     } withuid:userid];
  
 }

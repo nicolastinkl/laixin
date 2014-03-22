@@ -301,15 +301,17 @@
     }else{
          _ReportButton.hidden = YES;
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription * user = response;
-            //内容
-            if (user.headpic) {
-                [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
-            }else{
-                [_avatarButton setImage:[UIImage imageNamed:@"avatar_default"] forState:UIControlStateNormal];
+            if (response) {
+                FCUserDescription * user = response;
+                //内容
+                if (user.headpic) {
+                    [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+                }else{
+                    [_avatarButton setImage:[UIImage imageNamed:@"avatar_default"] forState:UIControlStateNormal];
+                }
+                [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
+                [_userNameButton setTitleColor:[tools colorWithIndex:[user.actor_level intValue]] forState:UIControlStateNormal];
             }
-            [_userNameButton setTitle:user.nick forState:UIControlStateNormal];
-            [_userNameButton setTitleColor:[tools colorWithIndex:[user.actor_level intValue]] forState:UIControlStateNormal];
         } withuid:activity.uid];
     }
     
@@ -361,9 +363,12 @@
         NSMutableArray *textCheckingResults = [[NSMutableArray alloc]init];
         for (postlikes *aUser in _activity.likeUsers) {
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-                FCUserDescription * user = response;
-                [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, user.nick.length) replacementString:user.uid]];
-                 nicktext = user.nick;
+                if (response) {
+                    FCUserDescription * user = response;
+                    [textCheckingResults addObject:[NSTextCheckingResult replacementCheckingResultWithRange:NSMakeRange(text.length, user.nick.length) replacementString:user.uid]];
+                    nicktext = user.nick;
+                }
+               
             } withuid:aUser.uid];
            text = [text stringByAppendingFormat:@"%@, ",nicktext];
         }

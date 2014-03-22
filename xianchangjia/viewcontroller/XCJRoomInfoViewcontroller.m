@@ -172,9 +172,12 @@
             [self.view_kSonger addSubview:iv];
             
             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                FCUserDescription * user = response;
-                NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
-                [iv setImageWithURL:[NSURL URLWithString:Urlstring] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                if (response) {
+                    FCUserDescription * user = response;
+                    NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+                    [iv setImageWithURL:[NSURL URLWithString:Urlstring] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                }
+                
             } withuid:userid];
         }];
         
@@ -721,12 +724,15 @@
                 if ([LXAPIController sharedLXAPIController].currentUser.active_by > 0) {
                     currentActive_by = [LXAPIController sharedLXAPIController].currentUser.active_by;
                     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                        FCUserDescription * user = response;
-                        NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
-                        [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
-                        self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
-                        self.image_tuijianPeople.layer.masksToBounds = YES;
-                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                        if (response) {
+                            FCUserDescription * user = response;
+                            NSString *Urlstring = [tools getUrlByImageUrl:user.headpic Size:100];
+                            [self.image_tuijianPeople setImageWithURL:[NSURL URLWithString:Urlstring]];
+                            self.image_tuijianPeople.layer.cornerRadius = self.image_tuijianPeople.height/2;
+                            self.image_tuijianPeople.layer.masksToBounds = YES;
+                            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                        }
+                        
                     } withuid:[NSString stringWithFormat:@"%d",[LXAPIController sharedLXAPIController].currentUser.active_by]];
                 }
                 

@@ -108,11 +108,14 @@
     }
     else{
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id userdes, NSError *error) {
-            FCUserDescription * localdespObject = userdes;
-            label_name.text = localdespObject.nick;
-            label_sign.text = localdespObject.signature;
-            [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:localdespObject.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
-             [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:160]]];
+            if (userdes) {
+                FCUserDescription * localdespObject = userdes;
+                label_name.text = localdespObject.nick;
+                label_sign.text = localdespObject.signature;
+                [imagebg setImageWithURL:[NSURL URLWithString:[DataHelper getStringValue:localdespObject.background_image defaultValue:@""]] placeholderImage:[UIImage imageNamed:@"opengroup_profile_cover"]];
+                [imageIcon setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:160]]];
+            }
+            
         } withuid:self.userID];
         NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
 

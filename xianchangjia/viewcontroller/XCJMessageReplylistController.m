@@ -270,15 +270,18 @@
     UILabel *labelTime = (UILabel *)[cell.contentView viewWithTag:4];
         UIImageView * imageviewTag = (UIImageView *)[cell.contentView viewWithTag:6];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-        FCUserDescription * user = response;
-        //内容
-        if (user.headpic) {
-            [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:160]]   placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
-        }else{
-            [imgView setImage:[UIImage imageNamed:@"avatar_fault"]];
+        if (response) {
+            
+            FCUserDescription * user = response;
+            //内容
+            if (user.headpic) {
+                [imgView setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:160]]   placeholderImage:[UIImage imageNamed:@"avatar_fault"]];
+            }else{
+                [imgView setImage:[UIImage imageNamed:@"avatar_fault"]];
+            }
+            labelnick.text = user.nick;
+            labelnick.textColor = [tools colorWithIndex:[user.actor_level intValue]];
         }
-        labelnick.text = user.nick;
-        labelnick.textColor = [tools colorWithIndex:[user.actor_level intValue]];
     } withuid:info.uid];
     labelTime.text = [tools timeLabelTextOfTime:[info.time doubleValue]];
     

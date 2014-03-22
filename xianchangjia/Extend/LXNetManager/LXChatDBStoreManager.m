@@ -19,7 +19,6 @@
 
 @implementation LXChatDBStoreManager
 
-
 /**
  *  friends list
  *

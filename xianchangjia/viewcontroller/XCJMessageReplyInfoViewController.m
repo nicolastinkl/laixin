@@ -451,9 +451,12 @@
 {
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-        infoview.UserInfo = result;
-        infoview.title = @"详细资料";
-        [self.navigationController pushViewController:infoview animated:YES];
+        if (result) {
+            
+            infoview.UserInfo = result;
+            infoview.title = @"详细资料";
+            [self.navigationController pushViewController:infoview animated:YES];
+        }
     } withuid:uid];
 }
 
@@ -462,9 +465,12 @@
 {
     XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-        infoview.UserInfo = result;
-        infoview.title = @"详细资料";
-        [self.navigationController pushViewController:infoview animated:YES];
+        if (result) {
+            
+            infoview.UserInfo = result;
+            infoview.title = @"详细资料";
+            [self.navigationController pushViewController:infoview animated:YES];
+        }
     } withuid:activity.uid];
 }
 
@@ -559,9 +565,12 @@
     {
         // if is me...
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription * user = response;
-            _inputTextView.text = [NSString stringWithFormat:@"@%@ ",user.nick];
-            [_inputTextView becomeFirstResponder];
+            if (response) {
+                
+                FCUserDescription * user = response;
+                _inputTextView.text = [NSString stringWithFormat:@"@%@ ",user.nick];
+                [_inputTextView becomeFirstResponder];
+            }
         } withuid:comment.uid];
     }else{
         _inputTextView.text = @"";

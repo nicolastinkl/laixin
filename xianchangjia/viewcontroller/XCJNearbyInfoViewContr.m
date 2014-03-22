@@ -487,19 +487,22 @@
     self.image_user.layer.masksToBounds = YES;
     
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-        FCUserDescription * user = response;
-        //内容
-        if (user.headpic) {
-            [self.image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
-        }else{
-            [self.image_user setImage:[UIImage imageNamed:@"avatar_default"] ];
-        }
-        self.label_user_nick.text = user.nick;
-        self.image_level.image = [UIImage imageNamed:[NSString stringWithFormat:@"mqz_widget_vip_lv%d",[user.actor_level intValue]]];
-        if ([user.sex intValue] == 1) {
-            self.image_user_sex.image = [UIImage imageNamed:@"md_boy"];
-        }else if ([user.sex intValue] == 2) {
-            self.image_user_sex.image = [UIImage imageNamed:@"md_girl"];
+        if (response) {
+            
+            FCUserDescription * user = response;
+            //内容
+            if (user.headpic) {
+                [self.image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+            }else{
+                [self.image_user setImage:[UIImage imageNamed:@"avatar_default"] ];
+            }
+            self.label_user_nick.text = user.nick;
+            self.image_level.image = [UIImage imageNamed:[NSString stringWithFormat:@"mqz_widget_vip_lv%d",[user.actor_level intValue]]];
+            if ([user.sex intValue] == 1) {
+                self.image_user_sex.image = [UIImage imageNamed:@"md_boy"];
+            }else if ([user.sex intValue] == 2) {
+                self.image_user_sex.image = [UIImage imageNamed:@"md_girl"];
+            }
         }
     } withuid:groupinfo.creator];
     

@@ -273,14 +273,19 @@
         Comment * comment = _datasource[indexPath.row];
         
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-            FCUserDescription * user = response;
-            //内容
-            if (user.headpic) {
-                [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]]  placeholderImage:[UIImage imageNamed:@"avatar_default"]];
-            }else{
-                [imageview setImage:[UIImage imageNamed:@"avatar_default"]];
+            if(response)
+            {
+                
+                FCUserDescription * user = response;
+                //内容
+                if (user.headpic) {
+                    [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]]  placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+                }else{
+                    [imageview setImage:[UIImage imageNamed:@"avatar_default"]];
+                }
+                labelName.text = user.nick;
             }
-            labelName.text = user.nick;
+            
         } withuid:comment.uid];
         
         labelTime.text = comment.timeText;

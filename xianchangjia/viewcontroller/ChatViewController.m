@@ -891,8 +891,11 @@
                 msg.messageStatus = @(YES);
                 msg.messageId =  [NSString stringWithFormat:@"UID_%@", uid];//[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-                    FCUserDescription * localdespObject = response;
-                    self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    if (response) {
+                        FCUserDescription * localdespObject = response;
+                        self.conversation.lastMessage = [NSString stringWithFormat:@"%@:%@",localdespObject.nick,content];
+                    }
+                   
                 } withuid:uid];
                 self.conversation.lastMessageDate = date;
                 self.conversation.messageStutes = @(messageStutes_incoming);
@@ -1905,9 +1908,12 @@
             //message.messageId // this is uid
             if (![message.messageId isNilOrEmpty]) {
                 [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id obj, NSError *error) {
-                    FCUserDescription * localdespObject = obj;
-                    [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
-                    labelName.text = localdespObject.nick;
+                    if (obj) {
+                        FCUserDescription * localdespObject = obj;
+                        [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+                        labelName.text = localdespObject.nick;
+                    }
+                    
                 } withuid:message.messageId];
             }
         }else{

@@ -79,30 +79,32 @@
  */
 -(void) getUserDesPtionCompletion:(CompletionBlock)completion withuid:(NSString * ) uid
 {
-    if (!uid) {
-        return;
-    }
-    //MARK Base fbid to find userdesp object,, if userdesp is nil, will select from networking
-    FCUserDescription * localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:uid];
-    if (localdespObject) {
-        completion(localdespObject,nil);
+    if (uid==nil || [uid isEqualToString:@""]) {
+        completion(nil,nil);
     }else{
-        //from networking by ID
-        NSDictionary * parames = @{@"uid":@[uid]};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
-            // "users":[....]
-            NSDictionary * userinfo = responseObject[@"result"];
-            NSArray * userArray = userinfo[@"users"];
-            if (userArray && userArray.count > 0) {
-                NSDictionary * dict = userArray[0];
-                LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
-                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
-                    completion(response,nil);
-                }];
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
+        //MARK Base fbid to find userdesp object,, if userdesp is nil, will select from networking
+        FCUserDescription * localdespObject  =[[[LXAPIController sharedLXAPIController] chatDataStoreManager] fetchFCUserDescriptionByUID:uid];
+        if (localdespObject) {
+            completion(localdespObject,nil);
+        }else{
+            //from networking by ID
+            NSDictionary * parames = @{@"uid":@[uid]};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+                // "users":[....]
+                NSDictionary * userinfo = responseObject[@"result"];
+                NSArray * userArray = userinfo[@"users"];
+                if (userArray && userArray.count > 0) {
+                    NSDictionary * dict = userArray[0];
+                    LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:currentUser withCompletion:^(id response, NSError * error) {
+                        completion(response,nil);
+                    }];
+                }
+            } failure:^(MLRequest *request, NSError *error) {
+            }];
+        }
     }
+    
 }
 -(void) getUserDesByNetCompletion:(CompletionBlock)completion withuid:(NSString * ) uid
 {

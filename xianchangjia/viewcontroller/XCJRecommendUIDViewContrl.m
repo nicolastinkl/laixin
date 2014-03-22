@@ -199,13 +199,16 @@
     UILabel * label_time = (UILabel*) [cell.contentView subviewWithTag:19];
     label_time.text = [tools timeLabelTextOfTime:pay.create_time];
      [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-         FCUserDescription * useinfo = response;
+         if (response) {
+             FCUserDescription * useinfo = response;
+             
+             [button_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:useinfo.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
+             label_username.text = useinfo.nick;
+             label_username.textColor = [tools colorWithIndex:0];
+             [button_user.layer setValue:[NSString stringWithFormat:@"%d",pay.uid] forKey:@"useid"];
+             [button_user addTarget:self action:@selector(SeeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
+         }
          
-         [button_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:useinfo.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"left_view_avatar_avatar"]];
-         label_username.text = useinfo.nick;
-         label_username.textColor = [tools colorWithIndex:0];
-         [button_user.layer setValue:[NSString stringWithFormat:@"%d",pay.uid] forKey:@"useid"];
-         [button_user addTarget:self action:@selector(SeeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
      } withuid:[NSString stringWithFormat:@"%d",pay.uid]];
     
     return cell;
@@ -218,10 +221,13 @@
 //    UITableViewCell * cell = (UITableViewCell *) button.superview.superview.superview;
 //    PayOrderHistorylog * pay = _datasouces[[self.tableView indexPathForCell:cell].row];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-        FCUserDescription * useinfo = response;
-        XCJAddUserTableViewController *viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-        viewcontr.UserInfo = useinfo;
-        [self.navigationController pushViewController:viewcontr animated:YES];
+        if (response) {
+            FCUserDescription * useinfo = response;
+            XCJAddUserTableViewController *viewcontr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+            viewcontr.UserInfo = useinfo;
+            [self.navigationController pushViewController:viewcontr animated:YES];
+        }
+        
     } withuid:stringid];
     
 }
