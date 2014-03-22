@@ -203,17 +203,11 @@
             }
             self.isLoading = NO;
             if (array.count > 0) {
-                if ([self.userID isEqualToString:[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]) {
-                    if(beforeid.length <= 0)
-                        [[EGOCache globalCache] setString:[responseObject JSONString] forKey:@"MyPhotoCache" withTimeoutInterval:60 ];
-                    // init with that...
-                }
-                
                 NSString  * plistKeyName =[NSString stringWithFormat:@"user.posts_%@", self.userID];
                 SLog(@"plistKeyName :%@",plistKeyName);
                 if ([[EGOCache globalCache] plistForKey:plistKeyName] == nil) {
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
-                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*5];
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
                      SLog(@"not  arr     %d" ,arr.count);
                 }
                 else {
@@ -222,7 +216,7 @@
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
                     [arr addObjectsFromArray:array];
                      SLog(@" have  arr    %d" ,arr.count);
-                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*5];
+                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
                 }
             }
         }

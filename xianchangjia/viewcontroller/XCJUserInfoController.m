@@ -124,6 +124,7 @@
         XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[arrObj firstObject]];
         if (post) {
             UserDict[@"最新动态"] = post.content;
+            [self.tableView reloadData];
         }
     }else{
         NSString * key =[NSString stringWithFormat:@"fetchRequestUserIDPOSY.%@",self.UserInfo.uid];
@@ -164,6 +165,7 @@
             self.Label_sign.text  = newFcObj.signature;
             [self.Image_user setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:[tools getStringValue:newFcObj.headpic defaultValue:@""] Size:100]]];
             [[EGOCache globalCache] setString:@"1" forKey:key withTimeoutInterval:60*5];
+            [self.tableView reloadData];
         } withuid:self.UserInfo.uid];
     }
 }
