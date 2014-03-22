@@ -1589,7 +1589,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
    // NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     
     //    NSLog(@"Receive Notify: %@", userInfo);
-    //NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     //如果当前程序状态是激活的。
     
     if (application.applicationState == UIApplicationStateActive) {

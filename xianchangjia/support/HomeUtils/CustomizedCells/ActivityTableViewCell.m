@@ -802,7 +802,7 @@
 
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissAtPageIndex:(NSUInteger)index
 {
-    //id <IDMPhoto> photo = [photoBrowser photoAtIndex:index];
+    id <IDMPhoto> photo = [photoBrowser photoAtIndex:index];
     SLog(@"Dissmised with photo index: %d, photo caption: %@", index, photo.caption);
 }
 
