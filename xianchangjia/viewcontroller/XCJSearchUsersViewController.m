@@ -84,6 +84,7 @@
         Image_friend.hidden = YES;
     }
     ((UILabel *) [cell.contentView subviewWithTag:21]).height = 0.5;
+    ((UILabel *) [cell.contentView subviewWithTag:21]).hidden = YES;
     [image setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:160]]];
     labelNick.text = user.nick;
     if (labelNick.text.length <= 0) {

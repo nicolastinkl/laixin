@@ -1041,7 +1041,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
     return YES;
 }
 
-
 -(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     if ([sinaweiboMain handleOpenURL:url]) {
@@ -1060,6 +1059,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
         SLLog(@"applicationDidEnterBackground webSocket close");
         [[[MLNetworkingManager sharedManager] webSocket] close];
     }
+    
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
