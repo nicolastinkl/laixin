@@ -16,7 +16,6 @@
 		86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FCF18B31A910002581E /* XCJSelectLaixinViewController.m */; };
 		86045FD318B346290002581E /* XCJSelectAgeModefilViewContr.m in Sources */ = {isa = PBXBuildFile; fileRef = 86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */; };
 		8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8607385318AB4BFC003830DE /* SJAvatarBrowser.m */; };
-		860C6D9318D8314F00F67EE3 /* libFBKVOController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 860C6D8F18D8314000F67EE3 /* libFBKVOController.a */; };
 		8613A6F6187F9ADC002B9013 /* FCBeInviteGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */; };
 		861C0F4A18DC2F6C001DA32F /* PPCircleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 861C0F4418DC2F6C001DA32F /* PPCircleButton.m */; };
 		861C0F4B18DC2F6C001DA32F /* PPPinCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 861C0F4618DC2F6C001DA32F /* PPPinCircleView.m */; };
@@ -51,6 +50,7 @@
 		8646F8C4187AA00D004A8696 /* FDStatusBarNotifierView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8646F8C3187AA00D004A8696 /* FDStatusBarNotifierView.m */; };
 		8646FDD518863CD2007CE6F4 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */; };
 		8646FDDC18868425007CE6F4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8646FDDB18868425007CE6F4 /* MapKit.framework */; };
+		8648222A18DD3A3E00B6F69A /* FBKVOController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8648222918DD3A3E00B6F69A /* FBKVOController.m */; };
 		86489D7918CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489D7818CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m */; };
 		86489EF71875874A001AB9BA /* PostActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86489EF61875874A001AB9BA /* PostActivityViewController.m */; };
 		86494CBC188139A100C22B14 /* ConverReply.m in Sources */ = {isa = PBXBuildFile; fileRef = 86494CBB188139A100C22B14 /* ConverReply.m */; };
@@ -495,20 +495,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		860C6D8E18D8314000F67EE3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ECEA60FE18A49C620064AFF4;
-			remoteInfo = FBKVOController;
-		};
-		860C6D9018D8314000F67EE3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ECEA610E18A49C620064AFF4;
-			remoteInfo = FBKVOControllerTests;
-		};
 		86BDD51A18BC6F4700F621F6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */;
@@ -544,7 +530,6 @@
 		86045FD218B346290002581E /* XCJSelectAgeModefilViewContr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelectAgeModefilViewContr.m; path = viewcontroller/XCJSelectAgeModefilViewContr.m; sourceTree = "<group>"; };
 		8607385218AB4BFC003830DE /* SJAvatarBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SJAvatarBrowser.h; sourceTree = "<group>"; };
 		8607385318AB4BFC003830DE /* SJAvatarBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SJAvatarBrowser.m; sourceTree = "<group>"; };
-		860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBKVOController.xcodeproj; path = FBKVOControllerTK/FBKVOController.xcodeproj; sourceTree = "<group>"; };
 		8613A6F4187F9ADC002B9013 /* FCBeInviteGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCBeInviteGroup.h; path = DAOModel/coredata/FCBeInviteGroup.h; sourceTree = "<group>"; };
 		8613A6F5187F9ADC002B9013 /* FCBeInviteGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FCBeInviteGroup.m; path = DAOModel/coredata/FCBeInviteGroup.m; sourceTree = "<group>"; };
 		861C0F4318DC2F6C001DA32F /* PPCircleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PPCircleButton.h; sourceTree = "<group>"; };
@@ -608,6 +593,8 @@
 		8646FDD218863CD2007CE6F4 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
 		8646FDD418863CD2007CE6F4 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
 		8646FDDB18868425007CE6F4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		8648222818DD3A3E00B6F69A /* FBKVOController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBKVOController.h; sourceTree = "<group>"; };
+		8648222918DD3A3E00B6F69A /* FBKVOController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBKVOController.m; sourceTree = "<group>"; };
 		86489D7718CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJSelfPrivatePhotoViewController.h; path = viewcontroller/XCJSelfPrivatePhotoViewController.h; sourceTree = "<group>"; };
 		86489D7818CFFC8C0025A30B /* XCJSelfPrivatePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJSelfPrivatePhotoViewController.m; path = viewcontroller/XCJSelfPrivatePhotoViewController.m; sourceTree = "<group>"; };
 		86489EF51875874A001AB9BA /* PostActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostActivityViewController.h; sourceTree = "<group>"; };
@@ -1357,7 +1344,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				860C6D9318D8314F00F67EE3 /* libFBKVOController.a in Frameworks */,
 				86AFF8CE18D6F5D7000BBAD4 /* CoreTelephony.framework in Frameworks */,
 				86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */,
 				86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */,
@@ -1439,15 +1425,6 @@
 				86045FC918B2F7EF0002581E /* AOTag.m */,
 			);
 			name = AOtag;
-			sourceTree = "<group>";
-		};
-		860C6D8918D8313F00F67EE3 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				860C6D8F18D8314000F67EE3 /* libFBKVOController.a */,
-				860C6D9118D8314000F67EE3 /* FBKVOControllerTests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		861C0F4218DC2F6C001DA32F /* PinPad */ = {
@@ -1633,6 +1610,15 @@
 				8646FDD418863CD2007CE6F4 /* MobClick.h */,
 			);
 			path = UMAnalytics_Sdk_2.2.1.OpenUDID;
+			sourceTree = "<group>";
+		};
+		8648222618DD3A3E00B6F69A /* FBKVOController */ = {
+			isa = PBXGroup;
+			children = (
+				8648222818DD3A3E00B6F69A /* FBKVOController.h */,
+				8648222918DD3A3E00B6F69A /* FBKVOController.m */,
+			);
+			path = FBKVOController;
 			sourceTree = "<group>";
 		};
 		86489EF4187586BE001AB9BA /* PostPhoto */ = {
@@ -2588,7 +2574,6 @@
 		86D181C11834822C0005901D = {
 			isa = PBXGroup;
 			children = (
-				860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */,
 				86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */,
 				86D181D31834822C0005901D /* laixin */,
 				86D181F51834822D0005901D /* xianchangjiaTests */,
@@ -2867,6 +2852,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				8648222618DD3A3E00B6F69A /* FBKVOController */,
 				869DAE1718D94C2E0078168B /* ZAActivityBar */,
 				8690DEAD18C8891900A14A51 /* WebSource */,
 				867B053C18C41D3B00A562FA /* WeChatSDK_1.4.2.1 */,
@@ -3524,10 +3510,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 860C6D8918D8313F00F67EE3 /* Products */;
-					ProjectRef = 860C6D8818D8313F00F67EE3 /* FBKVOController.xcodeproj */;
-				},
-				{
 					ProductGroup = 86BDD51718BC6F4700F621F6 /* Products */;
 					ProjectRef = 86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */;
 				},
@@ -3541,20 +3523,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		860C6D8F18D8314000F67EE3 /* libFBKVOController.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFBKVOController.a;
-			remoteRef = 860C6D8E18D8314000F67EE3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		860C6D9118D8314000F67EE3 /* FBKVOControllerTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FBKVOControllerTests.xctest;
-			remoteRef = 860C6D9018D8314000F67EE3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		86BDD51B18BC6F4700F621F6 /* libOHAttributedLabel.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -3735,6 +3703,7 @@
 				8688CCCC188E513F002CD2C8 /* FacialView.m in Sources */,
 				86D1828A1834AED30005901D /* UIImage+Addition.m in Sources */,
 				86D9A87E186C1A0500147631 /* XCJSysSettingsViewController.m in Sources */,
+				8648222A18DD3A3E00B6F69A /* FBKVOController.m in Sources */,
 				8626559C18ADADB700F05B81 /* UINavigationController+SGProgress.m in Sources */,
 				86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */,
 				86D182FE1834AF7E0005901D /* GlobalData.m in Sources */,
@@ -4163,10 +4132,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP",
-					"$(PROJECT_DIR)/xianchangjia/instabug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -4204,10 +4170,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP",
-					"$(PROJECT_DIR)/xianchangjia/instabug",
-				);
+				FRAMEWORK_SEARCH_PATHS = "/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
