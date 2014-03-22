@@ -1681,13 +1681,13 @@
 - (void) insertTableRow
 {
     
-  //  [self.tableView beginUpdates];
+    /*[self.tableView beginUpdates];
     
-   // NSArray *insertion = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.messageList.count inSection:0]];
+    NSArray *insertion = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.messageList.count inSection:0]];
     
-   // [self.tableView insertRowsAtIndexPaths:insertion withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView insertRowsAtIndexPaths:insertion withRowAnimation:UITableViewRowAnimationBottom];
     
-   // [self.tableView endUpdates];
+    [self.tableView endUpdates];*/
     
     [self.tableView reloadData];
     [self scrollToBottonWithAnimation:YES];
@@ -1812,6 +1812,7 @@
      *  两种信息,   1: 用户间聊天信息    2: 系统公告
      */
     FCMessage *message = self.messageList[indexPath.row];
+//    SLog(@"message ID :%@",message.messageId);
     if ([message.messageType intValue] == messageType_SystemAD) {
         //系统公告
         static NSString *CellIdentifier = @"SystemCell";
@@ -1849,24 +1850,26 @@
     UIButton * retryButton = (UIButton *) [cell.contentView subviewWithTag:10];
     UIButton * audioButton = (UIButton *) [cell.contentView subviewWithTag:11];
     UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
-    if ([message.messageSendStatus intValue] == 1)
+    if ([message.messageSendStatus intValue] == 1) //sending
     {
+//        if (message.messageId && message.messageId.length > 0) ;
+        
         [indictorView startAnimating];
         indictorView.hidden = NO;
         retryButton.hidden = YES;
-    }else if ([message.messageSendStatus intValue] == 2)
+    }else if ([message.messageSendStatus intValue] == 2) //error
     {
         [indictorView stopAnimating];
         indictorView.hidden = YES;
         retryButton.hidden = NO;
     }
-    else  if ([message.messageSendStatus intValue] == 0){
+    else  if ([message.messageSendStatus intValue] == 0){ //sended
     {
             [indictorView stopAnimating];
             indictorView.hidden = YES;
             retryButton.hidden = YES;
     }
-    }else if([message.messageSendStatus intValue] == 4)
+    }else if([message.messageSendStatus intValue] == 4) // will sending
     {
         [indictorView startAnimating];
         indictorView.hidden = NO;

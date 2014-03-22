@@ -123,10 +123,11 @@
     NSArray  *rssTemp = [_managedObjectContext executeFetchRequest:request error:&error];
     */
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"sentDate" ascending:YES];
-//    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"messageId" ascending:NO];
-//    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor,sortDescriptor2, nil];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sortDescriptor count:1];
+    NSSortDescriptor *sortDescriptorTime = [[NSSortDescriptor alloc] initWithKey:@"sentDate" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"messageId" ascending:YES];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptorTime,sortDescriptor, nil ];
+//	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:&sortDescriptor count:1];
+//    NSSortStable
 	NSMutableArray *sortedMessages = [[NSMutableArray alloc] initWithArray:[conversation.messages allObjects]];
 	[sortedMessages sortUsingDescriptors:sortDescriptors];
     return  [NSMutableArray arrayWithArray:sortedMessages];

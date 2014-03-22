@@ -16,9 +16,9 @@
 
 
 #define kRequestKeyName @"cdata"// @"client_code"
-#define kRequestKeyLength 5
+#define kRequestKeyLength 15
 
-#define INT_DefaultListSize                 10
+#define INT_DefaultListSize                 100
 
 
 @interface RemoteImgListOperator ()
@@ -110,7 +110,7 @@
         __block NSString *strBlockURL = [guid copy];
         __weak id progressBlock = progress;
         
-        dispatch_sync(_queueRemoteImgOper, ^{
+        dispatch_async(_queueRemoteImgOper, ^{
             BOOL bIsRequesting = NO;
             for (NSDictionary *dicItem in _arrRemoteImgOper)
             {

@@ -26,7 +26,7 @@
 #define ITEM_WIDTH              320.0
 #define TITLE_HEIGHT            320.0
 
-@interface XCJNearbyInfoViewContr ()<UIScrollViewDelegate,UIActionSheetDelegate>
+@interface XCJNearbyInfoViewContr ()<UIScrollViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
     NSMutableArray * photoArray;
     XCJGroupPost_list *  postinfo;
@@ -275,7 +275,10 @@
 
      }
 }
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -519,6 +522,12 @@
             if (responseObject) {
                 NSDictionary * groups = responseObject[@"result"];
                 NSArray * postsDict =  groups[@"posts"];
+                if (postsDict.count == 0) {
+                 
+                   UIAlertView * alert =  [[UIAlertView alloc] initWithTitle:@"活动不存在" message:@"该活动已被系统或者活动发起者删除." delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
+                    return ;
+                }
                 [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     if (idx == 0) {
                         
