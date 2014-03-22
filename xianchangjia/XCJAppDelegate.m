@@ -1586,7 +1586,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
      sound = default;
      };
      }*/
-    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+   // NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     
     //    NSLog(@"Receive Notify: %@", userInfo);
     //NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
