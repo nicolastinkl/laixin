@@ -55,7 +55,7 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		ECEA60FC18A49C620064AFF4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "$(PRODUCT_NAME)Headers";
 			dstSubfolderSpec = 16;
 			files = (

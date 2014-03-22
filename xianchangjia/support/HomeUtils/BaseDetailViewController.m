@@ -18,7 +18,7 @@
 #import "XCAlbumAdditions.h"
 #import "FCUserDescription.h"
 #import "XCJMessageReplyInfoViewController.h"
-#import <FBKVOController/FBKVOController.h>
+#import "FBKVOController.h"
 
 //#import "MobClick.h"
 #define kLoadMoreCellHeight 40
