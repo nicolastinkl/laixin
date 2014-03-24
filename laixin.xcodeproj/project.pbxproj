@@ -159,6 +159,7 @@
 		866F0622185724EE007A57CF /* SinaWeiboAuthorizeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061C185724EE007A57CF /* SinaWeiboAuthorizeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 866F061F185724EE007A57CF /* SinaWeiboRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		867014A9185185F100518B6D /* JsonImageurls.json in Resources */ = {isa = PBXBuildFile; fileRef = 867014A8185185F100518B6D /* JsonImageurls.json */; };
+		8670E38318DECD9000B60D11 /* UIViewController+TAPKeyboardPop.m in Sources */ = {isa = PBXBuildFile; fileRef = 8670E38218DECD9000B60D11 /* UIViewController+TAPKeyboardPop.m */; };
 		86740A971839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A941839FA2A0041B603 /* UIImage+ImageEffects.m */; };
 		86740A981839FA2A0041B603 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A941839FA2A0041B603 /* UIImage+ImageEffects.m */; };
 		86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86740A961839FA2A0041B603 /* UINavigationController+MHDismissModalView.m */; };
@@ -798,6 +799,8 @@
 		866F061E185724EE007A57CF /* SinaWeiboRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinaWeiboRequest.h; sourceTree = "<group>"; };
 		866F061F185724EE007A57CF /* SinaWeiboRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinaWeiboRequest.m; sourceTree = "<group>"; };
 		867014A8185185F100518B6D /* JsonImageurls.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = JsonImageurls.json; sourceTree = "<group>"; };
+		8670E38118DECD9000B60D11 /* UIViewController+TAPKeyboardPop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TAPKeyboardPop.h"; sourceTree = "<group>"; };
+		8670E38218DECD9000B60D11 /* UIViewController+TAPKeyboardPop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TAPKeyboardPop.m"; sourceTree = "<group>"; };
 		86740A931839FA2A0041B603 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		86740A941839FA2A0041B603 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		86740A951839FA2A0041B603 /* UINavigationController+MHDismissModalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+MHDismissModalView.h"; sourceTree = "<group>"; };
@@ -2046,6 +2049,15 @@
 			path = SinaWeibo;
 			sourceTree = "<group>";
 		};
+		8670E38018DECD9000B60D11 /* TAPKeyboardPopClasses */ = {
+			isa = PBXGroup;
+			children = (
+				8670E38118DECD9000B60D11 /* UIViewController+TAPKeyboardPop.h */,
+				8670E38218DECD9000B60D11 /* UIViewController+TAPKeyboardPop.m */,
+			);
+			path = TAPKeyboardPopClasses;
+			sourceTree = "<group>";
+		};
 		86740A921839FA1F0041B603 /* UIViewContr */ = {
 			isa = PBXGroup;
 			children = (
@@ -2852,6 +2864,7 @@
 		86D1825C1834AED30005901D /* support */ = {
 			isa = PBXGroup;
 			children = (
+				8670E38018DECD9000B60D11 /* TAPKeyboardPopClasses */,
 				8648222618DD3A3E00B6F69A /* FBKVOController */,
 				869DAE1718D94C2E0078168B /* ZAActivityBar */,
 				8690DEAD18C8891900A14A51 /* WebSource */,
@@ -3819,6 +3832,7 @@
 				869CE526186BE38D0004C1EC /* NSManagedObject+MagicalFinders.m in Sources */,
 				86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */,
 				865632EA185FFDDA00E9903C /* XCJNearbyHomeViewController.m in Sources */,
+				8670E38318DECD9000B60D11 /* UIViewController+TAPKeyboardPop.m in Sources */,
 				8690DEDA18C97BD000A14A51 /* XCJOrderAllViewController.m in Sources */,
 				8683FA95187FE26100CEFA45 /* XCJPostTextViewController.m in Sources */,
 				86D56C61189BFF44005CFD85 /* RemoteImgOperator.m in Sources */,

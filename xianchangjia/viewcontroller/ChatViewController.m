@@ -46,6 +46,9 @@
 #import "IDMPhoto.h"
 #import "IDMPhotoBrowser.h"
 
+#warning like iMesage will dismiss the keyboard
+//#import "UIViewController+TAPKeyboardPop.h"
+
 #define  keyboardHeight 216
 #define  facialViewWidth 300
 #define facialViewHeight 180
@@ -2142,18 +2145,27 @@
         
         [audioButton.layer setValue:message.audioUrl forKey:@"audiourl"];
         //SLog(@"message.audioLength %@",message.audioLength);
+        
+        int displayLength = 0;
         if ([message.audioLength intValue] > 1000) {
             int len =[message.audioLength intValue];
-            [audioButton setTitle:[NSString stringWithFormat:@"%d''",len/audioLengthDefine] forState:UIControlStateNormal];
+            displayLength = len/audioLengthDefine;
         }else{
             if ([message.audioLength intValue] < 0) {
                 int leng = [message.audioLength intValue];
                 leng = -leng;
-                 [audioButton setTitle:[NSString stringWithFormat:@"%d''",leng/audioLengthDefine] forState:UIControlStateNormal];
+                displayLength = leng/audioLengthDefine;
             }else{
-                [audioButton setTitle:[NSString stringWithFormat:@"%d''",[message.audioLength intValue]] forState:UIControlStateNormal];
+                displayLength = [message.audioLength intValue];
+               
             }
         }
+        if (displayLength <= 0) {
+            // length for local path
+            int  localLength = [self getFileSize:message.audioUrl];
+            displayLength = localLength/audioLengthDefine;
+        }
+         [audioButton setTitle:[NSString stringWithFormat:@"%d''",displayLength] forState:UIControlStateNormal];
         
         [audioButton addTarget:self action:@selector(playaudioClick:) forControlEvents:UIControlEventTouchUpInside];
  

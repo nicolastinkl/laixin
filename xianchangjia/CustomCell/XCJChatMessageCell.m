@@ -163,8 +163,8 @@
                 msg.messageSendStatus = @(0);
                 msg.messageUser = self.currentMessage.messageUser;
                 msg.imageUrl = url;
-                msg.audioUrl = msg.audioUrl;
-                msg.videoUrl = msg.videoUrl;
+                msg.audioUrl = self.currentMessage.audioUrl;
+                msg.videoUrl = self.currentMessage.videoUrl;
                 msg.read = self.currentMessage.read;
                 msg.latitude = self.currentMessage.latitude;
                 msg.longitude =self.currentMessage.longitude;
