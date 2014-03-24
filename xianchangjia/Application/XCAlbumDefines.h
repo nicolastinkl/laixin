@@ -78,7 +78,7 @@ typedef enum {
 
 #define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
 
-#define APP_STORE_LINK_http         @"https://itunes.apple.com/cn/app/xian-chang-jia//id541873451?ls=1&mt=8"
+#define APP_STORE_LINK_http         @"https://itunes.apple.com/cn/app/lai-xin//id541873451?ls=1&mt=8"
 #define APP_STORE_LINK_iTunes       @"itms-apps://itunes.apple.com/cn/app/541873451?mt=8"
 
 #define APP_COMMENT_LINK_iTunes     @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=541873451"

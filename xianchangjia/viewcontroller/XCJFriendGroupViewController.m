@@ -518,8 +518,14 @@
                 NSArray * postsDictOld = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
                 if (postsDictOld.count > self.activities.count) {
                     
+                    int totalNum = 0;
+                    if (self.activities.count + 20 < postsDictOld.count) {
+                        totalNum =20;
+                    }else{
+                        totalNum = postsDictOld.count - self.activities.count;
+                    }
                     __block NSInteger lasID = 0;
-                    NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(self.activities.count, 20)];
+                    NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(self.activities.count, totalNum)];
                     [postsDictOld enumerateObjectsAtIndexes:indexset options:NSSortStable usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                         XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                         lasID = [post.postid integerValue];

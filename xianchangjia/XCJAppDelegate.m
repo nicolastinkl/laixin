@@ -1063,7 +1063,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // tell websocket disconnect
     if([XCJAppDelegate hasLogin])
     {
-        
+        /*[[MLNetworkingManager sharedManager] sendWithAction:@"session.stop" parameters:@{} success:^(MLRequest *request, id responseObject) {
+         
+         } failure:^(MLRequest *request, NSError *error) {
+         
+         }];*/
         SLLog(@"applicationDidEnterBackground webSocket close");
         [[[MLNetworkingManager sharedManager] webSocket] close];
     }

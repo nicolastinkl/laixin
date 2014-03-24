@@ -123,11 +123,14 @@
         return;
     }
     
+    if (self.text_address.text.length <= 0) {
+        return;
+    }
+    
     if (self.textview.text.length <= 0) {
         [UIAlertView showAlertViewWithMessage:@"你不看提示的么,说明?"];
         return;
     }
-    
     
     [SVProgressHUD showWithStatus:@"正在创建活动..."];        
     NSDictionary * parames = @{@"name":self.text_nick.text ,@"position":self.text_address.text,@"board":self.text_phoneNumber.text,@"type":@(groupsGroupNearbyInvite)};
