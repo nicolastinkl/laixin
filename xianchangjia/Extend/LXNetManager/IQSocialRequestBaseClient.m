@@ -17,7 +17,8 @@ static NSString * const kAPIBaseURLString = @"https://service.laixinle.com/";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[IQSocialRequestBaseClient alloc] initWithBaseURL:[NSURL URLWithString:kAPIBaseURLString]];
-        [_sharedClient setSecurityPolicy:[AFSecurityPolicy defaultPolicy]];// policyWithPinningMode:AFSSLPinningModePublicKey]];
+        [_sharedClient setSecurityPolicy:[AFSecurityPolicy defaultPolicy]];
+        // policyWithPinningMode:AFSSLPinningModePublicKey]];
     });
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; 
     return _sharedClient;
