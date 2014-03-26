@@ -308,7 +308,7 @@
         //0   好友
         
         XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
-        UIImage * image = [self.tableview  viewToImage:self.tableview];
+        UIImage * image = [self.tableview  viewToImage:self.tableview.tableHeaderView];
         NSData * data = UIImageJPEGRepresentation(image, .5);
         switch (buttonIndex) {
             case 0:

@@ -34,6 +34,7 @@
                                                   }
                                               }];*/
     NSLog(@"parems get token : %@",parems);
+    
     [[IQSocialRequestBaseClient sharedClient] GET:parems parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         NSLog(@"responseObject : %@",responseObject);
         if (completion) {

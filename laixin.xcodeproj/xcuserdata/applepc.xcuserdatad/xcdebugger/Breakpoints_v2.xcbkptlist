@@ -692,11 +692,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXRequestFacebookManager.m"
-            timestampString = "417164957.992569"
+            timestampString = "417495679.192288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "-getUserDesPtionCompletion:withuid:"
             landmarkType = "5">
          </BreakpointContent>
@@ -800,11 +800,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXRequestFacebookManager.m"
-            timestampString = "412332556.601202"
+            timestampString = "417495679.192288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "-getUserDesPtionCompletion:withuid:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1476,11 +1476,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXRequestFacebookManager.m"
-            timestampString = "417164957.992569"
+            timestampString = "417495679.192288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "-getUserDesByNetCompletion:withuid:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1492,11 +1492,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXRequestFacebookManager.m"
-            timestampString = "417164957.992569"
+            timestampString = "417495679.192288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "-getUserDesByNetCompletion:withuid:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1524,11 +1524,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/Extend/LXNetManager/LXRequestFacebookManager.m"
-            timestampString = "417164957.992569"
+            timestampString = "417495679.192288"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "-getUserDesByNetCompletion:withuid:"
             landmarkType = "5">
             <Locations>

@@ -639,10 +639,10 @@
 
 #pragma mark - Status Bar
 
-/*- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}*/
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return YES;
+//}
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
@@ -710,6 +710,21 @@
 	_currentPageIndex = indexPriorToLayout;
 	_performingLayout = NO;
 }
+
+//#pragma mark Status Bar
+//- (void)changeStatusBarHidden:(BOOL)hidden {
+//    _errorView.hidden = hidden;
+//    [self setNeedsStatusBarAppearanceUpdate];
+//}
+//
+//-(BOOL)prefersStatusBarHidden
+//{
+//    return !_errorView.hidden;
+//}
+
+
+
+
 
 - (void)performLayout {
     // Setup

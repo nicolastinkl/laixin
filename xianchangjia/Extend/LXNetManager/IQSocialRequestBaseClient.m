@@ -9,7 +9,7 @@
 #import "IQSocialRequestBaseClient.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
-static NSString * const kAPIBaseURLString = @"http://service.xianchangjia.com";
+static NSString * const kAPIBaseURLString = @"https://service.laixinle.com/";
 
 @implementation IQSocialRequestBaseClient
 + (IQSocialRequestBaseClient *)sharedClient {
@@ -17,7 +17,7 @@ static NSString * const kAPIBaseURLString = @"http://service.xianchangjia.com";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _sharedClient = [[IQSocialRequestBaseClient alloc] initWithBaseURL:[NSURL URLWithString:kAPIBaseURLString]];
-        [_sharedClient setSecurityPolicy:[AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey]];
+        [_sharedClient setSecurityPolicy:[AFSecurityPolicy defaultPolicy]];// policyWithPinningMode:AFSSLPinningModePublicKey]];
     });
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; 
     return _sharedClient;

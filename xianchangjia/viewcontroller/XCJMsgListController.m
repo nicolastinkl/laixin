@@ -1085,7 +1085,7 @@
         default:
             break;
     }
-    return NO;
+    return YES;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1146,6 +1146,11 @@
                 break;
                 
             default:
+            {
+                id managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
+                [managedObject MR_deleteEntity];
+                [[managedObject managedObjectContext] MR_saveToPersistentStoreAndWait];
+            }
                 break;
         }
 

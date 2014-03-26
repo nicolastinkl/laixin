@@ -273,7 +273,7 @@
              "timeout":1388472185.910526
              }*/
             NSString * sessionID = [DataHelper getStringValue:response2[@"sessionid"] defaultValue:@""];
-            NSString * serverURL = [DataHelper getStringValue:response2[@"ws"] defaultValue:@""];
+            NSString * serverURL = [DataHelper getStringValue:response2[@"wss"] defaultValue:@""];
            // NSString * timeout = [DataHelper getStringValue:response2[@"timeout"] defaultValue:@""];
             
             if (sessionID.length > 1) {

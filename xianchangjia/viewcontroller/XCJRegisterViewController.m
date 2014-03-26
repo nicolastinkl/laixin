@@ -145,9 +145,9 @@
                  "ws":"ws://127.0.0.1:8000/ws",
                  "timeout":1388472185.910526
                  }*/
-                NSString * sessionID =  [response2 objectForKey:@"sessionid"];
-                NSString * serverURL =  [response2 objectForKey:@"ws"];
-                if (sessionID) {
+                NSString * sessionID = [DataHelper getStringValue:response2[@"sessionid"] defaultValue:@"" ];
+                NSString * serverURL =  [DataHelper getStringValue:response2[@"wss"] defaultValue:@"" ];
+                if (sessionID.length > 0) {
                     [USER_DEFAULT setObject:sessionID forKey:KeyChain_Laixin_account_sessionid];
                     [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                     [USER_DEFAULT synchronize];
