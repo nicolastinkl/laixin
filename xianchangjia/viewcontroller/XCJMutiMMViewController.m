@@ -33,6 +33,7 @@
     [super viewDidLoad];
 
     self.title = @"已选列表";
+   
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -47,12 +48,19 @@
         UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清空" style:UIBarButtonItemStyleDone target:self action:@selector(clearCacheClick:)];
         self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     }
-        
+    
+//    self.navigationItem.leftBarButtonItem =  [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStyleDone target:self action:@selector(backCLick:)];
+    
     if (arrays.count  == 0) {
         [self showErrorText:@"还没有选择K歌指导员"];
     }
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+}
+
+-(IBAction)backCLick:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

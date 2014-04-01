@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define PWdString @"PWdStringPIN"
+#define PWdString @"PWdStringPINS"
 
 
 @protocol PinPadPasswordProtocol <NSObject>

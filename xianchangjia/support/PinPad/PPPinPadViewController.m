@@ -8,7 +8,7 @@
 
 #import "PPPinPadViewController.h"
 #import "PPPinCircleView.h"
-
+#import "NSString+Addition.h"
 
 
 @interface PPPinPadViewController () {
@@ -120,15 +120,18 @@ static  CGFloat kVTPinPadViewControllerCircleRadius = 6.0f;
             if([self.delegate respondsToSelector:@selector(CorrectError)]) {
                 [self.delegate CorrectError];
             }
-            NSLog(@"Not correct pin");
+//            SLog(@"Not correct pin");
         }
     }else{
         if ([self pinLenght] == _inputPin.length)
         {
             //第一次输入
             if (twiceTimes) {
+                
                 NSString * Pin = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
-                if ([_inputPin isEqualToString:Pin]) {
+                // get md5
+                NSString * newmd5Str = [_inputPin md5Hash];
+                if ([newmd5Str isEqualToString:Pin]) {
                     if([self.delegate respondsToSelector:@selector(CorrectRight)]) {
                         [self.delegate CorrectRight];
                     }
@@ -153,7 +156,8 @@ static  CGFloat kVTPinPadViewControllerCircleRadius = 6.0f;
                     [[NSUserDefaults standardUserDefaults] synchronize];
                 }
             }else{
-                [[NSUserDefaults standardUserDefaults] setValue:_inputPin forKey:PWdString];
+                NSString * newmd5Str = [_inputPin md5Hash];
+                [[NSUserDefaults standardUserDefaults] setValue:newmd5Str forKey:PWdString];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 self.Textview_toast.text = @"请确认您的密码";

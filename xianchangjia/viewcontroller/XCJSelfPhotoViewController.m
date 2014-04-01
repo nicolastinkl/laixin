@@ -104,7 +104,6 @@
 //            }];
 //            
 //        }
-   
     }
     else{
         [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id userdes, NSError *error) {

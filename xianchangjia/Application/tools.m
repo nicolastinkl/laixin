@@ -10,6 +10,7 @@
 #import "XCAlbumDefines.h"
 #import "DataHelper.h"
 #import "NSString+Addition.h" 
+
 #pragma  mark 使用Category来计算同一时代（AD|BC）两个日期午夜之间的天数：
 
 
@@ -134,8 +135,6 @@
     UIViewController *controller = [[classType alloc] initWithNibName:className bundle:nil];
     return controller;
 }
-
-
 
 +(void) setRoundHeadRotary:(UIView *)view
 {

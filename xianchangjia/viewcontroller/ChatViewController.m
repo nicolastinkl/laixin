@@ -705,9 +705,12 @@
                     msg.messageType = @(messageType_audio);
                     int length  = [dicMessage[@"length"] intValue];
                     msg.audioLength = @(length/audioLengthDefine);
-                }else if ([typeMessage isEqualToString:@"map"]) {
+                }else if ([typeMessage isEqualToString:@"geo"]) {
                     self.conversation.lastMessage = @"[位置信息]";
-                    msg.imageUrl = imageurl;
+                    msg.imageUrl = @"";
+                    msg.latitude = @([DataHelper getFloatValue:dicMessage[@"lat"] defaultValue:0.0]);
+                    msg.longitude = @([DataHelper getFloatValue:dicMessage[@"long"] defaultValue:0.0]);
+                    
                     msg.messageType = @(messageType_map);
                 }else if ([typeMessage isEqualToString:@"video"]) {
                     self.conversation.lastMessage = @"[视频]";
@@ -780,9 +783,11 @@
                     self.conversation.lastMessage = @"[语音]";
                     msg.audioUrl = audiourl;
                     msg.messageType = @(messageType_audio);
-                }else if ([typeMessage isEqualToString:@"map"]) {
+                }else if ([typeMessage isEqualToString:@"geo"]) {
                     self.conversation.lastMessage = @"[位置信息]";
-                    msg.imageUrl = imageurl;
+                    msg.imageUrl = @"";
+                    msg.latitude = @([DataHelper getFloatValue:dicMessage[@"lat"] defaultValue:0.0]);
+                    msg.longitude = @([DataHelper getFloatValue:dicMessage[@"long"] defaultValue:0.0]);
                     msg.messageType = @(messageType_map);
                 }else if ([typeMessage isEqualToString:@"video"]) {
                     self.conversation.lastMessage = @"[视频]";
@@ -1255,6 +1260,16 @@
         NSString * address =  notity.userInfo[@"strAddresss"];
         NSNumber * lat =  notity.userInfo[@"lat"];
         NSNumber * log =  notity.userInfo[@"log"];
+        
+        
+        // send by test message
+        //message.send(uid,content=None,lat=None,long=None)
+        //,@"content":address
+        [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:@{@"uid":self.conversation.facebookId,@"lat":lat,@"long":log} success:^(MLRequest *request, id responseObject) {
+        } failure:^(MLRequest *request, NSError *error) {
+        }];
+        
+        
         NSString  *token =  [[EGOCache globalCache] stringForKey:@"uploadtoken"];
         if(token.length > 0){
             [self postLoactionMsg:notity.userInfo];
@@ -2124,8 +2139,15 @@
         
         imageview_BG.hidden = NO;
         imageview_Img.userInteractionEnabled = YES;
-        address.text = message.text;
-        address.hidden = NO;
+        if(message.text.length > 4)
+        {            
+            address.text = message.text;
+            address.hidden = NO;
+        }else
+        {
+            address.text = @"";
+            address.hidden = YES;
+        }
         
     }else if([message.messageType intValue] == messageType_audio)
     {
@@ -2285,15 +2307,20 @@
                 NSURL *URL = [NSURL URLWithString:audiourl];
                 NSURLRequest *request = [NSURLRequest requestWithURL:URL];
                 NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
-                    SLLog(@"response type : %@",[response MIMEType]);
+
                     NSString * filename = [response suggestedFilename];
+                    SLLog(@"response type : %@,%@",[response MIMEType],filename);
+                    
+                    if ([filename containString:@".amr"]) {
+                         return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@",filename]];
+                    }
+                    
                     return [documentsDirectoryPath URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.amr",filename]];
                 } completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
-                    NSLog(@"File downloaded to: %@", filePath);
+                    SLog(@"File downloaded to: %@", filePath);
                     [button hideIndicatorView];
                     button.userInteractionEnabled = YES;
                     int leng = [self getFileSize:[NSString stringWithFormat:@"%@",fileNameWhole]];
-                    //                [button setTitle:[NSString stringWithFormat:@"%d''",leng/1000] forState:UIControlStateNormal];
                     [VoiceConverter amrToWav:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"amr"] wavSavePath:[VoiceRecorderBaseVC getPathByFileName:filename ofType:@"wav"]];
                     
                     //初始化播放器的时候如下设置

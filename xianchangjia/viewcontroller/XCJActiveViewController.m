@@ -182,7 +182,6 @@
     }
 }
 
-
 -(IBAction)activeClick:(id)sender
 {
     UITextField * text =     ((UITextField *) [self.view subviewWithTag:1]);
@@ -201,13 +200,18 @@
                 NSDictionary * result = responseObject[@"result"];
                 if(result && result.allKeys.count > 0)
                 {
+                    /*
+                     {"push":false,"errno":0,"result":{"active_level":3,"active_by":1},"cdata":"WDRUQHFAOU","error":"no error"}
+                     */
                     //返回激活等级和激活者的id
                     NSInteger level = [DataHelper getIntegerValue:result[@"active_level"] defaultValue:0];
+                    NSInteger active_by = [DataHelper getIntegerValue:result[@"active_by"] defaultValue:0];
                     if (level > 0) {
                         //upload myself level
                         int activeCode = [LXAPIController sharedLXAPIController ].currentUser.actor_level;
                         if (level > activeCode) {
                             [LXAPIController sharedLXAPIController ].currentUser.active_level = level;
+                            [LXAPIController sharedLXAPIController ].currentUser.active_by = active_by;
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadMyLevel" object:nil];
                         }
                     }

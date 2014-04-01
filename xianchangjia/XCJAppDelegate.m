@@ -487,10 +487,13 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.messageType = @(messageType_audio);
                 int length  = [dicMessage[@"length"] intValue];
                 msg.audioLength = @(length/audioLengthDefine);
-            }else if ([typeMessage isEqualToString:@"map"]) {
+            }else if ([typeMessage isEqualToString:@"geo"]) {
                 conversation.lastMessage = @"[位置信息]";
-                msg.imageUrl = imageurl;
                 msg.messageType = @(messageType_map);
+                
+                msg.imageUrl = @"";
+                msg.latitude = @([DataHelper getFloatValue:dicMessage[@"lat"] defaultValue:0.0]);
+                msg.longitude = @([DataHelper getFloatValue:dicMessage[@"long"] defaultValue:0.0]);
             }else if ([typeMessage isEqualToString:@"video"]) {
                 conversation.lastMessage = @"[视频]";
                 msg.videoUrl = imageurl;
@@ -1073,6 +1076,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     }
     
     
+    
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
@@ -1202,9 +1206,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
                         msg.messageType = @(messageType_audio);
                         int length  = [obj[@"length"] intValue];
                         msg.audioLength = @(length/audioLengthDefine);
-                    }else if ([typeMessage isEqualToString:@"map"]) {
+                    }else if ([typeMessage isEqualToString:@"geo"]) {
                         //                                    conversation.lastMessage = @"[位置信息]";
-                        msg.imageUrl = imageurl;
+                        msg.imageUrl = @"";
+                        msg.latitude = @([DataHelper getFloatValue:obj[@"lat"] defaultValue:0.0]);
+                        msg.longitude = @([DataHelper getFloatValue:obj[@"long"] defaultValue:0.0]);
                         msg.messageType = @(messageType_map);
                     }else if ([typeMessage isEqualToString:@"video"]) {
                         //                                    conversation.lastMessage = @"[视频]";
@@ -1232,7 +1238,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                         conversation.lastMessage = @"[图片]";
                     }else if ([typeMessage isEqualToString:@"vic"]) {
                         conversation.lastMessage = @"[语音]";
-                    }else if ([typeMessage isEqualToString:@"map"]) {
+                    }else if ([typeMessage isEqualToString:@"geo"]) {
                         conversation.lastMessage = @"[位置信息]";
                     }else if ([typeMessage isEqualToString:@"video"]) {
                         conversation.lastMessage = @"[视频]";

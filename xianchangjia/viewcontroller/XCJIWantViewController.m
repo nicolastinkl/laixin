@@ -223,10 +223,13 @@
     }
 }
 
-
 - (BOOL)checkPin:(NSString *)pin {
+    
+    NSString * newmd5Str = [pin md5Hash];
+    
     NSString * PinOld = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
-    return [pin isEqualToString:PinOld];
+    
+    return [newmd5Str isEqualToString:PinOld];
 }
 
 - (NSInteger)pinLenght {
