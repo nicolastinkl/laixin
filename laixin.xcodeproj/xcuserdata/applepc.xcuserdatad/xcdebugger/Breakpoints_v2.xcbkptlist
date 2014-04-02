@@ -2713,8 +2713,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2702"
             endingLineNumber = "2702"
-            landmarkName = "@implementation ChatViewController"
-            landmarkType = "3">
+            landmarkName = "-gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
