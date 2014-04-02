@@ -532,8 +532,8 @@
     }
 	// Do any additional setup after loading the view.
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillShowKeyboardNotification:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillHideKeyboardNotification:) name:UIKeyboardWillHideNotification object:nil];
     
     /* receive websocket message
      */
@@ -605,6 +605,11 @@
 {
     if ([scrollViewDat isKindOfClass:[UITableView class]]) {
         self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        if ([self.inputTextView isFirstResponder]) {
+            [self.inputTextView resignFirstResponder];
+            
+        }
+
     }
 
 }
@@ -2499,41 +2504,110 @@
     return [self heightForCellWithPost:message.text]+20.0f;
 }
 
-#pragma mark - Keyboard
-- (void)keyboardWillShow:(NSNotification *)notification
+
+#pragma mark - Keyboard notifications
+
+- (void)handleWillShowKeyboardNotification:(NSNotification *)notification
 {
- 
+    
+    [self keyboardWillShowHide:notification];
+    [self scrollToBottonWithAnimation:YES];
+}
+
+- (void)handleWillHideKeyboardNotification:(NSNotification *)notification
+{
+    [self keyboardWillShowHide:notification];
+    
+    if(self.inputContainerView)
+    {
+        ( (UIButton*) [self.inputContainerView subviewWithTag:4]).hidden = NO;
+        ( (UIButton*) [self.inputContainerView subviewWithTag:5]).hidden = YES;
+    }
+}
+
+#pragma mark - Keyboard
+- (void)keyboardWillShowHide:(NSNotification *)notification
+{
     self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     
-    NSDictionary *info = [notification userInfo];
-    CGRect keyboardFrame = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-
-    [UIView animateWithDuration:0.3 animations:^{
+    NSDictionary *userInfo = [notification userInfo];
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameForTextField = [self.inputContainerView.superview convertRect:keyboardFrame fromView:nil];
+    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect newTextFieldFrame = self.inputContainerView.frame;
+    newTextFieldFrame.origin.y = keyboardFrameForTextField.origin.y - newTextFieldFrame.size.height;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationCurve:curve];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
+    
+    CGRect inputViewFrame = self.inputContainerView.frame;
+    CGFloat inputViewFrameY = keyboardY - inputViewFrame.size.height;
+    // for ipad modal form presentations
+    CGFloat messageViewFrameBottom = self.view.frame.size.height - inputViewFrame.size.height;
+    if (inputViewFrameY > messageViewFrameBottom)
+        inputViewFrameY = messageViewFrameBottom;
+    
+    [self.inputContainerView setTop:inputViewFrameY];
+    
+    [self setTableViewInsetsWithBottomValue:self.view.frame.size.height
+     - self.inputContainerView.frame.origin.y - self.inputContainerView.height];
+    
+    [UIView commitAnimations];
+    
+    {
+        //    [UIView animateWithDuration:duration delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState | curve animations:^{
+        //        self.tableView.height = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+        //        self.inputContainerView.frame = newTextFieldFrame;
+        //    } completion:nil];
         
-        self.tableView.height = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+        //tableView滚动到底部
+        //    [self scrollToBottonWithAnimation:YES];
         
-        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
-    }];
-    
-    
-    //tableView滚动到底部
-    [self scrollToBottonWithAnimation:YES];
-    
-    
-    //    if (self.keyboardView&&self.keyboardView.frameY<self.keyboardView.window.frameHeight) {
-    //        //到这里说明其不是第一次推出来的，而且中间变化，无需动画直接变
-    ////        self.inputContainerViewBottomConstraint.top = keyboardFrame.size.height;
-    //        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
-    ////        [self.view setNeedsUpdateConstraints];
-    //        return;
-    //    }
-    
-//    [self animateChangeWithConstant:keyboardFrame.size.height withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
-    
-    //晚一小会获取。
-//   [self performSelector:@selector(resetKeyboardView) withObject:nil afterDelay:0.001];
+        
+        //    if (self.keyboardView&&self.keyboardView.frameY<self.keyboardView.window.frameHeight) {
+        //        //到这里说明其不是第一次推出来的，而且中间变化，无需动画直接变
+        ////        self.inputContainerViewBottomConstraint.top = keyboardFrame.size.height;
+        //        self.inputContainerView.top = self.view.height - keyboardFrame.size.height - self.inputContainerView.height;
+        ////        [self.view setNeedsUpdateConstraints];
+        //        return;
+        //    }
+        
+        //    [self animateChangeWithConstant:keyboardFrame.size.height withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+        
+        //晚一小会获取。
+        //   [self performSelector:@selector(resetKeyboardView) withObject:nil afterDelay:0.001];
+    }
     
 }
+
+
+#pragma mark - Dismissive text view delegate
+
+- (void)setTableViewInsetsWithBottomValue:(CGFloat)bottom
+{
+    UIEdgeInsets insets = [self tableViewInsetsWithBottomValue:bottom];
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+}
+
+- (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom
+{
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        insets.top = self.topLayoutGuide.length;
+    }
+    insets.bottom = bottom;
+    
+    return insets;
+}
+
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
@@ -2561,6 +2635,8 @@
 //    [self animateChangeWithConstant:0. withDuration:[info[UIKeyboardAnimationDurationUserInfoKey] doubleValue] andCurve:[info[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
 //    self.keyboardView = nil;
 }
+
+
 
 - (void)animateChangeWithConstant:(CGFloat)constant withDuration:(NSTimeInterval)duration andCurve:(UIViewAnimationCurve)curve
 {

@@ -84,19 +84,38 @@
 - (void)keyboardWillShow:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
+    NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    UIViewAnimationCurve curve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] intValue];
+    CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardFrameForTextField = [CommentView.superview convertRect:keyboardFrame fromView:nil];
+
+    CGRect newTextFieldFrame = CommentView.frame;
+    newTextFieldFrame.origin.y = keyboardFrameForTextField.origin.y - newTextFieldFrame.size.height;
     
-    CGFloat newY = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height ;
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationCurve:curve];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    CommentView.frame = newTextFieldFrame;
+    
+    [UIView commitAnimations];
+    
+    
+    /*
+     CGFloat newY = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size.height ;
      if (CommentView) {
-         [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                          animations:^{
-//                              CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                               [CommentView setTop:APP_SCREEN_HEIGHT - CommentView.height-newY];
-                          }
-                          completion:^(BOOL finished) {
-                             
-                          }];
-        
+     [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
+     animations:^{
+     [CommentView setTop:APP_SCREEN_HEIGHT - CommentView.height-newY];
      }
+     completion:^(BOOL finished) {
+     
+     }];
+     
+     }
+     */
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification
@@ -120,6 +139,7 @@
     if (CommentView == nil) {
         CommentView = [[[NSBundle mainBundle] loadNibNamed:@"XCJCommentView" owner:self options:nil] firstObject];
         CommentView.delegate = self;
+        
     }
     
     [self.navigationController.view addSubview:CommentView];

@@ -589,7 +589,10 @@
     NSDictionary *userInfo = [notification userInfo];
     
     CGFloat newY = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].origin.y - _inputView.frameHeight;//-64
-
+    CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+	UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
     _tableView.userInteractionEnabled = NO;
     
     //调整tableView的位置
@@ -601,15 +604,17 @@
         }
     }
     
-    [UIView animateWithDuration:[[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue]
-                     animations:^{
-                          CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                         _inputView.frameY =  self.view.height - keyboardFrame.size.height - 44;// newY;
-                         _tableView.contentOffset = CGPointMake(0, newYOffset + 70);
-                     }
-                    completion:^(BOOL finished) {
-                        _tableView.userInteractionEnabled = YES;
-                    }];
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationCurve:curve];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    
+    _inputView.frameY =  self.view.height - keyboardRect.size.height - 44;// newY;
+    _tableView.contentOffset = CGPointMake(0, newYOffset + 70);
+       _tableView.userInteractionEnabled = YES;
+    [UIView commitAnimations];
+ 
     
 }
 
