@@ -46,8 +46,8 @@
 #import "IDMPhoto.h"
 #import "IDMPhotoBrowser.h"
 
-#warning like iMesage will dismiss the keyboard
-//#import "UIViewController+TAPKeyboardPop.h"
+//#warning like iMesage will dismiss the keyboard
+#import "UIViewController+TAPKeyboardPop.h"
 
 #define  keyboardHeight 216
 #define  facialViewWidth 300
@@ -218,7 +218,7 @@
 {
     ( (UIButton *) [self.inputContainerView subviewWithTag:8]).hidden = YES;
     ( (UIButton *) [self.inputContainerView subviewWithTag:7]).hidden = NO;
-    ((UIButton *) [self.inputContainerView subviewWithTag:9]).hidden = YES;
+    ( (UIButton *) [self.inputContainerView subviewWithTag:9]).hidden = YES;
     [self.inputTextView becomeFirstResponder];
     
 }
@@ -2101,7 +2101,6 @@
         address.text = @"";
         address.hidden = YES;
         
-        
     }else if([message.messageType intValue] == messageType_map)
     {
         //display image  115 108
@@ -2528,7 +2527,7 @@
 #pragma mark - Keyboard
 - (void)keyboardWillShowHide:(NSNotification *)notification
 {
-    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+//    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     
     NSDictionary *userInfo = [notification userInfo];
     NSTimeInterval duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -2593,7 +2592,7 @@
 {
     UIEdgeInsets insets = [self tableViewInsetsWithBottomValue:bottom];
     self.tableView.contentInset = insets;
-    self.tableView.scrollIndicatorInsets = insets;
+//    self.tableView.scrollIndicatorInsets = insets;
 }
 
 - (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom

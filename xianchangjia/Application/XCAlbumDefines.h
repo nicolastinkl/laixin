@@ -28,7 +28,7 @@ typedef enum {
 	KMessage_private_Location = 3, //location
 } KMessage_private_user_Msg_type;
 
-#define NEED_OUTPUT_LOG                     0   // 0 relese  1 debug
+#define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
 
 #define LaixinSetupDBMessageNotification    @"com.laixin.LaixinSetupDBMessageNotification"
 #define LaixinCloseDBMessageNotification    @"com.laixin.LaixinCloseDBMessageNotification"
@@ -78,6 +78,8 @@ typedef enum {
 
 #define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
 
+#define iosLXSystemColor               [UIColor colorWithRed:0.188 green:0.655 blue:1.000 alpha:1.000]
+
 #define APP_STORE_LINK_http         @"https://itunes.apple.com/cn/app/lai-xin//id541873451?ls=1&mt=8"
 #define APP_STORE_LINK_iTunes       @"itms-apps://itunes.apple.com/cn/app/541873451?mt=8"
 
@@ -103,6 +105,7 @@ typedef enum {
 #define KeyChain_Laixin_Max_ReplyID                 @"KeyChain_Laixin_Max_ReplyID"
 #define KeyChain_Laixin_Code_Jihuo                  @"KeyChain_Laixin_Code_Jihuo"
 #define KeyChain_Laixin_Max_beforeid                @"KeyChain_Laixin_Max_beforeid"
+#define KeyChain_Laixin_dream_goodvoice             @"KeyChain_Laixin_dream_goodvoice"
 /*-----------------------------
  1. 类型1----新的好友动态
  2. 类型2----新的被人评论

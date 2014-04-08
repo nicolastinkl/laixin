@@ -190,6 +190,7 @@
 		868A0EF218B3608000C2875F /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 868A0EF118B3608000C2875F /* iCarousel.m */; };
 		868A0EF518B3621E00C2875F /* XCJFindMMView.m in Sources */ = {isa = PBXBuildFile; fileRef = 868A0EF418B3621E00C2875F /* XCJFindMMView.m */; };
 		868A0EF818B3624300C2875F /* XCJFindMMView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 868A0EF718B3624300C2875F /* XCJFindMMView.xib */; };
+		868AC8AB18EE55950068CC77 /* XCJDreamVoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 868AC8AA18EE55950068CC77 /* XCJDreamVoiceViewController.m */; };
 		868B5D3918922FE4004D1743 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3818922FE4004D1743 /* EGOCache.m */; };
 		868B5D3B18924E53004D1743 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 868B5D3A18924E53004D1743 /* Default-568h@2x.png */; };
 		868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */ = {isa = PBXBuildFile; fileRef = 868B5D3E189284C6004D1743 /* UIImage+Blur.m */; };
@@ -493,6 +494,11 @@
 		86FB20F9186D8256006BDE32 /* FCUserDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20F8186D8256006BDE32 /* FCUserDescription.m */; };
 		86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */; };
 		86FB210118716C80006BDE32 /* XCJRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FB210018716C80006BDE32 /* XCJRegisterViewController.m */; };
+		86FF92B518F3EBF600E3933D /* XCJWellDreamTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92B418F3EBF600E3933D /* XCJWellDreamTableViewController.m */; };
+		86FF92BC18F3F07A00E3933D /* XLSwipeContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92B918F3F07A00E3933D /* XLSwipeContainerController.m */; };
+		86FF92BD18F3F07A00E3933D /* XLSwipeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BB18F3F07A00E3933D /* XLSwipeNavigationController.m */; };
+		86FF92C018F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */; };
+		86FF92C318F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -844,6 +850,8 @@
 		868A0EF318B3621E00C2875F /* XCJFindMMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJFindMMView.h; path = viewcontroller/views/XCJFindMMView.h; sourceTree = "<group>"; };
 		868A0EF418B3621E00C2875F /* XCJFindMMView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJFindMMView.m; path = viewcontroller/views/XCJFindMMView.m; sourceTree = "<group>"; };
 		868A0EF718B3624300C2875F /* XCJFindMMView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJFindMMView.xib; path = viewcontroller/views/XCJFindMMView.xib; sourceTree = "<group>"; };
+		868AC8A918EE55950068CC77 /* XCJDreamVoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDreamVoiceViewController.h; path = viewcontroller/XCJDreamVoiceViewController.h; sourceTree = "<group>"; };
+		868AC8AA18EE55950068CC77 /* XCJDreamVoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDreamVoiceViewController.m; path = viewcontroller/XCJDreamVoiceViewController.m; sourceTree = "<group>"; };
 		868B5D3718922FE4004D1743 /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
 		868B5D3818922FE4004D1743 /* EGOCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOCache.m; sourceTree = "<group>"; };
 		868B5D3A18924E53004D1743 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1340,6 +1348,16 @@
 		86FB20FD1871640C006BDE32 /* XCJLoginNaviController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJLoginNaviController.m; path = viewcontroller/XCJLoginNaviController.m; sourceTree = "<group>"; };
 		86FB20FF18716C80006BDE32 /* XCJRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJRegisterViewController.h; path = viewcontroller/XCJRegisterViewController.h; sourceTree = "<group>"; };
 		86FB210018716C80006BDE32 /* XCJRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJRegisterViewController.m; path = viewcontroller/XCJRegisterViewController.m; sourceTree = "<group>"; };
+		86FF92B318F3EBF600E3933D /* XCJWellDreamTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellDreamTableViewController.h; path = viewcontroller/XCJWellDreamTableViewController.h; sourceTree = "<group>"; };
+		86FF92B418F3EBF600E3933D /* XCJWellDreamTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamTableViewController.m; path = viewcontroller/XCJWellDreamTableViewController.m; sourceTree = "<group>"; };
+		86FF92B818F3F07A00E3933D /* XLSwipeContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLSwipeContainerController.h; sourceTree = "<group>"; };
+		86FF92B918F3F07A00E3933D /* XLSwipeContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLSwipeContainerController.m; sourceTree = "<group>"; };
+		86FF92BA18F3F07A00E3933D /* XLSwipeNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLSwipeNavigationController.h; sourceTree = "<group>"; };
+		86FF92BB18F3F07A00E3933D /* XLSwipeNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLSwipeNavigationController.m; sourceTree = "<group>"; };
+		86FF92BE18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellDreamUsersTableViewController.h; path = viewcontroller/XCJWellDreamUsersTableViewController.h; sourceTree = "<group>"; };
+		86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamUsersTableViewController.m; path = viewcontroller/XCJWellDreamUsersTableViewController.m; sourceTree = "<group>"; };
+		86FF92C118F3F21B00E3933D /* XCJWellDreamNewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellDreamNewsTableViewController.h; path = viewcontroller/XCJWellDreamNewsTableViewController.h; sourceTree = "<group>"; };
+		86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamNewsTableViewController.m; path = viewcontroller/XCJWellDreamNewsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2150,6 +2168,21 @@
 			name = view;
 			sourceTree = "<group>";
 		};
+		868AC8A718EE55780068CC77 /* DreamVoice */ = {
+			isa = PBXGroup;
+			children = (
+				86FF92B318F3EBF600E3933D /* XCJWellDreamTableViewController.h */,
+				86FF92B418F3EBF600E3933D /* XCJWellDreamTableViewController.m */,
+				868AC8A918EE55950068CC77 /* XCJDreamVoiceViewController.h */,
+				868AC8AA18EE55950068CC77 /* XCJDreamVoiceViewController.m */,
+				86FF92BE18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.h */,
+				86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */,
+				86FF92C118F3F21B00E3933D /* XCJWellDreamNewsTableViewController.h */,
+				86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */,
+			);
+			name = DreamVoice;
+			sourceTree = "<group>";
+		};
 		868B5D3C189284C6004D1743 /* UIImage-Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2709,6 +2742,7 @@
 		86D1820518349B0A0005901D /* SupportView */ = {
 			isa = PBXGroup;
 			children = (
+				86FF92B718F3F07A00E3933D /* TKSegementViews */,
 				861C0F4218DC2F6C001DA32F /* PinPad */,
 				866287E518CCB28500891B2D /* TKViewMoreCell */,
 				862EC4CE188E2A80006F4D43 /* AnimationLabel */,
@@ -2735,6 +2769,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				868AC8A718EE55780068CC77 /* DreamVoice */,
 				86DEA2F518C8381C0003694C /* FindRoom */,
 				86268A2D18C0644A000F0A48 /* NearbyInvite */,
 				86045FBD18B1F8B00002581E /* FindYouMM */,
@@ -3442,6 +3477,18 @@
 			name = Chat;
 			sourceTree = "<group>";
 		};
+		86FF92B718F3F07A00E3933D /* TKSegementViews */ = {
+			isa = PBXGroup;
+			children = (
+				86FF92B818F3F07A00E3933D /* XLSwipeContainerController.h */,
+				86FF92B918F3F07A00E3933D /* XLSwipeContainerController.m */,
+				86FF92BA18F3F07A00E3933D /* XLSwipeNavigationController.h */,
+				86FF92BB18F3F07A00E3933D /* XLSwipeNavigationController.m */,
+			);
+			name = TKSegementViews;
+			path = support/TKSegementViews;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3630,6 +3677,7 @@
 				86268A3118C06466000F0A48 /* XCJNearbyInviteViewContr.m in Sources */,
 				86045FD018B31A910002581E /* XCJSelectLaixinViewController.m in Sources */,
 				868B5D44189284C6004D1743 /* UIImage+Blur.m in Sources */,
+				86FF92C018F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m in Sources */,
 				86D182B61834AED30005901D /* NSObject+LKModel.m in Sources */,
 				86D56C60189BFF44005CFD85 /* RemoteImgListOperator.m in Sources */,
 				8622C89D187E3F7A00776A38 /* FCHomeGroupMsg.m in Sources */,
@@ -3667,6 +3715,7 @@
 				869CE536186BE38D0004C1EC /* MagicalRecord.m in Sources */,
 				869CE4C2186A73880004C1EC /* RegexKitLite.m in Sources */,
 				86C642321887A3D200E0CDDB /* CTAssetsPickerController.m in Sources */,
+				86FF92C318F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m in Sources */,
 				86EB76D9185AA6CC00836947 /* UIAlertView+AFNetworking.m in Sources */,
 				86EB76EC185AA72F00836947 /* MessageCell.m in Sources */,
 				868B5D45189284C6004D1743 /* UIImage+ImageWithColor.m in Sources */,
@@ -3711,6 +3760,7 @@
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
 				8690DECB18C8891900A14A51 /* SDURLCache.m in Sources */,
+				86FF92B518F3EBF600E3933D /* XCJWellDreamTableViewController.m in Sources */,
 				86D182961834AED30005901D /* UIView+Indicator.m in Sources */,
 				866287F218CCB28500891B2D /* SKSTableViewCellIndicator.m in Sources */,
 				8688CCCC188E513F002CD2C8 /* FacialView.m in Sources */,
@@ -3721,6 +3771,7 @@
 				86893DAD187FA7B700DC0CB8 /* XCJGroupMenuView.m in Sources */,
 				86D182FE1834AF7E0005901D /* GlobalData.m in Sources */,
 				86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */,
+				868AC8AB18EE55950068CC77 /* XCJDreamVoiceViewController.m in Sources */,
 				869CE524186BE38D0004C1EC /* NSManagedObject+MagicalAggregation.m in Sources */,
 				8681BE411839AACD00521D36 /* InviteInfo.m in Sources */,
 				86D182BA1834AED30005901D /* UIHyperlinksButton.m in Sources */,
@@ -3826,6 +3877,7 @@
 				86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */,
 				8690DED718C974C500A14A51 /* PayPellog.m in Sources */,
 				86AC094018893AC100C3BE30 /* XCJMessageReplyInfoViewController.m in Sources */,
+				86FF92BD18F3F07A00E3933D /* XLSwipeNavigationController.m in Sources */,
 				86EB76CF185AA6CC00836947 /* AFHTTPRequestOperationManager.m in Sources */,
 				866F0623185724EE007A57CF /* SinaWeiboRequest.m in Sources */,
 				8681BDC41834B53C00521D36 /* DAImageResizedImageView.m in Sources */,
@@ -3942,6 +3994,7 @@
 				86EB76C5185AA6CC00836947 /* MLNetworkingManager.m in Sources */,
 				866618A818951B07000228FC /* VoiceRecorderBaseVC.m in Sources */,
 				86A306A91871A8B100C7168B /* XCJSuperViewController.m in Sources */,
+				86FF92BC18F3F07A00E3933D /* XLSwipeContainerController.m in Sources */,
 				8690DECD18C8891900A14A51 /* script.js in Sources */,
 				86D182EC1834AF540005901D /* FMDatabase+InMemoryOnDiskIO.m in Sources */,
 				8666189E18951B07000228FC /* UIView+Animation.m in Sources */,

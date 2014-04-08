@@ -23,6 +23,19 @@
 
 }
 
+
+-(void)sendMessageClearStyle
+{
+    self.layer.borderWidth = 0.5;
+    self.layer.cornerRadius = 4.0;
+    self.layer.masksToBounds = YES;
+    [self setAdjustsImageWhenHighlighted:NO];
+    self.layer.borderColor = [ios7BlueColor CGColor];
+    self.backgroundColor = [UIColor clearColor];
+    [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
+    
+}
+
 /**
  *  用户标签选择
  */

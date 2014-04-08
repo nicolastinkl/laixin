@@ -27,8 +27,8 @@
 #import <objc/runtime.h>
 
 #define kGradientSize       0.45f
-#define kAnimationDuration  4.25f
-#define kGradientTint       [UIColor whiteColor] //ios7BlueColor
+#define kAnimationDuration  2.25f
+#define kGradientTint       ios7BlueColor //[UIColor whiteColor]
 
 #define kAnimationKey       @"gradientAnimation"
 

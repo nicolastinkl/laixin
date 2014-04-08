@@ -19,4 +19,5 @@
 -(void)dangerStyle;
 -(void)sendMessageStyle;
 -(void)labelphotoStyle;
+-(void)sendMessageClearStyle;
 @end

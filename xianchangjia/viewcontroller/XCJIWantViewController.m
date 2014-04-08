@@ -20,7 +20,12 @@
 #import "XCJNearbyInviteViewContr.h"
 #import "XCJFindRoomViewControl.h"
 #import "PPPinPadViewController.h"
-
+#import "XCJDreamVoiceViewController.h"
+#import "XCJWellDreamTableViewController.h"
+#import "XCJWellDreamNewsTableViewController.h"
+#import "XCJWellDreamUsersTableViewController.h"
+#import "XLSwipeContainerController.h"
+#import "XLSwipeNavigationController.h"
 @interface XCJIWantViewController ()<PinPadPasswordProtocol>
 
 @end
@@ -41,6 +46,9 @@
     [super viewDidLoad];
 
      [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(openDreamGoodVoice) name:@"openDreamGoodVoice" object:nil];
+    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -84,7 +92,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -169,6 +177,15 @@
             [image_New setFrame:CGRectMake(273, 17, 10, 10)];
          
             break;
+        case 3:
+            //@"group_avatar_default_0"
+            image_bgSign.image = [UIImage imageNamed:@"opengroup_everjoin_icon"];
+            label_name.text = @"来梦想好声音";
+            badage.hidden = YES;
+            image_New.hidden = YES;
+            [image_New setFrame:CGRectMake(273, 17, 10, 10)];
+            
+            break;
         default:
             break;
     }
@@ -199,8 +216,7 @@
                 pinViewController.delegate = self;
                 NSString * Pin = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
                 if (Pin && Pin.length > 0) {
-                    pinViewController.inputModel = 1;
-                    
+                    pinViewController.inputModel = 1;                    
                 }else{
                     pinViewController.inputModel = 2;
                 }
@@ -218,9 +234,36 @@
             [self.navigationController pushViewController:viewcontr animated:YES];
         }
             break;
+        case 3:
+        {
+            if ( [USER_DEFAULT boolForKey:KeyChain_Laixin_dream_goodvoice]) {
+                [self openDreamGoodVoice];
+            }else{
+                XCJDreamVoiceViewController*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJDreamVoiceViewController"];
+                viewcontr.title = @"来梦想好声音";
+                [self.navigationController pushViewController:viewcontr animated:YES];
+            }
+            
+        }
+            break;
         default:
             break;
     }
+}
+
+-(void) openDreamGoodVoice
+{
+    XCJWellDreamTableViewController*child_1  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWellDreamTableViewController"];
+    
+    XCJWellDreamNewsTableViewController*child_3  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWellDreamNewsTableViewController"];
+    
+    XCJWellDreamUsersTableViewController*child_2  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWellDreamUsersTableViewController"];
+    
+    XLSwipeNavigationController * contr =  [[XLSwipeNavigationController alloc] initWithViewControllers:child_1, child_2, child_3, nil];
+    
+    [self presentViewController:contr animated:YES completion:^{
+        
+    }];
 }
 
 - (BOOL)checkPin:(NSString *)pin {
