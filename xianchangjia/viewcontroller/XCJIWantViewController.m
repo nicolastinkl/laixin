@@ -26,6 +26,7 @@
 #import "XCJWellDreamUsersTableViewController.h"
 #import "XLSwipeContainerController.h"
 #import "XLSwipeNavigationController.h"
+#import "SBSegmentedViewController.h"
 @interface XCJIWantViewController ()<PinPadPasswordProtocol>
 
 @end
@@ -253,6 +254,7 @@
 
 -(void) openDreamGoodVoice
 {
+    /*model
     XCJWellDreamTableViewController*child_1  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWellDreamTableViewController"];
     
     XCJWellDreamNewsTableViewController*child_3  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJWellDreamNewsTableViewController"];
@@ -263,7 +265,12 @@
     
     [self presentViewController:contr animated:YES completion:^{
         
-    }];
+    }];*/
+    /*push*/
+    SBSegmentedViewController *segmentedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SBSegmentedViewController"];
+	segmentedViewController.position = SBSegmentedViewControllerControlPositionNavigationBar;
+	[segmentedViewController addStoryboardSegments:@[@"segmentOne", @"segmentTwo",@"segmentThree"]];
+    [self.navigationController pushViewController:segmentedViewController animated:YES];
 }
 
 - (BOOL)checkPin:(NSString *)pin {

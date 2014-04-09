@@ -27,12 +27,12 @@
 #import "DataHelper.h"
 #import "BaseDetailViewController.h"
 #import "IDMPhotoBrowser.h"
-
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "DAImageResizedImageView.h"
 #import <OHAttributedLabel/OHAttributedLabel.h>
 #import <OHAttributedLabel/NSAttributedString+Attributes.h>
 #import <OHAttributedLabel/OHASBasicMarkupParser.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-#import "DAImageResizedImageView.h"
+
 
 
 //static NSInteger const kAttributedLabelTag = 100;

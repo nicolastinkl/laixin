@@ -436,6 +436,10 @@
 		86E57CFC18796D1100978AFA /* THContactBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CF818796D1100978AFA /* THContactBubble.m */; };
 		86E57CFD18796D1100978AFA /* THContactPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57CFA18796D1100978AFA /* THContactPickerView.m */; };
 		86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */; };
+		86E5D9A118F507AE002882E8 /* SBEmbeddedSegmentSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D99E18F507AE002882E8 /* SBEmbeddedSegmentSegue.m */; };
+		86E5D9A218F507AE002882E8 /* SBSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9A018F507AE002882E8 /* SBSegmentedViewController.m */; };
+		86E5D9A718F516C0002882E8 /* XCJContentTypesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9A618F516C0002882E8 /* XCJContentTypesCell.m */; };
+		86E5D9AC18F5296C002882E8 /* PWLoadMoreTableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9AB18F5296C002882E8 /* PWLoadMoreTableFooterView.m */; };
 		86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
@@ -1226,6 +1230,14 @@
 		86E57CFA18796D1100978AFA /* THContactPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = THContactPickerView.m; sourceTree = "<group>"; };
 		86E57CFF18796EB500978AFA /* XCJCreateChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJCreateChatViewController.h; path = xianchangjia/viewcontroller/XCJCreateChatViewController.h; sourceTree = SOURCE_ROOT; };
 		86E57D0018796EB500978AFA /* XCJCreateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJCreateChatViewController.m; path = xianchangjia/viewcontroller/XCJCreateChatViewController.m; sourceTree = SOURCE_ROOT; };
+		86E5D99D18F507AE002882E8 /* SBEmbeddedSegmentSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBEmbeddedSegmentSegue.h; sourceTree = "<group>"; };
+		86E5D99E18F507AE002882E8 /* SBEmbeddedSegmentSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBEmbeddedSegmentSegue.m; sourceTree = "<group>"; };
+		86E5D99F18F507AE002882E8 /* SBSegmentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBSegmentedViewController.h; sourceTree = "<group>"; };
+		86E5D9A018F507AE002882E8 /* SBSegmentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBSegmentedViewController.m; sourceTree = "<group>"; };
+		86E5D9A518F516C0002882E8 /* XCJContentTypesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJContentTypesCell.h; path = viewcontroller/XCJContentTypesCell.h; sourceTree = "<group>"; };
+		86E5D9A618F516C0002882E8 /* XCJContentTypesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJContentTypesCell.m; path = viewcontroller/XCJContentTypesCell.m; sourceTree = "<group>"; };
+		86E5D9AA18F5296C002882E8 /* PWLoadMoreTableFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PWLoadMoreTableFooterView.h; sourceTree = "<group>"; };
+		86E5D9AB18F5296C002882E8 /* PWLoadMoreTableFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PWLoadMoreTableFooterView.m; sourceTree = "<group>"; };
 		86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddUserTableViewController.h; path = viewcontroller/XCJAddUserTableViewController.h; sourceTree = "<group>"; };
 		86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddUserTableViewController.m; path = viewcontroller/XCJAddUserTableViewController.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
@@ -2171,6 +2183,7 @@
 		868AC8A718EE55780068CC77 /* DreamVoice */ = {
 			isa = PBXGroup;
 			children = (
+				86E5D9A418F50EC8002882E8 /* DetailsCell */,
 				86FF92B318F3EBF600E3933D /* XCJWellDreamTableViewController.h */,
 				86FF92B418F3EBF600E3933D /* XCJWellDreamTableViewController.m */,
 				868AC8A918EE55950068CC77 /* XCJDreamVoiceViewController.h */,
@@ -2742,6 +2755,7 @@
 		86D1820518349B0A0005901D /* SupportView */ = {
 			isa = PBXGroup;
 			children = (
+				86E5D9A918F5295B002882E8 /* TKLoadmoreVIEW */,
 				86FF92B718F3F07A00E3933D /* TKSegementViews */,
 				861C0F4218DC2F6C001DA32F /* PinPad */,
 				866287E518CCB28500891B2D /* TKViewMoreCell */,
@@ -3147,6 +3161,24 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		86E5D9A418F50EC8002882E8 /* DetailsCell */ = {
+			isa = PBXGroup;
+			children = (
+				86E5D9A518F516C0002882E8 /* XCJContentTypesCell.h */,
+				86E5D9A618F516C0002882E8 /* XCJContentTypesCell.m */,
+			);
+			name = DetailsCell;
+			sourceTree = "<group>";
+		};
+		86E5D9A918F5295B002882E8 /* TKLoadmoreVIEW */ = {
+			isa = PBXGroup;
+			children = (
+				86E5D9AA18F5296C002882E8 /* PWLoadMoreTableFooterView.h */,
+				86E5D9AB18F5296C002882E8 /* PWLoadMoreTableFooterView.m */,
+			);
+			name = TKLoadmoreVIEW;
+			sourceTree = "<group>";
+		};
 		86EB764B185AA6CC00836947 /* DAOModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -3480,6 +3512,10 @@
 		86FF92B718F3F07A00E3933D /* TKSegementViews */ = {
 			isa = PBXGroup;
 			children = (
+				86E5D99D18F507AE002882E8 /* SBEmbeddedSegmentSegue.h */,
+				86E5D99E18F507AE002882E8 /* SBEmbeddedSegmentSegue.m */,
+				86E5D99F18F507AE002882E8 /* SBSegmentedViewController.h */,
+				86E5D9A018F507AE002882E8 /* SBSegmentedViewController.m */,
 				86FF92B818F3F07A00E3933D /* XLSwipeContainerController.h */,
 				86FF92B918F3F07A00E3933D /* XLSwipeContainerController.m */,
 				86FF92BA18F3F07A00E3933D /* XLSwipeNavigationController.h */,
@@ -3738,6 +3774,7 @@
 				86045FCA18B2F7EF0002581E /* AOTag.m in Sources */,
 				86EB76C4185AA6CC00836947 /* MLJson.m in Sources */,
 				86D182F81834AF540005901D /* LKDaoBase.m in Sources */,
+				86E5D9A718F516C0002882E8 /* XCJContentTypesCell.m in Sources */,
 				8690DED218C88ABA00A14A51 /* UINavigationSample.m in Sources */,
 				86EB76CA185AA6CC00836947 /* UIColor+Expanded.m in Sources */,
 				865632E6185FFDDA00E9903C /* XCJDyScenceViewController.m in Sources */,
@@ -3793,6 +3830,7 @@
 				86045FC318B21D3D0002581E /* XCJRecommendLSFriendViewcontr.m in Sources */,
 				861C0F4B18DC2F6C001DA32F /* PPPinCircleView.m in Sources */,
 				868B5D561893B068004D1743 /* ChineseToPinyinResource.m in Sources */,
+				86E5D9A118F507AE002882E8 /* SBEmbeddedSegmentSegue.m in Sources */,
 				86EB76ED185AA72F00836947 /* MLTextView.m in Sources */,
 				8668E489187541BB00D20C9E /* Comment.m in Sources */,
 				8681BDCC1836153000521D36 /* YLLabel.m in Sources */,
@@ -3959,6 +3997,7 @@
 				86D182F61834AF540005901D /* FMResultSet.m in Sources */,
 				8690DEDD18C9A1C000A14A51 /* XCJPayInfo.m in Sources */,
 				8668E483187540DB00D20C9E /* UItitleView.m in Sources */,
+				86E5D9AC18F5296C002882E8 /* PWLoadMoreTableFooterView.m in Sources */,
 				8681BDE118361A0800521D36 /* XCJReskitModel.m in Sources */,
 				86C72DE118433109001B6CA0 /* MessageManager.m in Sources */,
 				86ADDA261893D46A000A0C22 /* XCJSendMapViewController.m in Sources */,
@@ -4010,6 +4049,7 @@
 				8622C88F187D6F3A00776A38 /* XCJAboutViewController.m in Sources */,
 				866995EC1879130400233C47 /* XCJScanViewController.m in Sources */,
 				86EB76D7185AA6CC00836947 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				86E5D9A218F507AE002882E8 /* SBSegmentedViewController.m in Sources */,
 				86D1820918349B150005901D /* CRGradientNavigationBar.m in Sources */,
 				86D182FA1834AF540005901D /* SandboxFile.m in Sources */,
 				86CA8EF718A25E3000AFB15D /* XCJApplication.m in Sources */,
