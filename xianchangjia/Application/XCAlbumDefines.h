@@ -105,7 +105,7 @@ typedef enum {
 #define KeyChain_Laixin_Max_ReplyID                 @"KeyChain_Laixin_Max_ReplyID"
 #define KeyChain_Laixin_Code_Jihuo                  @"KeyChain_Laixin_Code_Jihuo"
 #define KeyChain_Laixin_Max_beforeid                @"KeyChain_Laixin_Max_beforeid"
-#define KeyChain_Laixin_dream_goodvoice             @"KeyChain_Laixin_dream_goodvoice"
+#define KeyChain_Laixin_dream_goodvoice             @"KeyChain_Laixin_dream_goodvoice1"
 /*-----------------------------
  1. 类型1----新的好友动态
  2. 类型2----新的被人评论

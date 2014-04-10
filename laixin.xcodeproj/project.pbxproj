@@ -440,6 +440,9 @@
 		86E5D9A218F507AE002882E8 /* SBSegmentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9A018F507AE002882E8 /* SBSegmentedViewController.m */; };
 		86E5D9A718F516C0002882E8 /* XCJContentTypesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9A618F516C0002882E8 /* XCJContentTypesCell.m */; };
 		86E5D9AC18F5296C002882E8 /* PWLoadMoreTableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9AB18F5296C002882E8 /* PWLoadMoreTableFooterView.m */; };
+		86E5D9B018F641E3002882E8 /* XCJDreamCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9AF18F641E2002882E8 /* XCJDreamCommentViewController.m */; };
+		86E5D9B318F64211002882E8 /* XCJDreamLikesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9B218F64211002882E8 /* XCJDreamLikesTableViewController.m */; };
+		86E5D9B618F683B3002882E8 /* XCJDreadUesrController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E5D9B518F683B3002882E8 /* XCJDreadUesrController.m */; };
 		86E707B41878152B00E2BB07 /* XCJAddUserTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */; };
 		86EB76431859A66800836947 /* logo58x58.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76401859A66800836947 /* logo58x58.png */; };
 		86EB76441859A66800836947 /* logo80x80.png in Resources */ = {isa = PBXBuildFile; fileRef = 86EB76411859A66800836947 /* logo80x80.png */; };
@@ -1238,6 +1241,12 @@
 		86E5D9A618F516C0002882E8 /* XCJContentTypesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJContentTypesCell.m; path = viewcontroller/XCJContentTypesCell.m; sourceTree = "<group>"; };
 		86E5D9AA18F5296C002882E8 /* PWLoadMoreTableFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PWLoadMoreTableFooterView.h; sourceTree = "<group>"; };
 		86E5D9AB18F5296C002882E8 /* PWLoadMoreTableFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PWLoadMoreTableFooterView.m; sourceTree = "<group>"; };
+		86E5D9AE18F641E2002882E8 /* XCJDreamCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDreamCommentViewController.h; path = viewcontroller/XCJDreamCommentViewController.h; sourceTree = "<group>"; };
+		86E5D9AF18F641E2002882E8 /* XCJDreamCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDreamCommentViewController.m; path = viewcontroller/XCJDreamCommentViewController.m; sourceTree = "<group>"; };
+		86E5D9B118F64211002882E8 /* XCJDreamLikesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDreamLikesTableViewController.h; path = viewcontroller/XCJDreamLikesTableViewController.h; sourceTree = "<group>"; };
+		86E5D9B218F64211002882E8 /* XCJDreamLikesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDreamLikesTableViewController.m; path = viewcontroller/XCJDreamLikesTableViewController.m; sourceTree = "<group>"; };
+		86E5D9B418F683B3002882E8 /* XCJDreadUesrController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDreadUesrController.h; path = viewcontroller/XCJDreadUesrController.h; sourceTree = "<group>"; };
+		86E5D9B518F683B3002882E8 /* XCJDreadUesrController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDreadUesrController.m; path = viewcontroller/XCJDreadUesrController.m; sourceTree = "<group>"; };
 		86E707B21878152B00E2BB07 /* XCJAddUserTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJAddUserTableViewController.h; path = viewcontroller/XCJAddUserTableViewController.h; sourceTree = "<group>"; };
 		86E707B31878152B00E2BB07 /* XCJAddUserTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJAddUserTableViewController.m; path = viewcontroller/XCJAddUserTableViewController.m; sourceTree = "<group>"; };
 		86EB76401859A66800836947 /* logo58x58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo58x58.png; sourceTree = "<group>"; };
@@ -2183,6 +2192,7 @@
 		868AC8A718EE55780068CC77 /* DreamVoice */ = {
 			isa = PBXGroup;
 			children = (
+				86E5D9AD18F641C4002882E8 /* Comment_likes */,
 				86E5D9A418F50EC8002882E8 /* DetailsCell */,
 				86FF92B318F3EBF600E3933D /* XCJWellDreamTableViewController.h */,
 				86FF92B418F3EBF600E3933D /* XCJWellDreamTableViewController.m */,
@@ -2192,6 +2202,8 @@
 				86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */,
 				86FF92C118F3F21B00E3933D /* XCJWellDreamNewsTableViewController.h */,
 				86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */,
+				86E5D9B418F683B3002882E8 /* XCJDreadUesrController.h */,
+				86E5D9B518F683B3002882E8 /* XCJDreadUesrController.m */,
 			);
 			name = DreamVoice;
 			sourceTree = "<group>";
@@ -3179,6 +3191,17 @@
 			name = TKLoadmoreVIEW;
 			sourceTree = "<group>";
 		};
+		86E5D9AD18F641C4002882E8 /* Comment_likes */ = {
+			isa = PBXGroup;
+			children = (
+				86E5D9AE18F641E2002882E8 /* XCJDreamCommentViewController.h */,
+				86E5D9AF18F641E2002882E8 /* XCJDreamCommentViewController.m */,
+				86E5D9B118F64211002882E8 /* XCJDreamLikesTableViewController.h */,
+				86E5D9B218F64211002882E8 /* XCJDreamLikesTableViewController.m */,
+			);
+			name = Comment_likes;
+			sourceTree = "<group>";
+		};
 		86EB764B185AA6CC00836947 /* DAOModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -3725,6 +3748,7 @@
 				86D182841834AED30005901D /* GCDHelper.m in Sources */,
 				866C156218ADE75F0054F686 /* IDMCaptionView.m in Sources */,
 				869DDC621874422600560AFD /* Conversation.m in Sources */,
+				86E5D9B018F641E3002882E8 /* XCJDreamCommentViewController.m in Sources */,
 				86D182901834AED30005901D /* UIImage+RoundedCorner.m in Sources */,
 				86ADDA2C1893D8F5000A0C22 /* MMLocationManager.m in Sources */,
 				86D1827C1834AED30005901D /* MCProgressBarView.m in Sources */,
@@ -3767,6 +3791,7 @@
 				869CE4DB186BE1A80004C1EC /* LXRequestFacebookManager.m in Sources */,
 				866516A3187BF276001F05F6 /* qrencode.c in Sources */,
 				86D182981834AED30005901D /* UIView+Shadow.m in Sources */,
+				86E5D9B618F683B3002882E8 /* XCJDreadUesrController.m in Sources */,
 				8668E44C187517C000D20C9E /* XCJGroupPost_list.m in Sources */,
 				863FCCA418A9F0C700422DEB /* HTCopyableLabel.m in Sources */,
 				8622C87B187D192100776A38 /* ListItem.m in Sources */,
@@ -3969,6 +3994,7 @@
 				8690DEC618C8891900A14A51 /* DZWebBrowser.m in Sources */,
 				8668E47F187540DB00D20C9E /* InterceptTouchView.m in Sources */,
 				8668E482187540DB00D20C9E /* MLScrollRefreshHeader.m in Sources */,
+				86E5D9B318F64211002882E8 /* XCJDreamLikesTableViewController.m in Sources */,
 				865632ED185FFDDA00E9903C /* XCJSettingsViewController.m in Sources */,
 				8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,

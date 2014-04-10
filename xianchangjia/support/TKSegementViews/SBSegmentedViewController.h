@@ -19,6 +19,8 @@ typedef NS_ENUM(NSInteger, SBSegmentedViewControllerControlPosition) {
 
 @interface SBSegmentedViewController : UIViewController
 
+@property (nonatomic,strong) id  someobject;
+
 @property (nonatomic, readonly, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic) SBSegmentedViewControllerControlPosition position;
 

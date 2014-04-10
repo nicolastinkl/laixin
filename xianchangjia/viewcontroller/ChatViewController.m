@@ -117,7 +117,7 @@
     
     {
         UIButton * buttonAudioss = (UIButton *) [self.inputContainerView subviewWithTag:9];
-        [buttonAudioss sendMessageStyle];
+        [buttonAudioss sendMessageClearStyle];
         [buttonAudioss setTitle:@"按住说话" forState:UIControlStateNormal];
 //        [buttonAudioss addTarget:self action:@selector(speakClick:) forControlEvents:UIControlStateNormal];
         //添加长按手势
@@ -246,7 +246,7 @@
             SLog(@"amr : %@",strAMRName);
             UIButton * buttonAudio = (UIButton *) [self.inputContainerView subviewWithTag:9];
             [buttonAudio setTitle:@"按住开始" forState:UIControlStateNormal];
-            [buttonAudio sendMessageStyle];
+            [buttonAudio sendMessageClearStyle];
             //2.audio   3.video
             [self SendMediaSource:strAMRName withType:2];
         }
@@ -445,7 +445,7 @@
         [self speakClick:nil];
     }//长按结束
     else if(longPressedRecognizer.state == UIGestureRecognizerStateEnded || longPressedRecognizer.state == UIGestureRecognizerStateCancelled){
-        [buttonAudio sendMessageStyle];
+        [buttonAudio sendMessageClearStyle];
         [buttonAudio setTitle:@"按住说话" forState:UIControlStateNormal];
 //        [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"nScreenTouch" object:nil userInfo:[NSDictionary dictionaryWithObject:nil forKey:@"data"]]];
     }

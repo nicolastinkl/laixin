@@ -137,6 +137,10 @@ NSInteger const DefaultSegmentIndex = 0;
 }
 
 - (void)addViewController:(UIViewController *)viewController {
+    if (!viewController.title) {
+        viewController.title = @"未知";
+    }
+    
 	if (viewController && viewController.title)
 		[self addViewController:viewController withTitle:viewController.title];
 	else

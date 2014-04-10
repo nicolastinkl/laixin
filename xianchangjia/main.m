@@ -14,6 +14,5 @@ int main(int argc, char * argv[])
 {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, NSStringFromClass([XCJApplication class]), NSStringFromClass([XCJAppDelegate class]));
-    }
-    
+    }    
 }

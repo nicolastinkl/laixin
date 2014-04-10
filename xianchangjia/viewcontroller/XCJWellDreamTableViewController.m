@@ -4,7 +4,7 @@
 //
 //  Created by apple on 4/8/14.
 //  Copyright (c) 2014 jijia. All rights reserved.
-//
+
 
 #import "XCJWellDreamTableViewController.h"
 #import "UIButton+WebCache.h"
@@ -19,13 +19,16 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DAImageResizedImageView.h"
 #import "XCJContentTypesCell.h"
-
+#import "SBSegmentedViewController.h"
+#import "XCJAddUserTableViewController.h"
 
 #define DISTANCE_BETWEEN_ITEMS  9.0
 #define LEFT_PADDING            9.0
 #define ITEM_WIDTH              135.0
 #define TITLE_HEIGHT            40.0
 #define TITLE_jianxi            2.5
+
+#define colNumber 4
 
 enum ENUMLoadMoreData {
     Enum_initData  = 0,
@@ -164,7 +167,6 @@ enum ENUMLoadMoreData {
                 NSArray * postsDict =  groups[@"posts"];
                 __block NSInteger lasID = 0;
                 if (postsDict &&  postsDict.count > 0) {
-                    
                     [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                         XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
                         if (post) {
@@ -314,8 +316,8 @@ enum ENUMLoadMoreData {
                 break;
             case 1:
             {
-                float imageviewHeight = (post.excount/3)*65 +(post.excount/3)*TITLE_jianxi;
-                if (post.excount%3>0) {
+                float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
+                if (post.excount%colNumber>0) {
                     imageviewHeight += TITLE_jianxi+65;
                 }
                 return imageviewHeight + 10; //content
@@ -360,139 +362,21 @@ enum ENUMLoadMoreData {
     return sizeToFit.height + 20;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell;
-    XCJGroupPost_list * post = groupList[indexPath.section];
-    // Return the number of rows in the section.
-    if (post.imageURL.length > 4 || post.excount > 0) {   //图片
-        switch (indexPath.row) {
-            case 1:
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"TKCONTENTCELL" forIndexPath:indexPath];
-               
-            }
-                break;
-            case 2:
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
-                
-                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
-                if (labelContent == nil) {
-                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-                    labelContent.centerVertically = YES;
-                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
-                    labelContent.delegate = self;
-                    labelContent.highlightedTextColor = [UIColor whiteColor];
-                    labelContent.tag = kAttributedLabelTag;
-                    [cell addSubview:labelContent];
-                        //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
-                }
-                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
-                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-                [mas setTextColor:[UIColor blackColor]];
-                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-                
-                labelContent.attributedText = mas;
-                [labelContent sizeToFit];
-                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
-                
-                [labelContent setWidth:sizeToFit.width];
-                [labelContent setHeight:sizeToFit.height];
-                
-                [labelContent setTop:10.0f];
-                [labelContent setLeft:10.0f];
-            }
-                break;
-            case 3:
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
-                
-                UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
-                UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
-                UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
-                [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
-                [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
-                [self refreshbutton:buttonLike withdata:post];
-                [buttonComment addTarget:self action:@selector(commentClick:) forControlEvents:UIControlEventTouchUpInside];
-                [buttonLike addTarget:self action:@selector(likeClick:) forControlEvents:UIControlEventTouchUpInside];
-                [buttonHSare addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
-                
-                
-            }
-                break;
-            default:
-                break;
-        }
-    }else{
-        switch (indexPath.row) {
-            case 1:
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
-                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
-                if (labelContent == nil) {
-                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-                    labelContent.centerVertically = YES;
-                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
-                    labelContent.delegate = self;
-                    labelContent.highlightedTextColor = [UIColor whiteColor];
-                    labelContent.tag = kAttributedLabelTag;
-                    [cell addSubview:labelContent];
-                     //    labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
-                }
-                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
-                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-                [mas setTextColor:[UIColor blackColor]];
-                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-                
-                labelContent.attributedText = mas;
-                [labelContent sizeToFit];
-                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
-                
-                [labelContent setWidth:sizeToFit.width];
-                [labelContent setHeight:sizeToFit.height];
-                [labelContent setTop:10.0f];
-                [labelContent setLeft:10.0f];
-                 
-            }
-                break;
-            case 2:
-            {
-                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
-    //TKUSERCELL TKCONTENTCELL  TKREICKTEXTCELL TKOPERATIONCELL
-    
-    /**
-     *  row  0
-     */
-    if(indexPath.row == 0){ //通用
-        cell = [tableView dequeueReusableCellWithIdentifier:@"TKUSERCELL" forIndexPath:indexPath];
-        UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
-        _avatarButton.layer.cornerRadius = 35/2;
-        _avatarButton.layer.masksToBounds = YES;
-    }
-    // Configure the cell...    
-    cell.backgroundColor = [UIColor colorWithHex: 0xffefefef];
-    return cell;
-}
 
 -(IBAction)commentClick:(id)sender
 {
     UIButton * button = sender;
     UITableViewCell * cell = (UITableViewCell *)button.superview.superview.superview;
     XCJGroupPost_list * post = groupList[ [self.tableView indexPathForCell:cell].section];
-    
+    if (post) {
+        
+        SBSegmentedViewController *segmentedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SBSegmentedCommentController"];
+        segmentedViewController.position = SBSegmentedViewControllerControlPositionNavigationBar;
+        [segmentedViewController addStoryboardSegments:@[@"SegmentComment", @"SegmentLikes"]];
+        segmentedViewController.someobject = post;
+        [self.navigationController pushViewController:segmentedViewController animated:YES];
+         
+    }
 }
 
 -(IBAction)likeClick:(id)sender
@@ -556,6 +440,160 @@ enum ENUMLoadMoreData {
     [actionsheet showInView:self.view];
 }
 
+
+#pragma mark cellfor
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
+    XCJGroupPost_list * post = groupList[indexPath.section];
+    // Return the number of rows in the section.
+    if (post.imageURL.length > 4 || post.excount > 0) {   //图片
+        switch (indexPath.row) {
+            case 1:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKCONTENTCELL" forIndexPath:indexPath];
+                
+            }
+                break;
+            case 2:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
+                
+                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+                if (labelContent == nil) {
+                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                    labelContent.centerVertically = YES;
+                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
+                    labelContent.delegate = self;
+                    labelContent.highlightedTextColor = [UIColor whiteColor];
+                    labelContent.tag = kAttributedLabelTag;
+                    [cell addSubview:labelContent];
+                    //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
+                }
+                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
+                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
+                [mas setTextColor:[UIColor blackColor]];
+                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
+                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+                
+                labelContent.attributedText = mas;
+                [labelContent sizeToFit];
+                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
+                
+                [labelContent setWidth:sizeToFit.width];
+                [labelContent setHeight:sizeToFit.height];
+                
+                [labelContent setTop:10.0f];
+                [labelContent setLeft:10.0f];
+            }
+                break;
+            case 3:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
+                
+                UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
+                UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
+                UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
+                [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
+                [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
+                [self refreshbutton:buttonLike withdata:post];
+                [buttonComment addTarget:self action:@selector(commentClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonLike addTarget:self action:@selector(likeClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonHSare addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
+                
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch (indexPath.row) {
+            case 1:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
+                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+                if (labelContent == nil) {
+                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+                    labelContent.centerVertically = YES;
+                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
+                    labelContent.delegate = self;
+                    labelContent.highlightedTextColor = [UIColor whiteColor];
+                    labelContent.tag = kAttributedLabelTag;
+                    [cell addSubview:labelContent];
+                    //    labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
+                }
+                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
+                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
+                [mas setTextColor:[UIColor blackColor]];
+                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
+                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+                
+                labelContent.attributedText = mas;
+                [labelContent sizeToFit];
+                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
+                
+                [labelContent setWidth:sizeToFit.width];
+                [labelContent setHeight:sizeToFit.height];
+                [labelContent setTop:10.0f];
+                [labelContent setLeft:10.0f];
+                
+            }
+                break;
+            case 2:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
+                UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
+                UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
+                UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
+                [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
+                [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
+                [self refreshbutton:buttonLike withdata:post];
+                [buttonComment addTarget:self action:@selector(commentClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonLike addTarget:self action:@selector(likeClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonHSare addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    //TKUSERCELL TKCONTENTCELL  TKREICKTEXTCELL TKOPERATIONCELL
+    
+    /**
+     *  row  0
+     */
+    if(indexPath.row == 0){ //通用
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TKUSERCELL" forIndexPath:indexPath];
+        UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
+        _avatarButton.layer.cornerRadius = 35/2;
+        _avatarButton.layer.masksToBounds = YES;
+        [_avatarButton addTarget:self action:@selector(seeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    // Configure the cell...
+    cell.backgroundColor = [UIColor colorWithHex: 0xffefefef];
+    return cell;
+}
+
+-(IBAction)seeUseinfoClick:(id)sender
+{
+    UITapGestureRecognizer * ges = sender;
+    UIImageView *buttonSender = (UIImageView *)ges.view;
+    UITableViewCell * cell = (UITableViewCell *)buttonSender.superview.superview.superview;
+    XCJGroupPost_list * post = groupList[ [self.tableView indexPathForCell:cell].section];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+        
+        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+        addUser.UserInfo = response;
+        [self.navigationController pushViewController:addUser animated:YES];
+        
+    } withuid:post.uid];
+}
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -645,8 +683,8 @@ enum ENUMLoadMoreData {
                         //有数据
                         [post.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             NSString * stringurl = obj;
-                            int row = idx/3;
-                            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%3)+TITLE_jianxi*(idx%3+1), (65+TITLE_jianxi) * row, 65, 65)];
+                            int row = idx/colNumber;
+                            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%colNumber)+TITLE_jianxi*(idx%colNumber+1), (65+TITLE_jianxi) * row, 65, 65)];
                             iv.contentMode = UIViewContentModeScaleAspectFill;
                             iv.clipsToBounds = YES;
                             iv.tag = idx;
@@ -687,8 +725,8 @@ enum ENUMLoadMoreData {
                         }];
                         //            [self.imageListScroll layoutIfNeeded];
                     }
-                    float imageviewHeight = (post.excount/3)*65 +(post.excount/3)*TITLE_jianxi;
-                    if (post.excount%3>0) {
+                    float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
+                    if (post.excount%colNumber>0) {
                         imageviewHeight += TITLE_jianxi+65;
                     }
                     imageListScroll.frame = CGRectMake(10, 5, 255.0, imageviewHeight);

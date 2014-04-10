@@ -44,11 +44,21 @@
 //    label.textAlignment = NSTextAlignmentCenter;
 //    label.textColor = [UIColor whiteColor];
     UIButton * button = (UIButton *) [view subviewWithTag:3];
-    [button sendMessageClearStyle];
+    [button sendMessageStyle];
     
     [view setTop:APP_SCREEN_CONTENT_HEIGHT - view.height];
-    self.animatinLabel.text = @"已有1024人参加";
+    self.animatinLabel.text = @"已有??人参加";
     [button addTarget:self action:@selector(joinThisinviteClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[MLNetworkingManager sharedManager] sendWithAction:@"group.members" parameters:@{@"gid":CurrentGID} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            NSDictionary * dict =  responseObject[@"result"];
+            NSArray * arr =  dict[@"members"];
+            self.animatinLabel.text = [NSString stringWithFormat:@"已有%d人参加",arr.count];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+    
 }
 
 -(IBAction)joinThisinviteClick:(id)sender
