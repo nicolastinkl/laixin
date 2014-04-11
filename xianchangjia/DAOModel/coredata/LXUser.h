@@ -28,6 +28,6 @@
 @property (nonatomic, assign) int active_level;
 @property (nonatomic, assign, readonly) int actor;
 @property (nonatomic, assign) int actor_level;
-
+@property (nonatomic, assign) int like_me_count;
 - (id)initWithDict:(NSDictionary *)dic;
 @end

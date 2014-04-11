@@ -21,6 +21,7 @@
 #import "XCJContentTypesCell.h"
 #import "SBSegmentedViewController.h"
 #import "XCJAddUserTableViewController.h"
+#import "XCJAppDelegate.h"
 
 #define DISTANCE_BETWEEN_ITEMS  9.0
 #define LEFT_PADDING            9.0
@@ -48,6 +49,7 @@ enum ENUMLoadMoreData {
     NSString  *_Currentgid;
     NSString * CurrentUrl;
 }
+
 @end
 
 @implementation XCJWellDreamTableViewController
@@ -96,6 +98,18 @@ enum ENUMLoadMoreData {
      * MARK: init net data.
      */
     [self initDatawithNet:Enum_initData];
+    
+    SBSegmentedViewController *segmentedViewController =  (SBSegmentedViewController *)self.navigationController.visibleViewController;
+    UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(JoinDreamClick:)];
+    segmentedViewController.navigationItem.rightBarButtonItem = barOne;
+    
+}
+
+-(IBAction)JoinDreamClick:(id)sender
+{
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"请选择您的参赛角色" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"选手",@"粉丝团", nil];
+    actionsheet.tag = 1;
+    [actionsheet showInView:self.navigationController.view];
 }
 
 
@@ -582,8 +596,7 @@ enum ENUMLoadMoreData {
 
 -(IBAction)seeUseinfoClick:(id)sender
 {
-    UITapGestureRecognizer * ges = sender;
-    UIImageView *buttonSender = (UIImageView *)ges.view;
+    UIButton *buttonSender = (UIButton *)sender;
     UITableViewCell * cell = (UITableViewCell *)buttonSender.superview.superview.superview;
     XCJGroupPost_list * post = groupList[ [self.tableView indexPathForCell:cell].section];
     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
@@ -826,27 +839,81 @@ enum ENUMLoadMoreData {
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag == 3) {
-    
-    if (buttonIndex == 0) {
         
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setString:[NSString stringWithFormat:@"%@",CurrentUrl]];
-    }else if(buttonIndex == 1)
-    {
-        NSString * title = [actionSheet buttonTitleAtIndex:buttonIndex];
-        if (![ title  isEqualToString:@"取消"]) {
+        if (buttonIndex == 0) {
             
-            if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:CurrentUrl]])
-            {
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CurrentUrl]];
-            }else{
-                [UIAlertView showAlertViewWithMessage:@"打开失败"];
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            [pasteboard setString:[NSString stringWithFormat:@"%@",CurrentUrl]];
+        }else if(buttonIndex == 1)
+        {
+            NSString * title = [actionSheet buttonTitleAtIndex:buttonIndex];
+            if (![ title  isEqualToString:@"取消"]) {
+                
+                if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:CurrentUrl]])
+                {
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:CurrentUrl]];
+                }else{
+                    [UIAlertView showAlertViewWithMessage:@"打开失败"];
+                }
             }
+            
         }
-        
-    }
     
+    }else if (actionSheet.tag == 2) {
+        // weichat share
+        //1  朋友圈
+        //0   好友
+        
+        XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+        UIImage * image = [self.tableView  viewToImage:self.tableView];
+        NSData * data = UIImageJPEGRepresentation(image, .5);
+        switch (buttonIndex) {
+            case 0:
+            {
+                [delegate sendImageContent:0 withImageData:data];
+            }
+                break;
+            case 1:
+            {
+                [delegate sendImageContent:1 withImageData:data];
+            }
+                break;
+            default:
+                break;
+        }
+    }else if(actionSheet.tag == 1)
+    {
+        switch (buttonIndex) {
+            case 0:
+            {
+                [self setuserTag:@"新都梦想好声音选手"];
+            }
+                break;
+            case 1:
+            {
+                [self setuserTag:@"新都梦想好声音粉丝团"];                
+            }
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 
+
+-(void) setuserTag:(NSString *) strtag
+{
+    [SVProgressHUD showWithStatus:@"正在处理中..."];
+    
+    [[MLNetworkingManager sharedManager] sendWithAction:@"user.update_tag" parameters:@{@"tags":@[strtag]} success:^(MLRequest *request, id responseObject) {
+        if (responseObject) {
+            [SVProgressHUD dismiss];
+            [UIAlertView showAlertViewWithMessage:@"设置成功"];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"设置失败,请重试"];
+    }];
 }
 @end

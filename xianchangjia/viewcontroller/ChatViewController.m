@@ -212,6 +212,18 @@
     //初始化播放器
     player = [[AVAudioPlayer alloc]init];
     
+    // Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillShowKeyboardNotification:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillHideKeyboardNotification:) name:UIKeyboardWillHideNotification object:nil];
+    
+    /* receive websocket message
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:)name: MLNetworkingManagerDidReceivePushMessageNotification   object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
+    
+    
 } 
 
 -(IBAction)ShowkeyboardButtonClick:(id)sender
@@ -529,15 +541,7 @@
         self.conversation.badgeNumber = @(0);
         [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
       //  [[NSNotificationCenter defaultCenter] postNotificationName:@"updateMessageTabBarItemBadge" object:nil];
-    }
-	// Do any additional setup after loading the view.
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillShowKeyboardNotification:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleWillHideKeyboardNotification:) name:UIKeyboardWillHideNotification object:nil];
-    
-    /* receive websocket message
-     */
-     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceivePushMessage:)name: MLNetworkingManagerDidReceivePushMessageNotification   object:nil];
+    } 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensorStateChange:)name:@"UIDeviceProximityStateDidChangeNotification"   object:nil];
     
@@ -550,9 +554,17 @@
      */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(webSocketDidReceiveForceMessage:)name: MLNetworkingManagerDidReceiveForcegroundMessageNotification   object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
-    
     [self.tableView reloadData];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MLNetworkingManagerDidReceiveForcegroundMessageNotification object:nil];
+    
+    
 }
 
  -(void)sensorStateChange:(NSNotificationCenter *)notification
@@ -592,14 +604,12 @@
     }
 }
 
--(void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-//    if (operation && [operation isExecuting]) {
-//        [operation cancel];
-//    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
+//-(void)viewDidDisappear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//
+//}
+
 
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollViewDat
 {
@@ -936,7 +946,7 @@
                                                     name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:MLNetworkingManagerDidReceivePushMessageNotification object:nil];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning

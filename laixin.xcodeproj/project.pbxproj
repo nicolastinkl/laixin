@@ -296,6 +296,8 @@
 		86ADDA361894E73F000A0C22 /* UIImage+WebP.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ADDA341894E73E000A0C22 /* UIImage+WebP.m */; };
 		86ADDA371894E73F000A0C22 /* WebP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ADDA351894E73E000A0C22 /* WebP.framework */; };
 		86AFF8CE18D6F5D7000BBAD4 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86AFF8CD18D6F5D7000BBAD4 /* CoreTelephony.framework */; };
+		86B272A918F7941200221CF7 /* XCJDreamPopUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B272A818F7941200221CF7 /* XCJDreamPopUserView.m */; };
+		86B272AB18F7943000221CF7 /* XCJDreamPopUserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B272AA18F7943000221CF7 /* XCJDreamPopUserView.xib */; };
 		86BDD4FE18BC501C00F621F6 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BDD4FD18BC501C00F621F6 /* CoreText.framework */; };
 		86BDD51C18BC6F5100F621F6 /* libOHAttributedLabel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BDD51B18BC6F4700F621F6 /* libOHAttributedLabel.a */; };
 		86C1A56B1885384600D78242 /* FCAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C1A56A1885384600D78242 /* FCAccount.m */; };
@@ -1055,6 +1057,9 @@
 		86AFF8C918D6F560000BBAD4 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		86AFF8CB18D6F580000BBAD4 /* Instabug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Instabug.framework; path = xianchangjia/instabug/Instabug.framework; sourceTree = "<group>"; };
 		86AFF8CD18D6F5D7000BBAD4 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		86B272A718F7941200221CF7 /* XCJDreamPopUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDreamPopUserView.h; path = viewcontroller/views/XCJDreamPopUserView.h; sourceTree = "<group>"; };
+		86B272A818F7941200221CF7 /* XCJDreamPopUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDreamPopUserView.m; path = viewcontroller/views/XCJDreamPopUserView.m; sourceTree = "<group>"; };
+		86B272AA18F7943000221CF7 /* XCJDreamPopUserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = XCJDreamPopUserView.xib; path = viewcontroller/views/XCJDreamPopUserView.xib; sourceTree = "<group>"; };
 		86BDD4FD18BC501C00F621F6 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		86BDD51618BC6F4700F621F6 /* OHAttributedLabel.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OHAttributedLabel.xcodeproj; path = OHAttributedLabel/OHAttributedLabel.xcodeproj; sourceTree = "<group>"; };
 		86C1A5691885384600D78242 /* FCAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FCAccount.h; path = DAOModel/coredata/FCAccount.h; sourceTree = "<group>"; };
@@ -2192,6 +2197,7 @@
 		868AC8A718EE55780068CC77 /* DreamVoice */ = {
 			isa = PBXGroup;
 			children = (
+				86B272A618F793EB00221CF7 /* DeltailsView */,
 				86E5D9AD18F641C4002882E8 /* Comment_likes */,
 				86E5D9A418F50EC8002882E8 /* DetailsCell */,
 				86FF92B318F3EBF600E3933D /* XCJWellDreamTableViewController.h */,
@@ -2585,6 +2591,16 @@
 				86ADDA351894E73E000A0C22 /* WebP.framework */,
 			);
 			path = "iOS-WebP";
+			sourceTree = "<group>";
+		};
+		86B272A618F793EB00221CF7 /* DeltailsView */ = {
+			isa = PBXGroup;
+			children = (
+				86B272A718F7941200221CF7 /* XCJDreamPopUserView.h */,
+				86B272A818F7941200221CF7 /* XCJDreamPopUserView.m */,
+				86B272AA18F7943000221CF7 /* XCJDreamPopUserView.xib */,
+			);
+			name = DeltailsView;
 			sourceTree = "<group>";
 		};
 		86B73D93187E670400EF7391 /* PostView */ = {
@@ -3665,6 +3681,7 @@
 				8690DE9018C872C900A14A51 /* room0005.jpg in Resources */,
 				8692E3C018642DB700F9E1DD /* Default@2x.png in Resources */,
 				86E57CEE18795CC900978AFA /* area.plist in Resources */,
+				86B272AB18F7943000221CF7 /* XCJDreamPopUserView.xib in Resources */,
 				8697EDE61880E2B300743FE2 /* like_comment_bg_two@2x.png in Resources */,
 				86D181E91834822D0005901D /* Images.xcassets in Resources */,
 				8668E478187540DB00D20C9E /* btn_comment_disable@2x.png in Resources */,
@@ -3999,6 +4016,7 @@
 				8668E492187543B900D20C9E /* UIImageView+Addtion.m in Sources */,
 				865632F2186000D300E9903C /* XCJSendCommentViewController.m in Sources */,
 				86C642341887A3D200E0CDDB /* NSDate+TimeInterval.m in Sources */,
+				86B272A918F7941200221CF7 /* XCJDreamPopUserView.m in Sources */,
 				869CE52B186BE38D0004C1EC /* NSManagedObjectContext+MagicalSaves.m in Sources */,
 				866C156518ADE75F0054F686 /* IDMPhotoBrowser.m in Sources */,
 				8630C54318B5EBC600A11084 /* XCJSearchUsersViewController.m in Sources */,

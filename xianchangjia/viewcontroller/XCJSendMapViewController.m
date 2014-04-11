@@ -146,6 +146,9 @@
     if (strAddresss) {
         newstr = [strAddresss stringByReplacingOccurrencesOfString:@"(null)" withString:@""];
     }
+    if (newstr == nil) {
+        newstr = @"";
+    }
     NSDictionary *dict = @{@"image":image,@"strAddresss":newstr,@"lat":@(lat),@"log":@(log)};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"PostChatLoacation" object:nil userInfo:dict];
     

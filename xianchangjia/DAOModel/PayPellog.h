@@ -50,7 +50,7 @@
 @property (nonatomic, assign) NSInteger paystate;
 @property (nonatomic, assign) double    create_time;
 
-
+@property (nonatomic, copy  ) NSString  *desc;
 @end
 
 

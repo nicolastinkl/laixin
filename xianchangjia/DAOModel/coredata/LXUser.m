@@ -44,6 +44,15 @@
         _signature = [tools getStringValue:dic[@"signature"] defaultValue:@""];
         _position = [tools getStringValue:dic[@"position"] defaultValue:@""];
         _phone =[tools getStringValue:dic[@"phone"] defaultValue:@""];
+        
+        //exinfo
+        NSDictionary * exinfoDict = [DataHelper getDictionaryValue:dic[@"exinfo"] defaultValue:nil];
+        if (exinfoDict) {
+            _like_me_count = [DataHelper getIntegerValue:exinfoDict[@"like_me_count"] defaultValue:0];
+        }
+        
+        
+        
     }
     return self;
 }

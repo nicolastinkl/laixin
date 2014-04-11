@@ -355,7 +355,7 @@
                         [paySelectBank show];
                     }else{
                         arrayCardIDS = @[];
-                        [self SurePayClick:@"merchandise.createorder" withCardid:nil];
+                        [self SurePayClick:@"merchandise.tenpay" withCardid:nil];
                     }
                 }
             } failure:^(MLRequest *request, NSError *error) {
@@ -381,7 +381,7 @@
                     [self SurePayClick:@"merchandise.paybycard" withCardid:cardid];
                 }else{
                    // 添加银行卡
-                   [self SurePayClick:@"merchandise.createorder" withCardid:nil];
+                   [self SurePayClick:@"merchandise.tenpay" withCardid:nil];
                 }
             }
         }

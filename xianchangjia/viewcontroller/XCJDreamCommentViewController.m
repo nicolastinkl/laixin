@@ -138,12 +138,11 @@
 }
 
 
-
 #pragma mark - Keyboard notifications
 
 - (void)handleWillShowKeyboardNotification:(NSNotification *)notification
 {
-    
+    [self.button_keyboard setImage:[UIImage imageNamed:@"chat_bottom_keyboard_nor"] forState:UIControlStateNormal];
     [self keyboardWillShowHide:notification];
 }
 
@@ -379,23 +378,31 @@
     
     [self.button_keyboard setImage:[UIImage imageNamed:@"bar_down_keyboard_icon"] forState:UIControlStateNormal];
     [self.textfield_content resignFirstResponder];
-    self.View_inputview.top = APP_SCREEN_HEIGHT - self.View_inputview.height;
-    
+//    self.View_inputview.top = APP_SCREEN_HEIGHT - self.View_inputview.height;
+   
     UITableViewCell * cell =  [tableView cellForRowAtIndexPath:indexPath];
     //    UIView * imageview = (UIView *) [cell.contentView subviewWithTag:2];
     if ([cell.reuseIdentifier isEqualToString:@"loadingCell"]) {
         [self LoadMoreClick:nil];
         //        [imageview showIndicatorViewBlue];
     }else{
-        Comment * comment = _datasource[indexPath.row];
-        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
-            
-            XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
-            addUser.UserInfo = response;
-            [self.navigationController pushViewController:addUser animated:YES];
-            
-        } withuid:comment.uid];
         
+        
+        double delayInSeconds = 0.1;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            Comment * comment = _datasource[indexPath.row];
+            [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+                
+                XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+                addUser.UserInfo = response;
+                [self.navigationController pushViewController:addUser animated:YES];
+                
+            } withuid:comment.uid];
+            
+        });
+        
+  
     }
 }
 

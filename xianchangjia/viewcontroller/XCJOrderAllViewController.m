@@ -106,9 +106,9 @@
      "productcatalog":1,
      "paystate":1*/
     [self.view showIndicatorViewLargeBlue];
-    
+    //@"before":@0,
     NSMutableArray * arrayMID = [[NSMutableArray alloc] init];
-    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.history" parameters:@{@"before":@"",@"count":@"10000"} success:^(MLRequest *request, id responseObject) {
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.ten_history" parameters:@{@"count":@(10000)} success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             NSDictionary * dict =  responseObject[@"result"];
             NSArray * jsonArray = dict[@"history"];
@@ -326,7 +326,7 @@
     
     [SVProgressHUD showWithStatus:@"正在处理..."];
     //,@"cardid":pay.orderid
-    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.createorder" parameters:@{@"mid":@(pay.mid),@"people_count":@(pay.ex_people),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.tenpay" parameters:@{@"mid":@(pay.mid),@"people_count":@(pay.ex_people),@"hardwareid":openUDID} success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
             if (errnoMesg == 0) {

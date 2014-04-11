@@ -113,6 +113,7 @@
                 [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
                 [USER_DEFAULT synchronize];
             }
+//            self.currentMessage.messageguid = guid;
             NSString * messageId = dataImg[@"messageId"];
             NSString * url = [DataHelper getStringValue:dataImg[@"url"] defaultValue:@""];
             switch ([dataImg[@"messagetype"] intValue]) {
@@ -149,7 +150,7 @@
             UIButton * retryButton = (UIButton *) [self.contentView subviewWithTag:10];
             retryButton.hidden = YES;
             
-            NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"messageguid == %@",guid];
+            /*NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"messageguid == %@",guid];
             FCMessage * groupMessage = [FCMessage MR_findFirstWithPredicate:parCMDss ];
             if (groupMessage) {
                 
@@ -177,6 +178,8 @@
 
                 SLLog(@"send ok");
             }
+            */
+            [localContext MR_saveToPersistentStoreAndWait];
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strSuccNotificationName object:nil];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strFailedNotificationName object:nil];
