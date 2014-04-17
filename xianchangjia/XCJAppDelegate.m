@@ -43,7 +43,7 @@
 
 static NSString * const kLaixinStoreName = @"Laixins";
 
-#define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
+
 @interface XCJAppDelegate()<UITabBarControllerDelegate>
 
 @end
@@ -500,7 +500,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.messageType = @(messageType_video);
             }
 
-            
+            msg.facebookID = conversation.facebookId;
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
             conversation.messageStutes = @(messageStutes_incoming);
@@ -717,11 +717,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@ \n \n更多详情请进入\n'%@'中查看",paylog.productname,paylog.ex_people,stringss,description];
                     [UIAlertView showAlertViewWithTitle:title message:messagessLog];
                     
-                    
                 }
             }
-
-            
         }
     }
 }
@@ -879,10 +876,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                              selector:@selector(laixinStepupNotification:)
                                                  name:LaixinSetupDBMessageNotification
                                                object:nil];
-    
-    
-    
-  
     
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1082,8 +1075,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 }
 
 -(void) ReceiveAllMessage
-{
-    
+{    
     if(![XCJAppDelegate hasLogin])
          return;
     {
@@ -1243,7 +1235,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     }else if ([typeMessage isEqualToString:@"video"]) {
                         conversation.lastMessage = @"[视频]";
                     }
-                    
+                    msg.facebookID = facebookID;
                     conversation.messageStutes = @(messageStutes_incoming);
                     conversation.facebookName = @"";
                     conversation.facebookId = facebookID;
@@ -1605,8 +1597,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
      }*/
    // NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     
-    //    NSLog(@"Receive Notify: %@", userInfo);
-    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+//    //    NSLog(@"Receive Notify: %@", userInfo);
+//    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     //如果当前程序状态是激活的。
     
     if (application.applicationState == UIApplicationStateActive) {
@@ -1621,7 +1613,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 //        [[UIApplication sharedApplication] presentLocalNotificationNow:_localNotification];
 //        //显示这个推送消息
 //        [UIAlertView showAlertViewWithTitle:@"来信" message:[NSString stringWithFormat:@"%@",alert]];
-        SLLog(@"push : %@",[NSString stringWithFormat:@"%@",alert]);
+//        SLLog(@"push : %@",[NSString stringWithFormat:@"%@",alert]);
     }
     
     // [BPush handleNotification:userInfo];

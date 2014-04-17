@@ -223,7 +223,6 @@
 		8690DECD18C8891900A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEC318C8891900A14A51 /* script.js */; };
 		8690DECF18C8895000A14A51 /* script.js in Sources */ = {isa = PBXBuildFile; fileRef = 8690DECE18C8895000A14A51 /* script.js */; };
 		8690DED218C88ABA00A14A51 /* UINavigationSample.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED118C88ABA00A14A51 /* UINavigationSample.m */; };
-		8690DED418C96E0C00A14A51 /* 易宝支付Logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */; };
 		8690DED718C974C500A14A51 /* PayPellog.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED618C974C500A14A51 /* PayPellog.m */; };
 		8690DEDA18C97BD000A14A51 /* XCJOrderAllViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */; };
 		8690DEDD18C9A1C000A14A51 /* XCJPayInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8690DEDC18C9A1C000A14A51 /* XCJPayInfo.m */; };
@@ -508,6 +507,7 @@
 		86FF92BD18F3F07A00E3933D /* XLSwipeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BB18F3F07A00E3933D /* XLSwipeNavigationController.m */; };
 		86FF92C018F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */; };
 		86FF92C318F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */; };
+		9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -913,7 +913,6 @@
 		8690DECE18C8895000A14A51 /* script.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = script.js; sourceTree = "<group>"; };
 		8690DED018C88ABA00A14A51 /* UINavigationSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UINavigationSample.h; path = viewcontroller/UINavigationSample.h; sourceTree = "<group>"; };
 		8690DED118C88ABA00A14A51 /* UINavigationSample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UINavigationSample.m; path = viewcontroller/UINavigationSample.m; sourceTree = "<group>"; };
-		8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "易宝支付Logo.jpg"; sourceTree = "<group>"; };
 		8690DED518C974C500A14A51 /* PayPellog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PayPellog.h; path = DAOModel/PayPellog.h; sourceTree = "<group>"; };
 		8690DED618C974C500A14A51 /* PayPellog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PayPellog.m; path = DAOModel/PayPellog.m; sourceTree = "<group>"; };
 		8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJOrderAllViewController.h; path = viewcontroller/XCJOrderAllViewController.h; sourceTree = "<group>"; };
@@ -1384,6 +1383,8 @@
 		86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamUsersTableViewController.m; path = viewcontroller/XCJWellDreamUsersTableViewController.m; sourceTree = "<group>"; };
 		86FF92C118F3F21B00E3933D /* XCJWellDreamNewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellDreamNewsTableViewController.h; path = viewcontroller/XCJWellDreamNewsTableViewController.h; sourceTree = "<group>"; };
 		86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamNewsTableViewController.m; path = viewcontroller/XCJWellDreamNewsTableViewController.m; sourceTree = "<group>"; };
+		9360928118FE243F0074C61B /* XCJDownloadLaixinViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDownloadLaixinViewcontr.h; path = viewcontroller/XCJDownloadLaixinViewcontr.h; sourceTree = "<group>"; };
+		9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDownloadLaixinViewcontr.m; path = viewcontroller/XCJDownloadLaixinViewcontr.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1492,7 +1493,6 @@
 		861E7CDF18C8679F0082B3DE /* RoomJPG */ = {
 			isa = PBXGroup;
 			children = (
-				8690DED318C96E0C00A14A51 /* 易宝支付Logo.jpg */,
 				8690DE8418C872C900A14A51 /* room0001.jpg */,
 				8690DE8518C872C900A14A51 /* room0002.jpg */,
 				8690DE8618C872C900A14A51 /* room0003.jpg */,
@@ -2552,6 +2552,7 @@
 		86A306AB18725EE600C7168B /* SystemSettings */ = {
 			isa = PBXGroup;
 			children = (
+				9360927F18FE24290074C61B /* download */,
 				8622C88C187D6F2500776A38 /* aboutview */,
 				865632DE185FFDDA00E9903C /* XCJSettingsViewController.h */,
 				865632DF185FFDDA00E9903C /* XCJSettingsViewController.m */,
@@ -3564,6 +3565,15 @@
 			path = support/TKSegementViews;
 			sourceTree = "<group>";
 		};
+		9360927F18FE24290074C61B /* download */ = {
+			isa = PBXGroup;
+			children = (
+				9360928118FE243F0074C61B /* XCJDownloadLaixinViewcontr.h */,
+				9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */,
+			);
+			name = download;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3675,7 +3685,6 @@
 				868B5D5B1893B068004D1743 /* unicode_to_hanyu_pinyin.txt in Resources */,
 				8622C891187D711100776A38 /* aboutLaixinInfo.plist in Resources */,
 				8690DE9318C872C900A14A51 /* room0008.jpg in Resources */,
-				8690DED418C96E0C00A14A51 /* 易宝支付Logo.jpg in Resources */,
 				8665168D187BEF75001F05F6 /* SVProgressHUD.bundle in Resources */,
 				866287EE18CCB28500891B2D /* expandableImage.png in Resources */,
 				8690DE9018C872C900A14A51 /* room0005.jpg in Resources */,
@@ -3953,6 +3962,7 @@
 				866618A418951B07000228FC /* ChatRecorderView.m in Sources */,
 				86FB20FE1871640C006BDE32 /* XCJLoginNaviController.m in Sources */,
 				86A306A51871A82A00C7168B /* XCJCompleteUploadImgViewController.m in Sources */,
+				9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */,
 				86740A991839FA2A0041B603 /* UINavigationController+MHDismissModalView.m in Sources */,
 				86893DB6187FCCC500DC0CB8 /* XCJCreateChatNaviController.m in Sources */,
 				8690DED718C974C500A14A51 /* PayPellog.m in Sources */,
@@ -4204,7 +4214,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -4245,7 +4255,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -4279,11 +4289,11 @@
 		86D182001834822D0005901D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT) ";
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP";
+				FRAMEWORK_SEARCH_PATHS = "/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/iOS-WebP";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -4300,10 +4310,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/WeChatSDK_1.4.2.1,
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/Extend/Vendor/SDWebImage",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/WeChatSDK_1.4.2.1",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;
@@ -4317,11 +4327,11 @@
 		86D182011834822D0005901D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT) ";
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/iOS-WebP";
+				FRAMEWORK_SEARCH_PATHS = "/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/iOS-WebP";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "xianchangjia/laixin-Prefix.pch";
@@ -4338,10 +4348,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/Extend/Vendor/SDWebImage,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib,
-					/Users/applepc/Documents/project/ios7Project/laixin/xianchangjia/support/WeChatSDK_1.4.2.1,
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/Extend/Vendor/SDWebImage",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/UMAnalytics_Sdk_2.2.1.OpenUDID",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/viewcontroller/AudioView/VoiceConvert/lib",
+					"/Users/tinkl/Documents/project-xcode/laixin/xianchangjia/support/WeChatSDK_1.4.2.1",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = laixin;

@@ -21,3 +21,5 @@ shared##classname = [[self alloc] init]; });    \
 return shared##classname;                           \
 }                                                           
 #endif
+
+

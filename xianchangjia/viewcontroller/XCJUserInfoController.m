@@ -269,6 +269,7 @@
             msg.messageguid = @"";
             msg.messageSendStatus = @0;
             msg.read = @YES;
+            msg.facebookID = conversation.facebookId;
             conversation.lastMessage = msg.text;
             [conversation addMessagesObject:msg];
         }

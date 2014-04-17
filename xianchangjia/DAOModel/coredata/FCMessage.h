@@ -19,7 +19,7 @@ enum messageTypeEnum {
     messageType_audio = 5,
     messageType_contacts = 6,
     messageType_video = 7,
-    messageType_SystemAD = 100, //系统公告 包括个人信息修改,开始聊天 然后====
+    messageType_SystemAD = 100,//FIXME:  //系统公告 包括个人信息修改,开始聊天 然后====
     };
 
 @interface FCMessage : NSManagedObject
@@ -39,6 +39,7 @@ enum messageTypeEnum {
 @property (nonatomic, retain) NSNumber * longitude;
 @property (nonatomic, retain) NSNumber * messageSendStatus;   //0 sended,1..sending..2 error
 
+@property (nonatomic, retain) NSString * facebookID; // MessageUSERID
 @property (nonatomic, retain) Conversation *conversation;
 @property (nonatomic, retain) FCUserDescription *messageUser;
 

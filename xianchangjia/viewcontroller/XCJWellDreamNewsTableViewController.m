@@ -17,10 +17,11 @@
 
 #define kAttributedLabelTag 211
 
-@interface XCJWellDreamNewsTableViewController ()<OHAttributedLabelDelegate>
+@interface XCJWellDreamNewsTableViewController ()<OHAttributedLabelDelegate,UIActionSheetDelegate>
 {
     XCJGroup_list * currentGroup;
     NSString * CurrentUrl;
+//    NSMutableAttributedString* currentmas;
 }
 @end
 
@@ -66,6 +67,13 @@
                 currentGroup = list;
             }
         }];
+        
+//        NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",currentGroup.group_board]];
+//        [mas setFont:[UIFont systemFontOfSize: 16.0f]];
+//        [mas setTextColor:[UIColor blackColor]];
+//        [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
+//        [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+//        currentmas = mas;
         [self.view hideIndicatorViewBlueOrGary];
         [self.tableView reloadData];
     } failure:^(MLRequest *request, NSError *error) {
@@ -121,18 +129,29 @@
 
 -(float) textHeight:(NSString *) text
 {
-    NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:text];
-    [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-    [mas setTextColor:[UIColor blackColor]];
-    [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-    CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
-    return sizeToFit.height + 20;
+    
+//    NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:text];
+//    [mas setFont:[UIFont systemFontOfSize: 16.0f]];
+//    [mas setTextColor:[UIColor blackColor]];
+//    [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
+//    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+//    CGSize sizeToFit = [currentmas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
+//    return sizeToFit.height + 20;
+    
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return   fmaxf(20.0f, sizeToFit.height + 15 );
+    
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    return APP_SCREEN_HEIGHT - 64;
+    
     if (currentGroup)
     return  [self textHeight:currentGroup.group_board];
     
@@ -147,33 +166,39 @@
         return cell;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    // Configure the cell...
-    OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+   
+    /*// Configure the cell...
+    UILabel* labelContent = (UILabel*)[cell viewWithTag:kAttributedLabelTag];
     if (labelContent == nil) {
         labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
         labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        labelContent.centerVertically = YES;
-        labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
-        labelContent.delegate = self;
+//        labelContent.centerVertically = YES;
+//        labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
+//        labelContent.delegate = self;
         labelContent.highlightedTextColor = [UIColor whiteColor];
         labelContent.tag = kAttributedLabelTag;
+        
+        labelContent.numberOfLines  = 0;
+        labelContent.lineBreakMode = NSLineBreakByCharWrapping;
         [cell addSubview:labelContent];
         //    labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
     }
-    NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",currentGroup.group_board]];
-    [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-    [mas setTextColor:[UIColor blackColor]];
-    [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
+  
     
-    labelContent.attributedText = mas;
+//    labelContent.attributedText = currentmas;
+      labelContent.text = currentGroup.group_board;
     [labelContent sizeToFit];
-    CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
+//    CGSize sizeToFit = [currentmas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
     
-    [labelContent setWidth:sizeToFit.width];
-    [labelContent setHeight:sizeToFit.height];
+    [labelContent setWidth:300.0f];
+    [labelContent setHeight:[self textHeight:currentGroup.group_board]];
     [labelContent setTop:10.0f];
     [labelContent setLeft:10.0f];
+    */
+    UITextView* labelContent = (UITextView*)[cell viewWithTag:1];
+    labelContent.text = currentGroup.group_board;
+    
+    labelContent.height = APP_SCREEN_HEIGHT - 64;
     
     return cell;
 }

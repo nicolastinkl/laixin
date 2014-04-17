@@ -492,6 +492,7 @@
         msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
         msg.messageguid = @"";
         msg.messageSendStatus = @0;
+        msg.facebookID = array.facebookId;
         msg.read = @YES;
         [array addMessagesObject:msg];
         array.lastMessage = msg.text;
@@ -524,6 +525,7 @@
             msg.messageguid = @"";
             msg.messageSendStatus = @0;
             msg.read = @YES;
+            msg.facebookID = conversation.facebookId;
             conversation.lastMessage = msg.text;
             [conversation addMessagesObject:msg];
         }
