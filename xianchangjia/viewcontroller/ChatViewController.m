@@ -67,13 +67,23 @@
     XCJChatSendInfoView *SendInfoView;
     NSURL * playingURL;
     XCJChatMessageCell * playingCell;
+    
+    BOOL _loading;
+    BOOL AllLoad;
+    BOOL AllDBdatabaseLoad;
+    NSInteger _currentPage;
+    
 }
-@property (weak, nonatomic) IBOutlet UIView *inputContainerView;
+@property (weak, nonatomic) IBOutlet UIView      *inputContainerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UITextView *inputTextView;
-@property (weak, nonatomic) UIView *keyboardView;
-@property (strong,nonatomic) NSMutableArray *messageList;
+@property (weak, nonatomic) IBOutlet UITextView  *inputTextView;
+@property (weak, nonatomic) UIView               *keyboardView;
+@property (strong,nonatomic) NSMutableArray      *messageList;
 @property (nonatomic, readonly) RemoteImgListOperator *m_objImgListOper;
+
+
+@property (weak, nonatomic) IBOutlet UILabel *label_titleToast;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityindret;
 
 
 @property (retain, nonatomic)  ChatVoiceRecorderVC      *recorderVC;
@@ -106,6 +116,10 @@
 //    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
 //    panRecognizer.delegate = self;
 //    [self.tableView addGestureRecognizer:panRecognizer];
+    
+    NSMutableArray * array = [[NSMutableArray alloc] init];
+    self.messageList =array;
+    
     
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
     
@@ -175,9 +189,14 @@
     
     EmjView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.height, self.view.width, keyboardHeight)];
     [EmjView addSubview:scrollView];
-//    [EmjView addSubview:pageControl];
+    [EmjView addSubview:pageControl];
     [self.view addSubview:EmjView];
     
+    
+    /**
+     *  init _data
+     */
+    _currentPage = 0;
     [self setUpSequencer];
     
     if (self.gid) {
@@ -224,7 +243,48 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PostLoacationClick:) name:@"PostChatLoacation" object:nil];
     
     
-} 
+}
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollViewDat
+{
+    
+    if (scrollViewDat && scrollViewDat == scrollView) {
+        int page = scrollView.contentOffset.x / 320;//通过滚动的偏移量来判断目前页面所对应的小白点
+        pageControl.currentPage = page;//pagecontroll响应值的变化
+    }
+    
+    if ([scrollViewDat isKindOfClass:[UITableView class]]) {
+        
+        if (AllLoad) {
+            return;
+        }
+        if ( scrollViewDat.contentOffset.y < -30.0f && !_loading) {
+            if (AllDBdatabaseLoad) {
+                [self viewdidloadedComplete];
+            }else{
+                _loading = YES;
+                [self performSelector:@selector(setUpSequencer) withObject:nil afterDelay:.3];
+                
+            }
+        }
+        
+    }
+}
+
+- (void) viewdidloadedComplete
+{
+    self.activityindret.hidden = YES;
+    self.label_titleToast.text = @"全部加载完成";
+}
+
+- (void) viewdidloading
+{
+    self.activityindret.hidden = NO;
+    self.label_titleToast.text = @"加载中...";
+}
+
+
 
 -(IBAction)ShowkeyboardButtonClick:(id)sender
 {
@@ -283,6 +343,7 @@
         // message did not come, this will be on rigth
         msg.messageStatus = @(NO);
         msg.messageId =  @"";
+        msg.facebookID = self.conversation.facebookId;
         self.conversation.lastMessage = @"[语音]";
         self.conversation.lastMessageDate = [NSDate date];
         self.conversation.badgeNumber = @0;
@@ -300,6 +361,7 @@
                 NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
                 msg.text = @"";
+                msg.facebookID = self.conversation.facebookId;
                 msg.messageSendStatus = @(4); // ready to send
                 msg.messageguid = [self getMD4HashWithObj];
                 msg.sentDate = [NSDate date];
@@ -376,6 +438,7 @@
                         msg.audioUrl = url;
                         // message did not come, this will be on rigth
                         msg.messageStatus = @(NO);
+                        msg.facebookID = self.conversation.facebookId;
                         msg.messageId =  msgID;
                             self.conversation.lastMessage = @"[语音]";
                         self.conversation.lastMessageDate = [NSDate date];
@@ -508,7 +571,7 @@
     [self.navigationController pushViewController:groupsettingview animated:YES];
 }
 
-- (void) setUpSequencer
+/*- (void) setUpSequencer
 {
     
     __weak ChatViewController *self_ = self;
@@ -524,15 +587,81 @@
     }];
     [sequencer run];
     
-}
+}*/
 
-//- (MessageList*)messageList
-//{
-//    if (!_messageList) {
-//        _messageList = [[MessageList alloc]init];
-//    }
-//    return _messageList;
-//}
+/*!
+ *  <#Description#>
+ *
+ *  @since <#version number#>
+ */
+- (void) setUpSequencer
+{
+
+    if (AllDBdatabaseLoad) {
+        return;
+    }
+    NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription  entityForName:@"FCMessage" inManagedObjectContext:localContext];
+    
+    [request setEntity:entity];
+    
+    NSPredicate * predicate = [NSPredicate predicateWithFormat:@"facebookID == %@",self.conversation.facebookId];
+    [request setPredicate:predicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor  alloc] initWithKey:@"sentDate"  ascending:NO];
+//    NSSortDescriptor *sortDescriptorMSGID = [[NSSortDescriptor  alloc] initWithKey:@"messageId"  ascending:NO];
+    
+    NSArray *sortDescriptors = [[NSArray  alloc] initWithObjects:sortDescriptor, nil];
+    
+    [request setSortDescriptors:sortDescriptors];
+    
+    [request setFetchLimit:20];
+    
+    [request  setFetchOffset:_currentPage * 20];
+    
+    NSArray  *rssTemp  = [FCMessage MR_executeFetchRequest:request];
+    
+    if (rssTemp.count == 20) {
+        AllDBdatabaseLoad = NO;
+    }else{
+        AllDBdatabaseLoad = YES;
+        [self viewdidloadedComplete];
+    }
+    if (rssTemp.count > 0) {
+        if (_currentPage == 0) {
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
+           // [self.messageList addObjectsFromArray:rssTemp];
+            
+            
+            [rssTemp enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [self.messageList insertObject:obj atIndex:0];
+            }];
+            
+            [self.tableView reloadData];
+            //tableView底部
+            [self scrollToBottonWithAnimation:NO];
+            
+        }else{
+            [rssTemp enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                [self.messageList insertObject:obj atIndex:0];
+            }];
+            
+            CGSize sizePre = self.tableView.contentSize;
+            int preHeight = sizePre.height;
+            [self.tableView reloadData];
+            CGSize sizeNew = self.tableView.contentSize;
+            float contentTop =  sizeNew.height - preHeight - 63;
+            [self.tableView setContentOffset:CGPointMake(0,  contentTop) animated:NO];
+            
+        }
+    }
+    
+    _loading = NO;
+    _currentPage++;
+    
+}
 
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -725,7 +854,6 @@
                     msg.imageUrl = @"";
                     msg.latitude = @([DataHelper getFloatValue:dicMessage[@"lat"] defaultValue:0.0]);
                     msg.longitude = @([DataHelper getFloatValue:dicMessage[@"long"] defaultValue:0.0]);
-                    
                     msg.messageType = @(messageType_map);
                 }else if ([typeMessage isEqualToString:@"video"]) {
                     self.conversation.lastMessage = @"[视频]";
@@ -734,7 +862,7 @@
                 }
                 
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
-                
+                msg.facebookID = self.conversation.facebookId;
                 self.conversation.lastMessageDate = date;
                 self.conversation.badgeNumber = @0;
                 self.conversation.messageStutes = @(messageStutes_incoming);
@@ -813,6 +941,7 @@
                 [[FDStatusBarNotifierView sharedFDStatusBarNotifierView] showInWindowMessage:[NSString stringWithFormat:@"%@:%@",self.conversation.facebookName,self.conversation.lastMessage]];
                 // message did come, this will be on left
                 msg.messageStatus = @(YES);
+                msg.facebookID = facebookID;
                 msg.messageId = [tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"];
                 self.conversation.lastMessage = content;
                 self.conversation.lastMessageDate = date;
@@ -940,6 +1069,10 @@
     //删除Observer
 //	[self.messageList removeObserver:self forKeyPath:@"array"];
 
+    
+    scrollView.delegate  = nil;
+    [_tableView setDelegate:nil];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -979,6 +1112,7 @@
     // message did not come, this will be on rigth
     msg.messageStatus = @(NO);
     msg.messageId = @"";
+    msg.facebookID = self.conversation.facebookId;
     self.conversation.lastMessage = @"[表情]";
     self.conversation.lastMessageDate = [NSDate date];
     self.conversation.badgeNumber = @0;
@@ -1103,6 +1237,7 @@
             msg.messageSendStatus = @(4); // ready to send
             msg.messageId = @"";
             msg.messageguid = [self getMD4HashWithObj];
+            msg.facebookID = self.conversation.facebookId;
             self.conversation.lastMessage = text;
             self.conversation.lastMessageDate = [NSDate date];
             self.conversation.badgeNumber = @0;
@@ -1246,6 +1381,7 @@
     FCMessage *msg = [FCMessage MR_createInContext:localContext];
     msg.sentDate = [NSDate date];
     msg.imageUrl = file;
+    msg.facebookID = self.conversation.facebookId;
     msg.messageType = @(messageType_map);
     // message did not come, this will be on rigth
     msg.messageStatus = @(NO);
@@ -1532,6 +1668,7 @@
     // message did not come, this will be on rigth
     msg.messageStatus = @(NO);
     msg.messageId = msgid;
+    msg.facebookID = self.conversation.facebookId;
     if (self.gid.length > 0) {
         self.conversation.lastMessage = [NSString stringWithFormat:@"%@:[图片]",[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_nick]];
     }else{
@@ -1615,6 +1752,7 @@
     msg.messageStatus = @(NO);
     msg.messageSendStatus = @(4); // ready to send
     msg.messageId = @"";
+    msg.facebookID = self.conversation.facebookId;
     msg.messageguid = [self getMD4HashWithObj];
     self.conversation.lastMessage = @"[图片]";
     self.conversation.lastMessageDate = [NSDate date];
@@ -1832,7 +1970,7 @@
     
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:14.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
     return   fmaxf(20.0f, sizeToFit.width + 10 );
 }
@@ -1878,11 +2016,23 @@
     UILabel * labelName = (UILabel *) [cell.contentView subviewWithTag:2];
     UILabel * labelTime = (UILabel *) [cell.contentView subviewWithTag:3];
     UILabel * labelContent = (UILabel *) [cell.contentView subviewWithTag:4];
+    labelContent.font = [UIFont systemFontOfSize:16.0f];
     UILabel * address = (UILabel *) [cell.contentView subviewWithTag:8];
     UIActivityIndicatorView * indictorView = (UIActivityIndicatorView *) [cell.contentView subviewWithTag:9];
     UIButton * retryButton = (UIButton *) [cell.contentView subviewWithTag:10];
     UIButton * audioButton = (UIButton *) [cell.contentView subviewWithTag:11];
     UIImageView * Image_playing = (UIImageView*)[cell.contentView subviewWithTag:12];
+     
+    int ssinde = indexPath.row%3;
+    if (ssinde == 0) {
+        labelTime.layer.cornerRadius = 4.0;
+        labelTime.layer.masksToBounds = YES;
+        labelTime.hidden = NO;
+    }else{
+        
+        labelTime.hidden = YES;
+    }
+    
     if ([message.messageSendStatus intValue] == 1) //sending
     {
 //        if (message.messageId && message.messageId.length > 0) ;
@@ -2455,7 +2605,7 @@
 - (CGFloat)heightForCellWithPost:(NSString *)post {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    CGSize sizeToFit = [post sizeWithFont:[UIFont systemFontOfSize:15.0f] constrainedToSize:CGSizeMake(220.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize sizeToFit = [post sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(220.0f, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 #pragma clang diagnostic pop
     return  fmaxf(35.0f, sizeToFit.height + 35.0f );
 }
@@ -2495,22 +2645,24 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    float celladdlenght = 10.0f;
+    
     FCMessage *message = self.messageList[indexPath.row];
     
     if ([message.messageType intValue] == messageType_SystemAD) {
         //系统公告
         float width =  APP_SCREEN_WIDTH * .7;
         float height = [self heightforsystem14:message.text withWidth:width];
-        return  height + 10.0f;
+        return  height + 10.0f + celladdlenght;
     }
     
     if ([message.messageType intValue] == messageType_image || [message.messageType intValue] == messageType_emj ) {
-        return 148.0f;
+        return 148.0f + celladdlenght;
     }
     if ([message.messageType intValue] == messageType_map) {
-        return 206.0f;
+        return 206.0f + celladdlenght;
     }
-    return [self heightForCellWithPost:message.text]+20.0f;
+    return [self heightForCellWithPost:message.text]+20.0f + celladdlenght;
 }
 
 

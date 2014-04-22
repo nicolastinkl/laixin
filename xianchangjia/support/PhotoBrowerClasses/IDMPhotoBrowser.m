@@ -1171,6 +1171,7 @@
 
 // If permanent then we don't set timers to hide again
 - (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated permanent:(BOOL)permanent {
+  
     // Cancel any timers
     [self cancelControlHiding];
     
@@ -1205,6 +1206,11 @@
 	// Control hiding timer
 	// Will cancel existing timer but only begin hiding if they are visible
 	if (!permanent) [self hideControlsAfterDelay];
+    
+    if (!hidden) {
+        [self doneButtonPressed:nil];
+    }
+  
 }
 
 - (void)cancelControlHiding {
@@ -1220,6 +1226,7 @@
 	// return;
     
     if (![self areControlsHidden]) {
+        
         [self cancelControlHiding];
 		_controlVisibilityTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(hideControls) userInfo:nil repeats:NO];
 	}

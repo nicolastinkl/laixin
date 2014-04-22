@@ -898,7 +898,6 @@ enum ENUMLoadMoreData {
                 break;
         }
     }
-
 }
 
 

@@ -193,6 +193,8 @@
         {
             NSString * strFrist = [[outputPinyin substringToIndex:1] uppercaseString];
             newFcObj.nick_frist_pinyin = strFrist;
+        }else{
+            newFcObj.nick_frist_pinyin = @"#";
         }
             
         [localContext MR_saveToPersistentStoreWithCompletion:^(BOOL sucess, NSError *error){

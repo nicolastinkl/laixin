@@ -300,6 +300,7 @@ enum actionTag {
                                 msg.messageguid = @"";
                                 msg.messageSendStatus = @0;
                                 msg.read = @YES;
+                                msg.facebookID = array.facebookId;
                                 array.lastMessage = msg.text;
                                 [array addMessagesObject:msg];
                             }
@@ -326,6 +327,7 @@ enum actionTag {
                                 msg.messageguid = @"";
                                 msg.messageSendStatus = @0;
                                 msg.read = @YES;
+                                msg.facebookID = conversation.facebookId;
                                 conversation.lastMessage = msg.text;
                                 [conversation addMessagesObject:msg];
                             }

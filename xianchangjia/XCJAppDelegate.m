@@ -43,7 +43,7 @@
 
 static NSString * const kLaixinStoreName = @"Laixins";
 
-#define UIColorFromRGB(rgbValue)[UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
+
 @interface XCJAppDelegate()<UITabBarControllerDelegate>
 
 @end
@@ -500,7 +500,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.messageType = @(messageType_video);
             }
 
-            
+            msg.facebookID = conversation.facebookId;
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
             conversation.messageStutes = @(messageStutes_incoming);
@@ -686,7 +686,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
             NSDictionary * logMessage = dicResult[@"log"];
             if (logMessage) {
                 PayPellog * paylog = [PayPellog turnObject:logMessage];
-                if (paylog) {
+                if (paylog && paylog.paystate == 1) {
                     // notify: new pay info
                     NSString * title;
                     NSString * description;
@@ -714,16 +714,142 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     
                     SystemSoundID id = 1007; //声音
                     AudioServicesPlaySystemSound(id);
-                    NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@ \n \n更多详情请进入\n'%@'中查看",paylog.productname,paylog.ex_people,stringss,description];
+                    NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@ \n \n更多详情请进入\n'%@'中查看",paylog.productdesc,paylog.ex_people,stringss,description];
                     [UIAlertView showAlertViewWithTitle:title message:messagessLog];
                     
+                    // notify other likes people
                     
+                    [self _sendPrivateMessage:paylog];
+                    
+                    
+                }else{
+                    NSString *stringss;
+                    if (paylog.amount >= 100) {
+                        stringss =  [NSString stringWithFormat:@"￥%d.00",paylog.amount/100];
+                    }else{
+                        if (paylog.amount >=10) {
+                            stringss =  [NSString stringWithFormat:@"￥0.%d",paylog.amount];
+                        }else{
+                            stringss =  [NSString stringWithFormat:@"￥0.0%d",paylog.amount];
+                        }
+                    }
+                    SystemSoundID id = 1007; //声音
+                    AudioServicesPlaySystemSound(id);
+                    NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@  ",paylog.productdesc,paylog.ex_people,stringss];
+                    [UIAlertView showAlertViewWithTitle:@"支付失败" message:messagessLog];
                 }
-            }
 
-            
+            }
         }
     }
+}
+
+/*!
+ *  发送私信给好友
+ *
+ *  @param paylog <#paylog description#>
+ *
+ *  @since <#version number#>
+ */
+-(void) _sendPrivateMessage:(PayPellog * )paylog
+{
+    //给 喜欢的小妹发送私信
+    NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
+    if (array.count > 0 ) {
+        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if (obj && [obj intValue] > 0) {
+                NSString * uid = [NSString stringWithFormat:@"%@",obj];
+                NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@)选中你,请尽快联系我",paylog.productdesc]};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@)选中你,请尽快联系我",paylog.productdesc]];
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                    
+                }];
+            }
+        }];
+    }
+    if([[EGOCache globalCache] hasCacheForKey:@"currentActive_by"])
+    {
+        NSString  * currentActive_by = [[EGOCache globalCache] stringForKey:@"currentActive_by"];
+        NSDictionary * parames = @{@"uid":currentActive_by,@"content":[NSString stringWithFormat:@"我在(%@)提到你是联系人,请尽快联系我",paylog.productdesc]};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
+            if (responseObject) {
+                [self SavedbData:currentActive_by withType:[NSString stringWithFormat:@"我在(%@)提到你是联系人,请尽快联系我",paylog.productdesc]];
+            }
+        } failure:^(MLRequest *request, NSError *error) {
+            
+        }];
+    }
+}
+
+/*!
+ *  发送私信 存储到本地
+ *
+ *  @param uid        <#uid description#>
+ *  @param stringName <#stringName description#>
+ *
+ *  @since <#version number#>
+ */
+-(void) SavedbData:(NSString * ) uid  withType:(NSString * ) stringName;
+{
+    // target to chat view
+    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",uid];
+    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
+    if (array) {
+        //系统消息公告
+        FCMessage * msg = [FCMessage MR_createInContext:localContext];
+        msg.messageType = @(messageType_SystemAD);
+        msg.text =stringName;
+        msg.sentDate = [NSDate date];
+        msg.audioUrl = @"";
+        // message did not come, this will be on rigth
+        msg.messageStatus = @(NO);
+        msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        msg.messageguid = @"";
+        msg.messageSendStatus = @0;
+        msg.facebookID = array.facebookId;
+        msg.read = @YES;
+        [array addMessagesObject:msg];
+        array.lastMessage = msg.text;
+        array.lastMessageDate = [NSDate date];
+        array.messageType = @(XCMessageActivity_UserPrivateMessage);
+        array.messageStutes = @(messageStutes_incoming);
+        array.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        
+        [localContext MR_saveOnlySelfAndWait];
+    }else{
+        // create new
+        Conversation * conversation =  [Conversation MR_createInContext:localContext];
+        conversation.lastMessageDate = [NSDate date];
+        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
+        conversation.messageStutes = @(messageStutes_incoming);
+        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+        //        conversation.facebookName = user.nick;
+        conversation.facebookId = uid;
+        conversation.badgeNumber = @0;
+        {
+            //系统消息公告
+            FCMessage * msg = [FCMessage MR_createInContext:localContext];
+            msg.messageType = @(messageType_SystemAD);
+            msg.text = stringName;
+            msg.sentDate = [NSDate date];
+            msg.audioUrl = @"";
+            // message did not come, this will be on rigth
+            msg.messageStatus = @(NO);
+            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
+            msg.messageguid = @"";
+            msg.messageSendStatus = @0;
+            msg.read = @YES;
+            msg.facebookID = conversation.facebookId;
+            conversation.lastMessage = msg.text;
+            [conversation addMessagesObject:msg];
+        }
+        [localContext MR_saveOnlySelfAndWait];
+    }
+    
 }
 
 
@@ -839,8 +965,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
                                          UIRemoteNotificationTypeSound |
-                                         UIRemoteNotificationTypeAlert |
-                                         UIRemoteNotificationTypeNewsstandContentAvailability)];
+                                         UIRemoteNotificationTypeAlert)];
+    // | UIRemoteNotificationTypeNewsstandContentAvailability
     
     
     [self copyDefaultStoreIfNecessary:[NSString stringWithFormat:@"%@.sqlite",kLaixinStoreName]];
@@ -879,10 +1005,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                                              selector:@selector(laixinStepupNotification:)
                                                  name:LaixinSetupDBMessageNotification
                                                object:nil];
-    
-    
-    
-  
     
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1082,8 +1204,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 }
 
 -(void) ReceiveAllMessage
-{
-    
+{    
     if(![XCJAppDelegate hasLogin])
          return;
     {
@@ -1243,7 +1364,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     }else if ([typeMessage isEqualToString:@"video"]) {
                         conversation.lastMessage = @"[视频]";
                     }
-                    
+                    msg.facebookID = facebookID;
                     conversation.messageStutes = @(messageStutes_incoming);
                     conversation.facebookName = @"";
                     conversation.facebookId = facebookID;
@@ -1605,8 +1726,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
      }*/
    // NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     
-    //    NSLog(@"Receive Notify: %@", userInfo);
-    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+//    //    NSLog(@"Receive Notify: %@", userInfo);
+//    NSString *alert = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
     //如果当前程序状态是激活的。
     
     if (application.applicationState == UIApplicationStateActive) {
@@ -1621,7 +1742,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 //        [[UIApplication sharedApplication] presentLocalNotificationNow:_localNotification];
 //        //显示这个推送消息
 //        [UIAlertView showAlertViewWithTitle:@"来信" message:[NSString stringWithFormat:@"%@",alert]];
-        SLLog(@"push : %@",[NSString stringWithFormat:@"%@",alert]);
+//        SLLog(@"push : %@",[NSString stringWithFormat:@"%@",alert]);
     }
     
     // [BPush handleNotification:userInfo];

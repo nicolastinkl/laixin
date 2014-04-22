@@ -204,6 +204,7 @@
             msg.text = [NSString stringWithFormat:@"您邀请%@开始私聊啦",self.UserInfo.nick];
             msg.sentDate = [NSDate date];
             msg.audioUrl = @"";
+            msg.facebookID = conversation.facebookId;
             // message did not come, this will be on rigth
             msg.messageStatus = @(NO);
             msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];

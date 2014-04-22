@@ -773,13 +773,25 @@
         if (badgeNumber > 0) {
             [delegate.tabBarController.tabBar.items[0] setBadgeValue:[NSString stringWithFormat:@"%d",badgeNumber]];
             [UIApplication sharedApplication].applicationIconBadgeNumber = badgeNumber;
+            
         }else{
             [delegate.tabBarController.tabBar.items[0] setBadgeValue:nil];
             [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         }
+        
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updatebadageNumber:) object:[NSString stringWithFormat:@"%d",badgeNumber]];
+        [self performSelector:@selector(updatebadageNumber:) withObject:[NSString stringWithFormat:@"%d",badgeNumber] afterDelay:1];
+        
     }
 }
 
+-(void) updatebadageNumber:(NSString *) badgeNumber
+{
+    
+    [[MLNetworkingManager sharedManager] sendWithAction:@"ios.set_badge" parameters:@{@"badge":badgeNumber} success:^(MLRequest *request, id responseObject) {
+    } failure:^(MLRequest *request, NSError *error) {
+    }];
+}
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
 	switch(type) {

@@ -192,7 +192,7 @@
 -(IBAction)SendImgActionClick:(id)sender
 {
     //查看是否有加入群组
-    if ( arrayGroup == nil) {
+    if (arrayGroup == nil) {
         
         NSMutableArray * auy = [[NSMutableArray alloc] init];
         arrayGroup = auy;
@@ -205,6 +205,22 @@
                 [arrayGroup addObject:conver];
             }
         }];
+        if ([[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id] isEqualToString:@"24"]) {
+            //来信小助手
+            NSString * stringGid = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"61"];
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            Conversation  * conver = [Conversation MR_findFirstWithPredicate:[NSPredicate predicateWithFormat:@"facebookId = %@",stringGid]];
+            if (conver == nil) {
+                Conversation  * conver  = [Conversation MR_createInContext:localContext];
+                conver.facebookId = stringGid;
+                conver.facebookName = @"来信&新声带";
+                conver.lastMessageDate = [NSDate date];
+                conver.lastMessage = @"来信&新声带";
+                conver.messageType = @(XCMessageActivity_UserGroupMessage);
+                [localContext MR_saveToPersistentStoreAndWait];
+            }
+        }
+        
     }
     
     if (arrayGroup.count == 0) {
@@ -232,7 +248,7 @@
             //dismiss
         }else{
              Conversation  * conver = arrayGroup[buttonIndex];
-             NSString * gid =[conver.facebookId stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
+             NSString * gid = [conver.facebookId stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@_",XCMessageActivity_User_GroupMessage] withString:@""];
              _Currentgid = gid;
              UIActionSheet * action = [[UIActionSheet alloc] initWithTitle:@"发表新动态" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"纯文字" otherButtonTitles:@"拍照+文字",@"相册+文字", nil];
              action.tag = 3;

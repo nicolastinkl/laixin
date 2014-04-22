@@ -66,7 +66,7 @@
                         ((UILabel *)[self.view subviewWithTag:1]).text = stringCode;
                         NSString * newCode = [NSString stringWithFormat:@"[activecode]-%@",stringCode];
                         ((UIImageView *)[self.view subviewWithTag:2]).image =  [QRCodeGenerator qrImageForString:newCode imageSize:216.0f];
-                        [[EGOCache globalCache] setString:stringCode forKey:KeyChain_Laixin_Code_Jihuo withTimeoutInterval:60*60];
+                        [[EGOCache globalCache] setString:stringCode forKey:KeyChain_Laixin_Code_Jihuo withTimeoutInterval:60*45];
                     }
                     
                 }

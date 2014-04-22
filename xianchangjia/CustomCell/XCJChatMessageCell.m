@@ -107,7 +107,7 @@
 
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSInteger indexMsgID = [DataHelper getIntegerValue:dataImg[@"messageId"] defaultValue:0];
-            NSString * guid = dataImg[@"MESSAGE_GUID"];
+//            NSString * guid = dataImg[@"MESSAGE_GUID"];
             NSInteger messageIndex = [USER_DEFAULT integerForKey:KeyChain_Laixin_message_PrivateUnreadIndex];
             if (messageIndex < indexMsgID) {
                 [USER_DEFAULT setInteger:indexMsgID forKey:KeyChain_Laixin_message_PrivateUnreadIndex];
@@ -176,9 +176,11 @@
                 [self.conversation removeMessagesObject:self.currentMessage];
                 [localContext MR_saveToPersistentStoreAndWait];
 
-                SLLog(@"send ok");
+             
             }
             */
+ 
+            SLLog(@"send ok");
             [localContext MR_saveToPersistentStoreAndWait];
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strSuccNotificationName object:nil];
@@ -199,12 +201,12 @@
         UIButton * retryButton = (UIButton *) [self.contentView subviewWithTag:10];
         retryButton.hidden = NO;
         NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
-        NSString * guid = dataImg[@"MESSAGE_GUID"];
+//        NSString * guid = dataImg[@"MESSAGE_GUID"];
         self.currentMessage.messageSendStatus = @2; //error
         UIActivityIndicatorView * indictorView = (UIActivityIndicatorView *) [self.contentView subviewWithTag:9];
         indictorView.hidden = YES;
         
-        NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"messageguid == %@",guid];
+       /* NSPredicate * parCMDss = [NSPredicate predicateWithFormat:@"messageguid == %@",guid];
         FCMessage * groupMessage = [FCMessage MR_findFirstWithPredicate:parCMDss ];
         if (groupMessage) {
             
@@ -233,6 +235,10 @@
             
              SLLog(@"send error");
         }
+        */
+        [localContext MR_saveToPersistentStoreAndWait];
+        
+        SLLog(@"send error");
         
         
         [[NSNotificationCenter defaultCenter] removeObserver:self name:_objRemoteImgListOper.m_strSuccNotificationName object:nil];

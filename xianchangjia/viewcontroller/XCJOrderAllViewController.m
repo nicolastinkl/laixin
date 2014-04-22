@@ -108,7 +108,8 @@
     [self.view showIndicatorViewLargeBlue];
     //@"before":@0,
     NSMutableArray * arrayMID = [[NSMutableArray alloc] init];
-    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.ten_history" parameters:@{@"count":@(10000)} success:^(MLRequest *request, id responseObject) {
+    //财付通 merchandise.ten_history
+    [[MLNetworkingManager sharedManager] sendWithAction:@"merchandise.history" parameters:@{@"count":@(10000)} success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
             NSDictionary * dict =  responseObject[@"result"];
             NSArray * jsonArray = dict[@"history"];

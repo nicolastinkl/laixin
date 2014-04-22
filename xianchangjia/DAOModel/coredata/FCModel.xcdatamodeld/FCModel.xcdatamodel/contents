@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13A3028" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="ConverReply" representedClassName="ConverReply" syncable="YES">
         <attribute name="badgeNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
@@ -73,6 +73,7 @@
     <entity name="FCMessage" representedClassName="FCMessage" syncable="YES">
         <attribute name="audioLength" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="audioUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="facebookID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -124,16 +125,16 @@
         <relationship name="userDespMsg" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FCMessage" inverseName="messageUser" inverseEntity="FCMessage" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ConverReply" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="Conversation" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCAccount" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCBeAddFriend" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCBeInviteGroup" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCContactsPhone" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCFriends" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCReplyMessage" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="FCUserDescription" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="ConverReply" positionX="0" positionY="0" width="128" height="135"/>
+        <element name="Conversation" positionX="0" positionY="0" width="128" height="210"/>
+        <element name="FCAccount" positionX="0" positionY="0" width="128" height="150"/>
+        <element name="FCBeAddFriend" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="FCBeInviteGroup" positionX="0" positionY="0" width="128" height="165"/>
+        <element name="FCContactsPhone" positionX="0" positionY="0" width="128" height="120"/>
+        <element name="FCFriends" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="FCHomeGroupMsg" positionX="0" positionY="0" width="128" height="195"/>
+        <element name="FCMessage" positionX="0" positionY="0" width="128" height="298"/>
+        <element name="FCReplyMessage" positionX="0" positionY="0" width="128" height="165"/>
+        <element name="FCUserDescription" positionX="0" positionY="0" width="128" height="390"/>
     </elements>
 </model>

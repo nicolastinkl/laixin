@@ -15,7 +15,6 @@
 @property (nonatomic, readonly) RemoteImgListOperator *m_objRemoteImgListOper;
 - (void)setRemoteImgOper:(RemoteImgListOperator *)objOper  withGUID:(NSString * ) guid;
 - (void) SendMessageRemoteImgOper:(RemoteImgListOperator *)objOper WithMessage:(NSMutableDictionary *) dict type:(int) type;
-
 @property (nonatomic,strong) FCMessage * currentMessage;
 @property (nonatomic,strong) Conversation * conversation;
 

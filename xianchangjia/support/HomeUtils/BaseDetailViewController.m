@@ -352,8 +352,7 @@
     ActivityTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[ActivityTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.delegate = self;
-        
+        cell.delegate = self;        
        /* _KVOController = [FBKVOController controllerWithObserver:self];
         [_KVOController observe:cell keyPath:@"activity" options:NSKeyValueObservingOptionNew block:^(id observer, id object, NSDictionary *change) {
             if ([object isKindOfClass:[ActivityTableViewCell class]]) {

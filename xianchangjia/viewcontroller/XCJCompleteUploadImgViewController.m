@@ -36,6 +36,8 @@
 
 @property (weak, nonatomic) IBOutlet UIButton * takeButton;
 
+@property (weak, nonatomic) IBOutlet UIButton * takeCloseButton;
+
 @end
 
 @implementation XCJCompleteUploadImgViewController
@@ -218,6 +220,8 @@
 	// Do any additional setup after loading the view.
     [self setNeedsStatusBarAppearanceUpdate];
 	// Do any additional setup after loading the view.
+    
+    self.takeCloseButton.top = APP_SCREEN_HEIGHT - 60;
     
 //    UIImageView * img = (UIImageView *) [self.view subviewWithTag:2];
 //    img.layer.cornerRadius = img.width/2;

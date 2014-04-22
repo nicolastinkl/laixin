@@ -10,7 +10,6 @@
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 
-
 #ifndef DoubanAlbum_DoubanAlbumDefines_h
 #define DoubanAlbum_DoubanAlbumDefines_h
 
@@ -22,10 +21,10 @@ typedef enum {
 
 //msgType;	 //0默认文本类型  1录音类型  2图片类型 3 位置信息类型
 typedef enum {
-	KMessage_private_Default = 0, //text
-	KMessage_private_Audio = 1, //audio
-	KMessage_private_Image = 2, //image
-	KMessage_private_Location = 3, //location
+	KMessage_private_Default = 0,   //text
+	KMessage_private_Audio = 1,     //audio
+	KMessage_private_Image = 2,     //image
+	KMessage_private_Location = 3,  //location
 } KMessage_private_user_Msg_type;
 
 #define NEED_OUTPUT_LOG                     1   // 0 relese  1 debug
@@ -55,16 +54,19 @@ typedef enum {
 #define xianchangjiaURI						@"2824743419://com.liveplus"
 #define LaixinWebsocketURL                  @"ws://127.0.0.1:8000/ws"
 
-#define USER_DEFAULT                [NSUserDefaults standardUserDefaults]
-#define FILE_MANAGER                [NSFileManager defaultManager]
-#define LocalServiceIP               @"http://192.168.8.247"
+#define USER_DEFAULT                        [NSUserDefaults standardUserDefaults]
+#define FILE_MANAGER                        [NSFileManager defaultManager]
+#define LocalServiceIP                      @"http://192.168.8.247"
 
-#define SystemKidsColor             0xfcd412
-#define TableName                   @"KidswantProject.db"
+#define SystemKidsColor                     0xfcd412
+#define TableName                           @"KidswantProject.db"
 
-#define KSingerCount                   @"KSingerCountTINKL"
+#define KSingerCount                        @"KSingerCountTINKL"
 
-#define APP_CACHES_PATH             [NSSearchPathForDirectoriesInDomains (NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+#define APP_CACHES_PATH                     [NSSearchPathForDirectoriesInDomains (NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
+
+
+#define UIColorFromRGB(rgbValue)    [UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
 #define APP_SCREEN_WIDTH            [UIScreen mainScreen].bounds.size.width
 #define APP_SCREEN_HEIGHT           [UIScreen mainScreen].bounds.size.height

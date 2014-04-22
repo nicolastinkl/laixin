@@ -45,11 +45,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(MainappControllerUpdateDataReplyMessage:) name:@"MainappControllerUpdateDataReplyMessage" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(openDreamGoodVoice) name:@"openDreamGoodVoice" object:nil];
-    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -181,7 +180,7 @@
         case 3:
             //@"group_avatar_default_0"
             image_bgSign.image = [UIImage imageNamed:@"opengroup_everjoin_icon"];
-            label_name.text = @"来梦想好声音";
+            label_name.text = @"来信&新声带";
             badage.hidden = YES;
             image_New.hidden = YES;
             [image_New setFrame:CGRectMake(273, 17, 10, 10)];
@@ -210,8 +209,6 @@
            break;
         case 1:
         {
-            
-            
             if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
                 PPPinPadViewController * pinViewController = [[PPPinPadViewController alloc] init];
                 pinViewController.delegate = self;

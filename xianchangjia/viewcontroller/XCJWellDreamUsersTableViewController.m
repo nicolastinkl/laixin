@@ -159,11 +159,11 @@ NSString  * sendLikeBOOL = @"sendLikeUSERDREAM";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    float imageviewHeight = (groupList.count/colNumber)*65 +(groupList.count/colNumber)*TITLE_jianxi;
+    float imageviewHeight = (groupList.count/colNumber)*ITEM_WIDTH +(groupList.count/colNumber)*TITLE_jianxi;
     if (groupList.count%colNumber>0) {
         imageviewHeight += TITLE_jianxi+ITEM_WIDTH;
     }
-    return imageviewHeight;
+    return imageviewHeight + 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

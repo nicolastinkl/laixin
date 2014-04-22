@@ -27,12 +27,18 @@
 #import "Conversation.h"
 #import "FCMessage.h"
 #import "CoreData+MagicalRecord.h"
+#import "UIAlertView+Blocks.h"
+#import "XCAlbumDefines.h"
+
+#define PWdString @"PWdStringPINS"
 
 
 @interface XCJRoomInfoViewcontroller () <UITableViewDataSource,UITableViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate>
 {
     int currentActive_by;
     NSArray * arrayCardIDS;
+    NSString * _currentAction;
+    NSString * _currentpayID;
 }
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_0;
 @property (strong, nonatomic) IBOutlet UITableViewCell *cell_1_1;
@@ -355,7 +361,8 @@
                         [paySelectBank show];
                     }else{
                         arrayCardIDS = @[];
-                        [self SurePayClick:@"merchandise.tenpay" withCardid:nil];
+                        //merchandise.tenpay
+                        [self SurePayClick:@"merchandise.createorder" withCardid:nil];
                     }
                 }
             } failure:^(MLRequest *request, NSError *error) {
@@ -381,7 +388,8 @@
                     [self SurePayClick:@"merchandise.paybycard" withCardid:cardid];
                 }else{
                    // 添加银行卡
-                   [self SurePayClick:@"merchandise.tenpay" withCardid:nil];
+                    // 易宝支付: merchandise.createorder  财付通支付 :merchandise.tenpay
+                   [self SurePayClick:@"merchandise.createorder" withCardid:nil];
                 }
             }
         }
@@ -391,145 +399,89 @@
 //确认支付
 -(void) SurePayClick:(NSString * )action withCardid:(NSString * ) cardid
 {
-    NSString* openUDID = [OpenUDID value];
     
-    //            NSString * count = self.label_serCount.text;
-    //            int thiscount = [count intValue];
-    
-    NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
-    int thiscount = array.count;
-    [SVProgressHUD showWithStatus:@"正在处理..."];
-    NSDictionary * dict;
-    if(currentActive_by > 0)
-    {
-        if (cardid) {
-            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by),@"cardid":cardid};
-        }else{
-            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by)};
-        }
-    }
-    else
-    {
-        if (cardid) {
-            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"cardid":cardid};
-        }else{
-            dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID};
-        }
+    _currentAction = action;
+    _currentpayID = cardid;
+    __block UIAlertView  *  prompt =[[UIAlertView alloc] initWithTitle:@"请输入进入来抢的界面密码" message:@""
+       cancelButtonItem:[RIButtonItem itemWithLabel:@"取消" action:^{
         
-    }
-    [[MLNetworkingManager sharedManager] sendWithAction:action parameters:dict success:^(MLRequest *request, id responseObject) {
-        if (responseObject) {
-            int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
-            if (errnoMesg == 0) {
-                [SVProgressHUD dismiss];
-                //给 喜欢的小妹发送私信
+    }] otherButtonItems:[RIButtonItem itemWithLabel:@"确定支付" action:^{
+        UITextField *tf = [prompt textFieldAtIndex:0];
+        // NICK
+        if (tf.text.length > 0) {
+            
+            NSString * newmd5Str = [tf.text md5Hash];
+            
+            NSString * PinOld = [USER_DEFAULT stringForKey:PWdString];
+            
+            if ([newmd5Str isEqualToString:PinOld]) {
+                NSString* openUDID = [OpenUDID value];
+                //  NSString * count = self.label_serCount.text;
+                //  int thiscount = [count intValue];
                 NSMutableArray * array = [[EGOCache globalCache] plistForKey:KSingerCount];
-                if (array.count > 0 ) {
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        if (obj && [obj intValue] > 0) {
-                            NSString * uid = [NSString stringWithFormat:@"%@",obj];
-                            NSDictionary * parames = @{@"uid":uid,@"content":[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
-                            [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
-                                if (responseObject) {
-                                    [self SavedbData:uid withType:[NSString stringWithFormat:@"我在(%@-%@)选中你,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
-                                }
-                            } failure:^(MLRequest *request, NSError *error) {
-                                
-                            }];
-                        }
-                    }];
-                }
+                int thiscount = array.count;
+                [SVProgressHUD showWithStatus:@"正在处理..."];
+                NSDictionary * dict;
                 if(currentActive_by > 0)
                 {
-                    NSDictionary * parames = @{@"uid":[NSString stringWithFormat:@"%@",@(currentActive_by)],@"content":[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]};
-                    [[MLNetworkingManager sharedManager] sendWithAction:@"message.send" parameters:parames success:^(MLRequest *request, id responseObject) {
-                        if (responseObject) {
-                            [self SavedbData:[NSString stringWithFormat:@"%d",currentActive_by] withType:[NSString stringWithFormat:@"我在(%@-%@)提到你是联系人,请尽快联系我",self.locatinfo.ktvName,self.rominfo.name]];
-                        }
-                    } failure:^(MLRequest *request, NSError *error) {
-                        
-                    }];
+                    if (cardid) {
+                        dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by),@"cardid":cardid};
+                    }else{
+                        dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"recommend_uid":@(currentActive_by)};
+                    }
+                }
+                else
+                {
+                    if (cardid) {
+                        dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID,@"cardid":cardid};
+                    }else{
+                        dict = @{@"mid":@(self.rominfo.mid),@"people_count":@(thiscount),@"hardwareid":openUDID};
+                    }
+                    
                 }
                 
-                NSDictionary * dict = responseObject[@"result"];
-                NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
-                if (string.length > 0) {
+                [[MLNetworkingManager sharedManager] sendWithAction:action parameters:dict success:^(MLRequest *request, id responseObject) {
+                    if (responseObject) {
+                        int errnoMesg = [DataHelper getIntegerValue:responseObject[@"errno"] defaultValue:0];
+                        if (errnoMesg == 0) {
+                            [SVProgressHUD dismiss];                            
+                            if (currentActive_by > 0) {
+                                // set cache
+                                [[EGOCache globalCache] setString:[NSString stringWithFormat:@"%d",currentActive_by] forKey:@"currentActive_by"];
+                            }
+                            NSDictionary * dict = responseObject[@"result"];
+                            NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
+                            if (string.length > 0) {
+                                
+                                DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
+                                webBrowser.showProgress = YES;
+                                webBrowser.allowSharing = YES;
+                                UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
+                                [webBrowserNC pushViewController:webBrowser animated:NO];
+                                [self presentViewController:webBrowserNC animated:YES completion:NULL];
+                                
+                            }else{
+                                [UIAlertView showAlertViewWithTitle:@"新订单提醒" message:@"\n提交订单成功，请等待支付结果!\n\n请进入我的订单查看订单详情"];
+                            }
+                        }
+                    }
+                } failure:^(MLRequest *request, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    [UIAlertView showAlertViewWithMessage:@"处理失败"];
                     
-                    DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
-                    webBrowser.showProgress = YES;
-                    webBrowser.allowSharing = YES;
-                    UINavigationSample *webBrowserNC = [self.storyboard instantiateViewControllerWithIdentifier:@"UINavigationSample"];
-                    [webBrowserNC pushViewController:webBrowser animated:NO];
-                    [self presentViewController:webBrowserNC animated:YES completion:NULL];
-                }else{
-                    [UIAlertView showAlertViewWithTitle:@"新订单提醒" message:@"支付成功!\n\n请进入我的订单查看订单详情"];
-                }
+                }];
+            }else{
+                [UIAlertView showAlertViewWithMessage:@"密码错误"];
             }
         }
-    } failure:^(MLRequest *request, NSError *error) {
-        [SVProgressHUD dismiss];
-        [UIAlertView showAlertViewWithMessage:@"处理失败"];
-        
-    }];
-}
-
-
--(void) SavedbData:(NSString * ) uid  withType:(NSString * ) stringName;
-{
-    // target to chat view
-    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",uid];
-    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
-    if (array) {
-        //系统消息公告
-        FCMessage * msg = [FCMessage MR_createInContext:localContext];
-        msg.messageType = @(messageType_SystemAD);
-        msg.text =stringName;
-        msg.sentDate = [NSDate date];
-        msg.audioUrl = @"";
-        // message did not come, this will be on rigth
-        msg.messageStatus = @(NO);
-        msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-        msg.messageguid = @"";
-        msg.messageSendStatus = @0;
-        msg.read = @YES;
-        [array addMessagesObject:msg];
-        array.lastMessage = msg.text;
-        array.lastMessageDate = [NSDate date];
-        array.messageType = @(XCMessageActivity_UserPrivateMessage);
-        array.messageStutes = @(messageStutes_incoming);
-        array.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-        
-        [localContext MR_saveOnlySelfAndWait];
-    }else{
-        // create new
-        Conversation * conversation =  [Conversation MR_createInContext:localContext];
-        conversation.lastMessageDate = [NSDate date];
-        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
-        conversation.messageStutes = @(messageStutes_incoming);
-        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-//        conversation.facebookName = user.nick;
-        conversation.facebookId = uid;
-        conversation.badgeNumber = @0;
-        {
-            //系统消息公告
-            FCMessage * msg = [FCMessage MR_createInContext:localContext];
-            msg.messageType = @(messageType_SystemAD);
-            msg.text = stringName;
-            msg.sentDate = [NSDate date];
-            msg.audioUrl = @"";
-            // message did not come, this will be on rigth
-            msg.messageStatus = @(NO);
-            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-            msg.messageguid = @"";
-            msg.messageSendStatus = @0;
-            msg.read = @YES;
-            conversation.lastMessage = msg.text;
-            [conversation addMessagesObject:msg];
-        }
-        [localContext MR_saveOnlySelfAndWait];
-    }
-
+    }], nil];
+    
+    prompt.alertViewStyle = UIAlertViewStylePlainTextInput;
+    UITextField *tf = [prompt textFieldAtIndex:0];
+    tf.keyboardType = UIKeyboardTypeNumberPad;
+    tf.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [prompt show];
+     
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
