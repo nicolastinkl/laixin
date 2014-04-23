@@ -38,7 +38,7 @@
         return;
     }
     
-    NSString * jihuoCode =  [[EGOCache globalCache] stringForKey:KeyChain_Laixin_Code_Jihuo];
+    NSString * jihuoCode =  @"";//[[EGOCache globalCache] stringForKey:KeyChain_Laixin_Code_Jihuo];
     if (jihuoCode.length > 0) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         ((UILabel *)[self.view subviewWithTag:1]).text = jihuoCode;

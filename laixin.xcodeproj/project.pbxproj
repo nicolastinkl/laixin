@@ -511,6 +511,7 @@
 		933D3C5A1904CF6B00837595 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C561904CF6B00837595 /* UIActionSheet+Blocks.m */; };
 		933D3C5B1904CF6B00837595 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C581904CF6B00837595 /* UIAlertView+Blocks.m */; };
 		9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */; };
+		93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1394,6 +1395,8 @@
 		933D3C581904CF6B00837595 /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+Blocks.m"; sourceTree = "<group>"; };
 		9360928118FE243F0074C61B /* XCJDownloadLaixinViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDownloadLaixinViewcontr.h; path = viewcontroller/XCJDownloadLaixinViewcontr.h; sourceTree = "<group>"; };
 		9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDownloadLaixinViewcontr.m; path = viewcontroller/XCJDownloadLaixinViewcontr.m; sourceTree = "<group>"; };
+		93E5C17F19077C6A00CD1690 /* XCJPayListCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPayListCardController.h; path = viewcontroller/XCJPayListCardController.h; sourceTree = "<group>"; };
+		93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayListCardController.m; path = viewcontroller/XCJPayListCardController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1704,6 +1707,8 @@
 				86528CE818D6A9BA007AD93A /* XCJRecommendUIDViewContrl.m */,
 				8690DED818C97BD000A14A51 /* XCJOrderAllViewController.h */,
 				8690DED918C97BD000A14A51 /* XCJOrderAllViewController.m */,
+				93E5C17F19077C6A00CD1690 /* XCJPayListCardController.h */,
+				93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */,
 			);
 			name = PayReCom;
 			sourceTree = "<group>";
@@ -4103,6 +4108,7 @@
 				86EB76EB185AA72F00836947 /* ChatUserCell.m in Sources */,
 				86D182861834AED30005901D /* OpenUDID.m in Sources */,
 				86660DD018780BB6007477C0 /* XCJAddFriendNaviController.m in Sources */,
+				93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */,
 				8683FA98187FE38400CEFA45 /* XCJPostTextNaviController.m in Sources */,
 				86E57D0118796EB500978AFA /* XCJCreateChatViewController.m in Sources */,
 				86D9A886186D294600147631 /* LXUser.m in Sources */,
