@@ -308,6 +308,8 @@
                         [USER_DEFAULT setObject:serverURL forKey:KeyChain_Laixin_systemconfig_websocketURL];
                         [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_account_HasLogin];
                         [USER_DEFAULT synchronize];
+                        // init core data 15384014997
+                        [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid];
                         // connection of websocket server
                         [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateData" object:nil];
                         

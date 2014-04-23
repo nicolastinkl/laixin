@@ -969,11 +969,11 @@ static NSString * const kLaixinStoreName = @"Laixins";
     // | UIRemoteNotificationTypeNewsstandContentAvailability
     
     
-    [self copyDefaultStoreIfNecessary:[NSString stringWithFormat:@"%@.sqlite",kLaixinStoreName]];
-    [MagicalRecord setupCoreDataStackWithStoreNamed:[NSString stringWithFormat:@"%@.sqlite",kLaixinStoreName]];
+    //[self copyDefaultStoreIfNecessary:[NSString stringWithFormat:@"%@.sqlite",kLaixinStoreName]];
+    //[MagicalRecord setupCoreDataStackWithStoreNamed:[NSString stringWithFormat:@"%@.sqlite",kLaixinStoreName]];
     
     if ([XCJAppDelegate hasLogin]) {
-//        [self laixinStepupDB];
+        [self laixinStepupDB];
         [self updateMessageTabBarItemBadge];
     }else{
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;

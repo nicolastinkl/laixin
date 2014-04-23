@@ -512,6 +512,7 @@
 		933D3C5B1904CF6B00837595 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C581904CF6B00837595 /* UIAlertView+Blocks.m */; };
 		9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */; };
 		93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */; };
+		93E5C189190798BA00CD1690 /* TKParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C188190798BA00CD1690 /* TKParallaxCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1397,6 +1398,8 @@
 		9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDownloadLaixinViewcontr.m; path = viewcontroller/XCJDownloadLaixinViewcontr.m; sourceTree = "<group>"; };
 		93E5C17F19077C6A00CD1690 /* XCJPayListCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPayListCardController.h; path = viewcontroller/XCJPayListCardController.h; sourceTree = "<group>"; };
 		93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayListCardController.m; path = viewcontroller/XCJPayListCardController.m; sourceTree = "<group>"; };
+		93E5C187190798BA00CD1690 /* TKParallaxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TKParallaxCell.h; path = viewcontroller/TKParallaxCell.h; sourceTree = "<group>"; };
+		93E5C188190798BA00CD1690 /* TKParallaxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TKParallaxCell.m; path = viewcontroller/TKParallaxCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1583,6 +1586,8 @@
 				86268A3618C08DEF000F0A48 /* XCJNearbyInfoViewContr.m */,
 				866287DB18CB3F7F00891B2D /* XCJInviteCommentViewController.h */,
 				866287DC18CB3F7F00891B2D /* XCJInviteCommentViewController.m */,
+				93E5C187190798BA00CD1690 /* TKParallaxCell.h */,
+				93E5C188190798BA00CD1690 /* TKParallaxCell.m */,
 			);
 			name = NearbyInvite;
 			sourceTree = "<group>";
@@ -3977,6 +3982,7 @@
 				8607385418AB4BFC003830DE /* SJAvatarBrowser.m in Sources */,
 				869CE525186BE38D0004C1EC /* NSManagedObject+MagicalDataImport.m in Sources */,
 				866C156818ADE75F0054F686 /* IDMZoomingScrollView.m in Sources */,
+				93E5C189190798BA00CD1690 /* TKParallaxCell.m in Sources */,
 				866287DD18CB3F7F00891B2D /* XCJInviteCommentViewController.m in Sources */,
 				86EB76DF185AA6CC00836947 /* base64.c in Sources */,
 				86D182D71834AF2D0005901D /* DADataEnvironment.m in Sources */,

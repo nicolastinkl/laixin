@@ -95,6 +95,11 @@
 
 #import <UIKit/UIKit.h>
 
+/*!
+ *  毛玻璃效果处理
+ *
+ *  @since <#version number#>
+ */
 @interface UIImage (ImageEffects)
 
 - (UIImage *)applyLightEffect;

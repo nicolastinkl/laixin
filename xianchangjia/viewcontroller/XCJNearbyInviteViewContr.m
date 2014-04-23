@@ -12,10 +12,15 @@
 #import "FCUserDescription.h"
 #import "XCJNearbyInfoViewContr.h"
 #import "XCJCreateNearInviteViewcontr.h"
+#import "TKParallaxCell.h"
+#import "UIImage+ImageEffects.h"
+#import "DAImageResizedImageView.h"
 
-@interface XCJNearbyInviteViewContr ()
+@interface XCJNearbyInviteViewContr ()<UIScrollViewDelegate>
 {
     NSMutableArray * _datasource;
+    NSArray *arrayUrls;
+    NSMutableArray * labelArray;
 }
 @end
 
@@ -33,7 +38,44 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    NSArray* arrayUrlsss = @[@"http://img.weheartpics.com/photo/320x320/13406137.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406171.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406088.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13392856.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13401922.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13403320.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13404422.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13400800.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13400732.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406127.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406110.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406084.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13405954.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13401319.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406053.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13401824.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13401632.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13406166.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13405856.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13405827.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13390281.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13405827.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13387482.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13383977.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13382796.jpg",
+                           @"http://img.weheartpics.com/photo/320x320/13382052.jpg"];
+    arrayUrls = arrayUrlsss;
+    
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"aboutLaixinInfo" ofType:@"plist"];
+    //    NSArray *array = [[NSArray alloc] initWithContentsOfFile:plistPath];
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithContentsOfFile:plistPath];
+    
+    NSString * strJson =  [dictionary valueForKey:@"grouptypeArray"];
+    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray * responseObject =[datajson  objectFromJSONData] ;
+    
+    labelArray = [NSMutableArray arrayWithArray:responseObject];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -93,7 +135,7 @@
                         [self.tableView reloadData];
                         [self.view hideIndicatorViewBlueOrGary];
                         
-                        
+                        [self scrollViewDidScroll:nil];
                         int index = 1 + random()%5; 
                         ((UILabel *) [self.tableView.tableHeaderView subviewWithTag:1]).backgroundColor = [tools colorWithIndex:index];
                         ((UILabel *) [self.tableView.tableFooterView subviewWithTag:1]).backgroundColor = [tools colorWithIndex:index];
@@ -152,34 +194,62 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"cellGroup";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    TKParallaxCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     XCJGroup_list * list = _datasource[indexPath.row];
+    UILabel * labelName = (UILabel *)[cell.contentView subviewWithTag:2];
     UILabel * labelgroupName = (UILabel *)[cell.contentView subviewWithTag:3];
-    UILabel * labelgroupAddress = (UILabel *)[cell.contentView subviewWithTag:4];
+//    UILabel * labelgroupAddress = (UILabel *)[cell.contentView subviewWithTag:4];
     UILabel * labelgroupBoard = (UILabel *)[cell.contentView subviewWithTag:5];
     UILabel * labelgorupTime = (UILabel *)[cell.contentView subviewWithTag:6];
     UILabel * labelsignBg = (UILabel *)[cell.contentView subviewWithTag:12];
 
-    UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
-    imageview.layer.cornerRadius = imageview.height/2;
-    imageview.layer.masksToBounds = YES;
+//    UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
+   
+    //.image = [UIImage imageNamed:@"demo_3.jpg"];//[UIImage imageNamed:@"PublicPlatform_add_banner_background"];
+//    imageview.layer.cornerRadius = imageview.height/2;
+//    imageview.layer.masksToBounds = YES;
     // Configure the cell...
     labelgroupName.text = list.group_name;
-    labelgroupAddress.text = list.position;
-    labelgroupBoard.text = list.group_board;
-     int index = 1 + random()%5;
+//    labelgroupAddress.text = list.position;
+    labelgroupBoard.text = @"";// list.group_board;
+    labelName.text = list.group_board;
+    
+    NSInteger indexWithUrl = [labelArray indexOfObject:list.group_board];
+    if (arrayUrls.count > indexWithUrl) {
+        NSString * tagUrl = arrayUrls[indexWithUrl];
+        [cell.parallaxImage setImageWithURL:[NSURL URLWithString:tagUrl] ];
+    }else{
+        int index = 13383619 + random()%1000;
+        //13383619
+        [cell.parallaxImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://img.weheartpics.com/photo/320x320/%d.jpg",index]]];
+    }
+
+    //placeholderImage:[UIImage imageNamed:@"demo_3.jpg"]
+    int index = 1 + random()%5;
     labelgroupBoard.textColor = [tools colorWithIndex:index];
     labelsignBg.backgroundColor = [tools colorWithIndex:index];
-//    list.time
+
     NSString * str =[self timeLabelTextOfTime:list.time];
-    labelgorupTime.text = str;
+    labelgorupTime.text = @"";// str;
     if ([str isEqualToString:@"失               效"]) {
         labelgorupTime.textColor =  [UIColor redColor];
+//        cell.parallaxImage.image = [[UIImage imageNamed:@"demo_3.jpg"] applyLightEffect];
     }else{
         labelgorupTime.textColor =  [tools colorWithIndex:0];
     }
     
+    
     return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // Get visible cells on table view.
+    NSArray *visibleCells = [self.tableView visibleCells];
+    
+    for (TKParallaxCell *cell in visibleCells) {
+        [cell cellOnTableView:self.tableView didScrollOnView:self.navigationController.view];
+    }
 }
 
 - (NSString*) timeLabelTextOfTime:(NSTimeInterval)time
@@ -202,31 +272,41 @@
     return text;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)viewDidAppear:(BOOL)animated
 {
-    return 120.0f;
+    [super viewDidAppear:animated];
+    [self scrollViewDidScroll:nil];
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    XCJGroup_list * list = _datasource[indexPath.row];
-    UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
-    UILabel * labelName = (UILabel *)[cell.contentView subviewWithTag:2];
-//    labelName.textAlignment = NSTextAlignmentCenter;
-    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
-        if (response) {
-            
-            FCUserDescription * user = response;
-            //内容
-            if (user.headpic) {
-                [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
-            }else{
-                [imageview setImage:[UIImage imageNamed:@"avatar_default"] ];
-            }
-            labelName.text = user.nick;
-        }
-    } withuid:list.creator];
+    return 130.0f;
 }
+
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    XCJGroup_list * list = _datasource[indexPath.row];
+//    TKParallaxCell *cellPar = cell;
+//    cellp
+//    UIImageView* imageview = (UIImageView*) [cell.contentView subviewWithTag:1];
+//    UILabel * labelName = (UILabel *)[cell.contentView subviewWithTag:2];
+//    labelName.textAlignment = NSTextAlignmentCenter;
+    /*[[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+     if (response) {
+     
+     FCUserDescription * user = response;
+     //内容
+     if (user.headpic) {
+     // [imageview setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:320]] placeholderImage:[UIImage imageNamed:@"PublicPlatform_add_banner_background"]];
+     }else{
+     //  [imageview setImage:[UIImage imageNamed:@"PublicPlatform_add_banner_background"] ];
+     }
+     labelName.text = user.nick;
+     }
+     } withuid:list.creator];*/
+    
+    
+//}
 
 
 #pragma mark - Navigation
@@ -246,7 +326,6 @@
 //        [view initallContr:list];
         
     }
-
     
 }
 
@@ -256,48 +335,5 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-
-
- */
 
 @end

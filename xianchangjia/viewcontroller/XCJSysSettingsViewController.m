@@ -51,6 +51,8 @@
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:LaixinCloseDBMessageNotification object:nil];
                 
+                [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+                
                 XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
                 delegate.tabBarController.selectedIndex = 0;
                 [SVProgressHUD dismiss];

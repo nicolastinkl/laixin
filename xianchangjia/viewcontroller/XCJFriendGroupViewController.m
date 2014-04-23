@@ -106,9 +106,16 @@
     NSArray * postsDict = [[EGOCache globalCache] plistForKey:@"MyFriendGroupPhotoCache"];
     if (postsDict.count > 0) {
         // parse
+        
+        NSInteger range =0;
+        if (postsDict.count >= 20) {
+            range = 20;
+        }else{
+            range = postsDict.count;
+        }
         __block NSInteger lasID = 0;
         
-        NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(0, 20)];
+        NSIndexSet* indexset = [NSIndexSet indexSetWithIndexesInRange: NSMakeRange(0, range)];
         [postsDict enumerateObjectsAtIndexes:indexset options:NSSortStable usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
             lasID = [post.postid integerValue];

@@ -116,19 +116,20 @@
     [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(uploadDataWithLogin:) name:@"MainappControllerUpdateData" object:nil];
     
     
-    NSInteger numberOfRows = 0;
-    // Return the number of rows in the section.
-    if ([[self.fetchedResultsController sections] count] > 0) {
-        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
-        numberOfRows = [sectionInfo numberOfObjects];
-    }
+    /*NSInteger numberOfRows = 0;
+     // Return the number of rows in the section.
+     if ([[self.fetchedResultsController sections] count] > 0) {
+     id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
+     numberOfRows = [sectionInfo numberOfObjects];
+     }
+     
+     if (numberOfRows <= 0) {
+     // show info
+     [self showErrorText:@"暂时还没有消息"];
+     }else{
+     [self hiddeErrorText];
+     }*/
     
-    if (numberOfRows <= 0) {
-        // show info
-        [self showErrorText:@"暂时还没有消息"];
-    }else{
-        [self hiddeErrorText];
-    }
     // The search bar is hidden when the view becomes visible the first time
     self.tableView.contentOffset = CGPointMake(0, CGRectGetHeight(self.searchDisplayController.searchBar.bounds));
     // title消息 切换
@@ -315,10 +316,6 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginInReceivingAllMessage" object:nil];
             
         }
-        {
-            //            [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid]; // setup db
-        }
-        
        
     } failure:^(MLRequest *request, NSError *error) {
         //         re request login
