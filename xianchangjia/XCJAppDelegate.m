@@ -717,6 +717,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@ \n \n更多详情请进入\n'%@'中查看",paylog.productdesc,paylog.ex_people,stringss,description];
                     [UIAlertView showAlertViewWithTitle:title message:messagessLog];
                     
+<<<<<<< HEAD
                     // notify other likes people
                     
                     [self _sendPrivateMessage:paylog];
@@ -737,9 +738,12 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     AudioServicesPlaySystemSound(id);
                     NSString * messagessLog =[NSString stringWithFormat:@"商品名称:%@\n K歌指导员%d位,\n支付价格:%@  ",paylog.productdesc,paylog.ex_people,stringss];
                     [UIAlertView showAlertViewWithTitle:@"支付失败" message:messagessLog];
+=======
+>>>>>>> FETCH_HEAD
                 }
 
             }
+<<<<<<< HEAD
         }
     }
 }
@@ -846,6 +850,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
             msg.facebookID = conversation.facebookId;
             conversation.lastMessage = msg.text;
             [conversation addMessagesObject:msg];
+=======
+>>>>>>> FETCH_HEAD
         }
         [localContext MR_saveOnlySelfAndWait];
     }

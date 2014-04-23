@@ -507,12 +507,16 @@
 		86FF92BD18F3F07A00E3933D /* XLSwipeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BB18F3F07A00E3933D /* XLSwipeNavigationController.m */; };
 		86FF92C018F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */; };
 		86FF92C318F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */; };
+<<<<<<< HEAD
 		933D3C591904CF6B00837595 /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C541904CF6B00837595 /* RIButtonItem.m */; };
 		933D3C5A1904CF6B00837595 /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C561904CF6B00837595 /* UIActionSheet+Blocks.m */; };
 		933D3C5B1904CF6B00837595 /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 933D3C581904CF6B00837595 /* UIAlertView+Blocks.m */; };
 		9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */; };
 		93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */; };
 		93E5C189190798BA00CD1690 /* TKParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C188190798BA00CD1690 /* TKParallaxCell.m */; };
+=======
+		9360928318FE243F0074C61B /* XCJDownloadLaixinViewcontr.m in Sources */ = {isa = PBXBuildFile; fileRef = 9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */; };
+>>>>>>> FETCH_HEAD
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1388,6 +1392,7 @@
 		86FF92BF18F3F20D00E3933D /* XCJWellDreamUsersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamUsersTableViewController.m; path = viewcontroller/XCJWellDreamUsersTableViewController.m; sourceTree = "<group>"; };
 		86FF92C118F3F21B00E3933D /* XCJWellDreamNewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellDreamNewsTableViewController.h; path = viewcontroller/XCJWellDreamNewsTableViewController.h; sourceTree = "<group>"; };
 		86FF92C218F3F21B00E3933D /* XCJWellDreamNewsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellDreamNewsTableViewController.m; path = viewcontroller/XCJWellDreamNewsTableViewController.m; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		933D3C531904CF6B00837595 /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIButtonItem.h; sourceTree = "<group>"; };
 		933D3C541904CF6B00837595 /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RIButtonItem.m; sourceTree = "<group>"; };
 		933D3C551904CF6B00837595 /* UIActionSheet+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+Blocks.h"; sourceTree = "<group>"; };
@@ -1400,6 +1405,10 @@
 		93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayListCardController.m; path = viewcontroller/XCJPayListCardController.m; sourceTree = "<group>"; };
 		93E5C187190798BA00CD1690 /* TKParallaxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TKParallaxCell.h; path = viewcontroller/TKParallaxCell.h; sourceTree = "<group>"; };
 		93E5C188190798BA00CD1690 /* TKParallaxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TKParallaxCell.m; path = viewcontroller/TKParallaxCell.m; sourceTree = "<group>"; };
+=======
+		9360928118FE243F0074C61B /* XCJDownloadLaixinViewcontr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJDownloadLaixinViewcontr.h; path = viewcontroller/XCJDownloadLaixinViewcontr.h; sourceTree = "<group>"; };
+		9360928218FE243F0074C61B /* XCJDownloadLaixinViewcontr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJDownloadLaixinViewcontr.m; path = viewcontroller/XCJDownloadLaixinViewcontr.m; sourceTree = "<group>"; };
+>>>>>>> FETCH_HEAD
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3585,6 +3594,7 @@
 			path = support/TKSegementViews;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		933D3C511904CF5900837595 /* TKAlertView */ = {
 			isa = PBXGroup;
 			children = (
@@ -3598,6 +3608,8 @@
 			name = TKAlertView;
 			sourceTree = "<group>";
 		};
+=======
+>>>>>>> FETCH_HEAD
 		9360927F18FE24290074C61B /* download */ = {
 			isa = PBXGroup;
 			children = (

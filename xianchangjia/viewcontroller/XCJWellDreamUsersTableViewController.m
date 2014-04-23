@@ -163,7 +163,11 @@ NSString  * sendLikeBOOL = @"sendLikeUSERDREAM";
     if (groupList.count%colNumber>0) {
         imageviewHeight += TITLE_jianxi+ITEM_WIDTH;
     }
+<<<<<<< HEAD
     return imageviewHeight + 50 + 20;
+=======
+    return imageviewHeight + 50;
+>>>>>>> FETCH_HEAD
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
