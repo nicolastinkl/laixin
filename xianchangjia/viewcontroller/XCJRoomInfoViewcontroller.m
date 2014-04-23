@@ -473,8 +473,7 @@
             }else{
                 [UIAlertView showAlertViewWithMessage:@"密码错误"];
             }
-        }
-<<<<<<< HEAD
+        } 
     }], nil];
     
     prompt.alertViewStyle = UIAlertViewStylePlainTextInput;
@@ -482,75 +481,7 @@
     tf.keyboardType = UIKeyboardTypeNumberPad;
     tf.clearButtonMode = UITextFieldViewModeWhileEditing;
     [prompt show];
-     
-=======
-    } failure:^(MLRequest *request, NSError *error) {
-        [SVProgressHUD dismiss];
-        [UIAlertView showAlertViewWithMessage:@"处理失败"];
-        
-    }];
-}
-
-
--(void) SavedbData:(NSString * ) uid  withType:(NSString * ) stringName;
-{
-    // target to chat view
-    NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-    NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",uid];
-    Conversation * array =  [Conversation MR_findFirstWithPredicate:pre inContext:localContext];
-    if (array) {
-        //系统消息公告
-        FCMessage * msg = [FCMessage MR_createInContext:localContext];
-        msg.messageType = @(messageType_SystemAD);
-        msg.text =stringName;
-        msg.sentDate = [NSDate date];
-        msg.audioUrl = @"";
-        // message did not come, this will be on rigth
-        msg.messageStatus = @(NO);
-        msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-        msg.messageguid = @"";
-        msg.messageSendStatus = @0;
-        msg.facebookID = array.facebookId;
-        msg.read = @YES;
-        [array addMessagesObject:msg];
-        array.lastMessage = msg.text;
-        array.lastMessageDate = [NSDate date];
-        array.messageType = @(XCMessageActivity_UserPrivateMessage);
-        array.messageStutes = @(messageStutes_incoming);
-        array.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-        
-        [localContext MR_saveOnlySelfAndWait];
-    }else{
-        // create new
-        Conversation * conversation =  [Conversation MR_createInContext:localContext];
-        conversation.lastMessageDate = [NSDate date];
-        conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
-        conversation.messageStutes = @(messageStutes_incoming);
-        conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-//        conversation.facebookName = user.nick;
-        conversation.facebookId = uid;
-        conversation.badgeNumber = @0;
-        {
-            //系统消息公告
-            FCMessage * msg = [FCMessage MR_createInContext:localContext];
-            msg.messageType = @(messageType_SystemAD);
-            msg.text = stringName;
-            msg.sentDate = [NSDate date];
-            msg.audioUrl = @"";
-            // message did not come, this will be on rigth
-            msg.messageStatus = @(NO);
-            msg.messageId =  [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_privateMessage,@"0"];
-            msg.messageguid = @"";
-            msg.messageSendStatus = @0;
-            msg.read = @YES;
-            msg.facebookID = conversation.facebookId;
-            conversation.lastMessage = msg.text;
-            [conversation addMessagesObject:msg];
-        }
-        [localContext MR_saveOnlySelfAndWait];
-    }
-
->>>>>>> FETCH_HEAD
+ 
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
