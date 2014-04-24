@@ -15,6 +15,11 @@
 #import "XCJRecommendUIDViewContrl.h"
 #include "OpenUDID.h"
 #import "DZWebBrowser.h"
+#import "SJAvatarBrowser.h"
+#import "QRCodeGenerator.h"
+#import "NSString+Addition.h"
+#import "XCJShowOrderEcodeImageViewcontroller.h"
+#import "NSData+SRB64Additions.h"
 
 @interface XCJOrderAllViewController ()<UIAlertViewDelegate,UIActionSheetDelegate>
 {
@@ -357,6 +362,25 @@
         [UIAlertView showAlertViewWithMessage:@"处理失败"];
         
     }];
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    PayOrderHistorylog * pay ;
+    if (pagetype == 0) {
+        pay = _datasouces[indexPath.section];
+    }else     if (pagetype == 1) {
+        pay = _datasouces_Used[indexPath.section];
+    }else     if (pagetype == 2) {
+        pay = _datasouces_canntrefund[indexPath.section];
+    }
+    
+    XCJShowOrderEcodeImageViewcontroller *viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJShowOrderEcodeImageViewcontroller"];
+    viewContr.orderID = pay.orderid;
+    [self.navigationController pushViewController:viewContr animated:YES];
+    
+    
 }
 
 /**

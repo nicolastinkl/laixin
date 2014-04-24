@@ -15,6 +15,7 @@
 #import "FCUserDescription.h"
 #import "UIButton+WebCache.h"
 #import "XCJAddUserTableViewController.h"
+#import "XCJShowOrderEcodeImageViewcontroller.h"
 
 @interface XCJRecommendUIDViewContrl ()
 {
@@ -133,6 +134,21 @@
 {
     return 196.0f;
 }
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    PayOrderHistorylog * pay = _datasouces[indexPath.section];
+    XCJShowOrderEcodeImageViewcontroller *viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJShowOrderEcodeImageViewcontroller"];
+    viewContr.orderID = pay.orderid;
+    [self.navigationController pushViewController:viewContr animated:YES];
+    
+    
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

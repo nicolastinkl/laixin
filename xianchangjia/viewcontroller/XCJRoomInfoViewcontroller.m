@@ -293,7 +293,8 @@
     }else{
         strtitle = @"确定提交订单吗";
     }
-    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:strtitle delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"￥99元 立即预订" otherButtonTitles:nil, nil];
+    //￥99元
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:strtitle delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"立即预订" otherButtonTitles:nil, nil];
     actionsheet.tag = 3;
     [actionsheet showInView:self.view];
     
@@ -404,7 +405,7 @@
     _currentpayID = cardid;
     __block UIAlertView  *  prompt =[[UIAlertView alloc] initWithTitle:@"请输入进入来抢的界面密码" message:@""
        cancelButtonItem:[RIButtonItem itemWithLabel:@"取消" action:^{
-        
+        [SVProgressHUD  dismiss];
     }] otherButtonItems:[RIButtonItem itemWithLabel:@"确定支付" action:^{
         UITextField *tf = [prompt textFieldAtIndex:0];
         // NICK
@@ -449,9 +450,10 @@
                                 // set cache
                                 [[EGOCache globalCache] setString:[NSString stringWithFormat:@"%d",currentActive_by] forKey:@"currentActive_by"];
                             }
-                            NSDictionary * dict = responseObject[@"result"];
-                            NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
-                            if (string.length > 0) {
+//                            NSDictionary * dict = responseObject[@"result"];
+//                            NSString * string   = [DataHelper getStringValue: dict[@"gourl"] defaultValue:@""];
+                            
+                            /*if (string.length > 0) {
                                 
                                 DZWebBrowser *webBrowser = [[DZWebBrowser alloc] initWebBrowserWithURL:[NSURL URLWithString:string]];
                                 webBrowser.showProgress = YES;
@@ -462,7 +464,9 @@
                                 
                             }else{
                                 [UIAlertView showAlertViewWithTitle:@"新订单提醒" message:@"\n提交订单成功，请等待支付结果!\n\n请进入我的订单查看订单详情"];
-                            }
+                            }*/
+                            [UIAlertView showAlertViewWithTitle:@"新订单提醒" message:@"\n提交订单成功\n\n请进入我的订单查看订单详情"];
+                            
                         }
                     }
                 } failure:^(MLRequest *request, NSError *error) {
@@ -480,6 +484,7 @@
     UITextField *tf = [prompt textFieldAtIndex:0];
     tf.keyboardType = UIKeyboardTypeNumberPad;
     tf.clearButtonMode = UITextFieldViewModeWhileEditing;
+    tf.secureTextEntry = YES;
     [prompt show];
  
 }

@@ -16,4 +16,13 @@
  */
 +(void)showImage:(UIImageView*)avatarImageView withURL:(NSString *) url;
 
+/*!
+ *  显示二维码
+ *
+ *  @param holdimageview <#holdimageview description#>
+ *
+ *  @since <#version number#>
+ */
++(void)showImage:(UIImageView*)holdimageview;
+
 @end

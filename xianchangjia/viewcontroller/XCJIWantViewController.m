@@ -220,7 +220,7 @@
                 }
                 [self presentViewController:pinViewController animated:YES completion:NULL];
             }else{
-                [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容. 进入条件:只有被该圈内用户激活才能进入."];
+                [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容.\n\n 进入条件:只有被该圈内用户激活才能进入."];
             }
             
         }
