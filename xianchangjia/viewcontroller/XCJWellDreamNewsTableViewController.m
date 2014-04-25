@@ -50,7 +50,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showErrorInfoWithRetryNot:) name:showErrorInfoWithRetryNotifition  object:nil];
     
-    [self reloadData];
+     [self.tableView reloadData];
+    
+//    [self reloadData];
 }
 
 
@@ -162,9 +164,9 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"NEWSCELL" forIndexPath:indexPath];
     
-    if (!currentGroup) {
-        return cell;
-    }
+//    if (!currentGroup) {
+//        return cell;
+//    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
    
     /*// Configure the cell...
@@ -195,10 +197,20 @@
     [labelContent setTop:10.0f];
     [labelContent setLeft:10.0f];
     */
-    UITextView* labelContent = (UITextView*)[cell viewWithTag:1];
-    labelContent.text = currentGroup.group_board;
     
-    labelContent.height = APP_SCREEN_HEIGHT - 64;
+    {
+        UITextView* labelContent = (UITextView*)[cell viewWithTag:1];
+//        labelContent.text = currentGroup.group_board;
+        labelContent.hidden = YES;
+        labelContent.height = APP_SCREEN_HEIGHT - 64;
+    }
+    
+    {
+       UIWebView *webview = (UIWebView*)[cell viewWithTag:2];
+       [ webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://mp.weixin.qq.com/s?__biz=MjM5MDI0MzMxMw==&mid=200246465&idx=1&sn=76577eebb9c4a89e30f073e9e3267a4a"]]];
+        webview.height = APP_SCREEN_HEIGHT - 64;
+    }
+   
     
     return cell;
 }

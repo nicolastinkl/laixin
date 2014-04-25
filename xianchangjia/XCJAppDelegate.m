@@ -36,7 +36,7 @@
 #import "Reachability.h"
 #import "PayPellog.h"
 
-#import <Parse/Parse.h>
+//#import <Parse/Parse.h>
 
 /*!
  *  pods
@@ -938,7 +938,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
 {
     /*!
      *  parse key
-     */
+    
     [Parse setApplicationId:ApplicationID clientKey:ClientKey];
     
     // If you are using Facebook, uncomment and add your FacebookAppID to your bundle's plist as
@@ -954,8 +954,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     [defaultACL setPublicReadAccess:YES];
     
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
-    
-    
+ */
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -970,6 +969,21 @@ static NSString * const kLaixinStoreName = @"Laixins";
     [self initAllControlos];
     
     [self initParse];
+    
+    if (application.applicationState != UIApplicationStateBackground) {
+        // Track an app open here if we launch with a push, unless
+        // "content_available" was used to trigger a background push (introduced
+        // in iOS 7). In that case, we skip tracking here to avoid double
+        // counting the app-open.
+        BOOL preBackgroundPush = ![application respondsToSelector:@selector(backgroundRefreshStatus)];
+        BOOL oldPushHandlerOnly = ![self respondsToSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
+        BOOL noPushPayload = ![launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if (preBackgroundPush || oldPushHandlerOnly || noPushPayload) {
+//            [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+        }
+    }
+    
+    
     /*
  
  //    [Instabug KickOffWithToken:@"6fd7d2d10a87f33de702536bcd70470c" CaptureSource:InstabugCaptureSourceUIKit FeedbackEvent:InstabugFeedbackEventShake IsTrackingLocation:YES];

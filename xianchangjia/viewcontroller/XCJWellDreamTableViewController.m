@@ -23,6 +23,7 @@
 #import "XCJAddUserTableViewController.h"
 #import "XCJAppDelegate.h"
 
+
 #define DISTANCE_BETWEEN_ITEMS  9.0
 #define LEFT_PADDING            9.0
 #define ITEM_WIDTH              135.0
@@ -77,6 +78,24 @@ enum ENUMLoadMoreData {
     [[OHAttributedLabel appearance] setLinkUnderlineStyle:kCTUnderlineStyleNone];
    
     _Currentgid = @"61";
+    
+    /*!
+     *  parse data
+     *
+     *  @since <#version number#>
+   
+    PFObject *gameScore = [PFObject objectWithClassName:@"LaixinNewVoice"];
+    gameScore[@"WebUrl"] = @"http://mp.weixin.qq.com/s?__biz=MjM5MDI0MzMxMw==&mid=200246465&idx=1&sn=76577eebb9c4a89e30f073e9e3267a4a";
+    gameScore[@"ContentText"] = @"..........";
+    [gameScore saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded)
+            SLog(@"succeeded");
+        else
+            SLog(@"error %@",error.userInfo);
+        
+    }]; */
+    
+    
     
     //config the load more view
     if (_loadMoreFooterView == nil) {

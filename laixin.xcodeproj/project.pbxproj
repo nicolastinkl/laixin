@@ -491,7 +491,6 @@
 		86EB76EC185AA72F00836947 /* MessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB76E7185AA72F00836947 /* MessageCell.m */; };
 		86EB76ED185AA72F00836947 /* MLTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EB76EA185AA72F00836947 /* MLTextView.m */; };
 		86EB770D185AB14F00836947 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB770C185AB14F00836947 /* libicucore.dylib */; };
-		86EB770E185AB1AE00836947 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7704185AAD7D00836947 /* libz.1.2.5.dylib */; };
 		86EB770F185AB1AE00836947 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7706185AADB100836947 /* libz.1.dylib */; };
 		86EB7711185AB1D800836947 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86EB7710185AB1D800836947 /* ImageIO.framework */; };
 		86F9B9AE1872865600ED768B /* XCJChangeUserInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F9B9AD1872865600ED768B /* XCJChangeUserInfoController.m */; };
@@ -1363,7 +1362,6 @@
 		86EB7701185AACE400836947 /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImagePrefetcher.h; sourceTree = "<group>"; };
 		86EB7702185AACE400836947 /* UIButton+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+WebCache.h"; sourceTree = "<group>"; };
 		86EB7703185AACE400836947 /* UIImageView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+WebCache.h"; sourceTree = "<group>"; };
-		86EB7704185AAD7D00836947 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
 		86EB7706185AADB100836947 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = usr/lib/libz.1.dylib; sourceTree = SDKROOT; };
 		86EB770C185AB14F00836947 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		86EB7710185AB1D800836947 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -1437,7 +1435,6 @@
 				869CE54D186BEC1A0004C1EC /* CoreData.framework in Frameworks */,
 				869CE549186BEBAF0004C1EC /* libresolv.dylib in Frameworks */,
 				86EB7711185AB1D800836947 /* ImageIO.framework in Frameworks */,
-				86EB770E185AB1AE00836947 /* libz.1.2.5.dylib in Frameworks */,
 				86EB770F185AB1AE00836947 /* libz.1.dylib in Frameworks */,
 				86EB770D185AB14F00836947 /* libicucore.dylib in Frameworks */,
 				866618A118951B07000228FC /* libopencore-amrnb.a in Frameworks */,
@@ -2732,7 +2729,6 @@
 				86EB7710185AB1D800836947 /* ImageIO.framework */,
 				86EB770C185AB14F00836947 /* libicucore.dylib */,
 				86EB7706185AADB100836947 /* libz.1.dylib */,
-				86EB7704185AAD7D00836947 /* libz.1.2.5.dylib */,
 				8643D0141839C712005238BC /* CoreLocation.framework */,
 				8681BDE91836236D00521D36 /* libxml2.dylib */,
 				86D1832A1834B0E80005901D /* Security.framework */,

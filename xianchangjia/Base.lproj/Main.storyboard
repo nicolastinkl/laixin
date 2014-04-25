@@ -4776,7 +4776,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YXb-Wc-gbK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3851" y="10162"/>
+            <point key="canvasLocation" x="3753" y="10612"/>
         </scene>
         <!--Dream Likes Table View Controller - 赞-->
         <scene sceneID="E0q-5H-xlP">
@@ -4845,7 +4845,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sJW-7H-sRn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4285" y="10546"/>
+            <point key="canvasLocation" x="4423" y="10810"/>
         </scene>
         <!--Dream Comment View Controller - 评论-->
         <scene sceneID="1hc-Uj-mUg">
@@ -5022,7 +5022,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZZ6-oG-1zp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4479" y="10150"/>
+            <point key="canvasLocation" x="4675" y="10414"/>
         </scene>
         <!--Well Dream Users Table View Controller - 成员-->
         <scene sceneID="PLK-0k-B7o">
@@ -5083,7 +5083,7 @@
                     </items>
                 </navigationBar>
             </objects>
-            <point key="canvasLocation" x="3913" y="9421"/>
+            <point key="canvasLocation" x="3923" y="9221"/>
         </scene>
         <!--Well Dream News Table View Controller - 新闻-->
         <scene sceneID="JLH-cg-73d">
@@ -5115,6 +5115,11 @@
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
+                                        <webView tag="2" contentMode="scaleToFill" id="AKz-WO-OCv">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="482"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </webView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -5128,7 +5133,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WSD-XH-0z9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4617" y="9486"/>
+            <point key="canvasLocation" x="4365" y="9772"/>
         </scene>
         <!--Dread Uesr Controller - 成员-->
         <scene sceneID="Ljr-3g-NMt">
@@ -5179,7 +5184,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pfW-8E-K0M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4047" y="9462"/>
+            <point key="canvasLocation" x="4322" y="9210"/>
         </scene>
         <!--MutiMM View Controller-->
         <scene sceneID="V7L-9J-ldW">
