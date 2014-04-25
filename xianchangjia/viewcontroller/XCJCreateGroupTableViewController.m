@@ -1,0 +1,187 @@
+//
+//  XCJCreateGroupTableViewController.m
+//  laixin
+//
+//  Created by apple on 14-1-3.
+//  Copyright (c) 2014年 jijia. All rights reserved.
+//
+
+#import "XCJCreateGroupTableViewController.h"
+#import "XCAlbumAdditions.h"
+#import "MLNetworkingManager.h"
+#import "NSString+Addition.h"
+#import "DataHelper.h"
+#import "XCJGroupPost_list.h"
+#import "UIAlertViewAddition.h"
+#import "HZAreaPickerView.h"
+#import "CoreData+MagicalRecord.h"
+#import "FCHomeGroupMsg.h"
+#import "Conversation.h"
+
+
+@interface XCJCreateGroupTableViewController ()<HZAreaPickerDelegate>
+
+@property (weak, nonatomic) IBOutlet UITextField *GroupName;
+@property (strong, nonatomic) HZAreaPickerView *locatePicker;
+@property (strong, nonatomic) NSString *areaValue, *cityValue;
+@property (weak, nonatomic) IBOutlet UITextField *Label_address;
+@property (weak, nonatomic) IBOutlet UITextField *textType;
+@end
+
+@implementation XCJCreateGroupTableViewController
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+- (IBAction)cancelClick:(id)sender {
+      [[NSNotificationCenter defaultCenter] removeObserver:self name:@"XCJSelectCroupTypeViewController" object:nil];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+    }];
+}
+
+- (IBAction)SelectClick:(id)sender {
+    [self.GroupName resignFirstResponder];
+    [self selectAddress:nil];
+}
+
+- (void) cancel
+{
+    [self cancelLocatePicker];
+}
+
+- (void) complate
+{
+    [self cancelLocatePicker];
+}
+
+-(void)setAreaValue:(NSString *)areaValue
+{
+    if (![_areaValue isEqualToString:areaValue]) {
+        self.Label_address.text = areaValue;
+    }
+}
+
+- (IBAction)ComplateClick:(id)sender {
+    /**
+     *  16 group.create(name,board,type) 创建群
+     Result={“gid”:1}
+     */
+    if ([self.GroupName.text isNilOrEmpty]) {
+        return;
+    }
+    [self.GroupName resignFirstResponder];
+    [SVProgressHUD show];
+    NSDictionary * parames = @{@"name":self.GroupName.text ,@"position":self.Label_address.text,@"board":self.textType.text,@"type":@1};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"group.create"  parameters:parames success:^(MLRequest *request, id responseObject) {
+        //Result={“gid”:1}
+        if (responseObject) {
+            NSDictionary * dict =  responseObject[@"result"];
+            NSString * gid =  [DataHelper getStringValue:dict[@"gid"] defaultValue:@""];
+            XCJGroup_list * list = [[XCJGroup_list alloc] init];
+            list.gid = gid;
+            list.group_name = self.GroupName.text;
+            list.group_board = self.textType.text;
+            list.type  = groupsGroupTextImgShare;
+            [SVProgressHUD dismiss];
+            
+            NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
+            // target to chat view
+            NSPredicate * pre = [NSPredicate predicateWithFormat:@"facebookId == %@",[NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid]];
+            Conversation * array =  [Conversation MR_findFirstWithPredicate:pre];
+            if (!array) {
+                // create new
+                Conversation * conversation =  [Conversation MR_createInContext:localContext];
+                conversation.lastMessage = @"您创建了新群组";
+                conversation.lastMessageDate = [NSDate date];
+                conversation.messageType = @(XCMessageActivity_UserGroupMessage);
+                conversation.messageStutes = @(messageStutes_incoming);
+                conversation.messageId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,@"0"];
+                conversation.facebookName = list.group_name;
+                conversation.facebookId = [NSString stringWithFormat:@"%@_%@",XCMessageActivity_User_GroupMessage,list.gid];
+                conversation.badgeNumber = @0;
+                [localContext MR_saveOnlySelfAndWait];
+            }
+            
+            [self cancelClick:nil];
+        }
+    } failure:^(MLRequest *request, NSError *error) {
+        [SVProgressHUD dismiss];
+        [UIAlertView showAlertViewWithMessage:@"创建失败"];
+    }];
+}
+
+#pragma mark - HZAreaPicker delegate
+-(void)pickerDidChaneStatus:(HZAreaPickerView *)picker
+{
+    if (picker.pickerStyle == HZAreaPickerWithStateAndCity) {
+        self.areaValue = [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
+    }
+}
+
+-(void)cancelLocatePicker
+{
+    [self.locatePicker cancelPicker];
+    self.locatePicker.delegate = nil;
+    self.locatePicker = nil;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    [self cancelLocatePicker];
+}
+
+- (IBAction)selectAddress:(id)sender
+{
+    if (self.locatePicker) {
+        [self.locatePicker cancelPicker];
+    }
+    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCity delegate:self];
+   [self.locatePicker showInView:self.view];
+
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+ 
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(XCJSelectCroupTypeViewControllerNotiy:) name:@"XCJSelectCroupTypeViewController" object:nil];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+  
+}
+
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+  
+}
+
+-(void) XCJSelectCroupTypeViewControllerNotiy:(NSNotification *) noty
+{
+     if(noty.object)
+     {
+         self.textType.text = [NSString stringWithFormat:@"%@",noty.object];
+     }
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
