@@ -12,7 +12,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 static NSString *const kJLRoutePatternKey = @"JLRoutePattern";
 static NSString *const kJLRouteURLKey = @"JLRouteURL";
 static NSString *const kJLRouteNamespaceKey = @"JLRouteNamespace";

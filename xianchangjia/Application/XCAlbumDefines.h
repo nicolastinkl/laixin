@@ -50,6 +50,13 @@ typedef enum {
 #define kAppSecret							@"9c152c876ec980df305d54196539773f"
 #define kAppRedirectURI						@"http://1.livep.sinaapp.com/api/weibo_manager_impl/sina_weibo/callback.php"
 
+
+/*!
+ *  parse
+ */
+#define ApplicationID                       @"feMWi3T1BlcCMC9hJvV221xhE1KFMb2jye4U7rzW"
+#define ClientKey                           @"b2iAcDOvgZJLxqStvWc6THh4pHpsG9AnoxacZEsi"
+
 #define kidswantURL                         @"http://api.xianchangjia.com/"//@"http://app.kidswant.com.cn"
 #define xianchangjiaURI						@"2824743419://com.liveplus"
 #define LaixinWebsocketURL                  @"ws://127.0.0.1:8000/ws"
