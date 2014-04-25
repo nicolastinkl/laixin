@@ -324,9 +324,9 @@
                 
                 //[[NSDate date] timeIntervalSinceNow];
                 
-                [_needRefreshViewController.activities insertObject:glist atIndex:0];
-                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
-                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+//                [_needRefreshViewController.activities insertObject:glist atIndex:0];
+//                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
+//                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
                 [SVProgressHUD dismiss];
                 /*
                  "replycount":0,

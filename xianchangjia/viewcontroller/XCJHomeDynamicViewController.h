@@ -12,10 +12,9 @@
 #import "FCHomeGroupMsg.h"
 #import "Conversation.h"
 
-@interface XCJHomeDynamicViewController : BaseDetailViewController
+@interface XCJHomeDynamicViewController : UIViewController
 
-@property (nonatomic,strong) NSString * Currentgid;
-
+@property (nonatomic,strong) NSString * Currentgid; 
 @property (readwrite, nonatomic, strong) Conversation * groupInfo;
 
 @end

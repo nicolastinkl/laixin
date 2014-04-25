@@ -80,10 +80,10 @@
                 // [[NSDate date] timeIntervalSinceNow];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
                 glist.comments = array;
-                
-                [_needRefreshViewController.activities insertObject:glist atIndex:0];
-                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
-                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"StartRefershNewPostInfo" object:glist];
+//                [_needRefreshViewController.activities insertObject:glist atIndex:0];
+//                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
+//                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
                 
                 [self  dismissThisNavi:nil];
             }

@@ -10,5 +10,5 @@
 @class BaseDetailViewController;
 @interface XCJPostTextViewController : UIViewController
 @property (nonatomic,strong) NSString * gID;
-@property (nonatomic,weak) BaseDetailViewController *needRefreshViewController;
+@property (nonatomic,weak) UIViewController *needRefreshViewController;
 @end

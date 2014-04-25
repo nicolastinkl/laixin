@@ -48,16 +48,42 @@
 #import "XCJSendManySelectedImageViewCOntrooler.h"
 #import "XCJErWeiCodeViewController.h"
 #import "UINavigationController+SGProgress.h"
+#import "SBSegmentedViewController.h"
+#import "XCJAddUserTableViewController.h"
+#import "PWLoadMoreTableFooterView.h"
+#import "UIButton+WebCache.h"
+#import "XCJContentTypesCell.h"
+#import "IDMPhotoBrowser.h"
 
-@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,CTAssetsPickerControllerDelegate>
+#define DISTANCE_BETWEEN_ITEMS  9.0
+#define LEFT_PADDING            9.0
+#define ITEM_WIDTH              135.0
+#define TITLE_HEIGHT            40.0
+#define TITLE_jianxi            2.5
+
+#define colNumber 4
+
+#define kAttributedLabelTag 211
+
+
+@interface XCJHomeDynamicViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,XCJGroupMenuViewDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UITextFieldDelegate,CTAssetsPickerControllerDelegate,PWLoadMoreTableFooterDelegate>
 {
 
     XCJGroupMenuView  * menuView;
     NSArray * JsonArray;
+    PWLoadMoreTableFooterView *_loadMoreFooterView;
+    BOOL _datasourceIsLoading;
+    bool _allLoaded;
+    NSString  *_Currentgid;
+    NSString * CurrentUrl;
 }
 
+
+@property (weak, nonatomic) IBOutlet UITableView *tableviewself;
 @property (nonatomic, strong) NSMutableArray *assets;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+
+@property (nonatomic, strong) NSMutableArray *activities;
 @end
 
 @implementation XCJHomeDynamicViewController
@@ -75,6 +101,7 @@
 {
     [super viewDidLoad];
     
+    
     if (!menuView) {
         menuView = [[NSBundle mainBundle] loadNibNamed:@"XCJGroupMenuView" owner:self options:nil][0];
         [self.view addSubview:menuView];
@@ -82,6 +109,8 @@
         menuView.top = -600;
         menuView.delegate =  self;
     }
+    
+    [self _init];
     
     if ([self.groupInfo.isMute boolValue]) {
         //如果是已经静音  那么就设置接收
@@ -99,10 +128,61 @@
     self.navigationItem.rightBarButtonItems = @[barTwo,barOne];
     
     // init data with parent viewcontroller
-    [self.refreshView beginRefreshing];
+//    [self.refreshView beginRefreshing];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(StartPostUploadimages:) name:@"StartPostUploadimages" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(StartRefershNewPostInfo:) name:@"StartRefershNewPostInfo" object:nil];
+    
+    
+    //config the load more view
+    if (_loadMoreFooterView == nil) {
+		
+		PWLoadMoreTableFooterView *view = [[PWLoadMoreTableFooterView alloc] init];
+		view.delegate = self;
+		_loadMoreFooterView = view;
+		
+	}
+    self.tableviewself.tableFooterView = _loadMoreFooterView;
+    
+    /**
+     *  MARK: init 0..
+     */
+    _allLoaded = NO;
+    _datasourceIsLoading = YES;
+    
+    _Currentgid = self.Currentgid;
+    /**
+     * MARK: init net data.
+     */
+    [self initDatawithNet:Enum_initData];
 }
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"StartPostUploadimages" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"StartRefershNewPostInfo" object:nil];
+    
+}
+
+-(void) StartRefershNewPostInfo:(NSNotification *) noitfy
+{
+    if (noitfy.object) {
+        [self.activities insertObject:noitfy.object atIndex:0];
+        [self.tableviewself reloadData];
+    }
+}
+
+-(void) _init
+{
+    {
+        NSMutableArray * _init_array = [[NSMutableArray alloc] init];
+        self.activities = _init_array;
+    }
+}
+
+
 
 -(void) StartPostUploadimages:(NSNotification * ) notify
 {
@@ -208,182 +288,6 @@
     [self presentViewController:nav animated:YES completion:nil];
 }
 
--(void)   initHomeData
-{
-    //    [self.refreshControl beginRefreshing];
-    //    [self setupLocationManager];
- 
-    /**
-     *  gid,content
-     */
-    if (_Currentgid == nil) {
-        [[MLNetworkingManager sharedManager] sendWithAction:@"group.my"  parameters:@{} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * groupsDict =  groups[@"groups"];
-                if (groupsDict && groupsDict.count > 0 ) {
-                    [groupsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        _Currentgid = [tools getStringValue:obj[@"gid"] defaultValue:@""];
-                        
-                        /*  add group
-                         NSDictionary * parames = @{@"content":@"来上班5天迟到4次然后人就不见了",@"gid":gid};
-                         [[MLNetworkingManager sharedManager] sendWithAction:@"post.add"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                         //    postid = 12;
-                         } failure:^(MLRequest *request, NSError *error) {
-                         }];*/
-                    }];
-//                    [self postGetActivitiesWithLastID:0];
-                }
-
-            }
-        } failure:^(MLRequest *request, NSError *error) {
-        }];
-    }else
-    {
-//        [self postGetActivitiesWithLastID:0];
-    }
-}
-
-- (void)postGetActivitiesWithLastID:(NSInteger)lastID withType:(NSInteger) typeIndex
-{
- 
-    if (_Currentgid == nil) {
-        _Currentgid  =  @"2";
-    }
-    if (_Currentgid == nil) {
-        [self failedGetActivitiesWithLastID:lastID];
-        return;
-    }
-   
-   
-    //put here to GCD
-//    double delayInSeconds = 0.1;
-//    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-//    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//        /* get all list data*/
-//        
-//       
-//    });
-    switch (typeIndex) {
-        case Enum_initData:
-        {
-            NSDictionary * parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
-            
-            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                //    postid = 12;
-                /*
-                 Result={
-                 “posts”:[*/
-                if (responseObject) {
-                    __block NSInteger lasID = 0;
-                    NSDictionary * groups = responseObject[@"result"];
-                    NSArray * postsDict =  groups[@"posts"];
-                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                        lasID = [post.postid integerValue];
-                        [self.activities addObject:post];
-                        
-                        if (idx == 0) {  //upload last message info
-                            self.groupInfo.lastMessage = post.content;
-                            self.groupInfo.lastMessageDate = [NSDate dateWithTimeIntervalSince1970:post.time];//[tools convertToUTC:];
-                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
-                        }
-                    }];
-                    [self successGetActivities:self.activities withLastID:lasID];
-                }else{
-                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-                [self failedGetActivitiesWithLastID:0];
-                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-            }];
-            
-        }
-            break;
-        case Enum_UpdateTopData:
-        {
-            //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
-            //                Result=同11
-            NSDictionary* parames = @{@"gid":_Currentgid,@"frompos":@(lastID)};
-            [[MLNetworkingManager sharedManager] sendWithAction:@"group.get_new_post" parameters:parames success:^(MLRequest *request, id responseObject) {
-                NSDictionary * groups = responseObject[@"result"];
-                NSArray * postsDict =  groups[@"posts"];
-                __block NSInteger lasID = 0;
-                if (postsDict &&  postsDict.count > 0) {
-                    
-                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                        if (post) {
-                            lasID = [post.postid integerValue];
-                            [self.activities insertObject:post atIndex:0];
-                            [self.cellHeights insertObject:@0 atIndex:0];
-                            [self reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-                        }
-                    }];
-                    [self successGetActivities:self.activities withLastID:lasID];
-                }else{
-                    [self failedGetActivitiesWithLastID:0];
-                }
-                
-            } failure:^(MLRequest *request, NSError *error) {
-                [self failedGetActivitiesWithLastID:0];
-                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-            }];
-        }
-            break;
-        case Enum_MoreData:
-        {
-            NSString * postid ;
-            if (self.activities.count >= 20) {
-                XCJGroupPost_list * post =[self.activities lastObject];
-                postid = post.postid;
-            }else{
-                postid = [NSString stringWithFormat:@"%d",self.activities.count];
-            }
-            NSDictionary* parames = @{@"gid":_Currentgid,@"pos":postid,@"count":@"20"};
-            
-            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
-                //    postid = 12;
-                /*
-                 Result={
-                 “posts”:[*/
-                if (responseObject) {
-                    __block NSInteger lasID = 0;
-                    NSDictionary * groups = responseObject[@"result"];
-                    NSArray * postsDict =  groups[@"posts"];
-                    if (postsDict && postsDict.count > 0) {
-                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                            lasID = [post.postid integerValue];
-                            [self.activities addObject:post];
-                        }];
-                        [self successGetActivities:self.activities withLastID:lasID];
-                    }else{
-                        [self failedGetActivitiesWithLastID:0];
-                    }
-                }else{
-                    [self failedGetActivitiesWithLastID:0];
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-                [self failedGetActivitiesWithLastID:0];
-                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
-            }];
-        }
-            break;
-            
-        default:
-            break;
-    }
-    NSDictionary * parames ;
-    if(lastID == 0)
-    {
-        parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
-    }else{
-        parames = @{@"gid":_Currentgid,@"pos":@(self.activities.count),@"count":@"20"};
-    }
-    
-    
-}
 
 
 - (void) hiddenSelfViewClick
@@ -448,15 +352,14 @@
  */
 - (void) moreClick
 {
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"退出群组"
-                                               otherButtonTitles:@"设置群组名称",@"查看群组二维码", nil];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"退出群组" otherButtonTitles:@"设置群组名称",@"查看群组二维码", nil];
     sheet.tag = 2;
     [sheet showInView:self.view];
 }
 
 -(IBAction)postAction:(id)sender
 {
-    if (menuView.top == 0) {
+    if (menuView.top == 64) {
         // hidden  _arrowImageView.transform = CGAffineTransformMakeRotation( M_PI);
         
         [UIView animateWithDuration:.3f animations:^{
@@ -467,26 +370,17 @@
         }];
     }else{
         // show
-        [self.tableView scrollsToTop];
+        //[self.tableviewself scrollsToTop];
         menuView.alpha = 0;
         menuView.top = -600;
         [UIView animateWithDuration:.3f animations:^{
             menuView.alpha = 1;
-            menuView.top = 0;
+            menuView.top = 64;
 //            self.ShowMenubutton.transform = CGAffineTransformMakeRotation(0);
         } completion:^(BOOL finished) {
         }];
         
     }
-    /*
-     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-     UIImagePickerController *photoLibrary = [[UIImagePickerController alloc] init];
-     photoLibrary.delegate = self;
-     photoLibrary.allowsEditing = YES;
-     photoLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-     [self presentViewController:photoLibrary animated:YES completion:nil];
-     }
-     */
 }
 
 #pragma mark - IBActionSheet/UIActionSheet Delegate Method
@@ -645,13 +539,35 @@
                         camera.delegate = self;
                         camera.sourceType = UIImagePickerControllerSourceTypeCamera;
                         [self presentViewController:camera animated:YES completion:nil];
-                    }
-                    
-                   
+                    }                   
                 }
                     break;
                 case 2:{
                      [self pickAssets:21];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        case 4:
+        {
+            //1  朋友圈
+            //0   好友
+            
+            XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
+            UIImage * image = [self.tableviewself  viewToImage:self.tableviewself];
+            NSData * data = UIImageJPEGRepresentation(image, .5);
+            switch (buttonIndex) {
+                case 0:
+                {
+                    [delegate sendImageContent:0 withImageData:data];
+                }
+                    break;
+                case 1:
+                {
+                    [delegate sendImageContent:1 withImageData:data];
                 }
                     break;
                 default:
@@ -698,161 +614,6 @@
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
-
-//点击赞按钮
-- (void)clickLikeButton:(UIButton *)likeButton onActivity:(XCJGroupPost_list *)activity{
-
-    likeButton.enabled = NO;
-    //赞
-    if (!activity.ilike) {
-        NSDictionary * parames = @{@"postid":activity.postid};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
-//            [activity.likeUsers addObject:[[LXAPIController sharedLXAPIController] currentUser]];
-            activity.ilike = YES;
-            activity.like ++;
-            likeButton.enabled = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-             likeButton.enabled = YES;
-            [UIAlertView showAlertViewWithMessage:@"点赞失败 请重试!"];
-        }];
-    }else{
-        NSDictionary * parames = @{@"postid":activity.postid};
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
-            //如果有则删除，没有则不动啊
-//            for (LXUser *aUser in activity.likeUsers) {
-//                if ([aUser.uid isEqualToString:[[LXAPIController sharedLXAPIController] currentUser].uid]) {
-////                    [activity.likeUsers removeObject:aUser];
-//                    break;
-//                }
-//            }
-            activity.like -- ;
-            activity.ilike = NO;
-            likeButton.enabled = YES;
-        } failure:^(MLRequest *request, NSError *error) {
-             likeButton.enabled = YES;
-            [UIAlertView showAlertViewWithMessage:@"取消赞失败 请重试!"];
-        }];
-    }
-    
-    //执行赞图标放大的动画
-    likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
-    [UIView animateWithDuration:.50f
-                     animations:^{
-                         likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
-                     }
-                     completion:^(BOOL finished) {
-                         //刷新对应行
-                         [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:activity] withAnimation:NO];
-                     }];
-    
-}
-
-- (void)clickDeleteButton:(UIButton *)commentButton onActivity:(XCJGroupPost_list *)activity
-{
-    if (activity) {
-        [SVProgressHUD show];
-        
-        [[MLNetworkingManager sharedManager] sendWithAction:@"post.delete" parameters:@{@"postid":activity.postid} success:^(MLRequest *request, id responseObject) {
-            if (responseObject) {
-                // delete ok
-                 [SVProgressHUD dismiss];
-                @try {
-                    
-                    [[EGOCache globalCache] removeCacheForKey:@"MyPhotoCache"];
-                    
-                    int index = [self.activities indexOfObject:activity];
-                    [self.cellHeights removeObjectAtIndex:index];
-                    [self.activities removeObject:activity];
-                    NSIndexPath  * indexpath = [NSIndexPath indexPathForRow:index inSection:0];
-                    [self.tableView deleteRowsAtIndexPaths:@[indexpath] withRowAnimation:UITableViewRowAnimationTop];
-                }
-                @catch (NSException *exception) {
-                    [UIAlertView showAlertViewWithMessage:@"删除失败"];
-                }
-                @finally {
-                    
-                }
-               
-            }
-           
-            
-        } failure:^(MLRequest *request, NSError *error) {
-            [UIAlertView showAlertViewWithMessage:@"删除失败"];
-            [SVProgressHUD dismiss];
-        }];
-    }
-}
-
-- (void)sendCommentContent:(NSString*)content ToActivity:(XCJGroupPost_list*)currentOperateActivity atCommentIndex:(NSInteger)commentIndex
-{
-    if ([content isNilOrEmpty]||commentIndex>=(NSInteger)currentOperateActivity.comments.count) {
-        return;
-    }
-    
-    NSDictionary * parames = @{@"postid":currentOperateActivity.postid,@"content":content};
-    [[MLNetworkingManager sharedManager] sendWithAction:@"post.reply"  parameters:parames success:^(MLRequest *request, id responseObject) {
-        //"result":{"replyid":1}
-        
-        if (responseObject) {
-            NSDictionary * result =  responseObject[@"result"];
-            NSString * repID = [DataHelper getStringValue:result[@"replyid"] defaultValue:@""];
-            
-            int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
-            if (localreplyid < [repID intValue]) {
-                [USER_DEFAULT setInteger:[repID intValue] forKey:KeyChain_Laixin_Max_ReplyID];
-                [USER_DEFAULT synchronize];
-            }
-            
-            Comment  *comment = [[Comment alloc] init];
-            comment.replyid = repID;
-            comment.uid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
-            comment.postid = currentOperateActivity.postid;
-            comment.time = [[NSDate date] timeIntervalSince1970];
-            comment.content = content;
-            [currentOperateActivity.comments addObject:comment];
-            //刷新此cell
-            [self reloadSingleActivityRowOfTableView:[self.activities indexOfObject:currentOperateActivity] withAnimation:NO];
-        }
-//        //升序排序
-//        NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"_time" ascending:YES];
-//        [currentOperateActivity.comments sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-        
-        
-    } failure:^(MLRequest *request, NSError *error) {
-        [UIAlertView showAlertViewWithMessage:@"回复失败 请重试!"];
-    }];
-    
-}
-
-#pragma mark - ActivityTableViewCellDelegate
-//点击某用户名
-- (void)clickUserID:(NSString *)uid onActivity:(XCJGroupPost_list *)activity
-{
-    XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
-     [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-         if (result) {
-             
-             infoview.UserInfo = result;
-             infoview.title = @"详细资料";
-             [self.navigationController pushViewController:infoview animated:YES];
-         }
-         
-     } withuid:uid];
-}
-
-//点击当前activity的发布者头像
-- (void)clickAvatarButton:(UIButton *)avatarButton onActivity:(XCJGroupPost_list *)activity
-{
-    XCJUserInfoController * infoview = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJUserInfoController"];
-    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id result, NSError * error) {
-        if (result) {
-            
-            infoview.UserInfo = result;
-            infoview.title = @"详细资料";
-            [self.navigationController pushViewController:infoview animated:YES];
-        }
-    } withuid:activity.uid];
-}
 
 #pragma mark - UIImagePickerController delegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)theInfo
@@ -905,6 +666,626 @@
 }
 
 
+
+- (void)initDatawithNet:(NSInteger) typeIndex
+{
+    
+    switch (typeIndex) {
+        case Enum_initData:
+        {
+            NSDictionary * parames = @{@"gid":_Currentgid,@"pos":@0,@"count":@"20"};
+            
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //    postid = 12;
+                /*
+                 Result={
+                 “posts”:[*/
+                if (responseObject) {
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"posts"];
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        [self.activities addObject:post];
+                        
+                    }];
+                    if (postsDict.count >= 20) {
+                        _allLoaded = NO;
+                    }else{
+                        _allLoaded = YES;
+                    }
+                }else{
+                    [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+                }
+                _datasourceIsLoading = NO;
+                [self doneLoadingTableViewData];
+                
+            } failure:^(MLRequest *request, NSError *error) {
+                _datasourceIsLoading = NO;
+                [self doneLoadingTableViewData];
+                
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
+            
+        }
+            break;
+        case Enum_UpdateTopData:
+        {
+            //group.get_new_post(gid,frompos) 取得新消息，从某个位置开始，用于掉线后重新连上的情况
+            //                Result=同11
+            NSString * lastID = 0;
+            if (self.activities.count  > 0) {
+                XCJGroupPost_list * post =[self.activities firstObject];
+                lastID = post.postid;
+            }else{
+                lastID = @"0";
+            }
+            NSDictionary* parames = @{@"gid":_Currentgid,@"frompos":lastID};
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.get_new_post" parameters:parames success:^(MLRequest *request, id responseObject) {
+                NSDictionary * groups = responseObject[@"result"];
+                NSArray * postsDict =  groups[@"posts"];
+                __block NSInteger lasID = 0;
+                if (postsDict &&  postsDict.count > 0) {
+                    [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                        if (post) {
+                            lasID = [post.postid integerValue];
+                            [self.activities insertObject:post atIndex:0];
+                        }
+                    }];
+                    _datasourceIsLoading = NO;
+                    [self doneLoadingTableViewData];
+                }
+                
+            } failure:^(MLRequest *request, NSError *error) {
+                _datasourceIsLoading = NO;
+                [self doneLoadingTableViewData];
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
+        }
+            break;
+        case Enum_MoreData:
+        {
+            NSInteger postid ;
+            if (self.activities.count >= 20) {
+                XCJGroupPost_list * post =[self.activities lastObject];
+                postid = [post.postid intValue];
+            }else{
+                postid = 0;
+            }
+            NSDictionary* parames = @{@"gid":_Currentgid,@"pos":@(postid),@"count":@"20"};
+            
+            [[MLNetworkingManager sharedManager] sendWithAction:@"group.post_list"  parameters:parames success:^(MLRequest *request, id responseObject) {
+                //    postid = 12;
+                /*
+                 Result={
+                 “posts”:[*/
+                if (responseObject) {
+                    NSDictionary * groups = responseObject[@"result"];
+                    NSArray * postsDict =  groups[@"posts"];
+                    if (postsDict && postsDict.count > 0) {
+                        [postsDict enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+                            [self.activities addObject:post];
+                        }];
+                        if (postsDict.count >= 20) {
+                            _allLoaded = NO;
+                        }else{
+                            _allLoaded = YES;
+                        }
+                    }
+                    _datasourceIsLoading = NO;
+                    [self doneLoadingTableViewData];
+                }
+                
+            } failure:^(MLRequest *request, NSError *error) {
+                _datasourceIsLoading = NO;
+                [self doneLoadingTableViewData];
+                [UIAlertView showAlertViewWithMessage:@"获取数据出错"];
+            }];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+
+#pragma mark -
+#pragma mark PWLoadMoreTableFooterDelegate Methods
+
+- (void)pwLoadMore {
+    //just make sure when loading more, DO NOT try to refresh your data
+    //Especially when you do your work asynchronously
+    //Unless you are pretty sure what you are doing
+    //When you are refreshing your data, you will not be able to load more if you have pwLoadMoreTableDataSourceIsLoading and config it right
+    //disable the navigationItem is only demo purpose
+    
+    _datasourceIsLoading = YES;
+    [self initDatawithNet:Enum_MoreData];
+    
+}
+#pragma mark -
+#pragma mark Data Source Loading / Reloading Methods
+- (void)doneLoadingTableViewData {
+	//  model should call this when its done loading
+	[_loadMoreFooterView pwLoadMoreTableDataSourceDidFinishedLoading];
+    [self.tableviewself reloadData];
+}
+
+
+- (BOOL)pwLoadMoreTableDataSourceIsLoading {
+    return _datasourceIsLoading;
+}
+- (BOOL)pwLoadMoreTableDataSourceAllLoaded {
+    return _allLoaded;
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return self.activities.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    XCJGroupPost_list * post = self.activities[section];
+    // Return the number of rows in the section.
+    if (post.imageURL.length > 4 || post.excount > 0) {   //图片
+        return 4;
+    }
+    
+    return 3;
+}
+
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    XCJGroupPost_list * post = self.activities[indexPath.section];
+    // Return the number of rows in the section.
+    if (post.imageURL.length > 4 || post.excount > 0) {   //图片
+        switch (indexPath.row) {
+            case 0:
+                return 44.0f;
+                break;
+            case 1:
+            {
+                float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
+                if (post.excount%colNumber>0) {
+                    imageviewHeight += TITLE_jianxi+65;
+                }
+                return imageviewHeight + 10; //content
+            }
+                break;
+            case 2:
+                return [self textHeight:post.content];//text
+                break;
+            case 3:
+                return 44.0f;
+                break;
+                
+            default:
+                break;
+        }
+    }
+    switch (indexPath.row) {
+        case 0:
+            return 44.0f;
+            break;
+        case 1:
+            return [self textHeight:post.content];//text
+            break;
+        case 2:
+            return 44.0f;
+            break;
+            
+        default:
+            break;
+    }
+    return 0.0f;
+}
+
+-(float) textHeight:(NSString *) text
+{
+    CGFloat maxWidth = 300.0f;//[UIScreen mainScreen].applicationFrame.size.width * 0.70f;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(maxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return  fmaxf(20.0f, sizeToFit.height + 20.0f );
+}
+
+-(IBAction)commentClick:(id)sender
+{
+    UIButton * button = sender;
+    UITableViewCell * cell = (UITableViewCell *)button.superview.superview.superview;
+    XCJGroupPost_list * post = self.activities[ [self.tableviewself indexPathForCell:cell].section];
+    if (post) {
+        
+        SBSegmentedViewController *segmentedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SBSegmentedCommentController"];
+        segmentedViewController.position = SBSegmentedViewControllerControlPositionNavigationBar;
+        [segmentedViewController addStoryboardSegments:@[@"SegmentComment", @"SegmentLikes"]];
+        segmentedViewController.someobject = post;
+        [self.navigationController pushViewController:segmentedViewController animated:YES];
+        
+    }
+}
+
+-(IBAction)likeClick:(id)sender
+{
+    UIButton * likeButton = sender;
+    UITableViewCell * cell = (UITableViewCell *)likeButton.superview.superview.superview;
+    XCJGroupPost_list * post = self.activities[ [self.tableviewself indexPathForCell:cell].section];
+    
+    
+    likeButton.enabled = NO;
+    //赞
+    if (!post.ilike) {
+        NSDictionary * parames = @{@"postid":post.postid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.like"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            post.ilike = YES;
+            post.like ++;
+            likeButton.enabled = YES;
+            [self refreshbutton:likeButton withdata:post];
+        } failure:^(MLRequest *request, NSError *error) {
+            likeButton.enabled = YES;
+            [UIAlertView showAlertViewWithMessage:@"操作失败"];
+        }];
+    }else{
+        NSDictionary * parames = @{@"postid":post.postid};
+        [[MLNetworkingManager sharedManager] sendWithAction:@"post.dislike"  parameters:parames success:^(MLRequest *request, id responseObject) {
+            post.like -- ;
+            post.ilike = NO;
+            likeButton.enabled = YES;
+            [self refreshbutton:likeButton withdata:post];
+        } failure:^(MLRequest *request, NSError *error) {
+            likeButton.enabled = YES;
+            [UIAlertView showAlertViewWithMessage:@"操作失败"];
+        }];
+    }
+    
+    //执行赞图标放大的动画
+    likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+    [UIView animateWithDuration:.50f
+                     animations:^{
+                         likeButton.imageView.transform=CGAffineTransformScale(CGAffineTransformIdentity, 1.0, 1.0);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
+}
+
+-(void) refreshbutton:(UIButton *) likeButton withdata:(XCJGroupPost_list * ) post
+{
+    if (!post.ilike)
+        [likeButton setImage:[UIImage imageNamed:@"home_tl_ic_like_nor"] forState:UIControlStateNormal];
+    else
+        [likeButton setImage:[UIImage imageNamed:@"home_tl_ic_liked_nor"] forState:UIControlStateNormal];
+    
+    [likeButton setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
+}
+
+-(IBAction)shareClick:(id)sender
+{
+    UIActionSheet * actionsheet = [[UIActionSheet alloc] initWithTitle:@"分享该动态给好友" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"微信好友",@"微信朋友圈", nil];
+    actionsheet.tag = 4;
+    [actionsheet showInView:self.view];
+}
+
+#pragma mark cellfor
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
+    XCJGroupPost_list * post = self.activities[indexPath.section];
+    // Return the number of rows in the section.
+    if (post.imageURL.length > 4 || post.excount > 0) {   //图片
+        switch (indexPath.row) {
+            case 1:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKCONTENTCELL" forIndexPath:indexPath];
+                
+                
+            }
+                break;
+            case 2:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
+                
+                UILabel* labelContent = (UILabel*)[cell viewWithTag:kAttributedLabelTag];
+                if (labelContent == nil) {
+                    labelContent = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+                    labelContent.tag = kAttributedLabelTag;
+                    labelContent.numberOfLines = 0;
+                    labelContent.lineBreakMode = NSLineBreakByCharWrapping;
+                    labelContent.font = [UIFont systemFontOfSize:16.0f];
+                    [cell addSubview:labelContent];
+                    //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
+                }
+                labelContent.text = [NSString stringWithFormat:@"%@",post.content];
+                [labelContent sizeToFit];
+                
+                [labelContent setWidth:300.0f];
+                [labelContent setHeight:[self textHeight:[NSString stringWithFormat:@"%@",post.content]]];
+                
+                [labelContent setTop:0.0f];
+                [labelContent setLeft:10.0f];
+            }
+                break;
+            case 3:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
+                
+                UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
+                UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
+                UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
+                UIView * lineView =[cell.contentView subviewWithTag:5];
+                [lineView setHeight:0.5];
+                [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
+                [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
+                [self refreshbutton:buttonLike withdata:post];
+                [buttonComment addTarget:self action:@selector(commentClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonLike addTarget:self action:@selector(likeClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonHSare addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
+                
+                
+            }
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch (indexPath.row) {
+            case 1:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
+                UILabel* labelContent = (UILabel*)[cell viewWithTag:kAttributedLabelTag];
+                if (labelContent == nil) {
+                    labelContent = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
+                    labelContent.tag = kAttributedLabelTag;
+                    labelContent.numberOfLines = 0;
+                    labelContent.lineBreakMode = NSLineBreakByCharWrapping;
+                    labelContent.font = [UIFont systemFontOfSize:16.0f];
+                    [cell addSubview:labelContent];
+                    //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
+                }
+                labelContent.text = [NSString stringWithFormat:@"%@",post.content];
+                [labelContent sizeToFit];
+                
+                [labelContent setWidth:300.0f];
+                [labelContent setHeight:[self textHeight:[NSString stringWithFormat:@"%@",post.content]]];
+                
+                [labelContent setTop:0.0f];
+                [labelContent setLeft:10.0f];
+            }
+                break;
+            case 2:
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"TKOPERATIONCELL" forIndexPath:indexPath];
+                UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
+                UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
+                UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
+                [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
+                [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
+                [self refreshbutton:buttonLike withdata:post];
+                [buttonComment addTarget:self action:@selector(commentClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonLike addTarget:self action:@selector(likeClick:) forControlEvents:UIControlEventTouchUpInside];
+                [buttonHSare addTarget:self action:@selector(shareClick:) forControlEvents:UIControlEventTouchUpInside];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    //TKUSERCELL TKCONTENTCELL  TKREICKTEXTCELL TKOPERATIONCELL
+    
+    /**
+     *  row  0
+     */
+    if(indexPath.row == 0){ //通用
+        cell = [tableView dequeueReusableCellWithIdentifier:@"TKUSERCELL" forIndexPath:indexPath];
+        UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
+        //        _avatarButton.layer.cornerRadius = 35/2;
+        //        _avatarButton.layer.masksToBounds = YES;
+        [_avatarButton addTarget:self action:@selector(seeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    // Configure the cell...
+    cell.backgroundColor = [UIColor colorWithHex: 0xffefefef];
+    return cell;
+}
+
+-(IBAction)seeUseinfoClick:(id)sender
+{
+    UIButton *buttonSender = (UIButton *)sender;
+    UITableViewCell * cell = (UITableViewCell *)buttonSender.superview.superview.superview;
+    XCJGroupPost_list * post = self.activities[ [self.tableviewself indexPathForCell:cell].section];
+    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError *error) {
+        
+        XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
+        addUser.UserInfo = response;
+        [self.navigationController pushViewController:addUser animated:YES];
+        
+    } withuid:post.uid];
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    XCJGroupPost_list * post = self.activities[indexPath.section];
+    if (indexPath.row == 0) {
+        UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
+        UILabel * useName = (UILabel *) [cell.contentView subviewWithTag:2];
+        UILabel * sendTime = (UILabel *) [cell.contentView subviewWithTag:3];
+        sendTime.text = [tools timeLabelTextOfTime:post.time];
+        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id response, NSError * error) {
+            if (response) {
+                FCUserDescription * user = response;
+                //内容
+                if (user.headpic) {
+                    [_avatarButton setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:user.headpic Size:100]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+                }else{
+                    [_avatarButton setImage:[UIImage imageNamed:@"avatar_default"] forState:UIControlStateNormal];
+                }
+                [useName setText:user.nick];
+                [useName setTextColor:[tools colorWithIndex:[user.actor_level intValue]]];
+                
+            }
+        } withuid:post.uid];
+        
+    }
+    
+    if (post.imageURL.length > 4 || post.excount > 0) {
+        switch (indexPath.row) {
+            case 1:
+            {
+                XCJContentTypesCell *contentCell = (XCJContentTypesCell *) cell;
+                if (post.excount > 0) {
+                    if (post.excountImages.count <= 0 && !contentCell.isloadingphotos) {
+                        //check from networking
+                        //查看是否有缓存
+                        NSString * cacheKey = [NSString stringWithFormat:@"post.readex.%@",post.postid];
+                        NSArray * cahceArray = [[EGOCache globalCache] plistForKey:cacheKey];
+                        //            SLog(@"cahceArray :%@",cahceArray);
+                        if (cahceArray && cahceArray.count > 0) {
+                            NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                            [[cahceArray mutableCopy] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                                [arrayURLS addObject:stringurl];
+                            }];
+                            post.excountImages = arrayURLS ;
+                            contentCell.isloadingphotos = NO;
+                        }else{
+                            contentCell.isloadingphotos = YES;
+                            //             [cell.imageListScroll showIndicatorViewBlue];
+                            [[MLNetworkingManager sharedManager] sendWithAction:@"post.readex" parameters:@{@"postid":post.postid} success:^(MLRequest *request, id responseObject) {
+                                if (responseObject) {
+                                    NSDictionary  * result = responseObject[@"result"];
+                                    NSArray * array = result[@"exdata"];
+                                    if (array.count > 0) {
+                                        [[EGOCache globalCache]  setPlist:[array mutableCopy] forKey:cacheKey];
+                                    }
+                                    NSMutableArray * arrayURLS  = [[NSMutableArray alloc] init];
+                                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                        NSString * stringurl = [DataHelper getStringValue:obj[@"picture"] defaultValue:@"" ];
+                                        [arrayURLS addObject:stringurl];
+                                    }];
+                                    [post.excountImages removeAllObjects];
+                                    [post.excountImages addObjectsFromArray:arrayURLS];
+                                    //    [_tableView reloadData];
+                                    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                }
+                                contentCell.isloadingphotos = NO;
+                            } failure:^(MLRequest *request, NSError *error) {
+                                contentCell.isloadingphotos = NO;
+                            }];
+                        }
+                        
+                    }
+                }
+                
+                UIView * imageListScroll = [cell.contentView subviewWithTag:1];
+                /*
+                 *  多图模式
+                 */
+                if (post.excount > 0) {
+                    [imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        ((UIView *)obj).hidden = YES;
+                    }];
+                    if (post.excountImages.count <= 0 ) {//&& !self.isloadingphotos
+                        
+                    }else{
+                        //有数据
+                        [post.excountImages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                            NSString * stringurl = obj;
+                            int row = idx/colNumber;
+                            UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(65*(idx%colNumber)+TITLE_jianxi*(idx%colNumber+1), (65+TITLE_jianxi) * row, 65, 65)];
+                            iv.contentMode = UIViewContentModeScaleAspectFill;
+                            iv.clipsToBounds = YES;
+                            iv.tag = idx;
+                            if([stringurl containString:@"assets-library://asset/"])
+                            {
+                                //系统图片
+                                [iv setImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                                
+                                ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+                                [library assetForURL:[NSURL URLWithString:stringurl]
+                                         resultBlock:^(ALAsset *asset) {
+                                             
+                                             // Here, we have the asset, let's retrieve the image from it
+                                             
+                                             CGImageRef imgRef = asset.thumbnail;// [[asset defaultRepresentation] fullResolutionImage];
+                                             
+                                             /* Instead of the full res image, you can ask for an image that fits the screen
+                                              CGImageRef imgRef  = [[asset defaultRepresentation] fullScreenImage];
+                                              */
+                                             // From the CGImage, let's build an UIImage
+                                             UIImage *  imatgetemporal = [UIImage imageWithCGImage:imgRef];
+                                             [iv setImage:imatgetemporal];
+                                             
+                                         } failureBlock:^(NSError *error) {
+                                             
+                                             // Something wrong happened.
+                                             
+                                         }];
+                            }else {
+                                [iv setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:stringurl Size:100]] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                            }
+                            iv.userInteractionEnabled = YES;
+                            UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
+                            [iv addGestureRecognizer:tapges];
+                            //                [iv setFullScreenImageURL:[NSURL URLWithString:stringurl]];
+                            // add self view
+                            [imageListScroll addSubview:iv];
+                        }];
+                        //            [self.imageListScroll layoutIfNeeded];
+                    }
+                    float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
+                    if (post.excount%colNumber>0) {
+                        imageviewHeight += TITLE_jianxi+65;
+                    }
+                    imageListScroll.frame = CGRectMake(10, 5, 255.0, imageviewHeight);
+                    imageListScroll.hidden = NO;
+                }
+            }
+                break;
+            case 3:
+            {
+                
+            }
+                break;
+            default:
+                break;
+        }
+        
+    }
+}
+
+-(void) SeeBigImageviewmulitClick:(id) sender
+{
+    UITapGestureRecognizer * ges = sender;
+    UIImageView *buttonSender = (UIImageView *)ges.view;
+    UITableViewCell * cell = (UITableViewCell *)buttonSender.superview.superview.superview.superview;
+    XCJGroupPost_list * post = self.activities[ [self.tableviewself indexPathForCell:cell].section];
+    if (post.excount > 0) {
+        NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:post.excountImages];
+        // Create and setup browser
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+        //        browser.delegate = self;
+        browser.displayActionButton = NO;
+        browser.displayArrowButton = YES;
+        browser.displayCounterLabel = YES;
+        [browser setInitialPageIndex:buttonSender.tag];
+        if (buttonSender.image) {
+            browser.scaleImage = buttonSender.image;        // Show
+        }
+        
+        [self presentViewController:browser animated:YES completion:nil];
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {

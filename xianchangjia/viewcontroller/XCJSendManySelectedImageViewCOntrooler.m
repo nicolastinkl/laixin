@@ -158,10 +158,10 @@
         if (string.length > 20) {
             NSString * straddress = [string substringToIndex:20];
             [self.button setTitle:straddress forState:UIControlStateNormal];
-              [self.button setWidth:( straddress.length * 10.0f)];
+              [self.button setWidth:( straddress.length * 15.0f)];
         }else{
             [self.button setTitle:string forState:UIControlStateNormal];
-              [self.button setWidth:( string.length * 10.0f)];
+              [self.button setWidth:( string.length * 15.0f)];
         }
       
         [self.button hideIndicatorViewBlueOrGary];
@@ -172,10 +172,10 @@
         if (addressString.length > 29) {
             NSString * straddress = [addressString substringToIndex:29];
             [self.button setTitle:[NSString stringWithFormat:@"%@...",straddress] forState:UIControlStateNormal];
-            [self.button setWidth:( straddress.length * 10.0f)];
+            [self.button setWidth:( straddress.length * 15.0f)];
         }else{
             [self.button setTitle:addressString forState:UIControlStateNormal];
-            [self.button setWidth:( addressString.length * 10.0f)];
+            [self.button setWidth:( addressString.length * 15.0f)];
         }
         [self.button hideIndicatorViewBlueOrGary];
     }];
@@ -243,11 +243,15 @@
                     }];
                     glist.excountImages = array;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"StartPostUploadimages" object:@([array count])];
+
                 }
-                [_needRefreshViewController.activities insertObject:glist atIndex:0];
-                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
-                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
-               
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"StartRefershNewPostInfo" object:glist];
+                
+//                [_needRefreshViewController.activities insertObject:glist atIndex:0];
+//                [_needRefreshViewController.cellHeights insertObject:@0 atIndex:0];
+//                [_needRefreshViewController reloadSingleActivityRowOfTableView:0 withAnimation:YES];
+                
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
                 [UIAlertView showAlertViewWithMessage:@"发送失败"];
