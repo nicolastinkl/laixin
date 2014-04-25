@@ -1,0 +1,22 @@
+PODS:
+  - JLRoutes (1.5)
+  - ReactiveCocoa (2.3):
+    - ReactiveCocoa/Core
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/Core (2.3):
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/no-arc (2.3)
+  - ReactiveViewModel (0.2):
+    - ReactiveCocoa (~> 2.1)
+
+DEPENDENCIES:
+  - JLRoutes (~> 1.5)
+  - ReactiveCocoa (~> 2.3)
+  - ReactiveViewModel (~> 0.2)
+
+SPEC CHECKSUMS:
+  JLRoutes: 377be327c3070c5b7131e4fc3debdbe0fd704939
+  ReactiveCocoa: 1f6265f9d521923d3efcc37b00722cefc16df269
+  ReactiveViewModel: f636ab3e06b5e69664b69c883fcdb457ab5cb0cb
+
+COCOAPODS: 0.32.1
