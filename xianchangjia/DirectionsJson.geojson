@@ -1,5 +1,0 @@
-{
-    "type": "MultiPolygon",
-    "coordinates": [{"distance":903862.6077800989,"user_num":0,"name":"南京测试圈","showcase_image":"http://app.kidswant.com.cn/27194ecf9b8e402f7db5cd754afd79bc.jpg","latitude":32040204,"detail_url":"http://app.kidswant.com.cn/h/scene/IbrPV0rJJ?sessionid=f57c653a8b55496db0f9abf4e8843524","type":2,"id":126087,"longitude":118815142,"description":"我在测试"},{"distance":904752.5897585873,"user_num":1,"name":"孩子王建邺万达店","showcase_image":"http://app.kidswant.com.cn/ae175cda9a3724736d7d025d84f9fb7f.jpg","latitude":32032001,"detail_url":"http://app.kidswant.com.cn/h/scene/I18kWYdJ7?sessionid=f57c653a8b55496db0f9abf4e8843524","type":2,"id":126088,"longitude":118815142,"description":"测试2"}]
-    
-}
