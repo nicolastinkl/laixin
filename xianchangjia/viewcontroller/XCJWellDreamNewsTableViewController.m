@@ -210,7 +210,6 @@
        [ webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://mp.weixin.qq.com/s?__biz=MjM5MDI0MzMxMw==&mid=200246465&idx=1&sn=76577eebb9c4a89e30f073e9e3267a4a"]]];
         webview.height = APP_SCREEN_HEIGHT - 64;
     }
-   
     
     return cell;
 }

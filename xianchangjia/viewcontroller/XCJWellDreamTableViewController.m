@@ -10,9 +10,9 @@
 #import "UIButton+WebCache.h"
 #import "XCAlbumAdditions.h"
 #import "PWLoadMoreTableFooterView.h"
-#import <OHAttributedLabel/OHAttributedLabel.h>
-#import <OHAttributedLabel/NSAttributedString+Attributes.h>
-#import <OHAttributedLabel/OHASBasicMarkupParser.h>
+//#import <OHAttributedLabel/OHAttributedLabel.h>
+//#import <OHAttributedLabel/NSAttributedString+Attributes.h>
+//#import <OHAttributedLabel/OHASBasicMarkupParser.h>
 #import "XCJGroupPost_list.h"
 #import "FCUserDescription.h"
 #import "IDMPhotoBrowser.h"
@@ -22,6 +22,7 @@
 #import "SBSegmentedViewController.h"
 #import "XCJAddUserTableViewController.h"
 #import "XCJAppDelegate.h"
+#import "YLLabel.h"
 
 
 #define DISTANCE_BETWEEN_ITEMS  9.0
@@ -40,8 +41,8 @@ enum ENUMLoadMoreData {
 };
 
 #define kAttributedLabelTag 211
-
-@interface XCJWellDreamTableViewController ()<PWLoadMoreTableFooterDelegate,OHAttributedLabelDelegate,UIActionSheetDelegate>
+///OHAttributedLabelDelegate
+@interface XCJWellDreamTableViewController ()<PWLoadMoreTableFooterDelegate,UIActionSheetDelegate>
 {
     NSMutableArray * groupList;
     PWLoadMoreTableFooterView *_loadMoreFooterView;
@@ -73,9 +74,9 @@ enum ENUMLoadMoreData {
      */
     [self _init];
     
-    [[OHAttributedLabel appearance] setLinkColor:ios7BlueColor];
-    [[OHAttributedLabel appearance] setHighlightedLinkColor:[UIColor colorWithWhite:0.4 alpha:0.3]];
-    [[OHAttributedLabel appearance] setLinkUnderlineStyle:kCTUnderlineStyleNone];
+//    [[OHAttributedLabel appearance] setLinkColor:ios7BlueColor];
+//    [[OHAttributedLabel appearance] setHighlightedLinkColor:[UIColor colorWithWhite:0.4 alpha:0.3]];
+//    [[OHAttributedLabel appearance] setLinkUnderlineStyle:kCTUnderlineStyleNone];
    
     _Currentgid = @"61";
     
@@ -386,15 +387,13 @@ enum ENUMLoadMoreData {
 
 -(float) textHeight:(NSString *) text
 {
-    NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:text];
-    [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-    [mas setTextColor:[UIColor blackColor]];
-    [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-    [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-    CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
-    return sizeToFit.height + 20;
+    CGFloat maxWidth = 300.0f;//[UIScreen mainScreen].applicationFrame.size.width * 0.70f;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    CGSize sizeToFit = [text sizeWithFont:[UIFont systemFontOfSize:16.0f] constrainedToSize:CGSizeMake(maxWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+#pragma clang diagnostic pop
+    return  fmaxf(20.0f, sizeToFit.height + 20.0f );
 }
-
 
 -(IBAction)commentClick:(id)sender
 {
@@ -473,7 +472,6 @@ enum ENUMLoadMoreData {
     [actionsheet showInView:self.view];
 }
 
-
 #pragma mark cellfor
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -486,39 +484,29 @@ enum ENUMLoadMoreData {
             case 1:
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"TKCONTENTCELL" forIndexPath:indexPath];
-                
             }
                 break;
             case 2:
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
                 
-                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+                UILabel* labelContent = (UILabel*)[cell viewWithTag:kAttributedLabelTag];
                 if (labelContent == nil) {
-                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-                    labelContent.centerVertically = YES;
-                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
-                    labelContent.delegate = self;
-                    labelContent.highlightedTextColor = [UIColor whiteColor];
+                    labelContent = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
                     labelContent.tag = kAttributedLabelTag;
+                    labelContent.numberOfLines = 0;
+                    labelContent.lineBreakMode = NSLineBreakByCharWrapping;
+                    labelContent.font = [UIFont systemFontOfSize:16.0f];
                     [cell addSubview:labelContent];
                     //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
                 }
-                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
-                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-                [mas setTextColor:[UIColor blackColor]];
-                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-                
-                labelContent.attributedText = mas;
+                labelContent.text = [NSString stringWithFormat:@"%@",post.content];
                 [labelContent sizeToFit];
-                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
                 
-                [labelContent setWidth:sizeToFit.width];
-                [labelContent setHeight:sizeToFit.height];
+                [labelContent setWidth:300.0f];
+                [labelContent setHeight:[self textHeight:[NSString stringWithFormat:@"%@",post.content]]];
                 
-                [labelContent setTop:10.0f];
+                [labelContent setTop:0.0f];
                 [labelContent setLeft:10.0f];
             }
                 break;
@@ -529,6 +517,8 @@ enum ENUMLoadMoreData {
                 UIButton * buttonComment =(UIButton *)  [cell.contentView subviewWithTag:1];
                 UIButton * buttonLike =(UIButton *)  [cell.contentView subviewWithTag:2];
                 UIButton * buttonHSare =(UIButton *)  [cell.contentView subviewWithTag:3];
+                UIView * lineView =[cell.contentView subviewWithTag:5];
+                [lineView setHeight:0.5];
                 [buttonComment setTitle:[NSString stringWithFormat:@"%d",post.replycount] forState:UIControlStateNormal];
                 [buttonLike setTitle:[NSString stringWithFormat:@"%d",post.like] forState:UIControlStateNormal];
                 [self refreshbutton:buttonLike withdata:post];
@@ -547,33 +537,24 @@ enum ENUMLoadMoreData {
             case 1:
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"TKREICKTEXTCELL" forIndexPath:indexPath];
-                OHAttributedLabel* labelContent = (OHAttributedLabel*)[cell viewWithTag:kAttributedLabelTag];
+                UILabel* labelContent = (UILabel*)[cell viewWithTag:kAttributedLabelTag];
                 if (labelContent == nil) {
-                    labelContent = [[OHAttributedLabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
-                    labelContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-                    labelContent.centerVertically = YES;
-                    labelContent.automaticallyAddLinksForType = NSTextCheckingAllTypes;
-                    labelContent.delegate = self;
-                    labelContent.highlightedTextColor = [UIColor whiteColor];
+                    labelContent = [[UILabel alloc] initWithFrame:CGRectMake(0,0,0,0)];
                     labelContent.tag = kAttributedLabelTag;
+                    labelContent.numberOfLines = 0;
+                    labelContent.lineBreakMode = NSLineBreakByCharWrapping;
+                    labelContent.font = [UIFont systemFontOfSize:16.0f];
                     [cell addSubview:labelContent];
-                    //    labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
+                    //  labelContent.backgroundColor = [UIColor colorWithRed:0.142 green:1.000 blue:0.622 alpha:0.210];
                 }
-                NSMutableAttributedString* mas = [NSMutableAttributedString attributedStringWithString:[NSString stringWithFormat:@"%@",post.content]];
-                [mas setFont:[UIFont systemFontOfSize: 16.0f]];
-                [mas setTextColor:[UIColor blackColor]];
-                [mas setTextAlignment:kCTTextAlignmentLeft lineBreakMode:kCTLineBreakByCharWrapping];
-                [OHASBasicMarkupParser processMarkupInAttributedString:mas];
-                
-                labelContent.attributedText = mas;
+                labelContent.text = [NSString stringWithFormat:@"%@",post.content];
                 [labelContent sizeToFit];
-                CGSize sizeToFit = [mas sizeConstrainedToSize:CGSizeMake(300.0f, CGFLOAT_MAX)];
                 
-                [labelContent setWidth:sizeToFit.width];
-                [labelContent setHeight:sizeToFit.height];
-                [labelContent setTop:10.0f];
+                [labelContent setWidth:300.0f];
+                [labelContent setHeight:[self textHeight:[NSString stringWithFormat:@"%@",post.content]]];
+                
+                [labelContent setTop:0.0f];
                 [labelContent setLeft:10.0f];
-                
             }
                 break;
             case 2:
@@ -604,8 +585,8 @@ enum ENUMLoadMoreData {
     if(indexPath.row == 0){ //通用
         cell = [tableView dequeueReusableCellWithIdentifier:@"TKUSERCELL" forIndexPath:indexPath];
         UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
-        _avatarButton.layer.cornerRadius = 35/2;
-        _avatarButton.layer.masksToBounds = YES;
+//        _avatarButton.layer.cornerRadius = 35/2;
+//        _avatarButton.layer.masksToBounds = YES;
         [_avatarButton addTarget:self action:@selector(seeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     // Configure the cell...
@@ -814,7 +795,7 @@ enum ENUMLoadMoreData {
         [self presentViewController:browser animated:YES completion:nil];
     }
 }
-
+/*
 /////////////////////////////////////////////////////////////////////////////
 #pragma mark - OHAttributedLabel Delegate Method
 /////////////////////////////////////////////////////////////////////////////
@@ -852,7 +833,7 @@ enum ENUMLoadMoreData {
     
     return NO;
 }
-
+*/
 
 #pragma mark actionSheet delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -875,7 +856,6 @@ enum ENUMLoadMoreData {
                     [UIAlertView showAlertViewWithMessage:@"打开失败"];
                 }
             }
-            
         }
     
     }else if (actionSheet.tag == 2) {
