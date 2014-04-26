@@ -853,11 +853,16 @@
                 break;
             case 1:
             {
-                float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
-                if (post.excount%colNumber>0) {
-                    imageviewHeight += TITLE_jianxi+65;
+                if (post.excount > 0) {
+                    
+                    float imageviewHeight = (post.excount/colNumber)*65 +(post.excount/colNumber)*TITLE_jianxi;
+                    if (post.excount%colNumber>0) {
+                        imageviewHeight += TITLE_jianxi+65;
+                    }
+                    return imageviewHeight + 10; //content
+                }else{
+                    return 320.0f;
                 }
-                return imageviewHeight + 10; //content
             }
                 break;
             case 2:
@@ -987,7 +992,6 @@
             case 1:
             {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"TKCONTENTCELL" forIndexPath:indexPath];
-                
                 
             }
                 break;
@@ -1249,6 +1253,48 @@
                     }
                     imageListScroll.frame = CGRectMake(10, 5, 255.0, imageviewHeight);
                     imageListScroll.hidden = NO;
+                }else{
+                    //单图模式
+                    [imageListScroll.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        ((UIView *)obj).hidden = YES;
+                    }];
+                    int idx = 0 ;
+                    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(TITLE_jianxi, 0, 300-TITLE_jianxi, 320)];
+                    iv.contentMode = UIViewContentModeScaleAspectFill;
+                    iv.clipsToBounds = YES;
+                    iv.tag = idx;
+                    if([post.imageURL containString:@"assets-library://asset/"])
+                    {
+                        //系统图片
+                        [iv setImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                        ALAssetsLibrary* library = [[ALAssetsLibrary alloc] init];
+                        [library assetForURL:[NSURL URLWithString:post.imageURL]
+                                 resultBlock:^(ALAsset *asset) {
+                                     
+                                     // Here, we have the asset, let's retrieve the image from it
+                                     
+                                     CGImageRef imgRef = asset.thumbnail;// [[asset defaultRepresentation] fullResolutionImage];
+                                     
+                                     /* Instead of the full res image, you can ask for an image that fits the screen
+                                      CGImageRef imgRef  = [[asset defaultRepresentation] fullScreenImage];
+                                      */
+                                     // From the CGImage, let's build an UIImage
+                                     UIImage *  imatgetemporal = [UIImage imageWithCGImage:imgRef];
+                                     [iv setImage:imatgetemporal];
+                                     
+                                 } failureBlock:^(NSError *error) {
+                                     
+                                     // Something wrong happened.
+                                     
+                                 }];
+                    }else {
+                     [iv setImageWithURL:[NSURL URLWithString:post.imageURL] placeholderImage:[UIImage imageNamed:@"aio_ogactivity_default"]];
+                    }
+                    iv.userInteractionEnabled = YES;
+                    UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
+                    [iv addGestureRecognizer:tapges];
+                    [imageListScroll addSubview:iv];
+                    
                 }
             }
                 break;
@@ -1279,6 +1325,20 @@
         browser.displayArrowButton = YES;
         browser.displayCounterLabel = YES;
         [browser setInitialPageIndex:buttonSender.tag];
+        if (buttonSender.image) {
+            browser.scaleImage = buttonSender.image;        // Show
+        }
+        
+        [self presentViewController:browser animated:YES completion:nil];
+    }else
+    {
+        NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:@[post.imageURL]];
+        // Create and setup browser
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+        //        browser.delegate = self;
+        browser.displayActionButton = NO;
+        browser.displayArrowButton = YES;
+        browser.displayCounterLabel = YES;
         if (buttonSender.image) {
             browser.scaleImage = buttonSender.image;        // Show
         }

@@ -321,7 +321,7 @@
                 glist.time = [[NSDate date] timeIntervalSinceNow];//[NSDate timeIntervalSinceReferenceDate];
                 NSMutableArray * array = [[NSMutableArray alloc] init];
                 glist.comments = array;
-                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"StartRefershNewPostInfo" object:glist];
                 //[[NSDate date] timeIntervalSinceNow];
                 
 //                [_needRefreshViewController.activities insertObject:glist atIndex:0];

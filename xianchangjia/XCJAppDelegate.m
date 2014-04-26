@@ -1041,6 +1041,10 @@ static NSString * const kLaixinStoreName = @"Laixins";
             // 可以显示一个提示框告诉用户这个app没有得到允许？
         } 
     }];
+//    [[UINavigationBar appearance] setTranslucent:YES];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigationbarbg"] forBarPosition:UIBarPositionTopAttached barMetrics:UIBarMetricsDefault];
+     
+//    [[UINavigationBar appearance] setTranslucent:YES];
     
     [JLRoutes addRoute:@"/user/view/:userID" handler:^BOOL(NSDictionary *parameters) {
         NSString *userID = parameters[@"userID"];
@@ -1156,12 +1160,23 @@ static NSString * const kLaixinStoreName = @"Laixins";
         self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
         self.tabBarController.delegate = self;
     }
-//    [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabBarBackground"]];
+    //
+    if ([UITabBar instancesRespondToSelector:@selector(setSelectedImageTintColor:)]) {
+        [self.tabBarController.tabBar setSelectedImageTintColor:iosLXSystemColor];
+    }
+    
+//   [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabbarbgLarge"]];
     //     [self.tabBarController.tabBar.items[0] setBadgeValue:@"New"];
     
 //    UIImage * tabBG =  [UIImage imageNamed:@"tabBarBackground"];
 //    tabBG =  [tabBG imageWithAlignmentRectInsets:UIEdgeInsetsMake(1,1,1,1)];
 //    [self.tabBarController.tabBar setBackgroundImage:tabBG];
+    
+    {
+        UITabBarItem * item = self.tabBarController.tabBar.items[0];
+        item.selectedImage = [UIImage imageNamed:@"index_msg"];
+    }
+    
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[2];
         item.selectedImage = [UIImage imageNamed:@"tabBarRecentsIconSelected"];
@@ -1169,10 +1184,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[1];
         item.selectedImage = [UIImage imageNamed:@"index_friends_hi"];
-    }
-    {
-        UITabBarItem * item = self.tabBarController.tabBar.items[0];
-        item.selectedImage = [UIImage imageNamed:@"index_msg"];
     }
     {
         UITabBarItem * item = self.tabBarController.tabBar.items[3];
