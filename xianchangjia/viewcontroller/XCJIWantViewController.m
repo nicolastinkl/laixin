@@ -203,12 +203,12 @@
     switch (indexPath.section) {
         case 0:
         {
-            [UIAlertView showAlertViewWithMessage:@"该功能需要向‘来信小助手’申请权限才能进入"];
+//            [UIAlertView showAlertViewWithMessage:@"该功能需要向‘来信小助手’申请权限才能进入"];
             
 //            NSURL *viewUserURL = [NSURL URLWithString:@"myapp://user/view/joeldev"];
 //            [[UIApplication sharedApplication] openURL:viewUserURL];
             
-            return;
+//            return;
             
             NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
