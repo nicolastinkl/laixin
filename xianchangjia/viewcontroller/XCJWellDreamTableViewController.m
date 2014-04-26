@@ -23,6 +23,7 @@
 #import "XCJAddUserTableViewController.h"
 #import "XCJAppDelegate.h"
 #import "YLLabel.h"
+#import "UIButton+WebCache.h"
 
 
 #define DISTANCE_BETWEEN_ITEMS  9.0
@@ -51,6 +52,8 @@ enum ENUMLoadMoreData {
     NSString  *_Currentgid;
     NSString * CurrentUrl;
 }
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollview;
+@property (weak, nonatomic) IBOutlet UIPageControl *pagecontrol;
 
 @end
 
@@ -123,6 +126,50 @@ enum ENUMLoadMoreData {
     UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(JoinDreamClick:)];
     segmentedViewController.navigationItem.rightBarButtonItem = barOne;
     
+    self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
+    
+    [self.pagecontrol setCurrentPage:0];
+    self.pagecontrol.pageIndicatorTintColor = [UIColor lightGrayColor];//RGBACOLOR(195, 179, 163, 1);
+    self.pagecontrol.currentPageIndicatorTintColor = ios7BlueColor;//RGBACOLOR(132, 104, 77, 1);
+    self.pagecontrol.numberOfPages = 5;//指定页面个数
+    [self.pagecontrol setBackgroundColor:[UIColor clearColor]];
+    
+    NSArray * arrayURL = @[@"http://gtms02.alicdn.com/tps/i2/T1rZOXFUtaXXazuKP7-520-280.jpg",
+                           @"http://i.mmcdn.cn/simba/img/T1BfAEFqXdXXb1upjX.jpg",
+                           @"http://gtms01.alicdn.com/tps/i1/T1KUh_FMVXXXazuKP7-520-280.jpg",
+                           @"http://gtms04.alicdn.com/tps/i4/T1sGhpFH0cXXc2jIrl-250-125.png",
+                           @"http://i.mmcdn.cn/simba/img/T1gRXaFLBdXXb1upjX.jpg"];
+    
+    [arrayURL enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop) {
+        UIButton *fview=[[UIButton alloc] initWithFrame:CGRectMake(320*i, 0, 320, 200)];
+        [fview setImageWithURL:[NSURL URLWithString:obj] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@""]];
+        fview.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        [self.scrollview addSubview:fview];
+        fview.tag = i;
+        [fview addTarget:self action:@selector(seeDesinfoClick:) forControlEvents:UIControlEventTouchUpInside];
+    }];
+    [self.scrollview setShowsVerticalScrollIndicator:NO];
+    [self.scrollview setShowsHorizontalScrollIndicator:NO];
+    self.scrollview.contentSize=CGSizeMake(320*5, 200);
+}
+
+-(IBAction)seeDesinfoClick:(id)sender
+{
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollViewDat
+{
+    
+    if (scrollViewDat && scrollViewDat == self.scrollview) {
+        int page = self.scrollview.contentOffset.x / 320;//通过滚动的偏移量来判断目前页面所对应的小白点
+        self.pagecontrol.currentPage = page;//pagecontroll响应值的变化
+    }
+}
+
+- (IBAction)pagevaluechange:(id)sender {
+    int page = self.pagecontrol.currentPage;//获取当前pagecontroll的值
+    [self.scrollview setContentOffset:CGPointMake(320 * page, 0)];//根据pagecontroll的值来改变scrollview的滚动位置，以此切换到指定的页面
 }
 
 -(IBAction)JoinDreamClick:(id)sender

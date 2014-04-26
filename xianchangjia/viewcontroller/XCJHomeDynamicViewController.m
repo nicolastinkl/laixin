@@ -1294,6 +1294,9 @@
                     UITapGestureRecognizer * tapges = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(SeeBigImageviewmulitClick:)];
                     [iv addGestureRecognizer:tapges];
                     [imageListScroll addSubview:iv];
+                    imageListScroll.frame = CGRectMake(10, 5, 300-TITLE_jianxi, 320);
+                    imageListScroll.hidden = NO;
+                    
                     
                 }
             }
@@ -1332,9 +1335,10 @@
         [self presentViewController:browser animated:YES completion:nil];
     }else
     {
-        NSArray * arrayPhotos  = [IDMPhoto photosWithURLs:@[post.imageURL]];
+       IDMPhoto * photo = [IDMPhoto photoWithURL:[NSURL URLWithString:post.imageURL]];
+        photo.caption = [NSString stringWithFormat:@"%@",post.content];
         // Create and setup browser
-        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:arrayPhotos animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
+        IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:@[photo] animatedFromView:buttonSender]; // using initWithPhotos:animatedFromView: method to use the zoom-in animation
         //        browser.delegate = self;
         browser.displayActionButton = NO;
         browser.displayArrowButton = YES;
