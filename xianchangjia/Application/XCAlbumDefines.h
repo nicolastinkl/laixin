@@ -27,7 +27,7 @@ typedef enum {
 	KMessage_private_Location = 3,  //location
 } KMessage_private_user_Msg_type;
 
-#define NEED_OUTPUT_LOG                     1  // 0 relese  1 debug
+#define NEED_OUTPUT_LOG                     0  // 0 relese  1 debug
 
 #define LaixinSetupDBMessageNotification    @"com.laixin.LaixinSetupDBMessageNotification"
 #define LaixinCloseDBMessageNotification    @"com.laixin.LaixinCloseDBMessageNotification"
@@ -72,7 +72,6 @@ typedef enum {
 #define KSingerCount                        @"KSingerCountTINKL"
 
 #define APP_CACHES_PATH                     [NSSearchPathForDirectoriesInDomains (NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
-
 
 #define UIColorFromRGB(rgbValue)    [UIColor colorWithRed:((float)((rgbValue&0xFF0000)>>16))/255.0 green:((float)((rgbValue&0xFF00)>>8))/255.0 blue:((float)(rgbValue&0xFF))/255.0 alpha:1.0]
 
