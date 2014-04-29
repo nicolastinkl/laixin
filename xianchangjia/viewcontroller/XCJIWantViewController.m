@@ -97,7 +97,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 4;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -124,46 +124,46 @@
 
     // Configure the cell...
     switch (indexPath.section) {
+            /*case 0:
+             {
+             image_bgSign.image = [UIImage imageNamed:@"file_icon_history"];
+             
+             label_name.text = @"群组动态";
+             NSPredicate * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
+             
+             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
+             if (contr) {
+             if ([contr.badgeNumber intValue ] > 0 || [contr.content isEqualToString:@"新朋友圈消息"]) {
+             if([contr.badgeNumber intValue ] > 0)
+             badage.text = [NSString stringWithFormat:@"%@",contr.badgeNumber];
+             badage.hidden = NO;
+             [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id resobj, NSError *error) {
+             if(resobj)
+             {
+             
+             FCUserDescription * localdespObject = resobj;
+             [imageSign setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
+             }
+             
+             } withuid:contr.uid];
+             imageSign.hidden = NO;
+             image_New.hidden = NO;
+             [image_New setFrame:CGRectMake(273, 2, 10, 10)];
+             }else{
+             image_New.hidden = YES;
+             badage.hidden = YES;
+             imageSign.hidden = YES;
+             }
+             }else{
+             badage.text = @"";
+             badage.hidden = YES;
+             image_New.hidden = YES;
+             
+             imageSign.hidden = YES;
+             }
+             }
+             break;*/
         case 0:
-        {
-            image_bgSign.image = [UIImage imageNamed:@"file_icon_history"];
-            
-           label_name.text = @"群组动态";
-            NSPredicate * pre = [NSPredicate predicateWithFormat:@"postid > %@",@"0"];
-            
-            ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-            if (contr) {
-                if ([contr.badgeNumber intValue ] > 0 || [contr.content isEqualToString:@"新朋友圈消息"]) {
-                    if([contr.badgeNumber intValue ] > 0)
-                        badage.text = [NSString stringWithFormat:@"%@",contr.badgeNumber];
-                    badage.hidden = NO;
-                    [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesPtionCompletion:^(id resobj, NSError *error) {
-                        if(resobj)
-                        {
-                            
-                            FCUserDescription * localdespObject = resobj;
-                            [imageSign setImageWithURL:[NSURL URLWithString:[tools getUrlByImageUrl:localdespObject.headpic Size:100]]];
-                        }
-                        
-                    } withuid:contr.uid];
-                    imageSign.hidden = NO;
-                    image_New.hidden = NO;
-                    [image_New setFrame:CGRectMake(273, 2, 10, 10)];
-                }else{
-                     image_New.hidden = YES;
-                     badage.hidden = YES;
-                    imageSign.hidden = YES;
-                }
-            }else{
-                badage.text = @"";
-                badage.hidden = YES;
-                image_New.hidden = YES;
-                
-                imageSign.hidden = YES;
-            }
-        }
-            break;
-        case 1:
         {
             image_bgSign.image = [UIImage imageNamed:@"file_icon_cloud"];
             label_name.text = @"来抢";
@@ -173,7 +173,7 @@
         }
             break;
             
-        case 2:
+        case 1:
             //@"group_avatar_default_0"
             image_bgSign.image = [UIImage imageNamed:@"tb_icon_menu_weitao_normal"];
             label_name.text = @"来活动";
@@ -182,7 +182,7 @@
             [image_New setFrame:CGRectMake(273, 17, 10, 10)];
          
             break;
-        case 3:
+        case 2:
             //@"group_avatar_default_0"
             image_bgSign.image = [UIImage imageNamed:@"opengroup_everjoin_icon"];
             label_name.text = @"来信&新声带";
@@ -201,24 +201,24 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     switch (indexPath.section) {
+            /*        case 0:
+             {
+             //            [UIAlertView showAlertViewWithMessage:@"该功能需要向‘来信小助手’申请权限才能进入"];
+             
+             //            NSURL *viewUserURL = [NSURL URLWithString:@"myapp://user/view/joeldev"];
+             //            [[UIApplication sharedApplication] openURL:viewUserURL];
+             
+             //            return;
+             
+             NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
+             ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
+             XCJFriendGroupViewController *viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFriendGroupViewController"];
+             viewcontr.conversation = contr;
+             [viewcontr hasNewPostInfo];
+             [self.navigationController pushViewController:viewcontr animated:YES];
+             }
+             break;*/
         case 0:
-        {
-//            [UIAlertView showAlertViewWithMessage:@"该功能需要向‘来信小助手’申请权限才能进入"];
-            
-//            NSURL *viewUserURL = [NSURL URLWithString:@"myapp://user/view/joeldev"];
-//            [[UIApplication sharedApplication] openURL:viewUserURL];
-            
-//            return;
-            
-            NSPredicate * pre = [NSPredicate predicateWithFormat:@"badgeNumber > %@",@"0"];
-            ConverReply * contr =   [ConverReply MR_findFirstWithPredicate:pre];
-            XCJFriendGroupViewController *viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJFriendGroupViewController"];
-            viewcontr.conversation = contr;
-            [viewcontr hasNewPostInfo];
-            [self.navigationController pushViewController:viewcontr animated:YES];
-        }
-           break;
-        case 1:
         {
             if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
                 PPPinPadViewController * pinViewController = [[PPPinPadViewController alloc] init];
@@ -236,14 +236,14 @@
             
         }
             break;
-        case 2:
+        case 1:
         {
             XCJNearbyInviteViewContr*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJNearbyInviteViewContr"];
             viewcontr.title = @"来活动";
             [self.navigationController pushViewController:viewcontr animated:YES];
         }
             break;
-        case 3:
+        case 2:
         {
             if ( [USER_DEFAULT boolForKey:KeyChain_Laixin_dream_goodvoice]) {
                 [self openDreamGoodVoice];

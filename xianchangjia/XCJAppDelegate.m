@@ -311,6 +311,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
             }
         }else if ([eventType isEqualToString:@"newlike"])
         {
+#warning new like
+            return;
             //被喜欢的照片
             NSDictionary * dicResult = MsgContent[@"data"];
             NSDictionary  * likeDict = dicResult[@"like"];
@@ -348,6 +350,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MainappControllerUpdateDataReplyMessage" object:nil];
         }else if ([eventType isEqualToString:@"newreply"])
         {
+#warning new like
+            return;
             //被评论的帖子
             NSDictionary * dicResult = MsgContent[@"data"];
             NSDictionary  *replyDict = dicResult[@"reply"];
@@ -460,6 +464,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
             }
             msg.text = content;
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            receiveTime += 20;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
             msg.sentDate = date;
             // message did come, this will be on left
@@ -529,7 +534,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
             [self updateMessageTabBarItemBadge];
             
         }else if([eventType isEqualToString:@"newpost"]){
-            
             NSDictionary * dicResult = MsgContent[@"data"];
             
             NSDictionary * dicMessage = dicResult[@"post"];
@@ -583,6 +587,10 @@ static NSString * const kLaixinStoreName = @"Laixins";
                     
                 } withuid:uid];
             }
+            
+            
+#warning newpost
+            return;
             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:dicMessage];
             int oldpostid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_FriendGroup_messageID];
             if (oldpostid <= 0 || oldpostid != [post.postid intValue]) {
@@ -1342,7 +1350,6 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 {
                     //MARK THIS
                     NSString *facebookID = [tools getStringValue:obj[@"fromid"] defaultValue:@""];
-                    
                     //out view
                     NSString * content = [tools getStringValue:obj[@"content"] defaultValue:@""];
                     NSString * imageurl = [tools getStringValue:obj[@"picture"] defaultValue:@""];
@@ -1463,7 +1470,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     }];
     
     //读取最新评论信息
-    
+    /*
     {
         int localreplyid = [USER_DEFAULT integerForKey:KeyChain_Laixin_Max_ReplyID];
         if (localreplyid > 0) {
@@ -1532,9 +1539,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
         NSDictionary * parames = @{@"count":@"1"};
         [[MLNetworkingManager sharedManager] sendWithAction:@"user.friend_timeline"  parameters:parames success:^(MLRequest *request, id responseObject) {
             //    postid = 12;
-            /*
-             Result={
-             “posts”:[*/
+           
             if (responseObject) {
                 NSDictionary * groups = responseObject[@"result"];
                 NSArray * postsDict =  groups[@"posts"];
@@ -1575,7 +1580,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
         } failure:^(MLRequest *request, NSError *error) {
         }];
     }
-    
+    */
     
 }
 

@@ -133,22 +133,24 @@
             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:[valueforKey firstObject]];
             UserDict[@"最新动态"] = post.content;
         }else{
-            [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
-                if (responseObject) {
-                    NSDictionary * dicreult = responseObject[@"result"];
-                    NSArray * array = dicreult[@"posts"];
-                    [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                        
-                        [[EGOCache globalCache] setPlist:@[obj] forKey:key withTimeoutInterval:60*3];
-                        
-                        XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                        UserDict[@"最新动态"] = post.content;
-                    }];
-                    [self.tableView reloadData];
-                }
-            } failure:^(MLRequest *request, NSError *error) {
-                
-            }];
+            /*
+             [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:@{@"uid":self.UserInfo.uid,@"count":@"1"} success:^(MLRequest *request, id responseObject) {
+             if (responseObject) {
+             NSDictionary * dicreult = responseObject[@"result"];
+             NSArray * array = dicreult[@"posts"];
+             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+             
+             [[EGOCache globalCache] setPlist:@[obj] forKey:key withTimeoutInterval:60*3];
+             
+             XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
+             UserDict[@"最新动态"] = post.content;
+             }];
+             [self.tableView reloadData];
+             }
+             } failure:^(MLRequest *request, NSError *error) {
+             
+             }];
+             */
         }
         
         

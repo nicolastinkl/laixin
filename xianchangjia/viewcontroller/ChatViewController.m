@@ -780,7 +780,6 @@
          {"push": true, "data": {"message": {"toid": 14, "msgid": 5, "content": "\u6211\u6765\u4e86sss", "fromid": 2, "time": 1388477804.0}}, "type": "newmsg"}
          */
       
-        
         NSDictionary * dicResult = MsgContent[@"data"];
         
         NSDictionary *  dicMessage = dicResult[@"message"];
@@ -802,6 +801,7 @@
             NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+            receiveTime += 20;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
             //                FCMessage  find this infomation
             NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];

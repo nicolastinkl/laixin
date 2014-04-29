@@ -849,7 +849,7 @@
     if (post.imageURL.length > 4 || post.excount > 0) {   //图片
         switch (indexPath.row) {
             case 0:
-                return 44.0f;
+                return 40;
                 break;
             case 1:
             {
@@ -1094,8 +1094,10 @@
     if(indexPath.row == 0){ //通用
         cell = [tableView dequeueReusableCellWithIdentifier:@"TKUSERCELL" forIndexPath:indexPath];
         UIButton * _avatarButton = (UIButton *) [cell.contentView subviewWithTag:1];
-        //        _avatarButton.layer.cornerRadius = 35/2;
-        //        _avatarButton.layer.masksToBounds = YES;
+        _avatarButton.layer.cornerRadius = 35/2;
+        _avatarButton.layer.masksToBounds = YES;
+        _avatarButton.layer.borderColor = [UIColor whiteColor].CGColor;
+        _avatarButton.layer.borderWidth = 2.0f;
         [_avatarButton addTarget:self action:@selector(seeUseinfoClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     // Configure the cell...
