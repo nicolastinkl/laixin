@@ -274,10 +274,11 @@
     [self presentViewController:contr animated:YES completion:^{
         
     }];*/
+    
     /*push*/
     SBSegmentedViewController *segmentedViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SBSegmentedViewController"];
 	segmentedViewController.position = SBSegmentedViewControllerControlPositionNavigationBar;
-	[segmentedViewController addStoryboardSegments:@[@"segmentOne", @"segmentTwo",@"segmentThree"]];
+	[segmentedViewController addStoryboardSegments:@[@"segmentOne", @"segmentTwo",@"segmentThree",@"segmentFour"]];
     [self.navigationController pushViewController:segmentedViewController animated:YES];
 }
 

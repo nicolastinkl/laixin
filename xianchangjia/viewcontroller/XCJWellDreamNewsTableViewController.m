@@ -206,8 +206,9 @@
     }
     
     {
-       UIWebView *webview = (UIWebView*)[cell viewWithTag:2];
-       [ webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://mp.weixin.qq.com/s?__biz=MjM5MDI0MzMxMw==&mid=200246465&idx=1&sn=76577eebb9c4a89e30f073e9e3267a4a"]]];
+        UIWebView *webview = (UIWebView*)[cell viewWithTag:2];
+        NSString * strJson = [MobClick getConfigParams:@"GoodVoiceURL"];
+        [webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:strJson]]];
         webview.height = APP_SCREEN_HEIGHT - 64;
     }
     

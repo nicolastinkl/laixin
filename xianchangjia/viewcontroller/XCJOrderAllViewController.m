@@ -122,7 +122,9 @@
                 PayOrderHistorylog * log = [PayOrderHistorylog turnObject:obj];
                 if (log) {
                     [_datasouces addObject:log];
-                    [arrayMID addObject:@(log.mid)];
+                    if (![arrayMID containsObject:@(log.mid)]) {
+                        [arrayMID addObject:@(log.mid)];
+                    }
                     if (log.paystate == 1) {
                         [_datasouces_Used addObject:log]; //已消费
                     }else if (log.paystate == 2) {

@@ -9,7 +9,7 @@
 #import "SBSegmentedViewController.h"
 
 NSInteger const DefaultSegmentIndex = 0;
-#define SegmentWidth 70.0f
+#define SegmentWidth 60.0f
 
 @interface SBSegmentedViewController ()
 
@@ -107,7 +107,6 @@ NSInteger const DefaultSegmentIndex = 0;
 		self.segmentedControl.selectedSegmentIndex = DefaultSegmentIndex;
 		self.currentSelectedIndex = DefaultSegmentIndex;
 	}
-	
 	[self observeViewController:self.viewControllers[self.currentSelectedIndex]];
 	
 	if (!self.hasAppeared) {
@@ -121,6 +120,14 @@ NSInteger const DefaultSegmentIndex = 0;
 
 		[self updateBarsForViewController:currentViewController];
     }
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backChevron"] style:UIBarButtonItemStylePlain target:self action:@selector(closeSBSegementClick:)];
+    self.navigationItem.leftBarButtonItem = backButton;
+}
+
+-(IBAction)closeSBSegementClick:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

@@ -49,7 +49,6 @@
     NSMutableDictionary * arrayDicy = [[NSMutableDictionary alloc] init];
     DictAry = arrayDicy;
     
-    
     [self.view showIndicatorViewLargeBlue];
     
     NSMutableArray * arrayMID = [[NSMutableArray alloc] init];
@@ -61,7 +60,11 @@
                 PayOrderHistorylog * log = [PayOrderHistorylog turnObject:obj];
                 if (log) {
                     [_datasouces addObject:log];
-                    [arrayMID addObject:@(log.mid)]; 
+                    
+                    if (![arrayMID containsObject:@(log.mid)]) {
+                        [arrayMID addObject:@(log.mid)];
+                    }
+                    
                 }
             }];
             

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 jijia. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+#import <XCTest/XCTestCase.h>
 
 @interface xianchangjiaTests : XCTestCase
 

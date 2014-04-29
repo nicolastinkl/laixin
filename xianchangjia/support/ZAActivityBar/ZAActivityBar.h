@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
+//#define ios7BlueColor               [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]
 
 // Visual Properties
 #define BAR_COLOR  [UIColor colorWithRed:0.157 green:0.607 blue:1.000 alpha:0.830]// [[UIColor blackColor] colorWithAlphaComponent:0.5f]

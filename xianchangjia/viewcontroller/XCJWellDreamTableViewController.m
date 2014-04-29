@@ -122,9 +122,9 @@ enum ENUMLoadMoreData {
      */
     [self initDatawithNet:Enum_initData];
     
-    SBSegmentedViewController *segmentedViewController =  (SBSegmentedViewController *)self.navigationController.visibleViewController;
-    UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(JoinDreamClick:)];
-    segmentedViewController.navigationItem.rightBarButtonItem = barOne;
+//    SBSegmentedViewController *segmentedViewController =  (SBSegmentedViewController *)self.navigationController.visibleViewController;
+//    UIBarButtonItem * barOne = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"threadInfoButtonMinified"] style:UIBarButtonItemStyleDone target:self action:@selector(JoinDreamClick:)];
+//    segmentedViewController.navigationItem.rightBarButtonItem = barOne;
     
     self.tableView.tableHeaderView.backgroundColor = [UIColor clearColor];
     
