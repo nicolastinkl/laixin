@@ -460,6 +460,7 @@
 		938C93B1190A5992002D346D /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 938C93B0190A5992002D346D /* libz.1.1.3.dylib */; };
 		938C93B3190A59A0002D346D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938C93B2190A59A0002D346D /* StoreKit.framework */; };
 		938C94C7190F696E002D346D /* XCJWellHuiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938C94C6190F696E002D346D /* XCJWellHuiTableViewController.m */; };
+		938C94CA190F7662002D346D /* JsonOfVoiceFile.txt in Resources */ = {isa = PBXBuildFile; fileRef = 938C94C9190F7662002D346D /* JsonOfVoiceFile.txt */; };
 		93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */; };
 		93E5C189190798BA00CD1690 /* TKParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C188190798BA00CD1690 /* TKParallaxCell.m */; };
 		93E5C20C190922F000CD1690 /* XCJShowOrderEcodeImageViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C20B190922F000CD1690 /* XCJShowOrderEcodeImageViewcontroller.m */; };
@@ -1343,6 +1344,7 @@
 		938C93B2190A59A0002D346D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		938C94C5190F696E002D346D /* XCJWellHuiTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellHuiTableViewController.h; path = viewcontroller/XCJWellHuiTableViewController.h; sourceTree = "<group>"; };
 		938C94C6190F696E002D346D /* XCJWellHuiTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellHuiTableViewController.m; path = viewcontroller/XCJWellHuiTableViewController.m; sourceTree = "<group>"; };
+		938C94C9190F7662002D346D /* JsonOfVoiceFile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JsonOfVoiceFile.txt; sourceTree = "<group>"; };
 		93E5C17F19077C6A00CD1690 /* XCJPayListCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPayListCardController.h; path = viewcontroller/XCJPayListCardController.h; sourceTree = "<group>"; };
 		93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayListCardController.m; path = viewcontroller/XCJPayListCardController.m; sourceTree = "<group>"; };
 		93E5C187190798BA00CD1690 /* TKParallaxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TKParallaxCell.h; path = viewcontroller/TKParallaxCell.h; sourceTree = "<group>"; };
@@ -2816,6 +2818,7 @@
 			children = (
 				867014A8185185F100518B6D /* JsonImageurls.json */,
 				8681BDBA1834B2A300521D36 /* DirectionsJson.geojson */,
+				938C94C9190F7662002D346D /* JsonOfVoiceFile.txt */,
 			);
 			name = TestDataJson;
 			sourceTree = "<group>";
@@ -3677,6 +3680,7 @@
 				86EB76451859A66800836947 /* logo120x120.png in Resources */,
 				868B5D3B18924E53004D1743 /* Default-568h@2x.png in Resources */,
 				8622C882187D2BFA00776A38 /* XCJErrorView.xib in Resources */,
+				938C94CA190F7662002D346D /* JsonOfVoiceFile.txt in Resources */,
 				867014A9185185F100518B6D /* JsonImageurls.json in Resources */,
 				86D181E11834822C0005901D /* Main.storyboard in Resources */,
 				86CA79EE18C5C7BA00348185 /* CRFAQTableViewController.xib in Resources */,
