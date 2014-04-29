@@ -20,9 +20,8 @@
     self.layer.borderColor = [ios7BlueColor CGColor];
     self.backgroundColor = [UIColor clearColor];
     [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
-
+    [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]] forState:UIControlStateHighlighted];
 }
-
 
 -(void)sendMessageClearStyle
 {
@@ -33,7 +32,7 @@
     self.layer.borderColor = [ios7BlueColor CGColor];
     self.backgroundColor = [UIColor whiteColor];
     [self setTitleColor:ios7BlueColor forState:UIControlStateNormal];
-    
+    [self setBackgroundImage:[self buttonImageFromColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]] forState:UIControlStateHighlighted];
 }
 
 /**

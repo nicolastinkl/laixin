@@ -10,6 +10,7 @@
 #import "XCAlbumAdditions.h"
 #import "JSONKit.h"
 #import "UIActionSheet+Blocks.h"
+#import "UIButton+Bootstrap.h"
 
 
 #define NAME_CELL_ROW 0

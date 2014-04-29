@@ -1159,8 +1159,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
     if (!self.tabBarController) {
         self.tabBarController = (UITabBarController *)((UIWindow*)[UIApplication sharedApplication].windows[0]).rootViewController;
         self.tabBarController.delegate = self;
-    }
-    //
+    } 
+    
     if ([UITabBar instancesRespondToSelector:@selector(setSelectedImageTintColor:)]) {
         [self.tabBarController.tabBar setSelectedImageTintColor:iosLXSystemColor];
     }
