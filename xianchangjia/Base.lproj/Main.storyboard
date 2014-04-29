@@ -4835,9 +4835,9 @@
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="heO-Pr-A57">
                                             <rect key="frame" x="15" y="30" width="280" height="90"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <mutableString key="text">"shopName":"迷尚澳门豆捞棕北店",
+                                            <string key="text">"shopName":"迷尚澳门豆捞棕北店",
 "shopLogo":"/L1/76/711011051/a73b96f04b934feba3fe0db21b9b55ae",
-"url":"http://h5.m.taobao.com/nearby/coupon_detail.html?bizType=100&amp;couponId=38197612186&amp;nid=25148313&amp;clientSrc=nearby_main_cat&amp;searchSid=NzM3ZGRmNjdiZDJiNWVlYmQ0MGJhYmExZDZmYjExMDE=&amp;cityCode=510100&amp;x=104.072185&amp;y=30.624493",</mutableString>
+"url":"http://h5.m.taobao.com/nearby/coupon_detail.html?bizType=100&amp;couponId=38197612186&amp;nid=25148313&amp;clientSrc=nearby_main_cat&amp;searchSid=NzM3ZGRmNjdiZDJiNWVlYmQ0MGJhYmExZDZmYjExMDE=&amp;cityCode=510100&amp;x=104.072185&amp;y=30.624493",</string>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>

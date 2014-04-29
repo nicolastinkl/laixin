@@ -284,18 +284,19 @@
             [USER_DEFAULT setObject:currentUser.background_image forKey:KeyChain_Laixin_account_user_backgroupbg];
             [USER_DEFAULT setObject:currentUser.position forKey:KeyChain_Laixin_account_user_position];
             [USER_DEFAULT synchronize];
-            NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
-            FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
-            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
-            if (account == nil) {
-                account = [FCAccount MR_createInContext:localContext];
-                account.facebookId = currentUser.uid;
-            }
-            account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
-            account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
-            account.time = @"";
-            account.userJson = userinfo;
-            [localContext MR_saveToPersistentStoreAndWait];
+#warning account message
+            /*NSPredicate * pres = [NSPredicate predicateWithFormat:@"facebookId == %@",currentUser.uid];
+             FCAccount * account = [FCAccount MR_findFirstWithPredicate:pres];
+             NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+             if (account == nil) {
+             account = [FCAccount MR_createInContext:localContext];
+             account.facebookId = currentUser.uid;
+             }
+             account.sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
+             account.websocketURL = [USER_DEFAULT stringForKey:KeyChain_Laixin_systemconfig_websocketURL];
+             account.time = @"";
+             account.userJson = userinfo;
+             [localContext MR_saveToPersistentStoreAndWait];*/
             //        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
             
             // Return the number of rows in the section.

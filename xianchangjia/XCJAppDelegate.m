@@ -1128,6 +1128,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
          [MagicalRecord cleanUp];
     }
 }
+
 -(void) laixinStepupDB
 {
     NSString * userID = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id];
@@ -1164,6 +1165,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
     if ([UITabBar instancesRespondToSelector:@selector(setSelectedImageTintColor:)]) {
         [self.tabBarController.tabBar setSelectedImageTintColor:iosLXSystemColor];
     }
+    
     
 //   [self.tabBarController.tabBar setBackgroundImage:[UIImage imageNamed:@"tabbarbgLarge"]];
     //     [self.tabBarController.tabBar.items[0] setBadgeValue:@"New"];
@@ -1825,7 +1827,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-      [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    if ([XCJAppDelegate hasLogin]) {
+        [[[LXAPIController sharedLXAPIController] chatDataStoreManager] saveContext];
+    }
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 

@@ -19,6 +19,7 @@
 #import "FCAccount.h"
 #import "XCJCompleteUserInfoViewController.h"
 #import "CoreData+MagicalRecord.h"
+#import "UIButton+Bootstrap.h"
 
 @interface XCJMainLoginViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *button_yanzhengCode;
@@ -75,7 +76,7 @@
     {
         UIView * viewKeyMain = (UIView *) [self.view subviewWithTag:1];
         UIButton *loginButton = (UIButton *) [viewKeyMain subviewWithTag:5];
-        
+        /*
         {
 //            UIImage* originalImage =[[UIImage imageNamed:@"fbc_promobutton_28_2_5_2_5_normal"] stretchableImageWithLeftCapWidth:11.0 topCapHeight:0.0];
             //normal
@@ -90,7 +91,8 @@
             UIEdgeInsets insets = UIEdgeInsetsMake(2,5,2,5);
             UIImage *stretchableImage = [originalImage resizableImageWithCapInsets:insets];
             [loginButton setBackgroundImage:stretchableImage forState:UIControlStateHighlighted];
-        }
+        }*/
+        [loginButton infoStyle];
         
         [loginButton addTarget:self action:@selector(loginClick:) forControlEvents:UIControlEventTouchUpInside];
         //266 30

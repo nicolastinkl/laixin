@@ -46,11 +46,11 @@
             [[MLNetworkingManager sharedManager] sendWithAction:@"ios.unreg" parameters:@{} success:^(MLRequest *request, id responseObject) {
                 [[[MLNetworkingManager sharedManager] webSocket] close];
                 // clear You can remove the application's persistent domain like this:
+
+                [[NSNotificationCenter defaultCenter] postNotificationName:LaixinCloseDBMessageNotification object:                [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]];
                 NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
                 [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:LaixinCloseDBMessageNotification object:nil];
-                
+                            
                 [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
                 
                 XCJAppDelegate *delegate = (XCJAppDelegate *)[UIApplication sharedApplication].delegate;
@@ -58,7 +58,6 @@
                 [SVProgressHUD dismiss];
                 UINavigationController * XCJLoginNaviController =  [self.storyboard instantiateViewControllerWithIdentifier:@"XCJLoginNaviController"];
                 [self presentViewController:XCJLoginNaviController animated:NO completion:nil];
-
             } failure:^(MLRequest *request, NSError *error) {
                 [UIAlertView showAlertViewWithMessage:@"注销失败"];
             }];

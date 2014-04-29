@@ -361,8 +361,7 @@
         }
     } failure:^(MLRequest *request, NSError *error) {
         [SVProgressHUD dismiss];
-        [UIAlertView showAlertViewWithMessage:@"处理失败"];
-        
+        [UIAlertView showAlertViewWithMessage:@"处理失败"];        
     }];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
