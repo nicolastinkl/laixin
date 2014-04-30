@@ -122,6 +122,7 @@ typedef enum {
  *
  */
 #define KeyChain_Laixin_post_add                    @"post.add"
+#define KeyChain_Laixin_post_add_count                    @"post.add.count"
 
 /*-----------------------------
  1. 类型1----新的好友动态

@@ -67,6 +67,11 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
 {
     if ([action isEqualToString:KeyChain_Laixin_post_add]) {
         //有发送新动态 这里做标记处理
+        
+        int count = [USER_DEFAULT integerForKey:KeyChain_Laixin_post_add_count];
+        count += 1;
+        [USER_DEFAULT setInteger:count forKey:KeyChain_Laixin_post_add_count];
+        
         [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_post_add];
         [USER_DEFAULT synchronize];
     }

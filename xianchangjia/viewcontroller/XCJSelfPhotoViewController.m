@@ -86,10 +86,9 @@
             
             if ([USER_DEFAULT boolForKey:KeyChain_Laixin_post_add]) {
                 // request new
-                 XCJGroupPost_list * post = array[0];
+                XCJGroupPost_list * post = [dataSource firstObject];
                 [self initDataSourcewithBeforeID:post.postid];
             }
-            
         } else{
             // get json data from networking
             [self initDataSourcewithBeforeID:@""];
@@ -196,7 +195,6 @@
  * initDataSourcewithBeforeID
  *
  *  @param beforeid <#beforeid description#>
- *
  *  @since <#version number#>
  */
 -(void) initDataSourcewithBeforeID:(NSString *) beforeid
@@ -207,15 +205,21 @@
         parems = @{@"uid":self.userID,@"count":@"50"};
         ISNewData = YES;
     }else {
-         parems = @{@"uid":self.userID,@"count":@"50",@"before":beforeid};
+        int count = [USER_DEFAULT integerForKey:KeyChain_Laixin_post_add_count];
+        parems = @{@"uid":self.userID,@"count":@(count)};//,@"before":beforeid
     }
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:parems success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
+            [USER_DEFAULT setInteger:0 forKey:KeyChain_Laixin_post_add_count];
+            [USER_DEFAULT synchronize];
             NSDictionary * dicreult = responseObject[@"result"];
             NSArray * array = dicreult[@"posts"];
             [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                 XCJGroupPost_list * post = [XCJGroupPost_list turnObject:obj];
-                [dataSource addObject:post];
+                if (beforeid.length <=0)
+                    [dataSource addObject:post];
+                else
+                    [dataSource insertObject:post atIndex:0];
             }];
             [self.tableView reloadData];
             if (array.count < 50) {
@@ -230,11 +234,19 @@
                     [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
                 }
                 else {
+                    
                     NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
-
-                    NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
-                    [arr addObjectsFromArray:array];
-                    [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
+                    if (beforeid.length <=0)
+                    {
+                        NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
+                        [arr addObjectsFromArray:array];
+                        [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
+                    }else{
+                        
+                        NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
+                        [arr addObjectsFromArray:arrayss];
+                        [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
+                    }
                 }
             }
         }
