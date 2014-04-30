@@ -47,7 +47,6 @@
 {
     [super viewDidLoad];
     
-    
     [[NSNotificationCenter defaultCenter ] addObserver:self selector:@selector(XCJSelfPhotoViewControllerDeletePhoto:) name:@"XCJSelfPhotoViewControllerDeletePhoto" object:nil];
     self.title = @"群组相册";
     NSMutableArray * array = [[NSMutableArray alloc]init];
@@ -84,10 +83,19 @@
                 //是当前用户
                 [dataSource addObject:post];
             }];
+            
+            if ([USER_DEFAULT boolForKey:KeyChain_Laixin_post_add]) {
+                // request new
+                 XCJGroupPost_list * post = array[0];
+                [self initDataSourcewithBeforeID:post.postid];
+            }
+            
         } else{
             // get json data from networking
             [self initDataSourcewithBeforeID:@""];
         }
+        
+        
         
 //        NSString * jsonData = [[EGOCache globalCache] stringForKey:@"MyPhotoCache"];
 //        if (jsonData.length > 150) {
@@ -128,6 +136,11 @@
 
         }else
             [self initDataSourcewithBeforeID:@""];
+    }
+    if ([USER_DEFAULT boolForKey:KeyChain_Laixin_post_add]) {
+        // request new
+        [USER_DEFAULT setBool:NO forKey:KeyChain_Laixin_post_add];
+        [USER_DEFAULT synchronize];
     }
 }
 
@@ -179,14 +192,22 @@
     
 }
 
-
+/*!
+ * initDataSourcewithBeforeID
+ *
+ *  @param beforeid <#beforeid description#>
+ *
+ *  @since <#version number#>
+ */
 -(void) initDataSourcewithBeforeID:(NSString *) beforeid
 {
     __block Boolean ISNewData = NO;
-    NSDictionary * parems = @{@"uid":self.userID,@"count":@"50",@"before":beforeid};
+    NSDictionary * parems;
     if (beforeid.length <=0) {
         parems = @{@"uid":self.userID,@"count":@"50"};
         ISNewData = YES;
+    }else {
+         parems = @{@"uid":self.userID,@"count":@"50",@"before":beforeid};
     }
     [[MLNetworkingManager sharedManager] sendWithAction:@"user.posts" parameters:parems success:^(MLRequest *request, id responseObject) {
         if (responseObject) {
@@ -207,14 +228,12 @@
                 if ([[EGOCache globalCache] plistForKey:plistKeyName] == nil) {
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:array];
                     [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
-                     SLog(@"not  arr     %d" ,arr.count);
                 }
                 else {
                     NSArray *arrayss = [[EGOCache globalCache] plistForKey:plistKeyName];
 
                     NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:arrayss];
                     [arr addObjectsFromArray:array];
-                     SLog(@" have  arr    %d" ,arr.count);
                     [[EGOCache globalCache] setPlist:arr forKey:plistKeyName withTimeoutInterval:60*60*5];
                 }
             }

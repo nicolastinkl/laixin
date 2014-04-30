@@ -801,7 +801,7 @@
             NSString * typeMessage = [tools getStringValue:dicMessage[@"type"] defaultValue:@""];
             NSManagedObjectContext *localContext = [NSManagedObjectContext MR_contextForCurrentThread];
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-            receiveTime += 20;
+            receiveTime += 95;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
             //                FCMessage  find this infomation
             NSPredicate * preCMD = [NSPredicate predicateWithFormat:@"messageId == %@",[tools getStringValue:dicMessage[@"msgid"] defaultValue:@"0"]];
@@ -897,6 +897,7 @@
                 FCMessage *msg = [FCMessage MR_createInContext:localContext];
                 msg.text = content;
                 NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
+                receiveTime += 95;
                 NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
                 msg.sentDate = date;
                 if ([typeMessage isEqualToString:@"txt"]) {
@@ -1341,8 +1342,8 @@
     self.inputTextView.inputView = SendInfoView;
     [self.inputTextView reloadInputViews];
     
-
 }
+
 - (void)takePhotoClick
 {
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {

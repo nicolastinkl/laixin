@@ -45,9 +45,14 @@
      */
     [self _init];
     
-    NSString*filePath=[[NSBundle mainBundle] pathForResource:@"JsonOfVoiceFile"ofType:@"txt"];
-    NSData * jsondata = [NSData dataWithContentsOfFile:filePath];
-    NSDictionary *jsonObj = [jsondata objectFromJSONData];
+    
+    NSString * strJson = [MobClick getConfigParams:@"GoodVoiceYouhui"];
+    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary * jsonObj = [datajson  objectFromJSONData] ;
+    
+//    NSString*filePath=[[NSBundle mainBundle] pathForResource:@"JsonOfVoiceFile"ofType:@"txt"];
+//    NSData * jsondata = [NSData dataWithContentsOfFile:filePath];
+//    NSDictionary *jsonObj = [jsondata objectFromJSONData];
     NSDictionary * dataDict = jsonObj[@"data"];
     NSArray * array = dataDict[@"resultList"];
     [groupList addObjectsFromArray:array];

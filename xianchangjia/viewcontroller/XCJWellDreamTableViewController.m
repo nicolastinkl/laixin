@@ -133,12 +133,10 @@ enum ENUMLoadMoreData {
     self.pagecontrol.currentPageIndicatorTintColor = ios7BlueColor;//RGBACOLOR(132, 104, 77, 1);
     self.pagecontrol.numberOfPages = 5;//指定页面个数
     [self.pagecontrol setBackgroundColor:[UIColor clearColor]];
-    
-    NSArray * arrayURL = @[@"http://gtms02.alicdn.com/tps/i2/T1rZOXFUtaXXazuKP7-520-280.jpg",
-                           @"http://i.mmcdn.cn/simba/img/T1BfAEFqXdXXb1upjX.jpg",
-                           @"http://gtms01.alicdn.com/tps/i1/T1KUh_FMVXXXazuKP7-520-280.jpg",
-                           @"http://gtms04.alicdn.com/tps/i4/T1sGhpFH0cXXc2jIrl-250-125.png",
-                           @"http://i.mmcdn.cn/simba/img/T1gRXaFLBdXXb1upjX.jpg"];
+
+    NSString * strJson = [MobClick getConfigParams:@"GoodVoiceADS"];
+    NSData* datajson = [strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray * arrayURL = [datajson  objectFromJSONData] ;
     
     [arrayURL enumerateObjectsUsingBlock:^(id obj, NSUInteger i, BOOL *stop) {
         UIButton *fview=[[UIButton alloc] initWithFrame:CGRectMake(320*i, 0, 320, 200)];

@@ -3414,7 +3414,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="120"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="demo_3.jpg" id="ArZ-8Y-vp4" customClass="DAImageResizedImageView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="ArZ-8Y-vp4" customClass="DAImageResizedImageView">
                                                     <rect key="frame" x="0.0" y="-40" width="320" height="201"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </imageView>
@@ -9172,7 +9172,6 @@
         <image name="crop_corner_right_top" width="26" height="26"/>
         <image name="darenHome_bar_follow_btn_shadow" width="51" height="32"/>
         <image name="darenTopListCell_bg" width="307" height="227"/>
-        <image name="demo_3.jpg" width="640" height="360"/>
         <image name="empty_friends" width="100" height="100"/>
         <image name="eventDownIcon" width="16" height="16"/>
         <image name="eventPlusIcon" width="16" height="16"/>

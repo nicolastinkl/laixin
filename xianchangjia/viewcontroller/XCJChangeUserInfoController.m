@@ -86,7 +86,6 @@
     self.label_sign.text =    [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_signature];
     self.Label_address.text = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_position];
 
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -259,7 +258,8 @@
 //    SLLog(@"Upload Path: %@", filePath);
 //    NSData *webData = UIImageJPEGRepresentation([theInfo objectForKey:UIImagePickerControllerEditedImage], 1);
 //    [webData writeToFile:filePath atomically:YES];
-    UIImage * image =  theInfo[UIImagePickerControllerOriginalImage];
+    
+    UIImage * image =  theInfo[UIImagePickerControllerEditedImage];
     [self uploadFile:image];
 }
 
@@ -341,14 +341,13 @@
     }];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex  // after animatio
 {
     if (buttonIndex == 1) {
         [SVProgressHUD showWithStatus:@"正在上传头像..."];
         [self uploadImage:ImageFile token:TokenAPP];
     }
 }
-
  
 //
 //#pragma mark - Table view data source

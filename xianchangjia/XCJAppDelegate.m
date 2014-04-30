@@ -464,8 +464,9 @@ static NSString * const kLaixinStoreName = @"Laixins";
             }
             msg.text = content;
             NSTimeInterval receiveTime  = [dicMessage[@"time"] doubleValue];
-            receiveTime += 20;
+            receiveTime += 95;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:receiveTime];
+//            SLog(@"date %@",date);
             msg.sentDate = date;
             // message did come, this will be on left
             msg.messageStatus = @(YES);
@@ -512,7 +513,7 @@ static NSString * const kLaixinStoreName = @"Laixins";
                 msg.messageType = @(messageType_video);
             }
 
-            msg.facebookID = conversation.facebookId;
+            msg.facebookID = facebookID;
             conversation.lastMessageDate = date;
             conversation.messageType = @(XCMessageActivity_UserPrivateMessage);
             conversation.messageStutes = @(messageStutes_incoming);
@@ -1626,8 +1627,8 @@ static NSString * const kLaixinStoreName = @"Laixins";
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     
-    SLog(@"applicationWillEnterForeground");
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    [MobClick updateOnlineConfig];  //在线参数配置
     //查看 websocket是否有关闭
     
 //    if ([[MLNetworkingManager sharedManager].webSocket readyState] >= SR_CLOSING) {

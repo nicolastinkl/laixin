@@ -65,6 +65,11 @@ static dispatch_queue_t request_is_timeout_judge_queue() {
                success:(MLNetworkingSuccessBlcok)success
                failure:(MLNetworkingFailureBlcok)failure
 {
+    if ([action isEqualToString:KeyChain_Laixin_post_add]) {
+        //有发送新动态 这里做标记处理
+        [USER_DEFAULT setBool:YES forKey:KeyChain_Laixin_post_add];
+        [USER_DEFAULT synchronize];
+    }
     //设置一个请求唯一标识
     MLRequest *request  = [[MLRequest alloc]init];
     request.action = action;
