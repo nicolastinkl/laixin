@@ -107,6 +107,7 @@ NSInteger const DefaultSegmentIndex = 0;
 		self.segmentedControl.selectedSegmentIndex = DefaultSegmentIndex;
 		self.currentSelectedIndex = DefaultSegmentIndex;
 	}
+    
 	[self observeViewController:self.viewControllers[self.currentSelectedIndex]];
 	
 	if (!self.hasAppeared) {
@@ -121,8 +122,9 @@ NSInteger const DefaultSegmentIndex = 0;
 		[self updateBarsForViewController:currentViewController];
     }
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backChevron"] style:UIBarButtonItemStylePlain target:self action:@selector(closeSBSegementClick:)];
-    self.navigationItem.leftBarButtonItem = backButton;
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(closeSBSegementClick:)];
+    
+    self.navigationItem.backBarButtonItem = backButton;
 }
 
 -(IBAction)closeSBSegementClick:(id)sender

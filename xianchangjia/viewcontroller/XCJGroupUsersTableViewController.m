@@ -85,7 +85,9 @@
                         [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                             LXUser * luser = [[LXUser alloc] initWithDict:obj];
                             [_datasource addObject:luser];
-                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
+                            [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:luser withCompletion:^(id reposne, NSError *error) {
+                                
+                            }];
                         }];
  
                         [self.tableView hideIndicatorViewBlueOrGary];

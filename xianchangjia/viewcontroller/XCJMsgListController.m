@@ -40,6 +40,7 @@
 #import "XCJAddFriendNaviController.h"
 #import "XCJScanViewController.h"
 #import "FCFriends.h"
+#import "BundleHelper.h"
 
 @interface XCJMsgListController ()<UITableViewDataSource,UITableViewDelegate,NSFetchedResultsControllerDelegate,XCJHomeMenuViewDelegate>//,UISearchDisplayDelegate,UISearchBarDelegate
 {
@@ -406,6 +407,18 @@
     //    }];
     //
     //    [sequencer run];
+
+    
+    if ([[BundleHelper bundleShortVersionString] isEqualToString:@"1.2.7"]) {
+        if (![USER_DEFAULT boolForKey:[BundleHelper bundleShortVersionString]]) {
+            
+            NSManagedObjectContext *localContext  = [NSManagedObjectContext MR_contextForCurrentThread];
+            NSPredicate * pre = [NSPredicate predicateWithFormat:@"friendID >  %@",@"0"];
+            [FCFriends MR_deleteAllMatchingPredicate:pre];
+            [localContext MR_saveToPersistentStoreAndWait];
+        }
+        
+    }
     
     FCFriends * friends = [FCFriends MR_findFirst];
     if (friends == nil) {        
@@ -438,6 +451,8 @@
                         } failure:^(MLRequest *request, NSError *error) {
                         }];
                     }
+                    [USER_DEFAULT setBool:YES forKey:[BundleHelper bundleShortVersionString]];
+                    [USER_DEFAULT synchronize];
                 } failure:^(MLRequest *request, NSError *error) {
                 }];
                 

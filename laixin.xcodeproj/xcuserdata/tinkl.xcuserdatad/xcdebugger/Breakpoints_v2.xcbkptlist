@@ -120,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "xianchangjia/viewcontroller/XCJMsgListController.m"
-            timestampString = "420454261.734349"
+            timestampString = "420884207.732269"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "787"
-            endingLineNumber = "787"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
             landmarkName = "-updatebadageNumber:"
             landmarkType = "5">
             <Locations>

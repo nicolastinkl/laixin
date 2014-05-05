@@ -100,7 +100,9 @@ NSString  * sendLikeBOOL = @"sendLikeUSERDREAM";
                 [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
                     LXUser * luser = [[LXUser alloc] initWithDict:obj];
                     [groupList addObject:luser];
-                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
+                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFCUserObject:luser withCompletion:^(id reposne, NSError *error) {                        
+                    }];
+//                    [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:luser];
                 }];
                 
                 [self.tableView hideIndicatorViewBlueOrGary];

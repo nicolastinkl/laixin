@@ -135,6 +135,23 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(add_friend_Notify:) name:@"add_friend_Notify" object:[[UIApplication sharedApplication] delegate]];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(group_invite_Notify:) name:@"group_invite_Notify" object:[[UIApplication sharedApplication] delegate]];
+    
+
+    [self refershFriends];
+}
+
+-(void) refershFriends
+{
+
+    NSInteger numberOfRows =  [FCFriends MR_countOfEntities];
+    // Return the number of rows in the section.
+//    if ([[self.fetchedResultsController sections] count] > 0) {
+//        id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:0];
+//        numberOfRows = [sectionInfo numberOfObjects];
+//    }
+    UILabel * footView = (UILabel * ) self.tableView.tableFooterView;
+    footView.text = [NSString stringWithFormat:@"共%d位好友",numberOfRows];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -275,6 +292,7 @@
             [tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
             break;
 	}
+    [self refershFriends];
 }
 
 
