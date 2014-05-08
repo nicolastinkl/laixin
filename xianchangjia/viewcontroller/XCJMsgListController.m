@@ -267,8 +267,8 @@
 -(void)   initHomeData
 {
     self.managedObjectContext = [NSManagedObjectContext MR_defaultContext];
-    [self reloadFetchedResults:nil];
-    
+        [self reloadFetchedResults:nil];        
+ 
     NSString * sessionid = [USER_DEFAULT stringForKey:KeyChain_Laixin_account_sessionid];
     NSDictionary * parames = @{@"sessionid":sessionid};
     [[MLNetworkingManager sharedManager] sendWithAction:@"session.start"  parameters:parames success:^(MLRequest *request, id responseObject) {

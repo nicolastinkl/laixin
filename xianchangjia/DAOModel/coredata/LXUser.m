@@ -51,7 +51,36 @@
             _like_me_count = [DataHelper getIntegerValue:exinfoDict[@"like_me_count"] defaultValue:0];
         }
         
+        if (_circelArray) {
+            [_circelArray removeAllObjects];
+        }else{
+            _circelArray = [[NSMutableArray alloc] init];
+        }
+        NSArray * circelArray = [DataHelper getArrayValue:dic[@"circle"] defaultValue:[NSMutableArray array]] ;
+        if (circelArray && circelArray.count > 0) {
+            [circelArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                LXUser_circel *circelinfo = [[LXUser_circel alloc] initWithDict:obj];
+                [_circelArray addObject:circelinfo];
+            }];
+        }
+    }
+    return self;
+}
+@end
+
+@implementation LXUser_circel
+@synthesize by_uid,cid,level,subid,time,title;
+
+- (id)initWithDict:(NSDictionary *)dic
+{
+    if (self = [super init]) {
+        cid = [[tools getStringValue:dic[@"cid"] defaultValue:@""] intValue];
+        level = [[tools getStringValue:dic[@"level"] defaultValue:@""] intValue];
+        subid = [[tools getStringValue:dic[@"subid"] defaultValue:@""] intValue];
         
+        title =[tools getStringValue:dic[@"title"] defaultValue:@""];
+        by_uid =[tools getStringValue:dic[@"by_uid"] defaultValue:@""];
+        time = [DataHelper getDoubleValue:dic[@"time"] defaultValue:0.0];
         
     }
     return self;

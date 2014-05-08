@@ -27,6 +27,7 @@
 #import "XLSwipeContainerController.h"
 #import "XLSwipeNavigationController.h"
 #import "SBSegmentedViewController.h"
+#import "LXCommendViewController.h"
 @interface XCJIWantViewController ()<PinPadPasswordProtocol>
 
 @end
@@ -220,27 +221,43 @@
              break;*/
         case 0:
         {
-            if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
-                PPPinPadViewController * pinViewController = [[PPPinPadViewController alloc] init];
-                pinViewController.delegate = self;
-                NSString * Pin = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
-                if (Pin && Pin.length > 0) {
-                    pinViewController.inputModel = 1;                    
-                }else{
-                    pinViewController.inputModel = 2;
-                }
-                [self presentViewController:pinViewController animated:YES completion:NULL];
+            
+            if ([LXAPIController sharedLXAPIController].currentUser.circelArray.count <= 0) {
+                [SVProgressHUD show];
+                NSDictionary * parames = @{@"uid":@[[USER_DEFAULT stringForKey:KeyChain_Laixin_account_user_id]]};
+                [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+                    // "users":[....]
+                    NSDictionary * userinfo = responseObject[@"result"];
+                    NSArray * userArray = userinfo[@"users"];
+                    if (userArray && userArray.count > 0) {
+                        NSDictionary * dict = userArray[0];
+                        LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                        [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
+                        [self gotoLaiGrapCircel];
+                    }
+                    [SVProgressHUD dismiss];
+                } failure:^(MLRequest *request, NSError *error) {
+                    [SVProgressHUD dismiss];
+                    [UIAlertView showAlertViewWithMessage:@"获取圈子属性失败，请重新获取"];
+                }];
             }else{
-                [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容.\n\n 进入条件:只有被该圈内用户激活才能进入."];
+                [self gotoLaiGrapCircel];
             }
+            
+            
             
         }
             break;
         case 1:
         {
+            /* LXCommendViewController*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"LXCommendViewController"];
+            viewcontr.title = @"来活动";
+            [self.navigationController pushViewController:viewcontr animated:YES];
+           */
             XCJNearbyInviteViewContr*viewcontr  = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJNearbyInviteViewContr"];
             viewcontr.title = @"来活动";
             [self.navigationController pushViewController:viewcontr animated:YES];
+             
         }
             break;
         case 2:
@@ -258,6 +275,36 @@
         default:
             break;
     }
+}
+
+- (void) gotoLaiGrapCircel
+{
+        NSString * strJson = [MobClick getConfigParams:@"LaiGrabCID"];
+        if ([strJson isNilOrEmpty]) {
+            strJson = @"1";
+        }
+        __block BOOL IsAuthChose = NO;
+        [[LXAPIController sharedLXAPIController].currentUser.circelArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            LXUser_circel * circleInfo = obj;
+            if (circleInfo.cid == [strJson intValue]) {
+                IsAuthChose = YES;
+            }
+        }];
+        
+        //            if ([LXAPIController sharedLXAPIController].currentUser.active_level>=3 || [LXAPIController sharedLXAPIController].currentUser.actor_level>=3) {
+        if(IsAuthChose){
+            PPPinPadViewController * pinViewController = [[PPPinPadViewController alloc] init];
+            pinViewController.delegate = self;
+            NSString * Pin = [[NSUserDefaults standardUserDefaults] stringForKey:PWdString];
+            if (Pin && Pin.length > 0) {
+                pinViewController.inputModel = 1;
+            }else{
+                pinViewController.inputModel = 2;
+            }
+            [self presentViewController:pinViewController animated:YES completion:NULL];
+        }else{
+            [UIAlertView showAlertViewWithMessage:@"抱歉,您不属于这个圈子,无法进入查看内容.\n\n 进入条件:只有被该圈内用户激活才能进入."];
+        }
 }
 
 -(void) openDreamGoodVoice

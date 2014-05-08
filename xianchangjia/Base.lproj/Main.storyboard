@@ -775,7 +775,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="V.1.2.5" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="T8x-5f-XTL">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="V.1.2.8" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="T8x-5f-XTL">
                                                     <rect key="frame" x="161" y="11" width="126" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -5130,6 +5130,39 @@
             </objects>
             <point key="canvasLocation" x="4423" y="10810"/>
         </scene>
+        <!--Commend View Controller-->
+        <scene sceneID="qeM-5Z-VPy">
+            <objects>
+                <viewController storyboardIdentifier="LXCommendViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Jar-2X-XUA" customClass="LXCommendViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EGf-3y-Nrw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="upo-NR-eRe">
+                                <rect key="frame" x="76" y="39" width="158" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ycu-ta-hN3">
+                                <rect key="frame" x="76" y="75" width="164" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="label1" destination="upo-NR-eRe" id="1MD-6M-ZJE"/>
+                        <outlet property="label2" destination="ycu-ta-hN3" id="u08-em-zG7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4I6-9a-nnM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4854" y="11065"/>
+        </scene>
         <!--Dream Comment View Controller - 评论-->
         <scene sceneID="1hc-Uj-mUg">
             <objects>
@@ -7096,6 +7129,24 @@
                                             <action selector="selectMaleClick:" destination="A5j-Fb-x4P" eventType="touchUpInside" id="jhZ-06-sDj"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_background_os7" id="AQA-iY-g4d">
+                                        <rect key="frame" x="27" y="148" width="266" height="91"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <rect key="contentStretch" x="0.29999999999999999" y="0.80000000000000004" width="0.29999999999999999" height="0.0"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="联系人电话" minimumFontSize="17" id="0gH-5U-SvQ">
+                                        <rect key="frame" x="38" y="156" width="232" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="namePhonePad"/>
+                                    </textField>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="注：填入联系人电话即可激活" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="FRL-kd-gMq">
+                                        <rect key="frame" x="38" y="206" width="224" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -7137,6 +7188,7 @@
                         <outlet property="MaleBtn" destination="5Xq-bi-NjB" id="g3r-u4-tc0"/>
                         <outlet property="ManBtn" destination="Wf5-wI-wJl" id="WhG-eF-0lM"/>
                         <outlet property="NickText" destination="l1A-eS-ftr" id="A6y-gx-OcW"/>
+                        <outlet property="PhoneText" destination="0gH-5U-SvQ" id="6pE-hn-rSR"/>
                         <outlet property="image_male" destination="zHh-qB-ExA" id="cnF-MF-ud9"/>
                         <outlet property="image_man" destination="5cF-zf-Fuv" id="Xwx-V7-XdR"/>
                     </connections>
@@ -8278,7 +8330,7 @@
                                 <rect key="frame" x="33" y="112" width="254" height="320"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="来信 V.1.2.5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1ZI-mh-40B">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="来信 V.1.2.8" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1ZI-mh-40B">
                                 <rect key="frame" x="0.0" y="190" width="320" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -8342,7 +8394,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E1j-aX-BCg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3533" y="-680"/>
+            <point key="canvasLocation" x="4039" y="-703"/>
         </scene>
         <!--Add Group Info View Controller-->
         <scene sceneID="dkL-91-RTf">

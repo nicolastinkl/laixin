@@ -215,21 +215,42 @@
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadMyLevel" object:nil];
                         }
                     }
-                    [SVProgressHUD dismiss];
                     NSString * activeByUID =  [DataHelper getStringValue:result[@"active_by"]  defaultValue:@""];
                     if (activeByUID.length > 0) {
                         // check this uid is my friends???
-                        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
-                            [[[LXAPIController sharedLXAPIController]  chatDataStoreManager] setFriendsUserDescription:response];
-                        } withuid:activeByUID];
+//                        [[[LXAPIController sharedLXAPIController] requestLaixinManager] getUserDesByNetCompletion:^(id response, NSError *error) {
+//                            [[[LXAPIController sharedLXAPIController]  chatDataStoreManager] setFriendsUserDescription:response];
+//                        } withuid:activeByUID];
                         
-                        [UIAlertView showAlertViewWithMessage:@"激活成功"];
+                        NSDictionary * parames = @{@"uid":@[activeByUID]};
+                        [[MLNetworkingManager sharedManager] sendWithAction:@"user.info" parameters:parames success:^(MLRequest *request, id responseObject) {
+                            // "users":[....]
+                            NSDictionary * userinfo = responseObject[@"result"];
+                            NSArray * userArray = userinfo[@"users"];
+                            if (userArray && userArray.count > 0) {
+                                NSDictionary * dict = userArray[0];
+                                LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                                
+                                [[[LXAPIController sharedLXAPIController] chatDataStoreManager] setFriendsObject:currentUser];
+                                
+                                [currentUser.circelArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                    LXUser_circel * circle = obj;
+                                    [self setCircleProprity:circle];
+                                    
+                                }];
+                               
+                            }
+                             [UIAlertView showAlertViewWithMessage:@"激活成功"];
+                        } failure:^(MLRequest *request, NSError *error) {
+                            [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
+                        }];
+                        
+                        
                     }else{
                         [UIAlertView showAlertViewWithMessage:@"激活失败,请检查激活码是否正确"];
                     }
                 }
                 else{
-                    [SVProgressHUD dismiss];
                     [UIAlertView showAlertViewWithMessage:@"激活失败,激活码已被使用"];
                 }
                 
@@ -242,6 +263,16 @@
         [UIAlertView showAlertViewWithMessage:@"请输入正确激活码"];
     }
     
+}
+
+-(void) setCircleProprity:(LXUser_circel *) circle
+{
+    NSDictionary * parames = @{@"cid":@(circle.cid),@"subid":@(circle.subid)};
+    [[MLNetworkingManager sharedManager] sendWithAction:@"circle.set" parameters:parames success:^(MLRequest *request, id responseObject) {
+        
+    } failure:^(MLRequest *request, NSError *error) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning

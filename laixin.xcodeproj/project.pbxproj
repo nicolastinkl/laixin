@@ -461,6 +461,8 @@
 		938C93B3190A59A0002D346D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938C93B2190A59A0002D346D /* StoreKit.framework */; };
 		938C94C7190F696E002D346D /* XCJWellHuiTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 938C94C6190F696E002D346D /* XCJWellHuiTableViewController.m */; };
 		938C94CA190F7662002D346D /* JsonOfVoiceFile.txt in Resources */ = {isa = PBXBuildFile; fileRef = 938C94C9190F7662002D346D /* JsonOfVoiceFile.txt */; };
+		93A65B08191A27E100B1BE2A /* LXCommendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A65B07191A27E100B1BE2A /* LXCommendViewController.m */; };
+		93A65B0B191A280C00B1BE2A /* LXCommendModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 93A65B0A191A280C00B1BE2A /* LXCommendModel.m */; };
 		93E5C18119077C6A00CD1690 /* XCJPayListCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */; };
 		93E5C189190798BA00CD1690 /* TKParallaxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C188190798BA00CD1690 /* TKParallaxCell.m */; };
 		93E5C20C190922F000CD1690 /* XCJShowOrderEcodeImageViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 93E5C20B190922F000CD1690 /* XCJShowOrderEcodeImageViewcontroller.m */; };
@@ -1345,6 +1347,10 @@
 		938C94C5190F696E002D346D /* XCJWellHuiTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJWellHuiTableViewController.h; path = viewcontroller/XCJWellHuiTableViewController.h; sourceTree = "<group>"; };
 		938C94C6190F696E002D346D /* XCJWellHuiTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJWellHuiTableViewController.m; path = viewcontroller/XCJWellHuiTableViewController.m; sourceTree = "<group>"; };
 		938C94C9190F7662002D346D /* JsonOfVoiceFile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = JsonOfVoiceFile.txt; sourceTree = "<group>"; };
+		93A65B06191A27E100B1BE2A /* LXCommendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXCommendViewController.h; path = viewcontroller/LXCommendViewController.h; sourceTree = "<group>"; };
+		93A65B07191A27E100B1BE2A /* LXCommendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXCommendViewController.m; path = viewcontroller/LXCommendViewController.m; sourceTree = "<group>"; };
+		93A65B09191A280C00B1BE2A /* LXCommendModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LXCommendModel.h; path = viewcontroller/RACModel/LXCommendModel.h; sourceTree = "<group>"; };
+		93A65B0A191A280C00B1BE2A /* LXCommendModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LXCommendModel.m; path = viewcontroller/RACModel/LXCommendModel.m; sourceTree = "<group>"; };
 		93E5C17F19077C6A00CD1690 /* XCJPayListCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XCJPayListCardController.h; path = viewcontroller/XCJPayListCardController.h; sourceTree = "<group>"; };
 		93E5C18019077C6A00CD1690 /* XCJPayListCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XCJPayListCardController.m; path = viewcontroller/XCJPayListCardController.m; sourceTree = "<group>"; };
 		93E5C187190798BA00CD1690 /* TKParallaxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TKParallaxCell.h; path = viewcontroller/TKParallaxCell.h; sourceTree = "<group>"; };
@@ -2780,6 +2786,7 @@
 		86D1820A1834AC1B0005901D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				93A65B03191A27AA00B1BE2A /* CocoaRAC */,
 				868AC8A718EE55780068CC77 /* DreamVoice */,
 				86DEA2F518C8381C0003694C /* FindRoom */,
 				86268A2D18C0644A000F0A48 /* NearbyInvite */,
@@ -3556,6 +3563,25 @@
 			name = download;
 			sourceTree = "<group>";
 		};
+		93A65B03191A27AA00B1BE2A /* CocoaRAC */ = {
+			isa = PBXGroup;
+			children = (
+				93A65B05191A27B200B1BE2A /* LXCommendView */,
+			);
+			name = CocoaRAC;
+			sourceTree = "<group>";
+		};
+		93A65B05191A27B200B1BE2A /* LXCommendView */ = {
+			isa = PBXGroup;
+			children = (
+				93A65B06191A27E100B1BE2A /* LXCommendViewController.h */,
+				93A65B07191A27E100B1BE2A /* LXCommendViewController.m */,
+				93A65B09191A280C00B1BE2A /* LXCommendModel.h */,
+				93A65B0A191A280C00B1BE2A /* LXCommendModel.m */,
+			);
+			name = LXCommendView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3835,6 +3861,7 @@
 				86D1830E1834AFFE0005901D /* AFAppAPIClient.m in Sources */,
 				86045FCD18B2FF9F0002581E /* NSData+crc32.m in Sources */,
 				86EB76CD185AA6CC00836947 /* UIView+Convenience.m in Sources */,
+				93A65B0B191A280C00B1BE2A /* LXCommendModel.m in Sources */,
 				869CE4CF186BCD120004C1EC /* XCJMainLoginViewController.m in Sources */,
 				8690DECB18C8891900A14A51 /* SDURLCache.m in Sources */,
 				86FF92B518F3EBF600E3933D /* XCJWellDreamTableViewController.m in Sources */,
@@ -3983,6 +4010,7 @@
 				869CE4D4186BDB160004C1EC /* IQSocialRequestBaseClient.m in Sources */,
 				865632EE185FFDDA00E9903C /* XCJUserViewController.m in Sources */,
 				86494CC01881437600C22B14 /* XCJMessageReplylistController.m in Sources */,
+				93A65B08191A27E100B1BE2A /* LXCommendViewController.m in Sources */,
 				869CE52F186BE38D0004C1EC /* NSPersistentStoreCoordinator+MagicalRecord.m in Sources */,
 				868B5D5E1893D065004D1743 /* XCJChatSendInfoView.m in Sources */,
 				869CE522186BE38D0004C1EC /* NSRelationshipDescription+MagicalDataImport.m in Sources */,
@@ -4158,8 +4186,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: yao zhang (3NW254563D)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: yao zhang (3NW254563D)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: YONGJUN WANG (89RFBF2W4Q)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;

@@ -158,10 +158,14 @@
                         [SVProgressHUD dismiss];
                         NSDictionary * dict = responseObject[@"result"];
                         LXUser *currentUser = [[LXUser alloc] initWithDict:dict];
+                        
+                         [[NSNotificationCenter defaultCenter] postNotificationName:LaixinSetupDBMessageNotification object:currentUser.uid];
+                        
                         [USER_DEFAULT setObject:currentUser.uid forKey:KeyChain_Laixin_account_user_id];
                         [[LXAPIController sharedLXAPIController] setCurrentUser:currentUser];
                         XCJCompleteUserInfoViewController * viewContr = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJCompleteUserInfoViewController"];
                         [self.navigationController pushViewController:viewContr animated:YES];
+                        
                     } failure:^(MLRequest *request, NSError *error) {
                         [self loginError];
                     }];
