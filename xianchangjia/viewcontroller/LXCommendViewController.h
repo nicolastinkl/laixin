@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIButton+Bootstrap.h"
 
 @class LXCommendModel;
 @interface LXCommendViewController : UIViewController

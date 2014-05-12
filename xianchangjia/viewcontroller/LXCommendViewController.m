@@ -12,6 +12,7 @@
 #import <ReactiveViewModel.h>
 #import <ReactiveCocoa/RACEXTScope.h>
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "XCAlbumAdditions.h"
 
 
 @interface LXCommendViewController ()
@@ -36,6 +37,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.view subviewWithTag:1];
     
     self.viewModel = [[LXCommendModel alloc] init];
     
