@@ -549,6 +549,7 @@
 
 -(IBAction)SeeUserInfoClick:(id)sender
 {
+    
     //查看好友资料
     XCJAddUserTableViewController * addUser = [self.storyboard instantiateViewControllerWithIdentifier:@"XCJAddUserTableViewController"];
     addUser.UserInfo = self.userinfo;

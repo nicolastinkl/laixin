@@ -168,6 +168,11 @@ umeng:<http://www.umeng.com/>
 * email:jiehong.liu@xianchangjia.com
 * pwd:123456
 
+#### 第三方库
+
+* MagicalRecord : <https://github.com/magicalpanda/MagicalRecord> 中文说明:<https://www.google.com.hk/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&ved=0CDkQFjAB&url=http%3a%2f%2fwww%2ecnblogs%2ecom%2fmybkn%2fp%2f3328183%2ehtml&ei=mdtxU4rxBs2E8gWo-IDoAQ&usg=AFQjCNHr3s_8Xfvndye2hQmPKokF0-VhEQ&sig2=zOS70JwRpDW4eczuKkJRaQ>
+* OHAttributeLabel :<https://github.com/AliSoftware/OHAttributedLabel>
+
 
 
 ####来信架构图
@@ -175,5 +180,4 @@ umeng:<http://www.umeng.com/>
 
 
 
-![image](http://blog.leezhong.com/image/FRP_ReactiveCocoa_large.png)
 .......by tinkl........
